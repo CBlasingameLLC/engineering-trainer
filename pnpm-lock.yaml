@@ -51,6 +51,9 @@ importers:
       '@et/answer-engine':
         specifier: workspace:*
         version: link:../../packages/answer-engine
+      '@et/circuits':
+        specifier: workspace:*
+        version: link:../../packages/circuits
       '@et/content-schema':
         specifier: workspace:*
         version: link:../../packages/content-schema
