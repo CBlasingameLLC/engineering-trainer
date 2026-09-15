@@ -15,7 +15,13 @@ export default defineConfig({
       '@et/generators': r('../../packages/generators/src/index.ts'),
     },
   },
-  server: { port: 5173, strictPort: true },
+  // Bind both servers to an explicit IPv4 address rather than the default
+  // `localhost`. On a dual-stack host `localhost` can resolve to ::1 first, so
+  // Vite listens on IPv6 only while health checks and the end-to-end driver dial
+  // 127.0.0.1 and find nothing there. Naming the interface removes the ambiguity
+  // and keeps CI binding exactly the way a developer's machine does.
+  server: { host: '127.0.0.1', port: 5173, strictPort: true },
+  preview: { host: '127.0.0.1', port: 4173, strictPort: true },
   build: {
     // Tauri expects a fixed output directory it can bundle.
     outDir: 'dist',

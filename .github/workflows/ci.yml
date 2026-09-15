@@ -98,13 +98,20 @@ jobs:
 
       - name: Serve and drive a real placement session
         run: |
-          pnpm --filter @et/desktop preview &
-          # Poll rather than pulling in a wait-for-it dependency.
-          for i in $(seq 1 60); do
+          pnpm --filter @et/desktop preview > preview.log 2>&1 &
+          # Poll rather than pulling in a wait-for-it dependency. The server is
+          # pinned to 127.0.0.1 in vite.config.ts, so this dials the same
+          # interface it listens on.
+          for _ in $(seq 1 60); do
             curl -sf http://127.0.0.1:4173 -o /dev/null && break
             sleep 1
           done
-          curl -sf http://127.0.0.1:4173 -o /dev/null || (echo "::error::preview server never came up" && exit 1)
+          if ! curl -sf http://127.0.0.1:4173 -o /dev/null; then
+            echo "::error::preview server never came up on 127.0.0.1:4173"
+            echo "--- preview output ---"; cat preview.log || true
+            echo "--- listening sockets ---"; ss -tlnp || true
+            exit 1
+          fi
           pnpm --filter @et/desktop e2e
 
       - name: Upload screenshots on failure
