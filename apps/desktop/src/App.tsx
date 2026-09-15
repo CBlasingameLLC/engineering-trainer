@@ -4,6 +4,7 @@ import { Onboarding } from '@/routes/Onboarding';
 import { Session } from '@/routes/Session';
 import { Report } from '@/routes/Report';
 import { Dashboard } from '@/routes/Dashboard';
+import { Credentials } from '@/routes/Credentials';
 
 export function App(): React.ReactElement {
   const route = useApp((s) => s.route);
@@ -43,5 +44,7 @@ export function App(): React.ReactElement {
       return <Report />;
     case 'dashboard':
       return <Dashboard />;
+    case 'credentials':
+      return <Credentials />;
   }
 }

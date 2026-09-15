@@ -2,7 +2,11 @@
 import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync, renameSync } from 'node:fs';
 import { join, resolve, basename } from 'node:path';
 import { KcGraph } from '@et/domain';
-import { loadCurriculum, parsePackDocument, toGraphInput, type Pack } from '@et/content-schema';
+import {
+  loadCurriculum, parseCredentialCatalog, parsePackDocument, toGraphInput,
+  type Credential, type Pack,
+} from '@et/content-schema';
+import { parse as parseYaml } from 'yaml';
 import { GENERATORS, buildPack } from '@et/generators';
 import { verifyPack, type VerifyReport } from './verify.js';
 import { computeStats, uncoveredKcs } from './stats.js';
@@ -20,6 +24,7 @@ const CURRICULUM_DIR = join(ROOT, 'content/curriculum');
 const SHARED_PACKS = join(ROOT, 'content/packs/shared');
 const PERSONAL_PACKS = join(ROOT, 'content/packs/personal');
 const INBOX = join(ROOT, 'content/inbox');
+const CREDENTIALS = join(ROOT, 'content/credentials');
 
 // Built at runtime rather than written as a literal escape, so the source stays
 // free of control characters.
@@ -50,6 +55,21 @@ function loadGraph(): { graph: KcGraph; issues: string[] } {
     // A prerequisite cycle surfaces here, and names the loop.
     return { graph: new KcGraph([], []), issues: [(error as Error).message] };
   }
+}
+
+function loadCredentials(): { credentials: Credential[]; issues: string[] } {
+  const credentials: Credential[] = [];
+  const issues: string[] = [];
+  for (const doc of readDocuments(CREDENTIALS)) {
+    try {
+      const result = parseCredentialCatalog(parseYaml(doc.text));
+      if (result.catalog) credentials.push(...result.catalog.credentials);
+      issues.push(...result.issues.map((i) => `${doc.source} ${i.path}: ${i.message}`));
+    } catch (error) {
+      issues.push(`${doc.source}: ${(error as Error).message}`);
+    }
+  }
+  return { credentials, issues };
 }
 
 function loadPacks(dirs: string[]): { packs: Pack[]; issues: string[] } {
@@ -89,6 +109,39 @@ function cmdValidate(): number {
   }
   const itemCount = packs.reduce((s, p) => s + p.items.length, 0);
   console.log(ok(`\n  packs: ${packs.length} pack(s), ${itemCount} item(s), schema valid`));
+
+  const { credentials, issues: credentialIssues } = loadCredentials();
+  if (credentialIssues.length > 0) {
+    console.log(bad(`\n  credentials: ${credentialIssues.length} issue(s)`));
+    for (const issue of credentialIssues) console.log(`    ${issue}`);
+    return 1;
+  }
+
+  // A credential pointing at a KC that does not exist cannot target a real gap,
+  // so the recommendation would silently fall back to a neutral score.
+  const knownKcs = new Set(graph.kcs.keys());
+  const danglingRefs: string[] = [];
+  for (const credential of credentials) {
+    for (const kc of [...credential.reinforcesKcs, ...credential.assumesKcs]) {
+      if (!knownKcs.has(kc)) danglingRefs.push(`${credential.id} -> unknown KC "${kc}"`);
+    }
+  }
+  if (danglingRefs.length > 0) {
+    console.log(bad(`\n  credentials: ${danglingRefs.length} dangling KC reference(s)`));
+    for (const ref of danglingRefs) console.log(`    ${ref}`);
+    return 1;
+  }
+
+  // Ratings age badly - providers change pricing and retire exams constantly.
+  const stale = credentials.filter((c) => {
+    const age = (Date.now() - new Date(c.checkedOn).getTime()) / 86_400_000;
+    return age > 365;
+  });
+  console.log(ok(`\n  credentials: ${credentials.length} entr(ies), schema valid, KC references resolve`));
+  if (stale.length > 0) {
+    console.log(warn(`    ${stale.length} entr(ies) not verified in over a year:`));
+    for (const c of stale) console.log(`      ${c.id} (checked ${c.checkedOn})`);
+  }
   return 0;
 }
 

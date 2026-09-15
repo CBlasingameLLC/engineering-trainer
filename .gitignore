@@ -43,3 +43,4 @@ content/inbox/**
 *.db-journal
 *.sqlite
 *.sqlite3
+.scratch/

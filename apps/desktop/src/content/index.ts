@@ -1,5 +1,9 @@
 import { KcGraph, type Kc, type KcEdge } from '@et/domain';
-import { loadCurriculum, parsePack, toGraphInput, type CourseDefinition, type Item, type Pack } from '@et/content-schema';
+import { parse as parseYaml } from 'yaml';
+import {
+  loadCurriculum, parseCredentialCatalog, parsePack, toGraphInput,
+  type CourseDefinition, type Credential, type Item, type Pack,
+} from '@et/content-schema';
 
 /**
  * Bundled content.
@@ -23,11 +27,18 @@ const packFiles = import.meta.glob('../../../../content/packs/shared/*.json', {
   import: 'default',
 }) as Record<string, unknown>;
 
+const credentialFiles = import.meta.glob('../../../../content/credentials/*.yaml', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>;
+
 export interface LoadedContent {
   graph: KcGraph;
   courses: CourseDefinition[];
   packs: Pack[];
   items: Item[];
+  credentials: Credential[];
   /** Problems found while loading. Surfaced rather than swallowed. */
   issues: string[];
 }
@@ -63,7 +74,19 @@ export function loadContent(): LoadedContent {
     else issues.push(...result.issues.map((i) => `${path.split('/').pop()} ${i.path}: ${i.message}`));
   }
 
-  cached = { graph, courses, packs, items: packs.flatMap((p) => p.items), issues };
+  const credentials: Credential[] = [];
+  for (const [path, text] of Object.entries(credentialFiles)) {
+    const name = path.split('/').pop() ?? path;
+    try {
+      const result = parseCredentialCatalog(parseYaml(text));
+      if (result.catalog) credentials.push(...result.catalog.credentials);
+      else issues.push(...result.issues.map((i) => `${name} ${i.path}: ${i.message}`));
+    } catch (error) {
+      issues.push(`${name}: ${(error as Error).message}`);
+    }
+  }
+
+  cached = { graph, courses, packs, items: packs.flatMap((p) => p.items), credentials, issues };
   return cached;
 }
 

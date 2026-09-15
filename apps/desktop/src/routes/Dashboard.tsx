@@ -69,9 +69,14 @@ export function Dashboard(): React.ReactElement {
             then works the prerequisite graph to draw conclusions about concepts it never asked about —
             so it can cover a whole course without asking a whole course's worth of questions.
           </p>
-          <button className="btn-primary mt-4" onClick={() => startPlacement(courseCodes)}>
-            Begin placement
-          </button>
+          <div className="mt-4 flex gap-3">
+            <button className="btn-primary" onClick={() => startPlacement(courseCodes)}>
+              Begin placement
+            </button>
+            <button className="btn-secondary" onClick={() => goTo('credentials')}>
+              Browse credentials
+            </button>
+          </div>
         </section>
       )}
 
@@ -169,6 +174,9 @@ export function Dashboard(): React.ReactElement {
                 Last report
               </button>
             )}
+            <button className="btn-secondary" onClick={() => goTo('credentials')}>
+              Credentials
+            </button>
             <button className="btn-secondary ml-auto" onClick={() => void resetAll()}>
               Reset everything
             </button>

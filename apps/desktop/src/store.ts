@@ -36,7 +36,7 @@ import {
  * browser.
  */
 
-type Route = 'loading' | 'onboarding' | 'dashboard' | 'session' | 'report';
+type Route = 'loading' | 'onboarding' | 'dashboard' | 'session' | 'report' | 'credentials';
 
 export interface ActiveItem {
   item: Item;

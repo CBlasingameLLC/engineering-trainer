@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "description": "Validate, verify and build content packs",
-  "bin": { "pack": "./src/cli.ts" },
+  "bin": {
+    "pack": "./src/cli.ts"
+  },
   "dependencies": {
     "@et/content-schema": "workspace:*",
     "@et/answer-engine": "workspace:*",
