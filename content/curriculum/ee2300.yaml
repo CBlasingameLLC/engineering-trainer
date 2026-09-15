@@ -1,0 +1,336 @@
+# EE 2300 — Circuits I (Texas State University, 2026 catalog)
+#
+# Tier 1: a direct prerequisite for the junior block (EE 3300 Circuits II,
+# EE 3370 Signals & Systems, EE 3340 Electromagnetics). This is the course
+# where silent decay costs the most, which is why it is the reference
+# implementation for the whole placement pipeline.
+#
+# competencies  — how the learner must think. Drives the radar chart.
+# difficultyPrior — logit scale, same units as learner ability. Seeds item
+#                   difficulty before any response data exists.
+# prerequisites — may cross courses. An edge into MATH is what lets a
+#                 Circuits II diagnosis point at Calculus.
+
+code: EE2300
+title: Circuits I
+institution: Texas State University
+catalogYear: 2026
+tier: 1
+credits: 3
+
+kcs:
+  # --- Unit 1: Fundamentals -------------------------------------------------
+  - id: ee2300.passive-sign-convention
+    title: Passive sign convention
+    unit: Fundamentals
+    domain: circuits
+    competencies: [concept, numeracy]
+    difficultyPrior: -1.6
+    description: >-
+      Assigning current direction and voltage polarity consistently, and reading
+      the sign of computed power as absorbed versus delivered.
+    prerequisites: []
+
+  - id: ee2300.charge-current-voltage
+    title: Charge, current, voltage, power and energy
+    unit: Fundamentals
+    domain: circuits
+    competencies: [concept, numeracy]
+    difficultyPrior: -1.5
+    prerequisites:
+      - kc: math2471.derivative-basics
+        strength: 0.5
+
+  - id: ee2300.ohms-law
+    title: Ohm's law, resistance and conductance
+    unit: Fundamentals
+    domain: circuits
+    competencies: [math-execution, concept]
+    difficultyPrior: -1.4
+    prerequisites:
+      - ee2300.passive-sign-convention
+      - ee2300.charge-current-voltage
+
+  # --- Unit 2: Circuit laws and reduction -----------------------------------
+  - id: ee2300.kcl
+    title: Kirchhoff's current law
+    unit: Circuit Laws
+    domain: circuits
+    competencies: [concept, modeling, visual]
+    difficultyPrior: -1.0
+    prerequisites:
+      - ee2300.charge-current-voltage
+
+  - id: ee2300.kvl
+    title: Kirchhoff's voltage law
+    unit: Circuit Laws
+    domain: circuits
+    competencies: [concept, modeling, visual]
+    difficultyPrior: -1.0
+    prerequisites:
+      - ee2300.passive-sign-convention
+      - ee2300.charge-current-voltage
+
+  - id: ee2300.series-parallel
+    title: Series and parallel reduction
+    unit: Circuit Laws
+    domain: circuits
+    competencies: [math-execution, strategy, visual]
+    difficultyPrior: -0.7
+    description: >-
+      Recognising series and parallel topology, including when neither applies,
+      and collapsing a resistive network to an equivalent.
+    prerequisites:
+      - ee2300.ohms-law
+      - ee2300.kcl
+      - ee2300.kvl
+
+  - id: ee2300.voltage-divider
+    title: Voltage divider
+    unit: Circuit Laws
+    domain: circuits
+    competencies: [math-execution]
+    difficultyPrior: -0.8
+    prerequisites:
+      - ee2300.series-parallel
+
+  - id: ee2300.current-divider
+    title: Current divider
+    unit: Circuit Laws
+    domain: circuits
+    competencies: [math-execution]
+    difficultyPrior: -0.6
+    prerequisites:
+      - ee2300.series-parallel
+
+  - id: ee2300.delta-wye
+    title: Delta-wye transformation
+    unit: Circuit Laws
+    domain: circuits
+    competencies: [math-execution, strategy, visual]
+    difficultyPrior: 0.3
+    prerequisites:
+      - ee2300.series-parallel
+
+  # --- Unit 3: Systematic analysis ------------------------------------------
+  - id: ee2300.nodal-analysis
+    title: Nodal analysis
+    unit: Systematic Analysis
+    domain: circuits
+    competencies: [math-execution, strategy, modeling]
+    difficultyPrior: 0.0
+    prerequisites:
+      - ee2300.kcl
+      - ee2300.ohms-law
+      - kc: math3376.linear-systems
+        strength: 0.8
+
+  - id: ee2300.supernode
+    title: Supernode analysis
+    unit: Systematic Analysis
+    domain: circuits
+    competencies: [strategy, math-execution]
+    difficultyPrior: 0.6
+    description: >-
+      Handling a voltage source between two non-reference nodes by enclosing
+      both in a supernode and supplying the constraint equation.
+    prerequisites:
+      - ee2300.nodal-analysis
+
+  - id: ee2300.mesh-analysis
+    title: Mesh analysis
+    unit: Systematic Analysis
+    domain: circuits
+    competencies: [math-execution, strategy, modeling]
+    difficultyPrior: 0.1
+    prerequisites:
+      - ee2300.kvl
+      - ee2300.ohms-law
+      - kc: math3376.linear-systems
+        strength: 0.8
+
+  - id: ee2300.supermesh
+    title: Supermesh analysis
+    unit: Systematic Analysis
+    domain: circuits
+    competencies: [strategy, math-execution]
+    difficultyPrior: 0.7
+    prerequisites:
+      - ee2300.mesh-analysis
+
+  - id: ee2300.dependent-sources
+    title: Dependent sources in systematic analysis
+    unit: Systematic Analysis
+    domain: circuits
+    competencies: [modeling, strategy]
+    difficultyPrior: 0.8
+    description: >-
+      Writing the controlling-variable constraint alongside the node or mesh
+      equations, rather than treating a dependent source as independent.
+    prerequisites:
+      - ee2300.nodal-analysis
+      - ee2300.mesh-analysis
+
+  # --- Unit 4: Network theorems ---------------------------------------------
+  - id: ee2300.linearity-superposition
+    title: Linearity and superposition
+    unit: Network Theorems
+    domain: circuits
+    competencies: [concept, strategy]
+    difficultyPrior: 0.3
+    description: >-
+      Suppressing sources correctly - independent voltage sources shorted,
+      independent current sources opened, dependent sources never suppressed.
+    prerequisites:
+      - ee2300.nodal-analysis
+      - ee2300.mesh-analysis
+
+  - id: ee2300.source-transformation
+    title: Source transformation
+    unit: Network Theorems
+    domain: circuits
+    competencies: [math-execution, strategy]
+    difficultyPrior: 0.2
+    prerequisites:
+      - ee2300.voltage-divider
+      - ee2300.current-divider
+
+  - id: ee2300.thevenin
+    title: Thevenin equivalent
+    unit: Network Theorems
+    domain: circuits
+    competencies: [strategy, modeling, math-execution]
+    difficultyPrior: 0.5
+    prerequisites:
+      - ee2300.linearity-superposition
+      - ee2300.source-transformation
+
+  - id: ee2300.norton
+    title: Norton equivalent
+    unit: Network Theorems
+    domain: circuits
+    competencies: [strategy, math-execution]
+    difficultyPrior: 0.5
+    prerequisites:
+      - ee2300.thevenin
+
+  - id: ee2300.max-power-transfer
+    title: Maximum power transfer
+    unit: Network Theorems
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.4
+    prerequisites:
+      - ee2300.thevenin
+
+  # --- Unit 5: Operational amplifiers ---------------------------------------
+  - id: ee2300.op-amp-ideal
+    title: Ideal op-amp model and virtual short
+    unit: Operational Amplifiers
+    domain: circuits
+    competencies: [concept, modeling]
+    difficultyPrior: 0.2
+    description: >-
+      Infinite open-loop gain and zero input current, and the virtual-short
+      consequence that holds only under negative feedback.
+    prerequisites:
+      - ee2300.nodal-analysis
+
+  - id: ee2300.op-amp-inverting
+    title: Inverting and non-inverting amplifiers
+    unit: Operational Amplifiers
+    domain: circuits
+    competencies: [math-execution, visual]
+    difficultyPrior: 0.3
+    prerequisites:
+      - ee2300.op-amp-ideal
+
+  - id: ee2300.op-amp-summing
+    title: Summing and difference amplifiers
+    unit: Operational Amplifiers
+    domain: circuits
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.7
+    prerequisites:
+      - ee2300.op-amp-inverting
+      - ee2300.linearity-superposition
+
+  - id: ee2300.op-amp-cascade
+    title: Cascaded op-amp stages
+    unit: Operational Amplifiers
+    domain: circuits
+    competencies: [strategy, math-execution]
+    difficultyPrior: 0.9
+    prerequisites:
+      - ee2300.op-amp-summing
+
+  # --- Unit 6: Energy storage and transients --------------------------------
+  - id: ee2300.capacitor-iv
+    title: Capacitor i-v relationship and stored energy
+    unit: Energy Storage and Transients
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.1
+    prerequisites:
+      - ee2300.ohms-law
+      - kc: math2471.derivative-basics
+        strength: 0.9
+      - kc: math2471.integration-basics
+        strength: 0.7
+
+  - id: ee2300.inductor-iv
+    title: Inductor i-v relationship and stored energy
+    unit: Energy Storage and Transients
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.2
+    prerequisites:
+      - ee2300.ohms-law
+      - kc: math2471.derivative-basics
+        strength: 0.9
+      - kc: math2471.integration-basics
+        strength: 0.7
+
+  - id: ee2300.first-order-natural
+    title: First-order natural response and the time constant
+    unit: Energy Storage and Transients
+    domain: circuits
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.5
+    description: >-
+      Source-free RC and RL decay, the time constant as an RC or L/R product,
+      and reading the response from the Thevenin resistance seen by the element.
+    prerequisites:
+      - ee2300.capacitor-iv
+      - ee2300.inductor-iv
+      - ee2300.thevenin
+      - kc: math2471.exponential-functions
+        strength: 0.8
+      - kc: math3323.first-order-ode
+        strength: 0.6
+
+  - id: ee2300.first-order-step
+    title: First-order step response
+    unit: Energy Storage and Transients
+    domain: circuits
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.8
+    description: >-
+      The general solution x(t) = x_inf + (x_0 - x_inf) e^{-t/tau}, assembled
+      from initial value, final value and time constant.
+    prerequisites:
+      - ee2300.first-order-natural
+
+  - id: ee2300.second-order-rlc
+    title: Second-order RLC damping regimes
+    unit: Energy Storage and Transients
+    domain: circuits
+    competencies: [math-execution, concept, strategy]
+    difficultyPrior: 1.3
+    description: >-
+      Series and parallel RLC, the damping ratio and natural frequency, and
+      classifying the response as over-, critically or under-damped.
+    prerequisites:
+      - ee2300.first-order-step
+      - kc: math3323.second-order-ode
+        strength: 0.9

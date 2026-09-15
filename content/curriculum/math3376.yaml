@@ -1,0 +1,24 @@
+# MATH 3376 — Applied Linear Algebra (Texas State University, 2026 catalog)
+#
+# Nodal and mesh analysis are simultaneous linear systems. A student who cannot
+# reliably solve a 3x3 system will read as weak at nodal analysis, and only a
+# cross-course edge makes that distinction visible.
+
+code: MATH3376
+title: Applied Linear Algebra
+institution: Texas State University
+catalogYear: 2026
+tier: 1
+credits: 3
+
+kcs:
+  - id: math3376.linear-systems
+    title: Solving simultaneous linear systems
+    unit: Linear Systems
+    domain: math
+    competencies: [math-execution, strategy]
+    difficultyPrior: -0.3
+    description: >-
+      Gaussian elimination and matrix methods on 2x2 and 3x3 systems, plus
+      recognising when a system is inconsistent or underdetermined.
+    prerequisites: []
