@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { DEFAULT_CAT_CONFIG, shouldStop } from '@et/domain';
+import { emptySchematic, formatValue, type Schematic } from '@et/circuits';
 import type { Response } from '@et/answer-engine';
 import { useApp } from '@/store';
 import { MathText } from '@/ui/Math';
+import { SchematicEditor } from '@/features/schematic/SchematicEditor';
 
 /**
  * The session player.
@@ -23,11 +25,18 @@ export function Session(): React.ReactElement {
   const correct = useApp((s) => s.correctCount);
   const hintsShown = useApp((s) => s.hintsShown);
   const submit = useApp((s) => s.submit);
+  const submitCircuit = useApp((s) => s.submitCircuit);
+  const submitCircuitNetlist = useApp((s) => s.submitCircuitNetlist);
   const advance = useApp((s) => s.advance);
   const showHint = useApp((s) => s.showHint);
+  const mode = useApp((s) => s.mode);
+  const sessionXp = useApp((s) => s.sessionXp);
 
   const [text, setText] = useState('');
   const [choice, setChoice] = useState<string | null>(null);
+  const [schematic, setSchematic] = useState<Schematic>(() => emptySchematic('my design'));
+  const [circuitInput, setCircuitInput] = useState<'draw' | 'netlist'>('draw');
+  const [deck, setDeck] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Clear the field and refocus when a new item arrives, so the learner can
@@ -35,6 +44,8 @@ export function Session(): React.ReactElement {
   useEffect(() => {
     setText('');
     setChoice(null);
+    setSchematic(emptySchematic('my design'));
+    setDeck('');
     inputRef.current?.focus();
   }, [active?.item.id]);
 
@@ -44,11 +55,17 @@ export function Session(): React.ReactElement {
 
   const { item } = active;
   const isChoice = item.type === 'multiple-choice';
+  const isCircuit = item.type === 'circuit-build';
   const budget = DEFAULT_CAT_CONFIG.maxItems;
   const outstanding = shouldStop(cat, bank, DEFAULT_CAT_CONFIG).outstanding.length;
 
   const send = (): void => {
     if (graded?.result.correct !== undefined && graded.result.outcome !== 'unparseable' && graded.result.outcome !== 'wrong-dimension') {
+      return;
+    }
+    if (isCircuit) {
+      if (circuitInput === 'netlist') void submitCircuitNetlist(deck);
+      else void submitCircuit(schematic);
       return;
     }
     const response: Response | null = isChoice
@@ -68,10 +85,13 @@ export function Session(): React.ReactElement {
   return (
     <div className="mx-auto flex h-full max-w-3xl flex-col px-6 py-8">
       <header className="flex items-center gap-4 text-sm">
-        <span className="font-medium text-slate-900">Placement</span>
+        <span className="font-medium text-slate-900">
+          {mode === 'challenge' ? 'Challenge exam' : mode === 'practice' ? 'Daily quest' : 'Placement'}
+        </span>
         <span className="text-slate-400">
           item {answered + 1} of at most {budget}
         </span>
+        <span className="tabular-nums text-amber-700">{sessionXp} XP</span>
         <span className="ml-auto tabular-nums text-slate-500">
           {correct}/{answered} correct
         </span>
@@ -94,7 +114,52 @@ export function Session(): React.ReactElement {
         <article className="card p-6" data-item-id={item.id} data-item-type={item.type}>
           <MathText className="block text-base leading-relaxed text-slate-800">{item.stem}</MathText>
 
-          {isChoice ? (
+          {isCircuit ? (
+            <div className="mt-6">
+              <div className="mb-2 flex items-center gap-2">
+                {(['draw', 'netlist'] as const).map((choice) => (
+                  <button
+                    key={choice}
+                    disabled={settled}
+                    onClick={() => setCircuitInput(choice)}
+                    className={`rounded px-2 py-1 text-xs ${circuitInput === choice ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+                    data-circuit-input={choice}
+                  >
+                    {choice === 'draw' ? 'Draw it' : 'Write a netlist'}
+                  </button>
+                ))}
+                <span className="text-xs text-slate-500">
+                  Graded by simulating what you build — any circuit meeting the specification counts.
+                </span>
+              </div>
+
+              {circuitInput === 'draw' ? (
+                <SchematicEditor
+                  value={schematic}
+                  onChange={setSchematic}
+                  readOnly={settled}
+                  rows={22}
+                  columns={30}
+                />
+              ) : (
+                <div>
+                  <textarea
+                    id="netlist"
+                    value={deck}
+                    disabled={settled}
+                    onChange={(e) => setDeck(e.target.value)}
+                    spellCheck={false}
+                    placeholder={'my design\nV1 in 0 1\nR1 in inv 2.2k\nRf inv out 22k\nXU1 out 0 inv opamp\n.op'}
+                    className="h-44 w-full rounded-md border border-slate-300 p-2 font-mono text-xs
+                               focus:border-slate-900 focus:outline-none disabled:bg-slate-50"
+                  />
+                  <p className="mt-1 text-xs text-slate-400">
+                    SPICE subset. First line is the title. Node names from the question must match.
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : isChoice ? (
             <div className="mt-6 space-y-2">
               {item.options.map((option) => {
                 const chosenThis = settled && graded.submitted === option.id;
@@ -162,7 +227,19 @@ export function Session(): React.ReactElement {
 
           {!settled && (
             <div className="mt-6 flex items-center gap-3">
-              <button className="btn-primary" onClick={send} disabled={isChoice ? !choice : !text.trim()}>
+              <button
+                className="btn-primary"
+                onClick={send}
+                disabled={
+                  isCircuit
+                    ? circuitInput === 'netlist'
+                      ? deck.trim().length === 0
+                      : schematic.components.length === 0
+                    : isChoice
+                      ? !choice
+                      : !text.trim()
+                }
+              >
                 Submit
               </button>
               {hintsShown < item.explanation.hints.length && (
@@ -211,12 +288,38 @@ function Feedback(): React.ReactElement | null {
         {result.misconception && (
           <span className="font-mono text-xs text-slate-400">{result.misconception}</span>
         )}
+        {graded.xpAwarded > 0 && (
+          <span className="ml-auto text-xs tabular-nums text-amber-700">+{graded.xpAwarded} XP</span>
+        )}
       </div>
 
       {result.feedback && !result.correct && (
         <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-900">
           <MathText>{result.feedback}</MathText>
         </p>
+      )}
+
+      {graded.circuit && (
+        <table className="mt-3 w-full text-sm">
+          <thead>
+            <tr className="text-left text-xs uppercase tracking-wide text-slate-400">
+              <th className="pb-1 font-medium">Measurement</th>
+              <th className="pb-1 text-right font-medium">Required</th>
+              <th className="pb-1 text-right font-medium">Your circuit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {graded.circuit.results.map((row) => (
+              <tr key={row.probe} className="border-t border-slate-100">
+                <td className="py-1 font-mono text-xs text-slate-600">{row.probe}</td>
+                <td className="py-1 text-right tabular-nums text-slate-500">{formatValue(row.expected)}</td>
+                <td className={`py-1 text-right tabular-nums ${row.within ? 'text-emerald-700' : 'text-red-700'}`}>
+                  {row.actual === null ? (row.message ?? 'not measurable') : formatValue(row.actual)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
 
       <ol className="mt-4 space-y-2">

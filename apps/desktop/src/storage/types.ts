@@ -1,5 +1,6 @@
-import type { Attempt, CourseId, KcId, MisconceptionId } from '@et/domain';
+import type { Attempt, CourseId, KcId, MisconceptionId, StreakState } from '@et/domain';
 import type { CourseGrade } from '@et/domain';
+import { emptyStreak } from '@et/domain';
 
 /**
  * Persistence contract.
@@ -28,9 +29,27 @@ export interface Profile {
   /** The term being prepared for, e.g. "2026 Fall". */
   targetTerm: string;
   totalXp: number;
-  streakDays: number;
+  /**
+   * Streak bookkeeping. A record of days worked, not a projection of the
+   * mastery model — replaying the attempt log cannot reconstruct which days the
+   * learner showed up, only which days produced answers.
+   */
+  streak: StreakState;
+  /** Courses whose challenge exam has been passed. */
+  crests: CourseId[];
   lastActiveAt: string | null;
   onboarded: boolean;
+}
+
+/** A circuit the learner drew, stored as geometry plus its derived netlist. */
+export interface CircuitRecord {
+  id: string;
+  name: string;
+  /** Serialised Schematic from @et/circuits. Geometry is the source of truth. */
+  schematic: unknown;
+  /** Netlist derived at save time, for display and quick reload. */
+  netlist: string;
+  updatedAt: string;
 }
 
 export type SessionMode = 'placement' | 'practice' | 'review' | 'challenge';
@@ -88,6 +107,10 @@ export interface StorageAdapter {
   savePriors(priors: InferredPrior[]): Promise<void>;
   listPriors(): Promise<InferredPrior[]>;
 
+  saveCircuit(circuit: CircuitRecord): Promise<void>;
+  listCircuits(): Promise<CircuitRecord[]>;
+  deleteCircuit(id: string): Promise<void>;
+
   /** Wipe everything. Used by "start over" and by tests. */
   reset(): Promise<void>;
 }
@@ -96,7 +119,8 @@ export const emptyProfile = (): Profile => ({
   completedCourses: [],
   targetTerm: '',
   totalXp: 0,
-  streakDays: 0,
+  streak: emptyStreak(),
+  crests: [],
   lastActiveAt: null,
   onboarded: false,
 });

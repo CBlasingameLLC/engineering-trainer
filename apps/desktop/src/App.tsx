@@ -5,6 +5,8 @@ import { Session } from '@/routes/Session';
 import { Report } from '@/routes/Report';
 import { Dashboard } from '@/routes/Dashboard';
 import { Credentials } from '@/routes/Credentials';
+import { SkillTree } from '@/routes/SkillTree';
+import { CircuitLab } from '@/routes/CircuitLab';
 
 export function App(): React.ReactElement {
   const route = useApp((s) => s.route);
@@ -46,5 +48,9 @@ export function App(): React.ReactElement {
       return <Dashboard />;
     case 'credentials':
       return <Credentials />;
+    case 'skillTree':
+      return <SkillTree />;
+    case 'circuitLab':
+      return <CircuitLab />;
   }
 }

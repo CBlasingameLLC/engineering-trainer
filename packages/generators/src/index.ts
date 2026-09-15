@@ -11,6 +11,7 @@ import { opAmpCascade, opAmpGain, opAmpSumming } from './ee2300/opamps.js';
 import {
   inductorBehaviour, naturalResponseTau, rcStepResponse, rlcDamping,
 } from './ee2300/transients.js';
+import { dividerDesign, opAmpGainDesign, rcTimeConstantDesign } from './ee2300/design.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -41,6 +42,10 @@ export const GENERATORS: readonly Generator[] = [
   inductorBehaviour,
   rcStepResponse,
   rlcDamping,
+  // Design tasks, graded by simulating what the learner builds.
+  dividerDesign,
+  opAmpGainDesign,
+  rcTimeConstantDesign,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>

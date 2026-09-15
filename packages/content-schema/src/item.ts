@@ -82,18 +82,32 @@ export const truthTableAnswerSchema = z.object({
 /**
  * A circuit the learner must build to spec, graded by simulation rather than by
  * comparing netlists — there are many correct designs.
+ *
+ * `reference` is one deck that satisfies the spec. It is not the answer key —
+ * there is no single answer — but it is what makes the item verifiable: an
+ * unsatisfiable design task is the circuit equivalent of a wrong answer key,
+ * and without a worked example nothing can detect one. `pack verify` grades the
+ * reference against the measurements and rejects the item if it fails.
  */
 export const circuitAnswerSchema = z.object({
   kind: z.literal('circuit'),
+  /** A SPICE deck demonstrating the spec is achievable. Required. */
+  reference: z.string().min(1),
+  /** Nodes the learner's design must expose, e.g. ["in", "out"]. */
+  requiredNodes: z.array(z.string().min(1)).default([]),
   measurements: z
     .array(
       z.object({
-        /** ngspice measurement expression, e.g. "v(out)" or "i(v1)". */
+        /** Measurement expression, e.g. "v(out)", "i(v1)", "db(v(out))". */
         probe: z.string().min(1),
         analysis: z.enum(['op', 'dc', 'ac', 'tran']),
         expected: z.number().finite(),
         unit: z.string(),
         tolerance: z.object({ rel: z.number().positive().optional(), abs: z.number().positive().optional() }),
+        /** Required for `ac`: a gain specification means nothing without a frequency. */
+        frequencyHz: z.number().positive().optional(),
+        /** Required for `tran`: likewise, a transient value needs an instant. */
+        atTime: z.number().positive().optional(),
       }),
     )
     .min(1),
@@ -263,6 +277,28 @@ export const itemSchema = z
 
     if (item.type === 'circuit-build' && item.answer.kind !== 'circuit') {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['answer'], message: 'circuit-build items need a circuit answer' });
+    }
+
+    // An AC measurement without a frequency, or a transient one without a time,
+    // cannot be evaluated at all - the grader would have to report the item as
+    // broken to the learner, which is the worst place to discover it.
+    if (item.answer.kind === 'circuit') {
+      for (const [i, m] of item.answer.measurements.entries()) {
+        if (m.analysis === 'ac' && m.frequencyHz === undefined) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['answer', 'measurements', i, 'frequencyHz'],
+            message: 'an ac measurement must state its frequency',
+          });
+        }
+        if (m.analysis === 'tran' && m.atTime === undefined) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['answer', 'measurements', i, 'atTime'],
+            message: 'a tran measurement must state the time it is taken at',
+          });
+        }
+      }
     }
   });
 

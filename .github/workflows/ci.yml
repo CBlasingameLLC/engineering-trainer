@@ -114,6 +114,12 @@ jobs:
           fi
           pnpm --filter @et/desktop e2e
 
+      # Drives the schematic editor by clicking - place parts, draw wires - and
+      # checks the solver returns the voltage the drawing implies. This is the
+      # only test covering the step from geometry to circuit.
+      - name: Drive the circuit lab and skill tree
+        run: pnpm --filter @et/desktop e2e:lab
+
       - name: Upload screenshots on failure
         if: failure()
         uses: actions/upload-artifact@v4

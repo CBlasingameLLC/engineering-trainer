@@ -1,5 +1,8 @@
 import { useMemo } from 'react';
-import { byCompetency, byDomain, type Competency } from '@et/domain';
+import {
+  byCompetency, byDomain, challengeReadiness, dailyQuest, levelProgress, streakAsOf,
+  type Competency,
+} from '@et/domain';
 import { useApp } from '@/store';
 import { upcomingDecay } from '@/features/learner-model';
 import { BAND_STYLE, DIAGNOSIS_COPY, pct } from '@/ui/bands';
@@ -27,6 +30,8 @@ export function Dashboard(): React.ReactElement {
   const content = useApp((s) => s.content);
   const profile = useApp((s) => s.profile);
   const startPlacement = useApp((s) => s.startPlacement);
+  const startQuest = useApp((s) => s.startQuest);
+  const startChallenge = useApp((s) => s.startChallenge);
   const goTo = useApp((s) => s.goTo);
   const resetAll = useApp((s) => s.resetAll);
   const lastPlacement = useApp((s) => s.lastPlacement);
@@ -41,7 +46,14 @@ export function Dashboard(): React.ReactElement {
     const risks = upcomingDecay(model, graph, 240).slice(0, 8);
     const worst = [...tested].sort((a, b) => a.composite - b.composite).slice(0, 8);
 
-    return { tested, competencies, domains, risks, worst, graph };
+    const quest = dailyQuest(graph, model.byKc);
+    const courses = [...new Set([...graph.kcs.values()].map((k) => k.courseId))].sort();
+    const challenges = courses.map((courseId) => ({
+      courseId,
+      ...challengeReadiness(courseId, graph, model.byKc),
+    }));
+
+    return { tested, competencies, domains, risks, worst, graph, quest, challenges };
   }, [model, content]);
 
   if (!view || !content) {
@@ -53,13 +65,19 @@ export function Dashboard(): React.ReactElement {
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
-      <header className="flex items-baseline gap-4">
+      <header className="flex flex-wrap items-baseline gap-4">
         <h1 className="text-2xl font-semibold text-slate-900">Engineering Trainer</h1>
         {profile.targetTerm && (
           <span className="text-sm text-slate-500">preparing for {profile.targetTerm}</span>
         )}
-        <span className="ml-auto text-sm tabular-nums text-slate-500">{profile.totalXp} XP</span>
+        <nav className="ml-auto flex gap-3 text-sm">
+          <button className="text-slate-500 underline" onClick={() => goTo('skillTree')}>Skill tree</button>
+          <button className="text-slate-500 underline" onClick={() => goTo('circuitLab')}>Circuit lab</button>
+          <button className="text-slate-500 underline" onClick={() => goTo('credentials')}>Credentials</button>
+        </nav>
       </header>
+
+      <Progress />
 
       {!hasData && (
         <section className="card mt-8 p-6">
@@ -76,12 +94,74 @@ export function Dashboard(): React.ReactElement {
             <button className="btn-secondary" onClick={() => goTo('credentials')}>
               Browse credentials
             </button>
+            <button className="btn-secondary" onClick={() => goTo('circuitLab')}>
+              Open the circuit lab
+            </button>
           </div>
         </section>
       )}
 
       {hasData && (
         <>
+          <section className="card mt-8 p-5">
+            <div className="flex flex-wrap items-baseline gap-3">
+              <h2 className="text-base font-semibold text-slate-900">Today's quest</h2>
+              <span className="text-sm text-slate-500">{view.quest.rationale}</span>
+              <button className="btn-primary ml-auto" onClick={startQuest}>
+                Start
+              </button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-6 text-sm">
+              <div>
+                <div className="text-xs uppercase tracking-wide text-slate-400">Review</div>
+                <ul className="mt-1 space-y-0.5">
+                  {view.quest.reviewKcs.length === 0 && <li className="text-slate-400">nothing due</li>}
+                  {view.quest.reviewKcs.map((id) => (
+                    <li key={id} className="text-slate-700">{view.graph.kcs.get(id)?.title ?? id}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <div className="text-xs uppercase tracking-wide text-slate-400">New, and unlocked</div>
+                <ul className="mt-1 space-y-0.5">
+                  {view.quest.frontierKcs.length === 0 && <li className="text-slate-400">nothing ready</li>}
+                  {view.quest.frontierKcs.map((id) => (
+                    <li key={id} className="text-slate-700">{view.graph.kcs.get(id)?.title ?? id}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-8">
+            <h2 className="text-sm font-semibold text-slate-900">Challenge exams</h2>
+            <p className="mt-1 max-w-2xl text-sm text-slate-600">
+              Passing one marks the course tested out and awards its crest. A pass needs breadth as
+              well as a score — high marks on a few topics is not evidence about a course.
+            </p>
+            <ul className="mt-3 space-y-1">
+              {view.challenges.map((challenge) => {
+                const earned = profile.crests.includes(challenge.courseId);
+                return (
+                  <li key={challenge.courseId} className="card flex flex-wrap items-center gap-3 px-4 py-2 text-sm">
+                    <span className="font-mono text-xs text-slate-500">{challenge.courseId}</span>
+                    {earned && <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">crest earned</span>}
+                    <span className="tabular-nums text-slate-500">{pct(challenge.averageMastery)} average</span>
+                    {challenge.untested > 0 && (
+                      <span className="text-xs text-slate-400">{challenge.untested} topic(s) untested</span>
+                    )}
+                    <button
+                      className={`ml-auto rounded px-3 py-1 text-sm ${challenge.ready ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-500'}`}
+                      onClick={() => startChallenge(challenge.courseId)}
+                    >
+                      {challenge.ready ? 'Attempt' : 'Attempt anyway'}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+
           {view.risks.length > 0 && (
             <section className="mt-8">
               <h2 className="text-sm font-semibold text-slate-900">Decaying before {profile.targetTerm || 'next term'}</h2>
@@ -224,5 +304,57 @@ function Axis({ title, blurb, rows }: { title: string; blurb: string; rows: Axis
         ))}
       </ul>
     </section>
+  );
+}
+
+
+/**
+ * Level, XP and streak.
+ *
+ * The streak is read through `streakAsOf` rather than straight off the profile,
+ * so a streak that has already lapsed shows as lapsed instead of staying
+ * reassuring until the next session discovers otherwise.
+ */
+function Progress(): React.ReactElement {
+  const profile = useApp((s) => s.profile);
+  const level = levelProgress(profile.totalXp);
+  const streak = streakAsOf(profile.streak, new Date());
+
+  return (
+    <div className="card mt-4 flex flex-wrap items-center gap-6 p-4">
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-semibold tabular-nums text-slate-900">{level.level}</span>
+        <span className="text-xs uppercase tracking-wide text-slate-400">level</span>
+      </div>
+
+      <div className="min-w-[140px] flex-1">
+        <div className="h-1.5 overflow-hidden rounded bg-slate-100">
+          <div className="h-full bg-amber-400" style={{ width: `${Math.round(level.fraction * 100)}%` }} />
+        </div>
+        <div className="mt-1 text-xs tabular-nums text-slate-500">
+          {profile.totalXp} XP · {level.xpForNextLevel - level.xpIntoLevel} to level {level.level + 1}
+        </div>
+      </div>
+
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-semibold tabular-nums text-slate-900">{streak.current}</span>
+        <span className="text-xs uppercase tracking-wide text-slate-400">day streak</span>
+        {streak.atRisk && streak.current > 0 && (
+          <span className="rounded bg-orange-100 px-1.5 py-0.5 text-xs text-orange-800">expires today</span>
+        )}
+      </div>
+
+      {streak.freezesAvailable > 0 && (
+        <span className="text-xs text-sky-700">
+          {streak.freezesAvailable} freeze{streak.freezesAvailable === 1 ? '' : 's'} banked
+        </span>
+      )}
+
+      {profile.crests.length > 0 && (
+        <span className="text-xs text-amber-800">
+          {profile.crests.length} course crest{profile.crests.length === 1 ? '' : 's'}
+        </span>
+      )}
+    </div>
   );
 }

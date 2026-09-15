@@ -15,6 +15,9 @@ import { DIAGNOSIS_COPY, pct } from '@/ui/bands';
 
 export function Report(): React.ReactElement {
   const placement = useApp((s) => s.lastPlacement);
+  const challenge = useApp((s) => s.lastChallenge);
+  const streak = useApp((s) => s.lastStreak);
+  const sessionXp = useApp((s) => s.sessionXp);
   const model = useApp((s) => s.model);
   const graph = useApp((s) => s.content?.graph);
   const goTo = useApp((s) => s.goTo);
@@ -35,6 +38,87 @@ export function Report(): React.ReactElement {
 
     return { measured, inferred };
   }, [placement, model, graph]);
+
+  // A challenge exam produces a verdict rather than a placement, so it gets its
+  // own report. Without this branch a learner who just sat a boss fight would be
+  // told there are no results.
+  if (challenge) {
+    return (
+      <div className="mx-auto max-w-3xl px-6 py-10">
+        <header className="flex items-baseline gap-3">
+          <h1 className="text-2xl font-semibold text-slate-900">
+            {challenge.courseId} challenge exam
+          </h1>
+          <span
+            className={`rounded px-2 py-0.5 text-sm font-semibold ${
+              challenge.passed ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-700'
+            }`}
+          >
+            {challenge.passed ? 'Passed — crest earned' : 'Not passed'}
+          </span>
+          <button className="ml-auto text-sm text-slate-500 underline" onClick={() => goTo('dashboard')}>
+            Back to dashboard
+          </button>
+        </header>
+
+        <dl className="mt-6 flex flex-wrap gap-8">
+          <div>
+            <dt className="text-xs uppercase tracking-wide text-slate-400">Score</dt>
+            <dd className="text-xl tabular-nums text-slate-900">{pct(challenge.scoreFraction)}</dd>
+            <dd className="text-xs text-slate-500">{challenge.correctCount} of {challenge.itemsAnswered}</dd>
+          </div>
+          <div>
+            <dt className="text-xs uppercase tracking-wide text-slate-400">Coverage</dt>
+            <dd className="text-xl tabular-nums text-slate-900">{pct(challenge.coverage)}</dd>
+            <dd className="text-xs text-slate-500">of the course's topics</dd>
+          </div>
+          <div>
+            <dt className="text-xs uppercase tracking-wide text-slate-400">XP earned</dt>
+            <dd className="text-xl tabular-nums text-amber-700">{sessionXp}</dd>
+          </div>
+          {streak && (
+            <div>
+              <dt className="text-xs uppercase tracking-wide text-slate-400">Streak</dt>
+              <dd className="text-xl tabular-nums text-slate-900">{streak.state.current}</dd>
+              <dd className="text-xs text-slate-500">
+                {streak.outcome === 'frozen'
+                  ? `${streak.freezesSpent} freeze spent covering a missed day`
+                  : streak.outcome === 'broken'
+                    ? 'reset after a gap'
+                    : streak.freezesEarned > 0
+                      ? 'freeze earned'
+                      : 'day recorded'}
+              </dd>
+            </div>
+          )}
+        </dl>
+
+        {!challenge.passed && challenge.reasons.length > 0 && (
+          <section className="mt-6">
+            <h2 className="text-sm font-semibold text-slate-900">What stood in the way</h2>
+            <ul className="mt-2 space-y-1 text-sm text-slate-700">
+              {challenge.reasons.map((reason) => (
+                <li key={reason}>• {reason}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {challenge.failedKcs.length > 0 && graph && (
+          <section className="mt-6">
+            <h2 className="text-sm font-semibold text-slate-900">Topics below the floor</h2>
+            <ul className="mt-2 space-y-1">
+              {challenge.failedKcs.map((id) => (
+                <li key={id} className="card px-4 py-2 text-sm" data-kc-id={id}>
+                  <span className="font-medium text-slate-900">{graph.kcs.get(id)?.title ?? id}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    );
+  }
 
   if (!placement || !grouped) {
     return (

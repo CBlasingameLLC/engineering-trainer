@@ -6,6 +6,12 @@ export * from './mastery/retention.js';
 export * from './mastery/composite.js';
 
 export * from './kc-graph/graph.js';
+export * from './kc-graph/layout.js';
+
+export * from './session/xp.js';
+export * from './session/streak.js';
+export * from './session/quest.js';
+export * from './session/challenge.js';
 
 export * from './cat/propagation.js';
 export * from './cat/session.js';

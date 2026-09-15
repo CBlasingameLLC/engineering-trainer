@@ -97,7 +97,20 @@ while (answered < 60) {
     for (const ref of item.kcRefs) missedKcs.add(ref.kc);
   }
 
-  if (item?.answer?.kind === 'choice') {
+  if (item?.answer?.kind === 'circuit') {
+    // Design tasks are answered through the netlist path rather than by
+    // driving the schematic editor; the editor itself is exercised directly in
+    // lab-and-tree.mjs, where a wrong drawing is a clearer failure signal than
+    // a wrong answer buried in a 45-item run.
+    await page.locator('button[data-circuit-input="netlist"]').click();
+    const deck = shouldMiss
+      // Parses, has a ground, and is simply the wrong design - so it is graded
+      // as incorrect rather than rejected as unevaluable.
+      ? item.answer.reference.replace(/^(R\w*\s+\S+\s+\S+\s+)\S+$/gm, '$1999k')
+      : item.answer.reference;
+    await page.locator('#netlist').fill(deck);
+    await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'choice') {
     const options = item.options.map((o) => o.id);
     const pickId = shouldMiss
       ? (options.find((o) => o !== item.answer.correctId) ?? item.answer.correctId)
@@ -125,7 +138,9 @@ while (answered < 60) {
   await page.waitForTimeout(60);
 }
 
+const circuitItems = [...byId.values()].filter((i) => i.answer?.kind === 'circuit').length;
 console.log(`[5] answered ${answered} items (${deliberatelyWrong} deliberately missed, ${unmatched} unidentified)`);
+console.log(`    bank contains ${circuitItems} design task(s) graded by simulation`);
 if (unmatched > 0) { console.error(`FAIL: ${unmatched} items could not be matched to the bank`); process.exitCode = 1; }
 
 // --- Report ----------------------------------------------------------------

@@ -13,6 +13,7 @@ export default defineConfig({
       '@et/content-schema': r('../../packages/content-schema/src/index.ts'),
       '@et/answer-engine': r('../../packages/answer-engine/src/index.ts'),
       '@et/generators': r('../../packages/generators/src/index.ts'),
+      '@et/circuits': r('../../packages/circuits/src/index.ts'),
     },
   },
   // Bind both servers to an explicit IPv4 address rather than the default

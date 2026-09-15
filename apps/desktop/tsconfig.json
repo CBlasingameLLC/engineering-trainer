@@ -3,16 +3,38 @@
   "compilerOptions": {
     "noEmit": true,
     "jsx": "react-jsx",
-    "lib": ["ES2023", "DOM", "DOM.Iterable"],
-    "types": ["vite/client"],
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "vite/client"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@et/domain": ["../../packages/domain/src/index.ts"],
-      "@et/content-schema": ["../../packages/content-schema/src/index.ts"],
-      "@et/answer-engine": ["../../packages/answer-engine/src/index.ts"],
-      "@et/generators": ["../../packages/generators/src/index.ts"]
+      "@/*": [
+        "src/*"
+      ],
+      "@et/domain": [
+        "../../packages/domain/src/index.ts"
+      ],
+      "@et/content-schema": [
+        "../../packages/content-schema/src/index.ts"
+      ],
+      "@et/answer-engine": [
+        "../../packages/answer-engine/src/index.ts"
+      ],
+      "@et/generators": [
+        "../../packages/generators/src/index.ts"
+      ],
+      "@et/circuits": [
+        "../../packages/circuits/src/index.ts"
+      ]
     }
   },
-  "include": ["src/**/*", "vite.config.ts"]
+  "include": [
+    "src/**/*",
+    "vite.config.ts"
+  ]
 }

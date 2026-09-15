@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { itemSchema } from '@et/content-schema';
 import { checkAnswer, toleranceFor } from '@et/answer-engine';
+import { gradeCircuit, nodesOf, parseNetlist } from '@et/circuits';
 import { GENERATORS, buildItems, buildPack, generatorById, makeRng } from '../src/index.js';
 import type { Generator } from '../src/types.js';
 
@@ -42,6 +43,11 @@ describe('generator registry', () => {
     expect(kcs.size).toBeGreaterThanOrEqual(15);
   });
 
+  it('includes design tasks graded by simulation', () => {
+    const design = GENERATORS.filter((g) => g.id.endsWith('.design'));
+    expect(design.length).toBeGreaterThanOrEqual(3);
+  });
+
   it('looks generators up by id', () => {
     expect(generatorById('ee2300.thevenin.resistance')).toBeDefined();
     expect(generatorById('nope')).toBeUndefined();
@@ -71,6 +77,10 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
     // against LLM-authored items.
     for (const seed of SEEDS) {
       const item = itemSchema.parse(variant(generator, seed));
+      // A design task states a specification, not an answer; it is checked by
+      // simulating its reference deck instead, below.
+      if (item.answer.kind === 'circuit') continue;
+
       const response =
         item.answer.kind === 'choice'
           ? ({ kind: 'choice', optionId: item.answer.correctId } as const)
@@ -78,6 +88,33 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
 
       const result = checkAnswer(response, item);
       expect(result.correct, `seed ${seed} rejected its own answer: ${result.feedback ?? ''}`).toBe(true);
+    }
+  });
+
+  it('states a design specification that its own reference design satisfies', () => {
+    // Only meaningful for circuit-build generators; a spec nothing can satisfy
+    // is the design equivalent of a wrong answer key.
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(generator, seed));
+      if (item.answer.kind !== 'circuit') continue;
+
+      const parsed = parseNetlist(item.answer.reference);
+      expect(parsed.errors, `seed ${seed} reference deck does not parse`).toEqual([]);
+
+      const present = new Set(nodesOf(parsed.netlist));
+      for (const node of item.answer.requiredNodes) {
+        expect(present.has(node), `seed ${seed}: reference lacks required node "${node}"`).toBe(true);
+      }
+
+      const graded = gradeCircuit(parsed.netlist, item.answer.measurements);
+      expect(graded.error, `seed ${seed} reference could not be simulated`).toBeUndefined();
+      expect(
+        graded.correct,
+        `seed ${seed} reference fails its own spec: ${graded.results
+          .filter((r) => !r.within)
+          .map((r) => `${r.probe} expected ${r.expected} got ${r.actual}`)
+          .join('; ')}`,
+      ).toBe(true);
     }
   });
 

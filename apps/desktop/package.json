@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "e2e": "node e2e/placement-flow.mjs"
+    "e2e": "node e2e/placement-flow.mjs",
+    "e2e:lab": "node e2e/lab-and-tree.mjs"
   },
   "dependencies": {
     "@et/answer-engine": "workspace:*",
@@ -19,7 +20,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zustand": "^5.0.2",
-    "yaml": "^2.9.1"
+    "yaml": "^2.9.1",
+    "@et/circuits": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.0.2",

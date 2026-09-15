@@ -1,6 +1,7 @@
 import { checkAnswer, toleranceFor, type Response } from '@et/answer-engine';
 import type { Item, Pack } from '@et/content-schema';
 import { generatorById, makeRng } from '@et/generators';
+import { gradeCircuit, nodesOf, parseNetlist } from '@et/circuits';
 
 /**
  * The verification gate.
@@ -145,7 +146,48 @@ function checkRegeneration(item: Item): VerifyFinding[] {
   return [];
 }
 
-/** Check 4 — misconception coverage. Untagged wrong options teach nothing. */
+/**
+ * Check 4 — a design task is actually satisfiable.
+ *
+ * A circuit-build item states a specification rather than an answer, so there
+ * is nothing to compare against. What can be checked is whether the spec can be
+ * met at all: every such item carries a reference deck, and that deck is graded
+ * against the item's own measurements using the same solver that will grade the
+ * learner. An unsatisfiable design task is the exact equivalent of a wrong
+ * answer key — the learner cannot win, and would reasonably conclude the app is
+ * broken rather than that they are.
+ */
+function checkCircuitReference(item: Item): VerifyFinding[] {
+  if (item.answer.kind !== 'circuit') return [];
+  const answer = item.answer;
+
+  const parsed = parseNetlist(answer.reference);
+  if (parsed.errors.length > 0) {
+    return [error(item.id, 'circuit-reference', `reference deck does not parse: ${parsed.errors.join('; ')}`)];
+  }
+
+  // Nodes the learner is told to expose must exist in the reference, or the
+  // wording and the grading disagree about what the circuit is called.
+  const present = new Set(nodesOf(parsed.netlist));
+  const missing = answer.requiredNodes.filter((n) => !present.has(n));
+  if (missing.length > 0) {
+    return [error(item.id, 'circuit-reference', `reference deck is missing required node(s): ${missing.join(', ')}`)];
+  }
+
+  const result = gradeCircuit(parsed.netlist, answer.measurements);
+  if (result.error) {
+    return [error(item.id, 'circuit-reference', `reference deck could not be simulated: ${result.error}`)];
+  }
+  if (!result.correct) {
+    const failed = result.results
+      .filter((r) => !r.within)
+      .map((r) => `${r.probe} expected ${r.expected} got ${r.actual ?? 'nothing'}${r.message ? ` (${r.message})` : ''}`);
+    return [error(item.id, 'circuit-reference', `the item's own reference design fails its specification: ${failed.join('; ')}`)];
+  }
+  return [];
+}
+
+/** Check 5 — misconception coverage. Untagged wrong options teach nothing. */
 function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
   if (item.type === 'multiple-choice' && item.answer.kind === 'choice') {
     const { correctId } = item.answer;
@@ -155,13 +197,14 @@ function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
       return [warn(item.id, 'misconception-coverage', 'no distractor is tagged with a misconception')];
     }
   }
+  if (item.type === 'circuit-build') return []; // graded by simulation; traps do not apply
   if (item.type === 'numeric' && item.misconceptionTraps.length === 0) {
     return [warn(item.id, 'misconception-coverage', 'numeric item defines no misconception traps')];
   }
   return [];
 }
 
-/** Check 5 — KC references resolve against the loaded curriculum. */
+/** Check 6 — KC references resolve against the loaded curriculum. */
 function checkKcReferences(item: Item, knownKcs: ReadonlySet<string>): VerifyFinding[] {
   if (knownKcs.size === 0) return []; // no curriculum supplied
   return item.kcRefs
@@ -186,6 +229,7 @@ export function verifyPack(pack: Pack, options: VerifyOptions = {}): VerifyRepor
       ...checkSelfConsistency(item),
       ...checkExplanationAgreement(item),
       ...checkRegeneration(item),
+      ...checkCircuitReference(item),
       ...checkMisconceptionCoverage(item),
       ...checkKcReferences(item, knownKcs),
     ];

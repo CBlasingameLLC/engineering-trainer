@@ -10,12 +10,20 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 /// rebuilt on load, so the mastery parameters can change without invalidating
 /// history. Nothing derived is stored here.
 fn migrations() -> Vec<Migration> {
-    vec![Migration {
-        version: 1,
-        description: "initial learner schema",
-        sql: include_str!("../migrations/001_initial.sql"),
-        kind: MigrationKind::Up,
-    }]
+    vec![
+        Migration {
+            version: 1,
+            description: "initial learner schema",
+            sql: include_str!("../migrations/001_initial.sql"),
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 2,
+            description: "saved circuits, streak bookkeeping and course crests",
+            sql: include_str!("../migrations/002_circuits_and_progress.sql"),
+            kind: MigrationKind::Up,
+        },
+    ]
 }
 
 fn main() {

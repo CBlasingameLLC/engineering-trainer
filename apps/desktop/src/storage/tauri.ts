@@ -1,6 +1,7 @@
 import {
   emptyProfile,
   type AttemptRecord,
+  type CircuitRecord,
   type InferredPrior,
   type MisconceptionEvent,
   type Profile,
@@ -41,7 +42,11 @@ export class TauriSqlAdapter implements StorageAdapter {
 
   async getProfile(): Promise<Profile> {
     const rows = await this.database.select<
-      { completed_courses: string; target_term: string; total_xp: number; streak_days: number; last_active_at: string | null; onboarded: number }[]
+      {
+        completed_courses: string; target_term: string; total_xp: number;
+        streak_days: number; streak_longest: number; streak_last_day: string | null;
+        streak_freezes: number; crests: string; last_active_at: string | null; onboarded: number;
+      }[]
     >('SELECT * FROM profile WHERE id = 1');
 
     const row = rows[0];
@@ -50,7 +55,13 @@ export class TauriSqlAdapter implements StorageAdapter {
       completedCourses: JSON.parse(row.completed_courses),
       targetTerm: row.target_term,
       totalXp: row.total_xp,
-      streakDays: row.streak_days,
+      streak: {
+        current: row.streak_days,
+        longest: row.streak_longest,
+        lastActiveDay: row.streak_last_day,
+        freezes: row.streak_freezes,
+      },
+      crests: JSON.parse(row.crests),
       lastActiveAt: row.last_active_at,
       onboarded: row.onboarded === 1,
     };
@@ -59,13 +70,18 @@ export class TauriSqlAdapter implements StorageAdapter {
   async saveProfile(profile: Profile): Promise<void> {
     await this.database.execute(
       `UPDATE profile SET completed_courses = $1, target_term = $2, total_xp = $3,
-                          streak_days = $4, last_active_at = $5, onboarded = $6
+                          streak_days = $4, streak_longest = $5, streak_last_day = $6,
+                          streak_freezes = $7, crests = $8, last_active_at = $9, onboarded = $10
        WHERE id = 1`,
       [
         JSON.stringify(profile.completedCourses),
         profile.targetTerm,
         profile.totalXp,
-        profile.streakDays,
+        profile.streak.current,
+        profile.streak.longest,
+        profile.streak.lastActiveDay,
+        profile.streak.freezes,
+        JSON.stringify(profile.crests),
         profile.lastActiveAt,
         profile.onboarded ? 1 : 0,
       ],
@@ -191,14 +207,41 @@ export class TauriSqlAdapter implements StorageAdapter {
     }));
   }
 
+  async saveCircuit(circuit: CircuitRecord): Promise<void> {
+    await this.database.execute(
+      `INSERT OR REPLACE INTO circuits (id, name, schematic, netlist, updated_at)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [circuit.id, circuit.name, JSON.stringify(circuit.schematic), circuit.netlist, circuit.updatedAt],
+    );
+  }
+
+  async listCircuits(): Promise<CircuitRecord[]> {
+    const rows = await this.database.select<
+      { id: string; name: string; schematic: string; netlist: string; updated_at: string }[]
+    >('SELECT * FROM circuits ORDER BY updated_at DESC');
+
+    return rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      schematic: JSON.parse(row.schematic),
+      netlist: row.netlist,
+      updatedAt: row.updated_at,
+    }));
+  }
+
+  async deleteCircuit(id: string): Promise<void> {
+    await this.database.execute('DELETE FROM circuits WHERE id = $1', [id]);
+  }
+
   async reset(): Promise<void> {
     // Order matters: children before the rows they reference.
-    for (const table of ['misconception_events', 'attempts', 'sessions', 'inferred_priors']) {
+    for (const table of ['misconception_events', 'attempts', 'sessions', 'inferred_priors', 'circuits']) {
       await this.database.execute(`DELETE FROM ${table}`);
     }
     await this.database.execute(
       `UPDATE profile SET completed_courses = '[]', target_term = '', total_xp = 0,
-                          streak_days = 0, last_active_at = NULL, onboarded = 0
+                          streak_days = 0, streak_longest = 0, streak_last_day = NULL,
+                          streak_freezes = 0, crests = '[]', last_active_at = NULL, onboarded = 0
        WHERE id = 1`,
     );
   }

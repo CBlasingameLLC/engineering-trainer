@@ -39,8 +39,19 @@ End-to-end (three steps, in order — the driver needs a served build):
 ```sh
 pnpm --filter @et/desktop build
 pnpm --filter @et/desktop preview &     # 127.0.0.1:4173
-pnpm --filter @et/desktop e2e
+pnpm --filter @et/desktop e2e           # placement -> gap report
+pnpm --filter @et/desktop e2e:lab       # skill tree + schematic editor + solver
 ```
+
+The container's preinstalled Chromium can lag the installed Playwright. When the
+driver reports a missing executable, point it at what is actually there rather
+than downloading a second copy:
+
+```sh
+E2E_CHROME=/opt/pw-browsers/chromium-1194/chrome-linux/chrome pnpm --filter @et/desktop e2e
+```
+
+CI installs its own matching browser, so this override is local-only.
 
 ## Architecture
 
@@ -59,10 +70,11 @@ underneath it. Nearly every design decision below follows from that.
 | `packages/content-schema` | Zod contract for items, packs, curriculum, credentials | The single shape every content producer emits |
 | `packages/answer-engine` | Grading: numeric+units, symbolic, truth-table, choice | Same code path grades a learner *and* verifies an author |
 | `packages/generators` | Parameterized item generators | Answers computed from parameters, never transcribed |
+| `packages/circuits` | Netlist model, MNA solver, schematic net extraction, grading | Zero runtime deps. ngspice is a **test-only** oracle |
 | `tools/pack-cli` | `validate`/`verify`/`stats`/`build`/`import` | The gate all content passes through |
 | `apps/desktop` | React renderer + Tauri shell | Orchestration only — **no mastery logic lives here** |
 
-`packages/circuits` and `packages/ui` are declared but empty stubs (Phase 3).
+`packages/ui` is declared but an empty stub.
 
 ### The mastery triad — three models, three questions
 
@@ -184,28 +196,75 @@ packs by the schema, and never enters a release build. Don't weaken that.
   resolves to `::1` in CI while the readiness poll dials IPv4; don't revert it.
 - **`packages/*/src/*.ts` imports use `.js` extensions** (`verbatimModuleSyntax`,
   bundler resolution). Workspace `@et/*` aliases are declared independently in
-  three configs that must stay in sync — `tsconfig.json` paths,
-  `vitest.config.ts`, and `apps/desktop/vite.config.ts` — so a new package
-  resolves in tests but not in the app, or vice versa, until all three know it.
+  **four** configs that must stay in sync:
+  `tsconfig.json`, `vitest.config.ts`, `apps/desktop/vite.config.ts` and
+  `apps/desktop/tsconfig.json`. Miss one and a new package resolves in tests but
+  not in the app, or typechecks at the root and not in the renderer — adding
+  `@et/circuits` produced 35 errors from exactly one missing entry.
+
+### Circuits: own solver, ngspice as oracle
+
+`packages/circuits` implements Modified Nodal Analysis from scratch — stamps,
+LU with partial pivoting, DC/AC/transient — and that solver is what grades
+`circuit-build` items and drives the Circuit Lab.
+
+ngspice (via `eecircuit-engine`, a 40 MB WebAssembly build) is a **devDependency
+used only in tests**, as an oracle: the same deck goes to both and the node
+voltages must agree. It is deliberately not shipped. Grading has to be
+deterministic and instant, and a solver that can emit *its own node equations*
+is worth more in a teaching tool than one that can only emit answers — that
+output is the entire reason the Lab exists.
+
+Things that will bite:
+
+- **SPICE takes the first line as the title, unconditionally.** A heuristic that
+  guesses whether line 1 is a title or a part turned `rc step response` into a
+  resistor named `rc`. `parseNetlist` returns `notes` when the title looks like
+  a component, so a pasted fragment says so instead of silently losing a part.
+- **`M` is milli, `MEG` is mega**, case-insensitively. Getting it backwards
+  scales a part by 10^9. Pinned by test.
+- **Geometry is the only stored state.** Connectivity is re-derived by
+  `extractNets` on every render, so a drawing and its circuit cannot disagree.
+  Pin offsets live in `PIN_LAYOUT` in `schematic.ts` and the SVG symbols must
+  match them, or parts look connected and simulate unconnected.
+- **`circuit-build` items carry a `reference` deck.** `pack verify` simulates it
+  against the item's own measurements — an unsatisfiable design spec is the
+  design equivalent of a wrong answer key, and nothing else can detect one.
+- Design tasks are graded on **measured behaviour, never topology**, so two
+  2.35k resistors in series pass a 4.7k spec.
+
+### Gamification is built to discourage grinding
+
+`xpForAttempt` pays a bonus scaled by how far FSRS retrievability had *fallen*
+before the attempt. Recalling something nearly forgotten pays up to double;
+a fresh, fully-retrievable item pays no bonus at all. This is deliberate and
+load-bearing — the naive alternative (flat XP per correct answer) rewards
+answering easy questions you already know, which is exactly the study behaviour
+the rest of the app exists to detect. Tests pin the ordering.
+
+Challenge exams require **coverage as well as score**: 100% on two of four
+topics fails. A crest is a claim about a course, and a mechanic that accepted
+narrow evidence would be lying to the person using it.
 
 ## State of the build
 
-Plan Phases 0–1 are complete: the EE 2300 vertical slice runs end to end
-(onboard → adaptive placement → gap report → dashboard), 349 tests pass, 413
-verified items across 28 of 34 KCs.
+Plan Phases 0–3 are complete. The EE 2300 vertical slice runs end to end
+(onboard → adaptive placement → gap report → dashboard), plus the skill tree,
+XP/streaks/quests/challenge exams, and the circuit lab with its own MNA solver.
 
-Not built, and not stubbed beyond a package manifest:
+Not built:
 
-- **Circuit lab** (Phase 3) — schematic editor, ngspice via `eecircuit-engine`,
-  the MNA teaching solver, `circuit-build` grading. The item schema already has
-  `circuitAnswerSchema`; nothing implements it. This was an explicit part of the
-  original request.
-- **Gamification** (Phase 2) — skill-tree DAG visualization, streaks, quests,
-  challenge exams. XP exists only as a flat 10-per-correct total on the
-  dashboard; the planned difficulty weighting and retrieval-effort bonus are not
-  implemented, and `Profile.streakDays` is persisted but never incremented.
 - **Curriculum breadth** (Phase 4) — the 6 math KCs referenced as cross-course
-  prerequisites have no items; `pnpm content stats` lists them.
+  prerequisites have no items; `pnpm content stats` lists them. Also no
+  `truth-table` or `symbolic` items yet, though both are in the schema and the
+  answer engine grades them.
+- **Nonlinear devices** — diodes and transistors need Newton-Raphson around the
+  existing stamping code plus a device-model library. Nothing in Circuits I/II
+  requires them.
+- **Schematic reconstruction from a netlist.** Importing a deck gives topology
+  with no geometry; the Lab says so rather than inventing a layout.
+- **Misconception feed** — misconception events are recorded and stored, but
+  nothing surfaces the recurring ones or launches a targeted drill.
 
 **The Tauri shell has never been compiled.** `webkit2gtk`/`gtk3`/`libsoup3` were
 unavailable in the development environment, so `cargo build` has not run against

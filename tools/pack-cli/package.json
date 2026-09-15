@@ -12,6 +12,7 @@
     "@et/answer-engine": "workspace:*",
     "@et/generators": "workspace:*",
     "@et/domain": "workspace:*",
-    "yaml": "^2.9.1"
+    "yaml": "^2.9.1",
+    "@et/circuits": "workspace:*"
   }
 }

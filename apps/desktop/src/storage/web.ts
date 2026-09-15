@@ -1,6 +1,7 @@
 import {
   emptyProfile,
   type AttemptRecord,
+  type CircuitRecord,
   type InferredPrior,
   type MisconceptionEvent,
   type Profile,
@@ -18,7 +19,7 @@ import {
  */
 
 const DB_NAME = 'engineering-trainer';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 const STORES = {
   profile: 'profile',
@@ -26,6 +27,7 @@ const STORES = {
   misconceptions: 'misconceptions',
   sessions: 'sessions',
   priors: 'priors',
+  circuits: 'circuits',
 } as const;
 
 function open(): Promise<IDBDatabase> {
@@ -38,6 +40,7 @@ function open(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORES.misconceptions)) db.createObjectStore(STORES.misconceptions, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORES.sessions)) db.createObjectStore(STORES.sessions, { keyPath: 'id' });
       if (!db.objectStoreNames.contains(STORES.priors)) db.createObjectStore(STORES.priors, { keyPath: 'kcId' });
+      if (!db.objectStoreNames.contains(STORES.circuits)) db.createObjectStore(STORES.circuits, { keyPath: 'id' });
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
@@ -68,7 +71,9 @@ export class WebStorageAdapter implements StorageAdapter {
 
   async getProfile(): Promise<Profile> {
     const stored = await run<Profile | undefined>(this.database, STORES.profile, 'readonly', (s) => s.get('singleton'));
-    return stored ?? emptyProfile();
+    // A profile written before streaks and crests existed is missing those
+    // fields; merging over the empty profile fills them without a migration.
+    return stored ? { ...emptyProfile(), ...stored } : emptyProfile();
   }
 
   async saveProfile(profile: Profile): Promise<void> {
@@ -113,6 +118,19 @@ export class WebStorageAdapter implements StorageAdapter {
 
   async listPriors(): Promise<InferredPrior[]> {
     return run<InferredPrior[]>(this.database, STORES.priors, 'readonly', (s) => s.getAll());
+  }
+
+  async saveCircuit(circuit: CircuitRecord): Promise<void> {
+    await run(this.database, STORES.circuits, 'readwrite', (s) => s.put(circuit));
+  }
+
+  async listCircuits(): Promise<CircuitRecord[]> {
+    const rows = await run<CircuitRecord[]>(this.database, STORES.circuits, 'readonly', (s) => s.getAll());
+    return rows.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  }
+
+  async deleteCircuit(id: string): Promise<void> {
+    await run(this.database, STORES.circuits, 'readwrite', (s) => s.delete(id));
   }
 
   async reset(): Promise<void> {

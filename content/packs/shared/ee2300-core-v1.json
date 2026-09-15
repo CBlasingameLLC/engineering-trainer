@@ -23944,6 +23944,3426 @@
         "licenseTier": "redistributable",
         "createdAt": "1970-01-01T00:00:00.000Z"
       }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s1",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 15\\,\\text{V} DC.\n- Node `out` must sit at **3.75\\,\\text{V}** with no load attached.\n- The divider must draw **0.1648 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 1,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 15\nR1 in out 68250\nR2 out 0 22750\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 3.75,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00016483516483516484,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{15}{0.0001648} = 91\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{3.75}{15} = 0.25$.",
+          "So $R_2 = 0.25 \\times 91000 = 22.8\\,\\text{k\\Omega}$ and $R_1 = 68.3\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 15 \\times \\dfrac{22750}{68250 + 22750} = 3.75\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s2",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 15\\,\\text{V} DC.\n- Node `out` must sit at **5\\,\\text{V}** with no load attached.\n- The divider must draw **4.545 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 2,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 15\nR1 in out 2200\nR2 out 0 1100\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 5,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.004545454545454545,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{15}{0.004545} = 3.3\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{5}{15} = 0.333$.",
+          "So $R_2 = 0.333 \\times 3300 = 1.1\\,\\text{k\\Omega}$ and $R_1 = 2.2\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 15 \\times \\dfrac{1100}{2200 + 1100} = 5\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s3",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 15\\,\\text{V} DC.\n- Node `out` must sit at **3.75\\,\\text{V}** with no load attached.\n- The divider must draw **13.64 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 3,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 15\nR1 in out 825\nR2 out 0 275\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 3.75,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.013636363636363636,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{15}{0.01364} = 1.1\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{3.75}{15} = 0.25$.",
+          "So $R_2 = 0.25 \\times 1100 = 275\\,\\text{\\Omega}$ and $R_1 = 825\\,\\text{\\Omega}$.",
+          "Check: $v_{out} = 15 \\times \\dfrac{275}{825 + 275} = 3.75\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s4",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 24\\,\\text{V} DC.\n- Node `out` must sit at **8\\,\\text{V}** with no load attached.\n- The divider must draw **21.82 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 4,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 24\nR1 in out 733.3\nR2 out 0 366.7\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 8,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.02181818181818182,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{24}{0.02182} = 1.1\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{8}{24} = 0.333$.",
+          "So $R_2 = 0.333 \\times 1100 = 367\\,\\text{\\Omega}$ and $R_1 = 733\\,\\text{\\Omega}$.",
+          "Check: $v_{out} = 24 \\times \\dfrac{366.7}{733.3 + 366.7} = 8\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s5",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 15\\,\\text{V} DC.\n- Node `out` must sit at **9\\,\\text{V}** with no load attached.\n- The divider must draw **3.846 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 5,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 15\nR1 in out 1560\nR2 out 0 2340\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 9,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0038461538461538464,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{15}{0.003846} = 3.9\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{9}{15} = 0.6$.",
+          "So $R_2 = 0.6 \\times 3900 = 2.34\\,\\text{k\\Omega}$ and $R_1 = 1.56\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 15 \\times \\dfrac{2340}{1560 + 2340} = 9\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s6",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- Node `out` must sit at **3\\,\\text{V}** with no load attached.\n- The divider must draw **0.8 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 6,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 12\nR1 in out 11250\nR2 out 0 3750\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 3,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0008,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{12}{0.0008} = 15\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{3}{12} = 0.25$.",
+          "So $R_2 = 0.25 \\times 15000 = 3.75\\,\\text{k\\Omega}$ and $R_1 = 11.3\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 12 \\times \\dfrac{3750}{11250 + 3750} = 3\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s7",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- Node `out` must sit at **1.25\\,\\text{V}** with no load attached.\n- The divider must draw **0.1064 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 7,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 5\nR1 in out 35250\nR2 out 0 11750\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 1.25,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00010638297872340425,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{5}{0.0001064} = 47\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{1.25}{5} = 0.25$.",
+          "So $R_2 = 0.25 \\times 47000 = 11.8\\,\\text{k\\Omega}$ and $R_1 = 35.3\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 5 \\times \\dfrac{11750}{35250 + 11750} = 1.25\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s8",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.1,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- Node `out` must sit at **2.5\\,\\text{V}** with no load attached.\n- The divider must draw **1.064 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 8,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 5\nR1 in out 2350\nR2 out 0 2350\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 2.5,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0010638297872340426,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{5}{0.001064} = 4.7\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{2.5}{5} = 0.5$.",
+          "So $R_2 = 0.5 \\times 4700 = 2.35\\,\\text{k\\Omega}$ and $R_1 = 2.35\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 5 \\times \\dfrac{2350}{2350 + 2350} = 2.5\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s9",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- Node `out` must sit at **3.75\\,\\text{V}** with no load attached.\n- The divider must draw **0.8065 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 9,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 5\nR1 in out 1550\nR2 out 0 4650\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 3.75,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0008064516129032258,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{5}{0.0008065} = 6.2\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{3.75}{5} = 0.75$.",
+          "So $R_2 = 0.75 \\times 6200 = 4.65\\,\\text{k\\Omega}$ and $R_1 = 1.55\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 5 \\times \\dfrac{4650}{1550 + 4650} = 3.75\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s10",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- Node `out` must sit at **9\\,\\text{V}** with no load attached.\n- The divider must draw **0.1935 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 10,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 12\nR1 in out 15500\nR2 out 0 46500\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 9,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0001935483870967742,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{12}{0.0001935} = 62\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{9}{12} = 0.75$.",
+          "So $R_2 = 0.75 \\times 62000 = 46.5\\,\\text{k\\Omega}$ and $R_1 = 15.5\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 12 \\times \\dfrac{46500}{15500 + 46500} = 9\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s11",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.1,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- Node `out` must sit at **6\\,\\text{V}** with no load attached.\n- The divider must draw **0.3077 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 11,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 12\nR1 in out 19500\nR2 out 0 19500\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 6,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0003076923076923077,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{12}{0.0003077} = 39\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{6}{12} = 0.5$.",
+          "So $R_2 = 0.5 \\times 39000 = 19.5\\,\\text{k\\Omega}$ and $R_1 = 19.5\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 12 \\times \\dfrac{19500}{19500 + 19500} = 6\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s12",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- Node `out` must sit at **2.25\\,\\text{V}** with no load attached.\n- The divider must draw **0.1098 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 12,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 9\nR1 in out 61500\nR2 out 0 20500\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 2.25,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00010975609756097561,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{9}{0.0001098} = 82\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{2.25}{9} = 0.25$.",
+          "So $R_2 = 0.25 \\times 82000 = 20.5\\,\\text{k\\Omega}$ and $R_1 = 61.5\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 9 \\times \\dfrac{20500}{61500 + 20500} = 2.25\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s13",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- Node `out` must sit at **4.8\\,\\text{V}** with no load attached.\n- The divider must draw **10.91 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 13,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 12\nR1 in out 660\nR2 out 0 440\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 4.8,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.01090909090909091,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{12}{0.01091} = 1.1\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{4.8}{12} = 0.4$.",
+          "So $R_2 = 0.4 \\times 1100 = 440\\,\\text{\\Omega}$ and $R_1 = 660\\,\\text{\\Omega}$.",
+          "Check: $v_{out} = 12 \\times \\dfrac{440}{660 + 440} = 4.8\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s14",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- Node `out` must sit at **4.8\\,\\text{V}** with no load attached.\n- The divider must draw **0.5455 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 14,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 12\nR1 in out 13200\nR2 out 0 8800\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 4.8,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0005454545454545455,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{12}{0.0005455} = 22\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{4.8}{12} = 0.4$.",
+          "So $R_2 = 0.4 \\times 22000 = 8.8\\,\\text{k\\Omega}$ and $R_1 = 13.2\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 12 \\times \\dfrac{8800}{13200 + 8800} = 4.8\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s15",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- Node `out` must sit at **3.6\\,\\text{V}** with no load attached.\n- The divider must draw **3.333 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 15,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 9\nR1 in out 1620\nR2 out 0 1080\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 3.6,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0033333333333333335,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{9}{0.003333} = 2.7\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{3.6}{9} = 0.4$.",
+          "So $R_2 = 0.4 \\times 2700 = 1.08\\,\\text{k\\Omega}$ and $R_1 = 1.62\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 9 \\times \\dfrac{1080}{1620 + 1080} = 3.6\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s16",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 15\\,\\text{V} DC.\n- Node `out` must sit at **3.75\\,\\text{V}** with no load attached.\n- The divider must draw **0.625 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 16,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 15\nR1 in out 18000\nR2 out 0 6000\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 3.75,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.000625,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{15}{0.000625} = 24\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{3.75}{15} = 0.25$.",
+          "So $R_2 = 0.25 \\times 24000 = 6\\,\\text{k\\Omega}$ and $R_1 = 18\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 15 \\times \\dfrac{6000}{18000 + 6000} = 3.75\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s17",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.7,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 15\\,\\text{V} DC.\n- Node `out` must sit at **5\\,\\text{V}** with no load attached.\n- The divider must draw **1.154 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 17,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 15\nR1 in out 8667\nR2 out 0 4333\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 5,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.001153846153846154,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{15}{0.001154} = 13\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{5}{15} = 0.333$.",
+          "So $R_2 = 0.333 \\times 13000 = 4.33\\,\\text{k\\Omega}$ and $R_1 = 8.67\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 15 \\times \\dfrac{4333}{8667 + 4333} = 5\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.voltage-divider.design.s18",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.voltage-divider",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.series-parallel",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.1,
+      "stem": "Design a **resistive divider**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- Node `out` must sit at **4.5\\,\\text{V}** with no load attached.\n- The divider must draw **0.6 mA** from the supply, so the total resistance across it is fixed.\n\nEither resistor may be built from a combination — only the measured behaviour is checked.",
+      "seed": 18,
+      "answer": {
+        "kind": "circuit",
+        "reference": "loaded divider\nV1 in 0 9\nR1 in out 7500\nR2 out 0 7500\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": 4.5,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0006,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The supply current fixes the total series resistance: $R_1 + R_2 = \\dfrac{9}{0.0006} = 15\\,\\text{k\\Omega}$.",
+          "The divider ratio fixes how that total is split: $\\dfrac{R_2}{R_1 + R_2} = \\dfrac{4.5}{9} = 0.5$.",
+          "So $R_2 = 0.5 \\times 15000 = 7.5\\,\\text{k\\Omega}$ and $R_1 = 7.5\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = 9 \\times \\dfrac{7500}{7500 + 7500} = 4.5\\,\\text{V}$."
+        ],
+        "principle": "A divider ratio fixes only the proportion; the current budget fixes the scale. Two specifications, two resistors.",
+        "hints": [
+          "The supply current and the supply voltage together give you the total resistance.",
+          "Split that total in the ratio the output voltage demands."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.voltage-divider.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s1",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-10** (so `out` sits at -10\\,\\text{V}).\n- Input resistance seen by the source must be **10\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 1,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 10000\nRf inv out 100000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -10,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0001,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 10\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 10 \\times 10000 = 100\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -10 \\times 1 = -10\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s2",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-5** (so `out` sits at -5\\,\\text{V}).\n- Input resistance seen by the source must be **20\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 2,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 20000\nRf inv out 100000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -5,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00005,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 20\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 5 \\times 20000 = 100\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -5 \\times 1 = -5\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s3",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-8** (so `out` sits at -8\\,\\text{V}).\n- Input resistance seen by the source must be **10\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 3,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 10000\nRf inv out 80000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -8,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0001,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 10\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 8 \\times 10000 = 80\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -8 \\times 1 = -8\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s4",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-4** (so `out` sits at -4\\,\\text{V}).\n- Input resistance seen by the source must be **20\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 4,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 20000\nRf inv out 80000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -4,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00005,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 20\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 4 \\times 20000 = 80\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -4 \\times 1 = -4\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s5",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.9,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-4** (so `out` sits at -4\\,\\text{V}).\n- Input resistance seen by the source must be **56\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 5,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 56000\nRf inv out 224000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -4,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00001785714285714286,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 56\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 4 \\times 56000 = 224\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -4 \\times 1 = -4\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s6",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 1.35,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-15** (so `out` sits at -15\\,\\text{V}).\n- Input resistance seen by the source must be **10\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 6,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 10000\nRf inv out 150000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -15,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0001,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 10\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 15 \\times 10000 = 150\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -15 \\times 1 = -15\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s7",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 1.35,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-25** (so `out` sits at -25\\,\\text{V}).\n- Input resistance seen by the source must be **1.1\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 7,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 1100\nRf inv out 27500\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -25,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0009090909090909091,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 1.1\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 25 \\times 1100 = 27.5\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -25 \\times 1 = -25\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s8",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-5** (so `out` sits at -5\\,\\text{V}).\n- Input resistance seen by the source must be **4.3\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 8,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 4300\nRf inv out 21500\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -5,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00023255813953488373,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 4.3\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 5 \\times 4300 = 21.5\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -5 \\times 1 = -5\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s9",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-4** (so `out` sits at -4\\,\\text{V}).\n- Input resistance seen by the source must be **6.8\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 9,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 6800\nRf inv out 27200\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -4,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00014705882352941175,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 6.8\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 4 \\times 6800 = 27.2\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -4 \\times 1 = -4\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s10",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 1.8,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-15** (so `out` sits at -15\\,\\text{V}).\n- Input resistance seen by the source must be **82\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 10,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 82000\nRf inv out 1230000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -15,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.000012195121951219513,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 82\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 15 \\times 82000 = 1.23\\,\\text{M\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -15 \\times 1 = -15\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s11",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.9,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-10** (so `out` sits at -10\\,\\text{V}).\n- Input resistance seen by the source must be **33\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 11,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 33000\nRf inv out 330000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -10,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.000030303030303030302,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 33\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 10 \\times 33000 = 330\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -10 \\times 1 = -10\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s12",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-10** (so `out` sits at -10\\,\\text{V}).\n- Input resistance seen by the source must be **1.1\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 12,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 1100\nRf inv out 11000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -10,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0009090909090909091,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 1.1\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 10 \\times 1100 = 11\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -10 \\times 1 = -10\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s13",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-2** (so `out` sits at -2\\,\\text{V}).\n- Input resistance seen by the source must be **22\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 13,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 22000\nRf inv out 44000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -2,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00004545454545454545,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 22\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 2 \\times 22000 = 44\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -2 \\times 1 = -2\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s14",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-10** (so `out` sits at -10\\,\\text{V}).\n- Input resistance seen by the source must be **2.7\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 14,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 2700\nRf inv out 27000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -10,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00037037037037037035,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 2.7\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 10 \\times 2700 = 27\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -10 \\times 1 = -10\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s15",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-8** (so `out` sits at -8\\,\\text{V}).\n- Input resistance seen by the source must be **2.4\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 15,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 2400\nRf inv out 19200\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -8,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0004166666666666667,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 2.4\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 8 \\times 2400 = 19.2\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -8 \\times 1 = -8\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s16",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 1.8,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-20** (so `out` sits at -20\\,\\text{V}).\n- Input resistance seen by the source must be **13\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 16,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 13000\nRf inv out 260000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -20,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00007692307692307693,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 13\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 20 \\times 13000 = 260\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -20 \\times 1 = -20\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s17",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-10** (so `out` sits at -10\\,\\text{V}).\n- Input resistance seen by the source must be **15\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 17,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 15000\nRf inv out 150000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -10,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.00006666666666666667,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 15\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 10 \\times 15000 = 150\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -10 \\times 1 = -10\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.op-amp-inverting.design.s18",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.op-amp-inverting",
+          "weight": 0.7
+        },
+        {
+          "kc": "ee2300.op-amp-ideal",
+          "weight": 0.3
+        }
+      ],
+      "difficultyB": 0.45,
+      "stem": "Design an **inverting amplifier** using one ideal op-amp.\n\n- Input source `V1` drives node `in` at 1\\,\\text{V} DC.\n- Closed-loop gain must be **-10** (so `out` sits at -10\\,\\text{V}).\n- Input resistance seen by the source must be **3.9\\,\\text{k\\Omega}**.\n\nName the output node `out`. Any resistor network that meets both specifications is accepted — there is more than one right answer.",
+      "seed": 18,
+      "answer": {
+        "kind": "circuit",
+        "reference": "inverting amplifier\nV1 in 0 1\nR1 in inv 3900\nRf inv out 39000\nXU1 out 0 inv opamp\n.op\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "op",
+            "expected": -10,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.02
+            }
+          },
+          {
+            "probe": "i(V1)",
+            "analysis": "op",
+            "expected": -0.0002564102564102564,
+            "unit": "A",
+            "tolerance": {
+              "rel": 0.03
+            }
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "For an ideal op-amp with negative feedback the inverting input is a **virtual ground**, so the source sees exactly $R_1$ to ground.",
+          "That fixes $R_1$ from the input-resistance specification: $R_1 = 3.9\\,\\text{k\\Omega}$.",
+          "Closed-loop gain of the inverting configuration is $-R_f/R_1$, so $R_f = 10 \\times 3900 = 39\\,\\text{k\\Omega}$.",
+          "Check: $v_{out} = -\\dfrac{R_f}{R_1} v_{in} = -10 \\times 1 = -10\\,\\text{V}$."
+        ],
+        "principle": "The inverting amplifier sets gain and input resistance with the same two resistors, so the two specifications are not independent — choose R1 from the input resistance first.",
+        "hints": [
+          "What resistance does the source actually see, given the virtual ground?",
+          "Fix R1 from the input-resistance spec, then get Rf from the gain."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.op-amp-inverting.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s1",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **7.585 V** (that is $63.2\\%$ of 12\\,\\text{V}) at $t = 0.03003\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 1,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 12\nR1 in out 9100\nC1 out 0 3.3e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 7.585446705942692,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.000030030000000000002
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.03003\\,\\text{ms}$.",
+          "One choice among many: $R = 9.1\\,\\text{k\\Omega}$ with $C = 0.0033\\,\\mu\\text{F}$, giving $\\tau = 0.03003\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s2",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **7.585 V** (that is $63.2\\%$ of 12\\,\\text{V}) at $t = 0.01551\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 2,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 12\nR1 in out 330\nC1 out 0 4.7e-8 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 7.585446705942692,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.00001551
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.01551\\,\\text{ms}$.",
+          "One choice among many: $R = 330\\,\\text{\\Omega}$ with $C = 0.047\\,\\mu\\text{F}$, giving $\\tau = 0.01551\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s3",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **7.585 V** (that is $63.2\\%$ of 12\\,\\text{V}) at $t = 0.00517\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 3,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 12\nR1 in out 1100\nC1 out 0 4.7e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 7.585446705942692,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.00000517
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.00517\\,\\text{ms}$.",
+          "One choice among many: $R = 1.1\\,\\text{k\\Omega}$ with $C = 0.0047\\,\\mu\\text{F}$, giving $\\tau = 0.00517\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s4",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 0.00748\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 4,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 110\nC1 out 0 6.8e-8 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.00000748
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.00748\\,\\text{ms}$.",
+          "One choice among many: $R = 110\\,\\text{\\Omega}$ with $C = 0.068\\,\\mu\\text{F}$, giving $\\tau = 0.00748\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s5",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 1.833\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 5,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 390\nC1 out 0 0.0000047 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.001833
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 1.833\\,\\text{ms}$.",
+          "One choice among many: $R = 390\\,\\text{\\Omega}$ with $C = 4.7\\,\\mu\\text{F}$, giving $\\tau = 1.833\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s6",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **5.689 V** (that is $63.2\\%$ of 9\\,\\text{V}) at $t = 0.00495\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 6,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 9\nR1 in out 1500\nC1 out 0 3.3e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 5.6890850294570185,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.00000495
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.00495\\,\\text{ms}$.",
+          "One choice among many: $R = 1.5\\,\\text{k\\Omega}$ with $C = 0.0033\\,\\mu\\text{F}$, giving $\\tau = 0.00495\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s7",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **5.689 V** (that is $63.2\\%$ of 9\\,\\text{V}) at $t = 0.047\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 7,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 9\nR1 in out 47000\nC1 out 0 1e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 5.6890850294570185,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.000047000000000000004
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.047\\,\\text{ms}$.",
+          "One choice among many: $R = 47\\,\\text{k\\Omega}$ with $C = 0.001\\,\\mu\\text{F}$, giving $\\tau = 0.047\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s8",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **5.689 V** (that is $63.2\\%$ of 9\\,\\text{V}) at $t = 0.47\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 8,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 9\nR1 in out 470\nC1 out 0 0.000001 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 5.6890850294570185,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.00047
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.47\\,\\text{ms}$.",
+          "One choice among many: $R = 470\\,\\text{\\Omega}$ with $C = 1\\,\\mu\\text{F}$, giving $\\tau = 0.47\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s9",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **7.585 V** (that is $63.2\\%$ of 12\\,\\text{V}) at $t = 9.3\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 9,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 12\nR1 in out 620\nC1 out 0 0.000015 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 7.585446705942692,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.009300000000000001
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 9.3\\,\\text{ms}$.",
+          "One choice among many: $R = 620\\,\\text{\\Omega}$ with $C = 15\\,\\mu\\text{F}$, giving $\\tau = 9.3\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s10",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **5.689 V** (that is $63.2\\%$ of 9\\,\\text{V}) at $t = 2046\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 10,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 9\nR1 in out 62000\nC1 out 0 0.000033 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 5.6890850294570185,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 2.0460000000000003
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 2046\\,\\text{ms}$.",
+          "One choice among many: $R = 62\\,\\text{k\\Omega}$ with $C = 33\\,\\mu\\text{F}$, giving $\\tau = 2046\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s11",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **7.585 V** (that is $63.2\\%$ of 12\\,\\text{V}) at $t = 1.287\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 11,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 12\nR1 in out 3900\nC1 out 0 3.3e-7 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 7.585446705942692,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.0012870000000000002
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 1.287\\,\\text{ms}$.",
+          "One choice among many: $R = 3.9\\,\\text{k\\Omega}$ with $C = 0.33\\,\\mu\\text{F}$, giving $\\tau = 1.287\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s12",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 0.0123\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 12,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 8200\nC1 out 0 1.5e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.000012299999999999999
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.0123\\,\\text{ms}$.",
+          "One choice among many: $R = 8.2\\,\\text{k\\Omega}$ with $C = 0.0015\\,\\mu\\text{F}$, giving $\\tau = 0.0123\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s13",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 0.00363\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 13,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 110\nC1 out 0 3.3e-8 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.0000036299999999999995
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.00363\\,\\text{ms}$.",
+          "One choice among many: $R = 110\\,\\text{\\Omega}$ with $C = 0.033\\,\\mu\\text{F}$, giving $\\tau = 0.00363\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s14",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 0.484\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 14,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 2200\nC1 out 0 2.2e-7 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.000484
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.484\\,\\text{ms}$.",
+          "One choice among many: $R = 2.2\\,\\text{k\\Omega}$ with $C = 0.22\\,\\mu\\text{F}$, giving $\\tau = 0.484\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s15",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 0.405\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 15,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 2700\nC1 out 0 1.5e-7 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.000405
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.405\\,\\text{ms}$.",
+          "One choice among many: $R = 2.7\\,\\text{k\\Omega}$ with $C = 0.15\\,\\mu\\text{F}$, giving $\\tau = 0.405\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s16",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 9\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **5.689 V** (that is $63.2\\%$ of 9\\,\\text{V}) at $t = 0.0792\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 16,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 9\nR1 in out 24000\nC1 out 0 3.3e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 5.6890850294570185,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.0000792
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.0792\\,\\text{ms}$.",
+          "One choice among many: $R = 24\\,\\text{k\\Omega}$ with $C = 0.0033\\,\\mu\\text{F}$, giving $\\tau = 0.0792\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s17",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 1.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 5\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **3.161 V** (that is $63.2\\%$ of 5\\,\\text{V}) at $t = 0.00611\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 17,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 5\nR1 in out 1300\nC1 out 0 4.7e-9 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 3.1606027941427883,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.00000611
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 0.00611\\,\\text{ms}$.",
+          "One choice among many: $R = 1.3\\,\\text{k\\Omega}$ with $C = 0.0047\\,\\mu\\text{F}$, giving $\\tau = 0.00611\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "ee2300.first-order-step.design.s18",
+      "type": "circuit-build",
+      "kcRefs": [
+        {
+          "kc": "ee2300.first-order-step",
+          "weight": 0.6
+        },
+        {
+          "kc": "ee2300.capacitor-iv",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "Design a **first-order RC step response**.\n\n- Source `V1` drives node `in` at 12\\,\\text{V} DC.\n- The capacitor starts fully discharged.\n- Node `out` must reach **7.585 V** (that is $63.2\\%$ of 12\\,\\text{V}) at $t = 3.3\\,\\text{ms}$.\n\nGive the capacitor an initial condition of 0. Any $R$ and $C$ with the right product is accepted.",
+      "seed": 18,
+      "answer": {
+        "kind": "circuit",
+        "reference": "rc step response\nV1 in 0 12\nR1 in out 1500\nC1 out 0 0.0000022 IC=0\n.tran\n.end",
+        "requiredNodes": [
+          "in",
+          "out"
+        ],
+        "measurements": [
+          {
+            "probe": "v(out)",
+            "analysis": "tran",
+            "expected": 7.585446705942692,
+            "unit": "V",
+            "tolerance": {
+              "rel": 0.04
+            },
+            "atTime": 0.0033
+          }
+        ]
+      },
+      "options": [],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "A step into a series RC gives $v_{out}(t) = V_s\\left(1 - e^{-t/\\tau}\\right)$ with $\\tau = RC$.",
+          "At $t = \\tau$ the exponential has fallen to $e^{-1} = 0.368$, so $v_{out} = 0.632 V_s$ — which is what the specification states.",
+          "So the requirement is simply $RC = 3.3\\,\\text{ms}$.",
+          "One choice among many: $R = 1.5\\,\\text{k\\Omega}$ with $C = 2.2\\,\\mu\\text{F}$, giving $\\tau = 3.3\\,\\text{ms}$."
+        ],
+        "principle": "A first-order time constant depends only on the product RC, so the design has one equation and two unknowns — one of them is yours to choose.",
+        "hints": [
+          "What fraction of the final value does a step response reach after exactly one time constant?",
+          "You only need the product RC. Pick a convenient capacitor first."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "ee2300.first-order-step.design",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
     }
   ]
 }
