@@ -73,6 +73,11 @@ const WEAK = ['op-amp', 'capacitor', 'RLC', 'charges through'];
 let answered = 0;
 let deliberatelyWrong = 0;
 let unmatched = 0;
+// Recorded as the session runs rather than maintained as a second list. A
+// hand-written set of "topics we expect to fail" drifts out of step with the
+// item bank the moment a generator is added, and then reports a content
+// addition as a product regression.
+const missedKcs = new Set();
 let firstShot = true;
 
 while (answered < 60) {
@@ -87,7 +92,10 @@ while (answered < 60) {
   if (!item) { unmatched++; }
 
   const shouldMiss = item ? WEAK.some((w) => item.stem.includes(w)) : false;
-  if (shouldMiss) deliberatelyWrong++;
+  if (shouldMiss) {
+    deliberatelyWrong++;
+    for (const ref of item.kcRefs) missedKcs.add(ref.kc);
+  }
 
   if (item?.answer?.kind === 'choice') {
     const options = item.options.map((o) => o.id);
@@ -132,19 +140,30 @@ if (inferredCount > 0) {
   const inferred = await page.locator('h2:has-text("Inferred, not tested") + p + ul li').count();
   console.log('    inferred KCs listed:', inferred);
 }
-// The product claim: the report should localise the weakness to the topics
-// actually missed, and not scatter gaps across untouched material.
-// Target the title span specifically: `font-medium` alone also matches the
-// "overall N%" figure in the same row.
+// The product claim: every reported gap should be a topic this run actually
+// got wrong, with nothing scattered across untouched material.
+//
+// Checked against the KC ids recorded during the run rather than a
+// hand-written list of expected topics. The previous version kept two
+// independent regexes - one selecting what to miss from item stems, another
+// naming the titles expected to fail - and they drifted apart the moment a
+// generator was added, reporting a content addition as a product regression.
+const gapKcs = await page
+  .locator('section:has(h2:text("Start here")) li[data-kc-id]')
+  .evaluateAll((els) => els.map((e) => e.getAttribute('data-kc-id')));
 const gapTitles = await page
   .locator('section:has(h2:text("Start here")) li span.font-medium.text-slate-900')
   .allInnerTexts();
-const expectedWeak = /op-amp|amplifier|Capacitor|RLC|step response|Summing|Cascaded/i;
-const onTarget = gapTitles.filter((t) => expectedWeak.test(t)).length;
+
+const stray = gapKcs.filter((kc) => !missedKcs.has(kc));
 console.log(`    gaps: ${gapTitles.join(' | ')}`);
-console.log(`    localisation: ${onTarget}/${gapTitles.length} gaps fall in the missed topics`);
-if (gapTitles.length > 0 && onTarget < gapTitles.length) {
-  console.error('FAIL: gaps were reported outside the deliberately-missed topics');
+console.log(`    localisation: ${gapKcs.length - stray.length}/${gapKcs.length} gaps are KCs this run actually missed`);
+if (stray.length > 0) {
+  console.error(`FAIL: gaps reported for KCs answered correctly: ${stray.join(', ')}`);
+  process.exitCode = 1;
+}
+if (gapKcs.length === 0) {
+  console.error('FAIL: deliberately missing a cluster of topics produced no gaps at all');
   process.exitCode = 1;
 }
 await page.screenshot({ path: `${SHOT}/04-report.png`, fullPage: true });

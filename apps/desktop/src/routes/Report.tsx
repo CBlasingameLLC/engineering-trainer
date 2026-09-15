@@ -166,7 +166,10 @@ function Group({
       <p className="mt-1 max-w-2xl text-sm text-slate-600">{blurb}</p>
       <ul className="mt-3 space-y-1">
         {(collapsed ? rows.slice(0, 5) : rows).map(({ kc, mastery }) => (
-          <li key={kc.id} className="card px-4 py-3">
+          // The KC id is exposed for the same reason the session player exposes
+          // the item id: titles are display text that changes, ids are stable,
+          // and a driver matching on prose silently rots as content is added.
+          <li key={kc.id} data-kc-id={kc.id} className="card px-4 py-3">
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs text-slate-400">{kc.courseId}</span>
               <span className="text-sm font-medium text-slate-900">{kc.title}</span>
