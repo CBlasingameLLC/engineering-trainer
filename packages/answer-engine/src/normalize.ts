@@ -65,7 +65,7 @@ export function normalizeInput(raw: string): string {
 
 /** Split a normalised answer into its numeric part and its unit, if any. */
 export function splitValueAndUnit(normalized: string): { expression: string; unit: string } {
-  const match = /^(.*?)\s*([a-zA-Z][a-zA-Z0-9^/*·\-]*)$/.exec(normalized);
+  const match = /^(.*?)\s*([a-zA-Z][a-zA-Z0-9^/*·-]*)$/.exec(normalized);
   if (!match?.[1]?.trim()) return { expression: normalized, unit: '' };
   return { expression: match[1].trim(), unit: match[2] ?? '' };
 }

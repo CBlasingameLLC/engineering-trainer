@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, types and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck packages and tools
+        run: pnpm exec tsc --noEmit -p tsconfig.json
+
+      - name: Typecheck desktop app
+        run: pnpm exec tsc --noEmit -p apps/desktop/tsconfig.json
+
+      - name: Unit tests
+        run: pnpm test
+
+  content:
+    name: Content verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Structural checks: schema, KC references resolve, no prerequisite cycles.
+      - name: Validate curriculum and packs
+        run: pnpm content validate
+
+      # Rebuild from the generators and confirm the committed bank still matches.
+      # Item ids embed their seed, so a drifted bank shows up as a diff here
+      # rather than as a learner meeting a stale question with a wrong answer.
+      - name: Rebuild the bank and check it is unchanged
+        run: |
+          pnpm content build --variants=18
+          git diff --exit-code --stat content/packs/shared/ \
+            || (echo "::error::The committed bank differs from what the generators now produce. Run 'pnpm content build --variants=18' and commit the result." && exit 1)
+
+      # The gate that matters: every stated answer independently reproduced.
+      - name: Verify every answer
+        run: pnpm content verify
+
+  e2e:
+    name: End-to-end placement flow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build the renderer
+        run: pnpm --filter @et/desktop build
+
+      - name: Serve and drive a real placement session
+        run: |
+          pnpm --filter @et/desktop preview &
+          # Poll rather than pulling in a wait-for-it dependency.
+          for i in $(seq 1 60); do
+            curl -sf http://127.0.0.1:4173 -o /dev/null && break
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:4173 -o /dev/null || (echo "::error::preview server never came up" && exit 1)
+          pnpm --filter @et/desktop e2e
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-screenshots
+          path: apps/desktop/e2e/screenshots/
+          if-no-files-found: ignore
