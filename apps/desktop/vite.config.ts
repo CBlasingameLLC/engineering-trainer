@@ -16,6 +16,16 @@ export default defineConfig({
     },
   },
   server: { port: 5173, strictPort: true },
-  // Tauri expects a fixed output directory it can bundle.
-  build: { outDir: 'dist', emptyOutDir: true, target: 'es2022' },
+  build: {
+    // Tauri expects a fixed output directory it can bundle.
+    outDir: 'dist',
+    emptyOutDir: true,
+    target: 'es2022',
+    rollupOptions: {
+      // Only reachable inside the Tauri shell, which provides it at runtime.
+      // Marking it external keeps the browser build - the one the end-to-end
+      // verification runs against - buildable without a Tauri toolchain.
+      external: ['@tauri-apps/plugin-sql'],
+    },
+  },
 });

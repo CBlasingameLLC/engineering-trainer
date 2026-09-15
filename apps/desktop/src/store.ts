@@ -16,6 +16,7 @@ import type { Item } from '@et/content-schema';
 import { loadContent, itemsForCourses, type LoadedContent } from '@/content';
 import { buildLearnerModel, type LearnerModel } from '@/features/learner-model';
 import { WebStorageAdapter } from '@/storage/web';
+import { TauriSqlAdapter, isTauri } from '@/storage/tauri';
 import {
   emptyProfile,
   type AttemptRecord,
@@ -115,7 +116,9 @@ export const useApp = create<AppState>((set, get) => ({
 
   async boot() {
     const content = loadContent();
-    const storage = new WebStorageAdapter();
+    // SQLite under the desktop shell, IndexedDB in a browser. The renderer
+    // never learns which, so the same code path is exercised either way.
+    const storage: StorageAdapter = isTauri() ? new TauriSqlAdapter() : new WebStorageAdapter();
     await storage.init();
 
     const profile = await storage.getProfile();

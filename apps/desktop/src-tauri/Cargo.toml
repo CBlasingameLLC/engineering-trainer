@@ -1,0 +1,25 @@
+[package]
+name = "engineering-trainer"
+version = "0.1.0"
+description = "Gamified gap-finder and mastery analysis trainer for electrical engineering"
+edition = "2021"
+rust-version = "1.77"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2.11", features = [] }
+tauri-plugin-sql = { version = "2.4", features = ["sqlite"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+
+[features]
+# Bundled by `tauri build`; the dev server path skips it.
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
