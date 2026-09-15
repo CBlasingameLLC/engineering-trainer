@@ -1,7 +1,7 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
 import {
-  adjustDifficulty, amps, distinctResistorPair, mantissaDifficulty, ohms, ratioDifficulty,
+  adjustDifficulty, amps, distinctResistorPair, mantissaDifficulty, ohms, pick, ratioDifficulty,
   resistor, supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
 import { separatedTraps } from '../traps.js';
@@ -240,6 +240,89 @@ export const maxPowerTransfer: Generator = {
           'What is $R_L$ at maximum power transfer?',
           'How much of $V_{th}$ actually appears across the load once it is connected?',
         ],
+      },
+    };
+  },
+};
+
+/**
+ * Source transformation in both directions.
+ *
+ * Rotating the direction matters: a student fluent at V/R can still stall on
+ * I*R, and a bank that always transforms the same way never finds out.
+ */
+export const sourceTransformation: Generator = {
+  id: 'ee2300.source-transformation.convert',
+  title: 'Source transformation',
+  kcRefs: [{ kc: 'ee2300.source-transformation', weight: 1 }],
+  difficultyB: 0.1,
+  generate(rng: Rng) {
+    const rs = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    const toCurrent = rng() < 0.5;
+
+    if (toCurrent) {
+      const vs = supplyVoltage(rng);
+      const is = vs / rs;
+      return {
+        type: 'numeric' as const,
+        kcRefs: this.kcRefs,
+        difficultyB: adjustDifficulty(this.difficultyB, [mantissaDifficulty(rs), -0.5]),
+        stem:
+          `A ${volts(vs)} source sits in series with $R_s = ${ohms(rs)}$. ` +
+          `Find the current of the equivalent Norton-form source.`,
+        answer: { kind: 'numeric' as const, value: is, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+        options: [],
+        misconceptionTraps: separatedTraps(is, DEFAULT_TOLERANCE, [
+          {
+            misconception: 'source-transform.multiplied',
+            value: vs * rs,
+            tolerance: { rel: 0.015 },
+            feedback: `You multiplied. Going from a voltage source to a current source divides: $I_s = V_s / R_s$.`,
+          },
+        ]),
+        explanation: {
+          steps: [
+            `The two forms must look identical to anything connected outside them, so match their short-circuit currents.`,
+            `Shorting the terminals of the series form gives $V_s / R_s$, which is the current the parallel form must supply:`,
+            `$I_s = \\dfrac{${trimNumber(vs)}}{${trimNumber(rs)}} = ${amps(is)}$, with the same $R_s$ now in **parallel**.`,
+            `The resistance never changes value under the transformation — only whether it sits in series or parallel.`,
+          ],
+          principle:
+            'Source transformation preserves what the outside world sees: the resistance keeps its value and moves between series and parallel.',
+          hints: ['What happens if you short the terminals of the series form?', 'Is this a divide or a multiply?'],
+        },
+      };
+    }
+
+    const isMa = pick(rng, [1, 2, 4, 5, 8, 10]);
+    const is = isMa / 1000;
+    const vs = is * rs;
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [mantissaDifficulty(rs), 0.5]),
+      stem:
+        `A ${amps(is)} source sits in parallel with $R_s = ${ohms(rs)}$. ` +
+        `Find the voltage of the equivalent Thevenin-form source.`,
+      answer: { kind: 'numeric' as const, value: vs, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      options: [],
+      misconceptionTraps: separatedTraps(vs, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'source-transform.divided',
+          value: is / rs,
+          tolerance: { rel: 0.015 },
+          feedback: `You divided. Going from a current source to a voltage source multiplies: $V_s = I_s R_s$.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `Match the open-circuit voltages of the two forms.`,
+          `With the terminals open, all of $I_s$ flows through $R_s$, so the terminal voltage is $I_s R_s$:`,
+          `$V_s = (${trimNumber(is)})(${trimNumber(rs)}) = ${volts(vs)}$, with the same $R_s$ now in **series**.`,
+        ],
+        principle:
+          'Source transformation preserves what the outside world sees: the resistance keeps its value and moves between series and parallel.',
+        hints: ['Where does the source current go when the terminals are open?', 'Is this a divide or a multiply?'],
       },
     };
   },

@@ -162,3 +162,80 @@ export const opAmpSumming: Generator = {
     };
   },
 };
+
+/**
+ * Two-stage op-amp cascade.
+ *
+ * Stage gains multiply because each stage's output drives the next, and an
+ * ideal op-amp output is a stiff source that the following stage cannot load.
+ * Adding them instead is the error, and it is trapped.
+ */
+export const opAmpCascade: Generator = {
+  id: 'ee2300.op-amp-cascade.two-stage',
+  title: 'Cascaded op-amp stages',
+  kcRefs: [
+    { kc: 'ee2300.op-amp-cascade', weight: 0.7 },
+    { kc: 'ee2300.op-amp-inverting', weight: 0.3 },
+  ],
+  difficultyB: 0.95,
+  generate(rng: Rng) {
+    const [rIn1, rf1] = distinctResistorPair(rng, { minRatio: 1.5, minDecade: 3, maxDecade: 4 });
+    const [rIn2, rf2] = distinctResistorPair(rng, { minRatio: 1.5, minDecade: 3, maxDecade: 4 });
+    const vin = pick(rng, [0.05, 0.1, 0.15, 0.2, 0.25, 0.4]);
+
+    const gain1 = -rf1 / rIn1; // inverting
+    const gain2 = 1 + rf2 / rIn2; // non-inverting
+    const vout = vin * gain1 * gain2;
+
+    const gainsAdded = vin * (gain1 + gain2);
+    const signDropped = -vout;
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [
+        mantissaDifficulty(rf1 / rIn1),
+        ratioDifficulty(rf2, rIn2),
+      ]),
+      stem:
+        `A ${volts(vin)} signal feeds an **inverting** stage with $R_{in1} = ${ohms(rIn1)}$ and ` +
+        `$R_{f1} = ${ohms(rf1)}$, whose output drives a **non-inverting** stage with ` +
+        `$R_{in2} = ${ohms(rIn2)}$ and $R_{f2} = ${ohms(rf2)}$. Both op-amps are ideal. Find the final output voltage.`,
+      answer: { kind: 'numeric' as const, value: vout, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      options: [],
+      misconceptionTraps: separatedTraps(vout, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'cascade.gains-added',
+          value: gainsAdded,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You added the stage gains. Each stage multiplies what it receives, so the overall gain is the ` +
+            `**product** $A_1 A_2$, not the sum.`,
+        },
+        {
+          misconception: 'op-amp.sign-dropped',
+          value: signDropped,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `Magnitude right, sign wrong. One stage inverts and the other does not, so exactly one sign ` +
+            `flip survives to the output.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `An ideal op-amp output is a stiff voltage source, so the second stage does not load the first and the stages can be analysed independently.`,
+          `Stage 1 (inverting): $A_1 = -\\dfrac{R_{f1}}{R_{in1}} = ${trimNumber(gain1, 4)}$.`,
+          `Stage 2 (non-inverting): $A_2 = 1 + \\dfrac{R_{f2}}{R_{in2}} = ${trimNumber(gain2, 4)}$.`,
+          `Cascaded gains multiply: $V_{out} = V_{in} A_1 A_2 = (${trimNumber(vin)})(${trimNumber(gain1, 4)})(${trimNumber(gain2, 4)}) = ${volts(vout)}$.`,
+          `The output is ${vout < 0 ? 'negative' : 'positive'} because only the first stage inverts.`,
+        ],
+        principle:
+          'Cascaded gains multiply, and they can be computed stage by stage only because an ideal op-amp output does not load the next stage.',
+        hints: [
+          'Does the second stage load the first? What does that let you do?',
+          'Do cascaded gains add or multiply?',
+        ],
+      },
+    };
+  },
+};

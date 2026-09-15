@@ -208,3 +208,83 @@ export const currentDivider: Generator = {
     };
   },
 };
+
+/**
+ * Delta-wye transformation.
+ *
+ * Each wye resistor is the product of the two delta resistors *adjacent* to its
+ * node over the sum of all three. The adjacent-versus-opposite confusion is the
+ * entire difficulty, so the opposite-resistor result is always trapped.
+ */
+export const deltaWye: Generator = {
+  id: 'ee2300.delta-wye.to-wye',
+  title: 'Delta-to-wye conversion',
+  kcRefs: [{ kc: 'ee2300.delta-wye', weight: 1 }],
+  difficultyB: 0.35,
+  generate(rng: Rng) {
+    // Keep the three legs distinguishable, or adjacent and opposite products
+    // collapse onto each other and the item cannot detect the mistake.
+    const [rab, rbc, rca] = resampleUntil(
+      rng,
+      (r) => [resistor(r), resistor(r), resistor(r)] as [number, number, number],
+      ([a, b, c]) => {
+        const sum = a + b + c;
+        const correct = (a * c) / sum; // adjacent to node A: Rab and Rca
+        const opposite = (b * c) / sum; // the classic wrong pair
+        const sumOnly = (a * c) / (a + c); // forgetting the third leg
+        return Math.abs(correct - opposite) / correct > 0.12 && Math.abs(correct - sumOnly) / correct > 0.12;
+      },
+    );
+
+    const sum = rab + rbc + rca;
+    const r1 = (rab * rca) / sum; // wye resistor at node A
+    const usedOpposite = (rbc * rca) / sum;
+    const forgotThirdLeg = (rab * rca) / (rab + rca);
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [
+        ratioDifficulty(rab, rca),
+        mantissaDifficulty(rbc),
+      ]),
+      stem:
+        `A delta network has $R_{ab} = ${ohms(rab)}$, $R_{bc} = ${ohms(rbc)}$ and $R_{ca} = ${ohms(rca)}$. ` +
+        `Find $R_1$, the wye resistor connected to node $a$.`,
+      answer: { kind: 'numeric' as const, value: r1, unit: 'ohm', tolerance: DEFAULT_TOLERANCE },
+      options: [],
+      misconceptionTraps: separatedTraps(r1, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'delta-wye.opposite-resistors',
+          value: usedOpposite,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You multiplied the wrong pair. The wye resistor at node $a$ uses the two delta legs that ` +
+            `**touch** node $a$ — $R_{ab}$ and $R_{ca}$ — not the leg opposite it.`,
+        },
+        {
+          misconception: 'delta-wye.denominator-incomplete',
+          value: forgotThirdLeg,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `Your denominator only summed the two adjacent legs. The denominator is the sum of **all three** ` +
+            `delta resistances, including $R_{bc}$.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `Identify the two delta legs that meet at node $a$: $R_{ab}$ and $R_{ca}$.`,
+          `The wye resistor at a node is the product of its two adjacent legs over the sum of all three:`,
+          `$R_1 = \\dfrac{R_{ab} R_{ca}}{R_{ab} + R_{bc} + R_{ca}} = \\dfrac{(${trimNumber(rab)})(${trimNumber(rca)})}{${trimNumber(sum, 5)}} = ${ohms(r1)}$.`,
+          `Sanity check: every wye resistance must come out smaller than either adjacent delta leg, and ${ohms(r1)} is smaller than both.`,
+        ],
+        principle:
+          'A wye resistor is built from the two delta legs touching its node, divided by the sum of all three.',
+        hints: [
+          'Which two delta resistors actually connect to node $a$?',
+          'What goes in the denominator — two of the legs, or all three?',
+        ],
+      },
+    };
+  },
+};

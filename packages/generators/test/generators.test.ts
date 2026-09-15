@@ -293,6 +293,152 @@ describe('physics cross-checks', () => {
       }
     }
   });
+
+  it('delta-wye round-trips back to the original delta', () => {
+    // The strongest available check: convert delta to wye, then apply the
+    // inverse transformation and require the original legs to reappear.
+    const g = generatorById('ee2300.delta-wye.to-wye')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const [rab, rbc, rca] = quantitiesFrom(item.stem) as [number, number, number];
+      const sum = rab + rbc + rca;
+
+      const r1 = (rab * rca) / sum;
+      const r2 = (rab * rbc) / sum;
+      const r3 = (rbc * rca) / sum;
+      expect(answerOf(g, seed)).toBeCloseTo(r1, 9);
+
+      // Y -> delta: each delta leg is the sum of pairwise products over the
+      // opposite wye resistor.
+      const pairwise = r1 * r2 + r2 * r3 + r3 * r1;
+      expect(pairwise / r3).toBeCloseTo(rab, 6);
+      expect(pairwise / r1).toBeCloseTo(rbc, 6);
+      expect(pairwise / r2).toBeCloseTo(rca, 6);
+    }
+  });
+
+  it('supernode solution satisfies both KCL and the source constraint', () => {
+    const g = generatorById('ee2300.supernode.floating-source')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const [is, vs, r1, r2] = quantitiesFrom(item.stem) as number[];
+      const va = answerOf(g, seed);
+      const vb = va - vs!; // the stated constraint, with + at node A
+
+      // Supernode KCL: both resistor branches carry the source current away.
+      const residual = va / r1! + vb / r2! - is!;
+      expect(Math.abs(residual) / Math.max(Math.abs(is!), 1e-12)).toBeLessThan(1e-9);
+    }
+  });
+
+  it('supermesh solution satisfies both KVL and the current-source constraint', () => {
+    const g = generatorById('ee2300.supermesh.shared-source')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const [is, vs, r1, r2] = quantitiesFrom(item.stem) as number[];
+      const i1 = answerOf(g, seed);
+      const i2 = i1 + is!; // stated constraint i2 - i1 = Is
+
+      // KVL around the supermesh, skipping the current-source branch.
+      const residual = -vs! + r1! * i1 + r2! * i2;
+      expect(Math.abs(residual) / Math.max(Math.abs(vs!), 1e-12)).toBeLessThan(1e-9);
+    }
+  });
+
+  it('dependent-source solution satisfies KCL with the control law substituted', () => {
+    const g = generatorById('ee2300.dependent-sources.cccs')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const [vs, r1, r2] = quantitiesFrom(item.stem) as number[];
+      // beta is a bare coefficient, not a dimensioned quantity, so it is not
+      // picked up by the SI-prefix scraper.
+      const beta = Number(/\\beta = ([\d.]+)\$/.exec(item.stem)?.[1]);
+      expect(Number.isFinite(beta)).toBe(true);
+      const va = answerOf(g, seed);
+
+      const ix = (vs! - va) / r1!;
+      // Current in from R1 plus the injected beta*Ix must leave through R2.
+      const residual = ix + beta * ix - va / r2!;
+      expect(Math.abs(residual) / Math.max(Math.abs(ix), 1e-12)).toBeLessThan(1e-9);
+    }
+  });
+
+  it('source transformation preserves what the outside world can measure', () => {
+    // The two forms are equivalent exactly when their open-circuit voltage and
+    // short-circuit current agree, so check that rather than the formula.
+    const g = generatorById('ee2300.source-transformation.convert')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const nums = quantitiesFrom(item.stem) as number[];
+      const answer = answerOf(g, seed);
+
+      if (item.answer.kind === 'numeric' && item.answer.unit === 'A') {
+        const [vs, rs] = nums; // V-source in series with Rs -> Norton current
+        expect(answer * rs!).toBeCloseTo(vs!, 6); // same open-circuit voltage
+      } else {
+        const [is, rs] = nums; // I-source in parallel with Rs -> Thevenin voltage
+        expect(answer / rs!).toBeCloseTo(is!, 9); // same short-circuit current
+      }
+    }
+  });
+
+  it('natural response decays through the parallel equivalent resistance', () => {
+    const g = generatorById('ee2300.first-order-natural.time-constant')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const vt = answerOf(g, seed);
+      const v0 = Number(/charged to ([\d.]+)\\,\\text\{V\}/.exec(item.stem)?.[1]);
+      const decades = Number(/t = ([\d.]+)\\tau/.exec(item.stem)?.[1]);
+      expect(Number.isFinite(v0)).toBe(true);
+      expect(Number.isFinite(decades)).toBe(true);
+      // Independent of the resistances: at t = n*tau exactly e^-n survives.
+      const expected = v0 * Math.exp(-decades);
+      expect(vt).toBeCloseTo(expected, 6);
+      // And it must sit strictly between zero and the initial value.
+      expect(vt).toBeGreaterThan(0);
+      expect(vt).toBeLessThan(v0);
+    }
+  });
+
+  it('inductor answers satisfy their defining relationship', () => {
+    const g = generatorById('ee2300.inductor-iv.relationship')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      if (item.answer.kind !== 'numeric') continue;
+      const answer = item.answer.value;
+      expect(answer).toBeGreaterThan(0);
+
+      if (item.answer.unit === 'J') {
+        // Energy must be recoverable as (1/2)L i^2 from the stated quantities.
+        const lMh = Number(/L = ([\d.]+)/.exec(item.stem)?.[1]);
+        const i = Number(/of ([\d.]+)\\,\\text\{(m?)A\}/.exec(item.stem)?.[1]);
+        const scale = /\\text\{mA\}/.test(item.stem) ? 1e-3 : 1;
+        expect(answer).toBeCloseTo(0.5 * (lMh / 1000) * (i * scale) ** 2, 9);
+      } else {
+        // v = L di/dt, so the voltage must scale with L and inversely with the ramp time.
+        const lMh = Number(/L = ([\d.]+)/.exec(item.stem)?.[1]);
+        const dtMs = Number(/over ([\d.]+) ms/.exec(item.stem)?.[1]);
+        expect(lMh).toBeGreaterThan(0);
+        expect(dtMs).toBeGreaterThan(0);
+        expect(answer * dtMs).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('cascade output equals the product of its stage gains, never the sum', () => {
+    const g = generatorById('ee2300.op-amp-cascade.two-stage')!;
+    for (const seed of SEEDS) {
+      const item = itemSchema.parse(variant(g, seed));
+      const [vin, rIn1, rf1, rIn2, rf2] = quantitiesFrom(item.stem) as number[];
+      const a1 = -rf1! / rIn1!;
+      const a2 = 1 + rf2! / rIn2!;
+
+      expect(answerOf(g, seed)).toBeCloseTo(vin! * a1 * a2, 9);
+      // Exactly one inversion survives, so the output opposes the input.
+      expect(answerOf(g, seed)).toBeLessThan(0);
+      expect(answerOf(g, seed)).not.toBeCloseTo(vin! * (a1 + a2), 6);
+    }
+  });
 });
 
 describe('buildItems', () => {

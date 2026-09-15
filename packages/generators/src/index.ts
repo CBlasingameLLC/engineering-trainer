@@ -1,12 +1,16 @@
 import type { Generator } from './types.js';
 import { ohmsLaw, powerSignConvention } from './ee2300/fundamentals.js';
-import { currentDivider, seriesParallel, voltageDivider } from './ee2300/networks.js';
-import { meshTwoLoop, nodalTwoSource } from './ee2300/analysis.js';
+import { currentDivider, deltaWye, seriesParallel, voltageDivider } from './ee2300/networks.js';
 import {
-  maxPowerTransfer, nortonCurrent, theveninResistance, theveninVoltage,
+  dependentSource, meshTwoLoop, nodalTwoSource, supermesh, supernode,
+} from './ee2300/analysis.js';
+import {
+  maxPowerTransfer, nortonCurrent, sourceTransformation, theveninResistance, theveninVoltage,
 } from './ee2300/theorems.js';
-import { opAmpGain, opAmpSumming } from './ee2300/opamps.js';
-import { rcStepResponse, rlcDamping } from './ee2300/transients.js';
+import { opAmpCascade, opAmpGain, opAmpSumming } from './ee2300/opamps.js';
+import {
+  inductorBehaviour, naturalResponseTau, rcStepResponse, rlcDamping,
+} from './ee2300/transients.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -19,14 +23,22 @@ export const GENERATORS: readonly Generator[] = [
   seriesParallel,
   voltageDivider,
   currentDivider,
+  deltaWye,
   nodalTwoSource,
+  supernode,
   meshTwoLoop,
+  supermesh,
+  dependentSource,
+  sourceTransformation,
   theveninVoltage,
   theveninResistance,
   nortonCurrent,
   maxPowerTransfer,
   opAmpGain,
   opAmpSumming,
+  opAmpCascade,
+  naturalResponseTau,
+  inductorBehaviour,
   rcStepResponse,
   rlcDamping,
 ];

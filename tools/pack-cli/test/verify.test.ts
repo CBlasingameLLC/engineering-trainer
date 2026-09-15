@@ -188,9 +188,13 @@ describe('computeStats', () => {
   });
 
   it('reports curriculum KCs that no item exercises', () => {
+    // Uses a KC that will never exist rather than one that merely happens to be
+    // uncovered today: the previous fixture named delta-wye and broke the
+    // moment a generator was written for it, testing the bank's contents
+    // instead of the function.
     const stats = computeStats([goodPack()]);
-    const uncovered = uncoveredKcs(stats, ['ee2300.ohms-law', 'ee2300.delta-wye']);
-    expect(uncovered).toEqual(['ee2300.delta-wye']);
+    const uncovered = uncoveredKcs(stats, ['ee2300.ohms-law', 'ee2300.never-authored']);
+    expect(uncovered).toEqual(['ee2300.never-authored']);
   });
 
   it('attributes an item to every KC it references', () => {
