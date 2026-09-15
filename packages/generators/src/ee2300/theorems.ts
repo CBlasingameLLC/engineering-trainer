@@ -1,7 +1,8 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
 import {
-  amps, distinctResistorPair, ohms, resistor, supplyVoltage, trimNumber, volts, type Rng,
+  adjustDifficulty, amps, distinctResistorPair, mantissaDifficulty, ohms, ratioDifficulty,
+  resistor, supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
@@ -16,7 +17,11 @@ function theveninNetwork(rng: Rng) {
   const r3 = resistor(rng, { minDecade: 2, maxDecade: 3 });
   const vth = (vs * r2) / (r1 + r2);
   const rth = r3 + parallel(r1, r2);
-  return { vs, r1, r2, r3, vth, rth };
+  // Signals shared by every generator built on this topology: a near-unity
+  // divider is harder to reason about, and a large R3 makes the suppressed
+  // parallel combination less visible in the result.
+  const signals = [ratioDifficulty(r1, r2), mantissaDifficulty(vs), ratioDifficulty(r3, parallel(r1, r2))];
+  return { vs, r1, r2, r3, vth, rth, signals };
 }
 
 const networkDescription = (n: ReturnType<typeof theveninNetwork>): string =>
@@ -45,7 +50,7 @@ export const theveninResistance: Generator = {
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem: `${networkDescription(n)} Find the Thevenin resistance $R_{th}$ seen from terminals $a$-$b$.`,
       answer: { kind: 'numeric' as const, value: n.rth, unit: 'ohm', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -99,7 +104,7 @@ export const theveninVoltage: Generator = {
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem: `${networkDescription(n)} Find the Thevenin voltage $V_{th}$ at terminals $a$-$b$.`,
       answer: { kind: 'numeric' as const, value: n.vth, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -152,7 +157,7 @@ export const nortonCurrent: Generator = {
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem: `${networkDescription(n)} Find the Norton current $I_N$ for terminals $a$-$b$.`,
       answer: { kind: 'numeric' as const, value: iN, unit: 'A', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -198,7 +203,7 @@ export const maxPowerTransfer: Generator = {
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem:
         `${networkDescription(n)} A load $R_L$ is connected across $a$-$b$ and chosen for maximum power transfer. ` +
         `Find the power delivered to that load.`,

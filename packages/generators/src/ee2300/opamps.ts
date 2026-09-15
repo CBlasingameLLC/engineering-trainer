@@ -1,6 +1,9 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
-import { distinctResistorPair, ohms, pick, resistor, trimNumber, volts, type Rng } from '../rng.js';
+import {
+  adjustDifficulty, distinctResistorPair, mantissaDifficulty, ohms, pick, ratioDifficulty,
+  resistor, trimNumber, volts, type Rng,
+} from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
 /** A small input signal, in volts. */
@@ -30,6 +33,13 @@ export const opAmpGain: Generator = {
     const inverting = rng() < 0.5;
 
     const vout = inverting ? (-rf / rIn) * vin : (1 + rf / rIn) * vin;
+    // A round gain is recognisable; the non-inverting form is harder because
+    // of the extra unity term students routinely drop.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      mantissaDifficulty(rf / rIn),
+      inverting ? -0.5 : 0.5,
+      ratioDifficulty(rf, rIn),
+    ]);
 
     const traps = inverting
       ? [
@@ -57,7 +67,7 @@ export const opAmpGain: Generator = {
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `An ideal op-amp is wired as a **${config}** amplifier with $R_{in} = ${ohms(rIn)}$ and ` +
         `$R_f = ${ohms(rf)}$. For an input of ${volts(vin)}, find the output voltage.`,
@@ -102,11 +112,17 @@ export const opAmpSumming: Generator = {
 
     const vout = -rf * (v1 / r1 + v2 / r2);
     const averaged = -(rf / r1) * ((v1 + v2) / 2);
+    // Unequal input resistors defeat the averaging shortcut, which is the
+    // whole discrimination this item is built around.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      ratioDifficulty(r1, r2),
+      mantissaDifficulty(rf),
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `An inverting summing amplifier has inputs ${volts(v1)} through $R_1 = ${ohms(r1)}$ and ` +
         `${volts(v2)} through $R_2 = ${ohms(r2)}$, with feedback resistor $R_f = ${ohms(rf)}$. ` +

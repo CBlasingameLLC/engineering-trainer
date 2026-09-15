@@ -1,6 +1,9 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
-import { amps, ohms, resistor, supplyVoltage, trimNumber, volts, type Rng } from '../rng.js';
+import {
+  adjustDifficulty, amps, mantissaDifficulty, ohms, ratioDifficulty, resistor, supplyVoltage,
+  trimNumber, volts, type Rng,
+} from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
 /**
@@ -29,11 +32,17 @@ export const nodalTwoSource: Generator = {
     const va = (vs1 / r1 + vs2 / r3) / conductance;
     // Subtracting instead of adding the second source term.
     const signFlipped = (vs1 / r1 - vs2 / r3) / conductance;
+    // Similar branch conductances make the arithmetic less forgiving, and an
+    // awkward supply value removes the chance of recognising the result.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      ratioDifficulty(r1, r3),
+      mantissaDifficulty(vs1),
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `Node $A$ connects to three branches: a ${volts(vs1)} source through $R_1 = ${ohms(r1)}$, ` +
         `a ${volts(vs2)} source through $R_3 = ${ohms(r3)}$, and $R_2 = ${ohms(r2)}$ to ground. ` +
@@ -97,11 +106,17 @@ export const meshTwoLoop: Generator = {
     const i2 = (vs * r3) / det;
     // Ignoring the coupling term is the classic first mistake.
     const uncoupled = vs / (r1 + r3);
+    // The closer the shared branch is to the others, the more the coupling
+    // term matters and the less a single-loop shortcut resembles the answer.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      -ratioDifficulty(r3, r1),
+      mantissaDifficulty(r2),
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `A ${volts(vs)} source drives mesh 1 through $R_1 = ${ohms(r1)}$. ` +
         `$R_3 = ${ohms(r3)}$ is the shared branch between mesh 1 and mesh 2, and ` +

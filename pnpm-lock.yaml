@@ -41,6 +41,9 @@ importers:
 
   packages/content-schema:
     dependencies:
+      yaml:
+        specifier: ^2.9.1
+        version: 2.9.1
       zod:
         specifier: ^3.24.1
         version: 3.25.76
@@ -59,6 +62,24 @@ importers:
       '@et/domain':
         specifier: workspace:*
         version: link:../domain
+
+  tools/pack-cli:
+    dependencies:
+      '@et/answer-engine':
+        specifier: workspace:*
+        version: link:../../packages/answer-engine
+      '@et/content-schema':
+        specifier: workspace:*
+        version: link:../../packages/content-schema
+      '@et/domain':
+        specifier: workspace:*
+        version: link:../../packages/domain
+      '@et/generators':
+        specifier: workspace:*
+        version: link:../../packages/generators
+      yaml:
+        specifier: ^2.9.1
+        version: 2.9.1
 
 packages:
 

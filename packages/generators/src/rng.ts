@@ -106,6 +106,48 @@ export function distinctResistorPair(
   );
 }
 
+/**
+ * Per-variant difficulty.
+ *
+ * A generator's nominal difficulty describes its *topic*, but individual draws
+ * genuinely differ: a divider with a 10:1 ratio can be eyeballed, while 6.8k
+ * against 4.7k cannot, and an RC problem asked at exactly one time constant is
+ * easier than one at 1.5 because e^-1 is memorised.
+ *
+ * Emitting a single fixed difficulty per generator leaves every item for a KC
+ * at the same point on the ability scale, which defeats adaptive selection:
+ * Fisher information is maximised when item difficulty sits near learner
+ * ability, so a bank with no spread cannot measure anyone who is not already at
+ * that one point. Deriving difficulty from the actual parameters gives the
+ * engine a range to bracket with, and reflects something true about the item.
+ *
+ * Each signal is in [-1, 1]: negative is easier, positive is harder.
+ */
+export function adjustDifficulty(base: number, signals: readonly number[], spread = 0.9): number {
+  if (signals.length === 0) return base;
+  const mean = signals.reduce((s, x) => s + clampSignal(x), 0) / signals.length;
+  return Number(Math.min(4, Math.max(-4, base + spread * mean)).toFixed(3));
+}
+
+const clampSignal = (x: number): number => Math.min(1, Math.max(-1, x));
+
+/**
+ * How awkward a ratio is to compute mentally. A 10:1 ratio is easy; values
+ * within a factor of 1.5 of each other require actual arithmetic.
+ */
+export function ratioDifficulty(a: number, b: number): number {
+  const ratio = Math.max(a / b, b / a);
+  // ratio 10+ -> -1 (easy); ratio 1.5 -> +1 (hard)
+  return clampSignal(1 - 2 * ((Math.log10(ratio) - Math.log10(1.5)) / (1 - Math.log10(1.5))));
+}
+
+/** Round mantissas (1, 2, 5) are easier to carry through a calculation. */
+export function mantissaDifficulty(value: number): number {
+  const mantissa = Math.abs(value) / 10 ** Math.floor(Math.log10(Math.abs(value)));
+  const round = [1, 1.5, 2, 2.5, 3, 5];
+  return round.some((r) => Math.abs(mantissa - r) < 0.05) ? -1 : 1;
+}
+
 // ---------------------------------------------------------------------------
 // Presentation
 // ---------------------------------------------------------------------------

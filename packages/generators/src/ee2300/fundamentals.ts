@@ -1,6 +1,9 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
-import { amps, ohms, pick, resistor, supplyVoltage, trimNumber, volts, type Rng } from '../rng.js';
+import {
+  adjustDifficulty, amps, mantissaDifficulty, ohms, pick, resistor, supplyVoltage, trimNumber,
+  volts, type Rng,
+} from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
 /**
@@ -21,11 +24,16 @@ export const ohmsLaw: Generator = {
     const i = v / r;
     const unknown = pick(rng, ['V', 'I', 'R'] as const);
 
+    // Solving for V is a direct multiplication; solving for R requires
+    // rearranging and dividing by an awkward current, so it is harder.
+    const unknownCost = unknown === 'V' ? -1 : unknown === 'I' ? 0 : 1;
+    const difficultyB = adjustDifficulty(this.difficultyB, [unknownCost, mantissaDifficulty(r)]);
+
     if (unknown === 'I') {
       return {
         type: 'numeric' as const,
         kcRefs: this.kcRefs,
-        difficultyB: this.difficultyB,
+        difficultyB,
         stem: `A resistor of ${ohms(r)} has ${volts(v)} across it. Find the current through it.`,
         answer: { kind: 'numeric' as const, value: i, unit: 'A', tolerance: DEFAULT_TOLERANCE },
         options: [],
@@ -53,7 +61,7 @@ export const ohmsLaw: Generator = {
       return {
         type: 'numeric' as const,
         kcRefs: this.kcRefs,
-        difficultyB: this.difficultyB,
+        difficultyB,
         stem: `A current of ${amps(i)} flows through a ${ohms(r)} resistor. Find the voltage across it.`,
         answer: { kind: 'numeric' as const, value: v, unit: 'V', tolerance: DEFAULT_TOLERANCE },
         options: [],
@@ -72,7 +80,7 @@ export const ohmsLaw: Generator = {
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem: `A resistor carries ${amps(i)} when ${volts(v)} is placed across it. Find its resistance.`,
       answer: { kind: 'numeric' as const, value: r, unit: 'ohm', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -120,11 +128,12 @@ export const powerSignConvention: Generator = {
     const entersPositive = rng() < 0.5;
     const power = entersPositive ? v * i : -v * i;
     const verb = entersPositive ? 'entering' : 'leaving';
+    const difficultyB = adjustDifficulty(this.difficultyB, [entersPositive ? -1 : 1]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `An element has ${volts(v)} across it, with the reference **+** terminal at the top. ` +
         `A current of ${amps(i)} is measured **${verb}** the **+** terminal. ` +

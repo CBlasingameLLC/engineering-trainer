@@ -1,8 +1,8 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
 import {
-  amps, distinctResistorPair, ohms, resampleUntil, resistor, sourceCurrentMa, supplyVoltage,
-  trimNumber, volts, type Rng,
+  adjustDifficulty, amps, distinctResistorPair, mantissaDifficulty, ohms, ratioDifficulty,
+  resampleUntil, resistor, sourceCurrentMa, supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
@@ -40,11 +40,16 @@ export const seriesParallel: Generator = {
 
     const allSeries = r1 + r2 + r3;
     const allParallel = 1 / (1 / r1 + 1 / r2 + 1 / r3);
+    // Resistors of similar magnitude are harder to reduce by inspection.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      ratioDifficulty(r2, r3),
+      mantissaDifficulty(r1),
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `$R_1 = ${ohms(r1)}$ is in series with the parallel combination of ` +
         `$R_2 = ${ohms(r2)}$ and $R_3 = ${ohms(r3)}$. ` +
@@ -102,11 +107,16 @@ export const voltageDivider: Generator = {
     const [r1, r2] = distinctResistorPair(rng, { minRatio: 1.5 });
     const vout = (vs * r2) / (r1 + r2);
     const inverted = (vs * r1) / (r1 + r2);
+    // A 10:1 divider can be eyeballed; 6.8k against 4.7k cannot.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      ratioDifficulty(r1, r2),
+      mantissaDifficulty(vs),
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `A ${volts(vs)} source drives $R_1 = ${ohms(r1)}$ in series with $R_2 = ${ohms(r2)}$. ` +
         `Find the voltage across $R_2$.`,
@@ -157,11 +167,15 @@ export const currentDivider: Generator = {
     // Current through R1 is set by the OPPOSITE resistance.
     const i1 = (is * r2) / (r1 + r2);
     const sameResistor = (is * r1) / (r1 + r2);
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      ratioDifficulty(r1, r2),
+      mantissaDifficulty(is),
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `A ${amps(is)} current source feeds $R_1 = ${ohms(r1)}$ in parallel with $R_2 = ${ohms(r2)}$. ` +
         `Find the current through $R_1$.`,

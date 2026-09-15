@@ -1,8 +1,8 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
 import {
-  capacitance, inductance, ohms, pick, resistor, seconds, supplyVoltage, trimNumber, volts,
-  type Rng,
+  adjustDifficulty, capacitance, inductance, mantissaDifficulty, ohms, pick, resistor, seconds,
+  supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
@@ -36,11 +36,17 @@ export const rcStepResponse: Generator = {
     const decayOnly = vFinal * Math.exp(-t / tau);
     // Using the complement without the initial term.
     const noInitial = vFinal * (1 - Math.exp(-t / tau));
+    // t = 1*tau is easiest because e^-1 is memorised; a non-zero starting
+    // voltage is the step that most students omit entirely.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      tMultiple === 1 ? -1 : tMultiple === 0.5 || tMultiple === 1.5 ? 1 : 0,
+      v0 === 0 ? -1 : 1,
+    ]);
 
     return {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `A capacitor $C = ${trimNumber(c * 1e9)}\\,\\text{nF}$ charges through $R = ${ohms(r)}$ toward ` +
         `${volts(vFinal)}. Its initial voltage is ${volts(v0)}. ` +
@@ -116,11 +122,18 @@ export const rlcDamping: Generator = {
 
     const alpha = r / (2 * l);
     const correctId = regime === 'over' ? 'a' : regime === 'critical' ? 'b' : 'c';
+    // The closer alpha sits to omega_0, the less the classification can be
+    // judged by inspection and the more it demands an actual comparison.
+    const separation = Math.abs(Math.log10(alpha / omega0));
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      Math.min(1, Math.max(-1, 1 - separation * 3)),
+      mantissaDifficulty(r),
+    ]);
 
     return {
       type: 'multiple-choice' as const,
       kcRefs: this.kcRefs,
-      difficultyB: this.difficultyB,
+      difficultyB,
       stem:
         `A **series** RLC circuit has $R = ${ohms(r)}$, $L = ${trimNumber(l * 1e3)}\\,\\text{mH}$ and ` +
         `$C = ${trimNumber(c * 1e9)}\\,\\text{nF}$. Classify its natural response.`,

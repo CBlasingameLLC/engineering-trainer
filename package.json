@@ -13,9 +13,9 @@
     "test:watch": "vitest",
     "typecheck": "tsc --build --force",
     "lint": "eslint .",
-    "pack": "tsx tools/pack-cli/src/cli.ts",
     "dev": "pnpm --filter @et/desktop dev",
-    "tauri": "pnpm --filter @et/desktop tauri"
+    "tauri": "pnpm --filter @et/desktop tauri",
+    "content": "tsx tools/pack-cli/src/cli.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
