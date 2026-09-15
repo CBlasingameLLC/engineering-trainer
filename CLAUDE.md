@@ -25,6 +25,17 @@ pnpm tauri dev                 # desktop shell (needs Rust + webkit2gtk)
 
 `pnpm content`, not `pnpm pack` — pnpm reserves `pack` as a built-in.
 
+**After any dependency or workspace change, run the install CI actually runs:**
+
+```sh
+pnpm install --frozen-lockfile
+```
+
+Plain `pnpm install` silently repairs a stale lockfile and carries on; CI passes
+`--frozen-lockfile` and refuses it. So a lockfile that never learned about a new
+dependency passes locally and fails every CI job at the install step, before a
+single test runs.
+
 **Typechecking is two projects, and `pnpm typecheck` only covers one.** The root
 `tsconfig.json` explicitly excludes `apps/desktop`. CI runs both; do the same
 before pushing:
@@ -194,6 +205,17 @@ packs by the schema, and never enters a release build. Don't weaken that.
   error outside `test/` and the e2e driver.
 - **Vite is pinned to `127.0.0.1`** in `apps/desktop/vite.config.ts`. `localhost`
   resolves to `::1` in CI while the readiness poll dials IPv4; don't revert it.
+- **CI pins pnpm to 10** via `pnpm/action-setup`'s `version` input, independently
+  of the action's own version. The committed lockfile was written by pnpm 10; a
+  newer pnpm major rewrites its format and then fails the frozen install. Bump
+  the action freely, but move `version` only when regenerating the lockfile on
+  the same pnpm major locally.
+- **A hand-edited `package.json` needs `pnpm install` afterwards.** Adding a
+  workspace dependency by editing the file directly leaves the lockfile without
+  the new specifier. Every CI job then dies at
+  `ERR_PNPM_OUTDATED_LOCKFILE` — all of them at once, which looks alarming and
+  is actually one cause. Prefer `pnpm --filter <pkg> add <dep>`; if you do edit
+  by hand, run `pnpm install` and commit the lockfile with the change.
 - **`packages/*/src/*.ts` imports use `.js` extensions** (`verbatimModuleSyntax`,
   bundler resolution). Workspace `@et/*` aliases are declared independently in
   **four** configs that must stay in sync:
