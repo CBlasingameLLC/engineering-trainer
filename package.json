@@ -5,7 +5,9 @@
   "description": "Gamified gap-finder and mastery analysis trainer for electrical engineering",
   "license": "UNLICENSED",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
@@ -20,5 +22,8 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "mathjs": "^15.2.0"
   }
 }
