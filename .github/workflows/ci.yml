@@ -123,6 +123,14 @@ jobs:
       - name: Drive the circuit lab and skill tree
         run: pnpm --filter @et/desktop e2e:lab
 
+      # Answers into each item's own misconception traps, then asserts the feed
+      # reports every error the run committed. Expectations are built during
+      # the run, never kept beside the content. This covers the join between
+      # grading, storage and the feed - each of which has unit tests, and all of
+      # which were disconnected for most of this project's life.
+      - name: Drive the misconception feed and a targeted drill
+        run: pnpm --filter @et/desktop e2e:misconceptions
+
       - name: Upload screenshots on failure
         if: failure()
         uses: actions/upload-artifact@v7
