@@ -22,8 +22,9 @@ pnpm --filter @et/desktop tauri dev
 pnpm --filter @et/desktop tauri build  # produces an installer
 ```
 
-Storage goes to SQLite at `sqlite:trainer.db` in the app data directory, with
-migrations applied from `src-tauri/migrations/`.
+Storage goes to SQLite at `sqlite:trainer.db`, which `tauri-plugin-sql` places in
+the app **config** directory — on Linux `~/.config/com.cblasingame.engineering-trainer/`
+— not the data directory. Migrations are applied from `src-tauri/migrations/`.
 
 ### Linux build prerequisites
 
@@ -32,12 +33,26 @@ sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file \
   libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
 ```
 
-> The Tauri shell has **not been compiled or run** in the environment this was
-> developed in — `webkit2gtk`, `gtk3` and `libsoup3` were unavailable, so
-> `cargo build` was never executed against it. The Rust side is standard Tauri
-> v2 wiring and the SQL adapter mirrors the tested IndexedDB one method for
-> method, but treat the first `tauri dev` as unverified. The browser path, by
-> contrast, is exercised end-to-end on every run of the e2e suite.
+The desktop build is now compiled and run: `tauri build` produces `.deb`, `.rpm`
+and `.AppImage` bundles, and the app has been launched headless under Xvfb,
+driven through onboarding, and confirmed to write to SQLite.
+
+Compiling it for the first time found two real defects that the browser path
+structurally cannot surface — see **Capabilities** below and the note on the SQL
+plugin import. Both are fixed; the lesson is that "mirrors the tested adapter
+method for method" was not the same as working.
+
+### Capabilities
+
+Tauri v2 denies every plugin command unless a capability grants it.
+`src-tauri/capabilities/default.json` grants the SQL plugin's four commands.
+Without it the app starts, renders, and fails on its first database call with
+`Command plugin:sql|load not allowed by ACL`.
+
+`sql:allow-execute` is granted explicitly rather than relying on `sql:default`,
+which is a **read-only** set — `allow-close`, `allow-load`, `allow-select` and no
+write. Relying on it would let the app boot and read, then fail the first time it
+recorded an attempt.
 
 ## Why there are two storage adapters
 

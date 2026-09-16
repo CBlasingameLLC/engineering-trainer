@@ -15,7 +15,8 @@
     "lint": "eslint .",
     "dev": "pnpm --filter @et/desktop dev",
     "tauri": "pnpm --filter @et/desktop tauri",
-    "content": "tsx tools/pack-cli/src/cli.ts"
+    "content": "tsx tools/pack-cli/src/cli.ts",
+    "portable": "node tools/portable/pack.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

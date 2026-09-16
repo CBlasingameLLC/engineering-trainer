@@ -13,7 +13,10 @@ architecture kept clean for a possible commercial path.
 
 ## Status
 
-Early. See the open pull request for what is built and what is not.
+Early, but installable. `pnpm --filter @et/desktop tauri build` produces `.deb`,
+`.rpm` and `.AppImage` bundles on Linux; `pnpm portable` assembles a
+cross-platform bundle that needs only Node. See `docs/ROADMAP.md` for what is
+next.
 
 ## Layout
 

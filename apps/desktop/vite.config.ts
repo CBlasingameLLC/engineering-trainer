@@ -28,11 +28,11 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     target: 'es2022',
-    rollupOptions: {
-      // Only reachable inside the Tauri shell, which provides it at runtime.
-      // Marking it external keeps the browser build - the one the end-to-end
-      // verification runs against - buildable without a Tauri toolchain.
-      external: ['@tauri-apps/plugin-sql'],
-    },
+    // `@tauri-apps/plugin-sql` is bundled rather than marked external. It is a
+    // normal npm package that talks to the Rust side over Tauri's IPC, not
+    // something the shell injects, so leaving it external emitted a bare
+    // specifier the WebView could not resolve - the desktop build launched and
+    // then hung on storage init. It is reached only through a dynamic import
+    // behind `isTauri()`, so the browser build never fetches the chunk.
   },
 });

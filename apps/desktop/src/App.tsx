@@ -12,10 +12,28 @@ export function App(): React.ReactElement {
   const route = useApp((s) => s.route);
   const content = useApp((s) => s.content);
   const boot = useApp((s) => s.boot);
+  const bootError = useApp((s) => s.bootError);
 
   useEffect(() => {
     void boot();
   }, [boot]);
+
+  // Startup failures must be loud. A rejected boot used to leave the app on
+  // "Loading..." indefinitely, which is indistinguishable from a slow start and
+  // gives no way to tell a storage fault from a content fault.
+  if (bootError) {
+    return (
+      <div className="mx-auto max-w-2xl p-8">
+        <h1 className="text-lg font-semibold text-red-700">The app could not start</h1>
+        <p className="mt-2 text-sm text-slate-600">
+          Startup failed before any data was loaded. Nothing has been lost; the error is below.
+        </p>
+        <pre className="mt-4 overflow-x-auto whitespace-pre-wrap rounded bg-slate-100 p-3 font-mono text-xs text-slate-800">
+          {bootError}
+        </pre>
+      </div>
+    );
+  }
 
   // Content problems are fatal and must be loud: a malformed curriculum would
   // otherwise surface as inexplicably missing questions.

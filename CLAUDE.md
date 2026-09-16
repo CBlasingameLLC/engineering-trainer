@@ -205,6 +205,10 @@ packs by the schema, and never enters a release build. Don't weaken that.
   error outside `test/` and the e2e driver.
 - **Vite is pinned to `127.0.0.1`** in `apps/desktop/vite.config.ts`. `localhost`
   resolves to `::1` in CI while the readiness poll dials IPv4; don't revert it.
+- **A silent `boot()` failure is a blank "Loading…" screen.** `store.boot()`
+  captures startup errors into `bootError` and `App` renders them. This is how
+  the ACL failure above was diagnosed at all — before it, a broken storage
+  backend was indistinguishable from a slow start. Keep it.
 - **CI pins pnpm to 10** via `pnpm/action-setup`'s `version` input, independently
   of the action's own version. The committed lockfile was written by pnpm 10; a
   newer pnpm major rewrites its format and then fails the frozen install. Bump
@@ -288,8 +292,24 @@ Not built:
 - **Misconception feed** — misconception events are recorded and stored, but
   nothing surfaces the recurring ones or launches a targeted drill.
 
-**The Tauri shell has never been compiled.** `webkit2gtk`/`gtk3`/`libsoup3` were
-unavailable in the development environment, so `cargo build` has not run against
-it. The Rust side is standard Tauri v2 wiring and the SQL adapter mirrors the
-tested IndexedDB one method for method, but treat the first `tauri dev` as
-unverified. The browser path is exercised on every CI run.
+**The desktop build works and has been run.** `tauri build` produces `.deb`,
+`.rpm` and `.AppImage`; the app has been launched headless under Xvfb, driven
+through onboarding, and confirmed to apply both migrations and write to SQLite.
+
+Compiling it the first time found two defects the browser path cannot surface,
+both now fixed and both worth knowing about:
+
+- **`@tauri-apps/plugin-sql` was never installed.** A local `.d.ts` shim declared
+  the module and `vite.config.ts` marked it external, so the compiler and the
+  bundler were each satisfied while the package was absent — the build emitted a
+  bare specifier the WebView could not resolve. Do not mark Tauri plugin packages
+  external; they are ordinary npm packages that talk over IPC, and the dynamic
+  import behind `isTauri()` already keeps them out of the browser bundle.
+- **Tauri v2 denies every plugin command without a capability.**
+  `src-tauri/capabilities/default.json` grants the SQL commands. `sql:default` is
+  a **read-only** set (close/load/select), so `sql:allow-execute` is granted
+  explicitly — relying on the default would boot and read fine and then fail the
+  first write.
+
+`tauri-plugin-sql` puts `trainer.db` in the app **config** dir
+(`~/.config/<identifier>/` on Linux), not the data dir.

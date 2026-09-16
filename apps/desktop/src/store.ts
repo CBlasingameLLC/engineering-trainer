@@ -73,6 +73,12 @@ interface AppState {
   profile: Profile;
   model: LearnerModel | null;
   circuits: CircuitRecord[];
+  /**
+   * Why startup failed, if it did. Without this a storage failure leaves the
+   * app on "Loading..." forever with nothing on screen and nothing in the UI to
+   * diagnose from - which is exactly how a broken desktop build looked.
+   */
+  bootError: string | null;
 
   // Active session
   mode: SessionMode;
@@ -134,6 +140,7 @@ export const useApp = create<AppState>((set, get) => ({
   profile: emptyProfile(),
   model: null,
   circuits: [],
+  bootError: null,
 
   mode: 'placement',
   sessionId: null,
@@ -154,28 +161,35 @@ export const useApp = create<AppState>((set, get) => ({
   workingSchematic: null,
 
   async boot() {
-    const content = loadContent();
     // SQLite under the desktop shell, IndexedDB in a browser. The renderer
     // never learns which, so the same code path is exercised either way.
-    const storage: StorageAdapter = isTauri() ? new TauriSqlAdapter() : new WebStorageAdapter();
-    await storage.init();
+    const kind = isTauri() ? 'SQLite (desktop)' : 'IndexedDB (browser)';
+    try {
+      const content = loadContent();
+      const storage: StorageAdapter = isTauri() ? new TauriSqlAdapter() : new WebStorageAdapter();
+      await storage.init();
 
-    const profile = await storage.getProfile();
-    const [attempts, priors, circuits] = await Promise.all([
-      storage.listAttempts(),
-      storage.listPriors(),
-      storage.listCircuits(),
-    ]);
-    const model = buildLearnerModel(content.graph, profile, attempts, priors);
+      const profile = await storage.getProfile();
+      const [attempts, priors, circuits] = await Promise.all([
+        storage.listAttempts(),
+        storage.listPriors(),
+        storage.listCircuits(),
+      ]);
+      const model = buildLearnerModel(content.graph, profile, attempts, priors);
 
-    set({
-      content,
-      storage,
-      profile,
-      model,
-      circuits,
-      route: profile.onboarded ? 'dashboard' : 'onboarding',
-    });
+      set({
+        content,
+        storage,
+        profile,
+        model,
+        circuits,
+        bootError: null,
+        route: profile.onboarded ? 'dashboard' : 'onboarding',
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? (error.stack ?? error.message) : String(error);
+      set({ bootError: `Storage backend: ${kind}\n\n${detail}` });
+    }
   },
 
   async completeOnboarding(courses, targetTerm) {

@@ -44,3 +44,6 @@ content/inbox/**
 *.sqlite
 *.sqlite3
 .scratch/
+
+# Build output for distribution
+release/

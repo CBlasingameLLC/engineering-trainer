@@ -19,6 +19,9 @@ export default tseslint.config(
       '**/coverage/**',
       'apps/desktop/src-tauri/**',
       'content/**',
+      // Assembled distribution bundles: generated output, and the copied
+      // renderer inside them is minified code eslint has nothing to say about.
+      'release/**',
     ],
   },
 

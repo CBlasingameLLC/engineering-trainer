@@ -13,9 +13,15 @@ import {
  * SQLite-backed storage for the desktop build.
  *
  * Mirrors WebStorageAdapter exactly, so the renderer never knows which one it
- * is talking to. The plugin is imported dynamically because `@tauri-apps/plugin-sql`
- * has no meaning in a plain browser, and a static import would break the web
- * build that the whole verification story depends on.
+ * is talking to. The plugin is imported dynamically so the browser build never
+ * fetches the chunk: the import sits behind `isTauri()` and only the desktop
+ * shell ever reaches it.
+ *
+ * The plugin is a real dependency and is bundled. An earlier version declared it
+ * with a local `.d.ts` shim and marked it external in vite.config.ts, which
+ * satisfied both the compiler and the bundler while the package was not
+ * installed at all - the desktop build then emitted a bare specifier the WebView
+ * could not resolve, and hung on startup with no error shown.
  *
  * Schema and migrations live in `src-tauri/migrations/001_initial.sql` and are
  * applied by the Rust side at startup.
