@@ -205,3 +205,86 @@ describe('computeStats', () => {
     for (const ref of generator.kcRefs) expect(covered.has(ref.kc)).toBe(true);
   });
 });
+
+describe('symbolic answer keys', () => {
+  /**
+   * Symbolic items are the case where the rest of the gate goes quiet:
+   * self-consistency grades the stored expression against itself and always
+   * passes, and explanation-agreement reads numeric keys only. These tests pin
+   * that the residual check covers the difference, because without it a
+   * symbolic bank would be "verified" by two checks that cannot fail.
+   */
+  function symbolicPack(): Pack {
+    const { pack, issues } = buildPack(
+      GENERATORS.filter((g) => g.id.startsWith('math')),
+      { packId: 'math-test', course: 'MATH2471', title: 'Math test bank', variantsPerGenerator: 3 },
+    );
+    expect(issues).toHaveLength(0);
+    return pack;
+  }
+
+  const firstSymbolic = (pack: Pack): Item => {
+    const item = pack.items.find((i) => i.answer.kind === 'symbolic');
+    expect(item, 'expected at least one symbolic item').toBeDefined();
+    return item!;
+  };
+
+  it('verifies every generated symbolic answer against its declared residual', () => {
+    const pack = symbolicPack();
+    const symbolic = pack.items.filter((i) => i.answer.kind === 'symbolic');
+    expect(symbolic.length).toBeGreaterThan(5);
+
+    const report = verifyPack(pack);
+    const residualFindings = report.findings.filter((f) => f.check === 'symbolic-residual');
+    expect(residualFindings).toEqual([]);
+    expect(report.ok).toBe(true);
+  });
+
+  it('rejects a symbolic answer that no longer satisfies its residual', () => {
+    const pack = clone(symbolicPack());
+    const item = firstSymbolic(pack);
+    if (item.answer.kind !== 'symbolic') throw new Error('unreachable');
+
+    // Scale the whole derivative by two: still well-formed, still parses, still
+    // grades itself correct — and wrong.
+    item.answer.expression = `2*(${item.answer.expression})`;
+    // Re-attribute to a hand author so the regeneration check stands aside:
+    // that is also the realistic case, since a hand-written symbolic item has
+    // no generator to regenerate from and the residual is its only gate.
+    item.provenance = { ...item.provenance, producer: 'hand' };
+
+    const report = verifyPack(pack);
+    expect(report.ok).toBe(false);
+    expect(report.findings.some((f) => f.check === 'symbolic-residual' && f.itemId === item.id)).toBe(true);
+  });
+
+  it('shows that self-consistency alone cannot catch a wrong symbolic key', () => {
+    // The point of the residual check, stated as a test: a corrupted symbolic
+    // answer sails through the check that guards every numeric item.
+    const pack = clone(symbolicPack());
+    const item = firstSymbolic(pack);
+    if (item.answer.kind !== 'symbolic') throw new Error('unreachable');
+    item.answer.expression = `7*(${item.answer.expression}) + 3`;
+    item.answer.residual = undefined;
+    item.provenance = { ...item.provenance, producer: 'hand' };
+
+    const report = verifyPack(pack);
+    const onThisItem = report.findings.filter((f) => f.itemId === item.id && f.severity === 'error');
+    expect(onThisItem).toEqual([]);
+  });
+
+  it('flags a symbolic item that declares no residual at all', () => {
+    const pack = clone(symbolicPack());
+    const item = firstSymbolic(pack);
+    if (item.answer.kind !== 'symbolic') throw new Error('unreachable');
+    item.answer.residual = undefined;
+    item.provenance = { ...item.provenance, producer: 'hand' };
+
+    const report = verifyPack(pack);
+    expect(report.findings.some(
+      (f) => f.check === 'symbolic-residual' && f.itemId === item.id && f.severity === 'warning',
+    )).toBe(true);
+    // A warning does not block on its own, but --strict is what the shared bank builds with.
+    expect(verifyPack(pack, { strict: true }).ok).toBe(false);
+  });
+});

@@ -3,6 +3,8 @@ import type { Item, Pack } from '@et/content-schema';
 import { generatorById, makeRng } from '@et/generators';
 import { gradeCircuit, nodesOf, parseNetlist } from '@et/circuits';
 
+import { checkResidual } from './symbolic.js';
+
 /**
  * The verification gate.
  *
@@ -187,7 +189,36 @@ function checkCircuitReference(item: Item): VerifyFinding[] {
   return [];
 }
 
-/** Check 5 — misconception coverage. Untagged wrong options teach nothing. */
+/**
+ * Check 5 — a symbolic answer satisfies the relationship it declares.
+ *
+ * This is the only independent evidence a symbolic item gets. Self-consistency
+ * grades the stored expression against itself and always passes; explanation
+ * agreement reads numeric keys only. Without this check a symbolic bank enters
+ * the repository verified in name alone.
+ *
+ * A symbolic answer with no declared residual is a gap in that evidence rather
+ * than a defect, so it warns instead of failing — but under `--strict` it
+ * blocks, which is what the shared bank is built with.
+ */
+function checkSymbolicResidual(item: Item): VerifyFinding[] {
+  if (item.answer.kind !== 'symbolic') return [];
+
+  if (!item.answer.residual) {
+    return [warn(
+      item.id,
+      'symbolic-residual',
+      'symbolic answer declares no residual, so nothing independently re-derives it',
+    )];
+  }
+
+  const outcome = checkResidual(item.answer);
+  return outcome.ok
+    ? []
+    : [error(item.id, 'symbolic-residual', outcome.detail ?? 'the answer fails its declared relationship')];
+}
+
+/** Check 6 — misconception coverage. Untagged wrong options teach nothing. */
 function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
   if (item.type === 'multiple-choice' && item.answer.kind === 'choice') {
     const { correctId } = item.answer;
@@ -201,10 +232,16 @@ function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
   if (item.type === 'numeric' && item.misconceptionTraps.length === 0) {
     return [warn(item.id, 'misconception-coverage', 'numeric item defines no misconception traps')];
   }
+  // Symbolic items diagnose through expression traps. Without them a wrong
+  // answer records only that the learner missed, and the misconception feed
+  // never learns that a whole course's worth of errors were chain-rule errors.
+  if (item.type === 'symbolic' && !item.misconceptionTraps.some((t) => t.expression !== undefined)) {
+    return [warn(item.id, 'misconception-coverage', 'symbolic item defines no expression traps')];
+  }
   return [];
 }
 
-/** Check 6 — KC references resolve against the loaded curriculum. */
+/** Check 7 — KC references resolve against the loaded curriculum. */
 function checkKcReferences(item: Item, knownKcs: ReadonlySet<string>): VerifyFinding[] {
   if (knownKcs.size === 0) return []; // no curriculum supplied
   return item.kcRefs
@@ -230,6 +267,7 @@ export function verifyPack(pack: Pack, options: VerifyOptions = {}): VerifyRepor
       ...checkExplanationAgreement(item),
       ...checkRegeneration(item),
       ...checkCircuitReference(item),
+      ...checkSymbolicResidual(item),
       ...checkMisconceptionCoverage(item),
       ...checkKcReferences(item, knownKcs),
     ];

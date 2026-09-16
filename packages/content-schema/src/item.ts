@@ -57,6 +57,57 @@ export const numericAnswerSchema = z.object({
     .refine((t) => t.rel !== undefined || t.abs !== undefined, 'specify rel or abs tolerance'),
 });
 
+/**
+ * A relationship the stated symbolic answer must satisfy, checkable without
+ * trusting the author.
+ *
+ * Symbolic items have a verification problem the numeric ones do not. The
+ * self-consistency check feeds an item's own answer through the grader, which
+ * for a symbolic answer compares the stored expression against itself and
+ * therefore always passes; explanation-agreement only inspects numeric answer
+ * keys. That leaves regeneration as the only real gate, and regeneration proves
+ * a generator is deterministic, not that its calculus is right.
+ *
+ * Declaring the relationship closes it. An antiderivative can be differentiated
+ * back, a derivative can be compared against a central difference of the
+ * function it came from, and a claimed ODE solution can be substituted into the
+ * equation to see whether the residual vanishes. Each is an independent
+ * re-derivation by a different method than the one that produced the answer,
+ * which is what makes it worth running — the calculus analogue of checking the
+ * MNA solver against ngspice.
+ */
+export const symbolicResidualSchema = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('derivative-of'),
+    /** The function that was differentiated; the answer must equal its derivative. */
+    expression: z.string().min(1),
+    variable: z.string().min(1),
+  }),
+  z.object({
+    kind: z.literal('antiderivative-of'),
+    /** The integrand; the derivative of the answer must equal it. */
+    expression: z.string().min(1),
+    variable: z.string().min(1),
+  }),
+  z.object({
+    kind: z.literal('ode-solution'),
+    /**
+     * Coefficients of `second*y'' + first*y' + zeroth*y = forcing`, each an
+     * expression in `variable`. Constant coefficients are the common case, but
+     * allowing expressions covers variable-coefficient equations for free.
+     */
+    variable: z.string().min(1),
+    second: z.string().min(1).default('0'),
+    first: z.string().min(1),
+    zeroth: z.string().min(1),
+    forcing: z.string().min(1).default('0'),
+    /** Initial conditions the particular solution must also meet. */
+    initial: z
+      .array(z.object({ at: z.number().finite(), order: z.number().int().min(0).max(2), value: z.number().finite() }))
+      .default([]),
+  }),
+]);
+
 /** A symbolic answer is checked by sampling, not string comparison. */
 export const symbolicAnswerSchema = z.object({
   kind: z.literal('symbolic'),
@@ -65,6 +116,13 @@ export const symbolicAnswerSchema = z.object({
   variables: z.array(z.string().min(1)).min(1),
   /** Sampling domain per variable, so equivalence is tested where the expression is defined. */
   domain: z.record(z.string(), z.tuple([z.number(), z.number()])).optional(),
+  /**
+   * How `pack verify` re-derives this answer independently. Optional because
+   * not every symbolic answer is the result of a calculus operation - a closed
+   * form for a divider ratio is just an expression - but a generator that can
+   * supply one should, and `verify --strict` reports the ones that do not.
+   */
+  residual: symbolicResidualSchema.optional(),
 });
 
 export const choiceAnswerSchema = z.object({
@@ -150,16 +208,45 @@ export const optionSchema = z.object({
  * recovers it: "you entered 6.67 V, which is what you get if you leave the
  * current source in place while finding the Thevenin resistance."
  */
-export const misconceptionTrapSchema = z.object({
-  misconception: slug,
-  /** The wrong value this error produces, in the same unit as the answer. */
-  value: z.number().finite(),
-  tolerance: z
-    .object({ rel: z.number().positive().optional(), abs: z.number().positive().optional() })
-    .refine((t) => t.rel !== undefined || t.abs !== undefined, 'specify rel or abs tolerance'),
-  /** Shown when the learner lands on it. */
-  feedback: z.string().min(1),
-});
+export const misconceptionTrapSchema = z
+  .object({
+    misconception: slug,
+    /** The wrong value this error produces, in the same unit as the answer. */
+    value: z.number().finite().optional(),
+    /**
+     * The wrong *expression* this error produces, for symbolic items.
+     *
+     * A calculus error does not land on a number, it lands on a form:
+     * differentiating `sin(3x)` without the chain rule gives `cos(3x)`, and
+     * that is a diagnosis rather than just a miss. Matching it uses the same
+     * sampling equivalence that grades the item, so a learner who writes an
+     * algebraically different spelling of the same mistake is still diagnosed.
+     */
+    expression: z.string().min(1).optional(),
+    tolerance: z
+      .object({ rel: z.number().positive().optional(), abs: z.number().positive().optional() })
+      .refine((t) => t.rel !== undefined || t.abs !== undefined, 'specify rel or abs tolerance')
+      .optional(),
+    /** Shown when the learner lands on it. */
+    feedback: z.string().min(1),
+  })
+  .superRefine((trap, ctx) => {
+    const hasValue = trap.value !== undefined;
+    const hasExpression = trap.expression !== undefined;
+    if (hasValue === hasExpression) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'a trap sets exactly one of `value` (numeric items) or `expression` (symbolic items)',
+      });
+    }
+    if (hasValue && trap.tolerance === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['tolerance'],
+        message: 'a numeric trap needs a tolerance, or it can never match',
+      });
+    }
+  });
 
 export const explanationSchema = z.object({
   /** Worked solution, one step per entry. KaTeX permitted. */
@@ -250,6 +337,9 @@ export const itemSchema = z
     // as an error, which is worse than having no trap at all.
     if (item.answer.kind === 'numeric') {
       for (const [i, trap] of item.misconceptionTraps.entries()) {
+        // Expression traps belong to symbolic answers and carry no value to
+        // compare; overlap for those is checked by sampling, not arithmetic.
+        if (trap.value === undefined || trap.tolerance === undefined) continue;
         const tol = Math.max(
           trap.tolerance.abs ?? 0,
           (trap.tolerance.rel ?? 0) * Math.abs(trap.value),
@@ -307,6 +397,7 @@ export type Provenance = z.infer<typeof provenanceSchema>;
 export type Answer = z.infer<typeof answerSchema>;
 export type NumericAnswer = z.infer<typeof numericAnswerSchema>;
 export type SymbolicAnswer = z.infer<typeof symbolicAnswerSchema>;
+export type SymbolicResidual = z.infer<typeof symbolicResidualSchema>;
 export type ChoiceAnswer = z.infer<typeof choiceAnswerSchema>;
 export type TruthTableAnswer = z.infer<typeof truthTableAnswerSchema>;
 export type CircuitAnswer = z.infer<typeof circuitAnswerSchema>;

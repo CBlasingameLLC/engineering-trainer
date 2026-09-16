@@ -72,6 +72,9 @@ importers:
       katex:
         specifier: ^0.18.7
         version: 0.18.7
+      mathjs:
+        specifier: ^15.2.0
+        version: 15.2.0
       react:
         specifier: ^19.0.0
         version: 19.3.0
@@ -145,6 +148,9 @@ importers:
 
   packages/generators:
     dependencies:
+      '@et/answer-engine':
+        specifier: workspace:*
+        version: link:../answer-engine
       '@et/content-schema':
         specifier: workspace:*
         version: link:../content-schema

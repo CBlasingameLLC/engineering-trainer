@@ -271,3 +271,60 @@ describe('checkAnswer dispatch', () => {
     expect(checkAnswer({ kind: 'text', value: 'x' }, circuitItem).feedback).toMatch(/simulator/);
   });
 });
+
+describe('symbolic answers determined only up to a constant', () => {
+  /**
+   * `∫x^3 dx = x^4/4 + C` is how every calculus course writes the answer, so
+   * the grader has to accept the whole family. It learns that the family is
+   * admissible from the item declaring its answer to be an antiderivative —
+   * not from guessing, and not from a flag an author has to remember to set.
+   */
+  const antiderivative: SymbolicAnswer = {
+    kind: 'symbolic',
+    expression: 'x^4/4',
+    variables: ['x'],
+    domain: { x: [1, 4] },
+    residual: { kind: 'antiderivative-of', expression: 'x^3', variable: 'x' },
+  };
+
+  it('accepts the bare antiderivative', () => {
+    expect(checkSymbolic('x^4/4', antiderivative).correct).toBe(true);
+  });
+
+  it('accepts a named constant of integration', () => {
+    expect(checkSymbolic('x^4/4 + C', antiderivative).correct).toBe(true);
+  });
+
+  it('accepts a specific numeric constant', () => {
+    expect(checkSymbolic('x^4/4 - 12', antiderivative).correct).toBe(true);
+  });
+
+  it('accepts an algebraically different but equivalent form', () => {
+    expect(checkSymbolic('0.25*x*x*x*x + C', antiderivative).correct).toBe(true);
+  });
+
+  it('rejects a difference that is not constant', () => {
+    // Off by a term in x, which is a real error rather than a choice of constant.
+    const result = checkSymbolic('x^4/4 + x', antiderivative);
+    expect(result.correct).toBe(false);
+    expect(result.feedback).toContain('constant');
+  });
+
+  it('rejects a wrong antiderivative even with a constant attached', () => {
+    expect(checkSymbolic('x^3/3 + C', antiderivative).correct).toBe(false);
+  });
+
+  it('still demands exact agreement when the answer is not an antiderivative', () => {
+    // Without the residual the constant is not free, and `+ C` is just wrong.
+    const plain: SymbolicAnswer = { kind: 'symbolic', expression: 'x^4/4', variables: ['x'], domain: { x: [1, 4] } };
+    expect(checkSymbolic('x^4/4 + C', plain).correct).toBe(false);
+    expect(checkSymbolic('x^4/4', plain).correct).toBe(true);
+  });
+
+  it('does not let a built-in constant absorb an error', () => {
+    // `e` parses as a symbol but is a known value; treating it as a free
+    // constant would make `x^4/4 + e` and `x^4/4 + e*x` indistinguishable.
+    expect(checkSymbolic('x^4/4 + e', antiderivative).correct).toBe(true);
+    expect(checkSymbolic('x^4/4 + e*x', antiderivative).correct).toBe(false);
+  });
+});

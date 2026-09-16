@@ -81,10 +81,19 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
       // simulating its reference deck instead, below.
       if (item.answer.kind === 'circuit') continue;
 
+      // Build the response from the answer's own shape. Casting every
+      // non-choice answer to `{ value: number }` worked only while numeric was
+      // the sole free-response kind; a symbolic answer has no `value`, so the
+      // cast produced the literal string "undefined" and the item was graded
+      // against nonsense rather than against its key.
       const response =
         item.answer.kind === 'choice'
           ? ({ kind: 'choice', optionId: item.answer.correctId } as const)
-          : ({ kind: 'text', value: String((item.answer as { value: number }).value) } as const);
+          : item.answer.kind === 'symbolic'
+            ? ({ kind: 'text', value: item.answer.expression } as const)
+            : item.answer.kind === 'truth-table'
+              ? ({ kind: 'truth-table' as const, rows: [...item.answer.rows] })
+              : ({ kind: 'text', value: String(item.answer.value) } as const);
 
       const result = checkAnswer(response, item);
       expect(result.correct, `seed ${seed} rejected its own answer: ${result.feedback ?? ''}`).toBe(true);
@@ -125,6 +134,7 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
       const item = itemSchema.parse(variant(generator, seed));
       if (item.answer.kind !== 'numeric') continue;
       for (const trap of item.misconceptionTraps) {
+        if (trap.value === undefined || trap.tolerance === undefined) continue;
         const slack = Math.max(
           toleranceFor(trap.tolerance, trap.value),
           toleranceFor(item.answer.tolerance, item.answer.value),

@@ -12,6 +12,9 @@ import {
   inductorBehaviour, naturalResponseTau, rcStepResponse, rlcDamping,
 } from './ee2300/transients.js';
 import { dividerDesign, opAmpGainDesign, rcTimeConstantDesign } from './ee2300/design.js';
+import { CALCULUS_GENERATORS } from './math/calculus.js';
+import { ODE_GENERATORS } from './math/odes.js';
+import { LINEAR_ALGEBRA_GENERATORS } from './math/linear.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -46,10 +49,33 @@ export const GENERATORS: readonly Generator[] = [
   dividerDesign,
   opAmpGainDesign,
   rcTimeConstantDesign,
+  // The cross-course prerequisites. Without items here the graph can infer that
+  // a circuits failure is really a calculus failure but can never confirm it,
+  // which leaves the central claim of the app untested.
+  ...CALCULUS_GENERATORS,
+  ...ODE_GENERATORS,
+  ...LINEAR_ALGEBRA_GENERATORS,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>
   GENERATORS.find((g) => g.id === id);
 
+/**
+ * The course a generator belongs to: the one owning its highest-weighted KC.
+ *
+ * Generators deliberately span courses — a forced first-order ODE is 80%
+ * differential equations and 20% exponentials, and recording both is what lets
+ * mastery propagate across the boundary. But *membership* has to be singular.
+ * Matching on any referenced KC put the same item, with the same id, into two
+ * packs, and an item loaded twice is counted twice by the CAT engine: the
+ * duplicate-stem guard in `buildItems` catches this within a pack and cannot
+ * see across them. Primary attribution is already what `difficultyB` and the
+ * title describe, so it is the honest place to draw the line.
+ */
+export const primaryCourse = (generator: Generator): string => {
+  const dominant = [...generator.kcRefs].sort((a, b) => b.weight - a.weight)[0];
+  return (dominant?.kc.split('.')[0] ?? '').toUpperCase();
+};
+
 export const generatorsForCourse = (course: string): Generator[] =>
-  GENERATORS.filter((g) => g.kcRefs.some((r) => r.kc.startsWith(`${course.toLowerCase()}.`)));
+  GENERATORS.filter((g) => primaryCourse(g) === course.toUpperCase());

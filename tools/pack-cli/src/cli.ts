@@ -7,7 +7,7 @@ import {
   type Credential, type Pack,
 } from '@et/content-schema';
 import { parse as parseYaml } from 'yaml';
-import { GENERATORS, buildPack } from '@et/generators';
+import { GENERATORS, buildPack, generatorsForCourse } from '@et/generators';
 import { verifyPack, type VerifyReport } from './verify.js';
 import { computeStats, uncoveredKcs } from './stats.js';
 
@@ -236,29 +236,58 @@ function cmdStats(): number {
   return 0;
 }
 
+/**
+ * One pack per course.
+ *
+ * Courses are shipped, imported and licensed as units, so a single combined
+ * bank would make it impossible to hand out Circuits I without also handing out
+ * everything else. Splitting on the KC prefix keeps that boundary automatic:
+ * a generator declares the KCs it exercises and lands in the right pack without
+ * anyone maintaining a second list that can drift out of step with the first.
+ */
+const PACK_TARGETS: readonly { course: string; packId: string; title: string }[] = [
+  { course: 'EE2300', packId: 'ee2300-core-v1', title: 'Circuits I generated core bank' },
+  { course: 'MATH2471', packId: 'math2471-core-v1', title: 'Calculus I prerequisite bank' },
+  { course: 'MATH3323', packId: 'math3323-core-v1', title: 'Differential equations prerequisite bank' },
+  { course: 'MATH3376', packId: 'math3376-core-v1', title: 'Linear algebra prerequisite bank' },
+];
+
 function cmdBuild(args: string[]): number {
   const variants = Number(args.find((a) => a.startsWith('--variants='))?.split('=')[1] ?? 12);
   console.log(`Building packs from ${GENERATORS.length} generators (${variants} variants each)\n`);
 
-  const { pack, issues } = buildPack(GENERATORS, {
-    packId: 'ee2300-core-v1',
-    course: 'EE2300',
-    title: 'Circuits I generated core bank',
-    variantsPerGenerator: variants,
-  });
+  mkdirSync(SHARED_PACKS, { recursive: true });
+  let total = 0;
 
-  if (issues.length > 0) {
-    console.log(bad(`  ${issues.length} generated item(s) failed schema validation:`));
-    for (const issue of issues.slice(0, 10)) {
-      console.log(`    ${issue.itemId} ${issue.path}: ${issue.message}`);
+  for (const target of PACK_TARGETS) {
+    const generators = generatorsForCourse(target.course);
+    if (generators.length === 0) {
+      console.log(warn(`  ${target.course}: no generators registered, skipping`));
+      continue;
     }
-    return 1;
+
+    const { pack, issues } = buildPack(generators, {
+      packId: target.packId,
+      course: target.course,
+      title: target.title,
+      variantsPerGenerator: variants,
+    });
+
+    if (issues.length > 0) {
+      console.log(bad(`  ${issues.length} generated item(s) failed schema validation:`));
+      for (const issue of issues.slice(0, 10)) {
+        console.log(`    ${issue.itemId} ${issue.path}: ${issue.message}`);
+      }
+      return 1;
+    }
+
+    const file = join(SHARED_PACKS, `${pack.packId}.json`);
+    writeFileSync(file, `${JSON.stringify(pack, null, 2)}\n`);
+    console.log(ok(`  wrote ${String(pack.items.length).padStart(4)} items to content/packs/shared/${basename(file)}`));
+    total += pack.items.length;
   }
 
-  mkdirSync(SHARED_PACKS, { recursive: true });
-  const target = join(SHARED_PACKS, `${pack.packId}.json`);
-  writeFileSync(target, `${JSON.stringify(pack, null, 2)}\n`);
-  console.log(ok(`  wrote ${pack.items.length} items to content/packs/shared/${basename(target)}`));
+  console.log(`\n  ${total} items across ${PACK_TARGETS.length} packs`);
   return 0;
 }
 

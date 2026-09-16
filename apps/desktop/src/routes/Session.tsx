@@ -4,6 +4,7 @@ import { emptySchematic, formatValue, type Schematic } from '@et/circuits';
 import type { Response } from '@et/answer-engine';
 import { useApp } from '@/store';
 import { MathText } from '@/ui/Math';
+import { ExpressionInput } from '@/ui/ExpressionInput';
 import { SchematicEditor } from '@/features/schematic/SchematicEditor';
 
 /**
@@ -56,6 +57,7 @@ export function Session(): React.ReactElement {
   const { item } = active;
   const isChoice = item.type === 'multiple-choice';
   const isCircuit = item.type === 'circuit-build';
+  const isSymbolic = item.answer.kind === 'symbolic';
   const budget = DEFAULT_CAT_CONFIG.maxItems;
   const outstanding = shouldStop(cat, bank, DEFAULT_CAT_CONFIG).outstanding.length;
 
@@ -186,6 +188,15 @@ export function Session(): React.ReactElement {
                 );
               })}
             </div>
+          ) : isSymbolic && item.answer.kind === 'symbolic' ? (
+            <ExpressionInput
+              answer={item.answer}
+              value={text}
+              disabled={settled}
+              onChange={setText}
+              onSubmit={send}
+              inputRef={inputRef}
+            />
           ) : (
             <div className="mt-6">
               <label className="label" htmlFor="answer">

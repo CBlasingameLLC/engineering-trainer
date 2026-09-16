@@ -101,7 +101,9 @@ export function parseQuantity(
 
 /** Match a wrong numeric value against the item's known error traps. */
 function matchTrap(value: number, traps: readonly MisconceptionTrap[]): MisconceptionTrap | undefined {
-  return traps.find((t) => within(value, t.value, t.tolerance));
+  return traps.find(
+    (t) => t.value !== undefined && t.tolerance !== undefined && within(value, t.value, t.tolerance),
+  );
 }
 
 export function checkNumeric(
@@ -138,7 +140,7 @@ export function checkNumeric(
 export function checkSymbolic(
   raw: string,
   answer: SymbolicAnswer,
-  opts: { samples?: number; random?: () => number } = {},
+  opts: { samples?: number; random?: () => number; traps?: readonly MisconceptionTrap[] } = {},
 ): CheckResult {
   const normalized = normalizeInput(raw);
   if (normalized === '') return { correct: false, outcome: 'unparseable', feedback: 'No answer entered.' };
@@ -146,10 +148,12 @@ export function checkSymbolic(
   const samples = opts.samples ?? 24;
   const random = opts.random ?? Math.random;
 
+  let learnerNode: math.MathNode;
   let learner: math.EvalFunction;
   let reference: math.EvalFunction;
   try {
-    learner = math.parse(normalized).compile();
+    learnerNode = math.parse(normalized);
+    learner = learnerNode.compile();
   } catch {
     return { correct: false, outcome: 'unparseable', feedback: `Could not read "${raw}" as an expression.` };
   }
@@ -159,9 +163,27 @@ export function checkSymbolic(
     return { correct: false, outcome: 'unparseable', feedback: 'The stored answer expression is invalid.' };
   }
 
+  // An antiderivative is only determined up to a constant, so `x^2`, `x^2 + 5`
+  // and `x^2 + C` are all correct answers to the same question. Comparing
+  // values point by point would mark two of the three wrong. Because the item
+  // declares that its answer *is* an antiderivative, the right criterion can be
+  // derived from the item rather than guessed at: the learner's expression and
+  // the key must differ by the same amount everywhere, not by nothing.
+  const upToConstant = answer.residual?.kind === 'antiderivative-of';
+
+  // Symbols the learner used that the item never mentioned - the `C` in
+  // `x^2 + C`. Each is pinned to one arbitrary value for the whole comparison.
+  // Holding it fixed is what makes the constant-difference test meaningful: a
+  // genuine constant of integration shifts every sample equally, while a stray
+  // variable that actually belongs in the expression does not.
+  const extras = freeSymbols(learnerNode).filter((name) => !answer.variables.includes(name));
+  const extraScope: Record<string, number> = {};
+  for (const name of extras) extraScope[name] = 1 + random() * 4;
+
   let compared = 0;
+  let offset: number | null = null;
   for (let i = 0; i < samples * 4 && compared < samples; i++) {
-    const scope: Record<string, number> = {};
+    const scope: Record<string, number> = { ...extraScope };
     for (const v of answer.variables) {
       const [lo, hi] = answer.domain?.[v] ?? [1, 10];
       scope[v] = lo + random() * (hi - lo);
@@ -181,11 +203,23 @@ export function checkSymbolic(
     } catch {
       return wrong({ feedback: 'Your expression could not be evaluated over the expected variables.' });
     }
-    if (typeof actual !== 'number' || !Number.isFinite(actual)) return wrong();
+    if (typeof actual !== 'number' || !Number.isFinite(actual)) return symbolicMiss(normalized, answer, opts);
 
     // Relative comparison, with an absolute floor so values near zero do not
     // demand impossible precision.
-    if (Math.abs(actual - expected) > Math.max(1e-6, 1e-6 * Math.abs(expected))) return wrong();
+    const tolerance = Math.max(1e-6, 1e-6 * Math.abs(expected));
+    if (upToConstant) {
+      const difference = actual - expected;
+      if (offset === null) {
+        offset = difference;
+      } else if (Math.abs(difference - offset) > Math.max(tolerance, 1e-6 * Math.abs(offset))) {
+        return symbolicMiss(normalized, answer, opts, {
+          feedback: 'That differs from the correct antiderivative by more than a constant.',
+        });
+      }
+    } else if (Math.abs(actual - expected) > tolerance) {
+      return symbolicMiss(normalized, answer, opts);
+    }
     compared++;
   }
 
@@ -193,6 +227,56 @@ export function checkSymbolic(
     return { correct: false, outcome: 'unparseable', feedback: 'Could not evaluate the answer over its domain.' };
   }
   return ok();
+}
+
+/**
+ * Attribute a wrong expression to a known error, when one explains it.
+ *
+ * Multiple choice gets this for free because the learner picks from a tagged
+ * list. Free response would otherwise lose it, and free response is where the
+ * better evidence is: nobody offered the learner `cos(3x)`, so writing it is a
+ * specific statement about what they believe the chain rule does.
+ *
+ * Comparison runs through `checkSymbolic` itself rather than string matching,
+ * so a learner who writes an algebraically different spelling of the same
+ * mistake is still diagnosed. Recursion terminates because the trap expression
+ * is graded against a trap-free answer.
+ */
+function symbolicMiss(
+  normalized: string,
+  answer: SymbolicAnswer,
+  opts: { samples?: number; random?: () => number; traps?: readonly MisconceptionTrap[] },
+  extra: { feedback?: string } = {},
+): CheckResult {
+  for (const trap of opts.traps ?? []) {
+    if (trap.expression === undefined) continue;
+    const asAnswer: SymbolicAnswer = { ...answer, expression: trap.expression, residual: undefined };
+    if (checkSymbolic(normalized, asAnswer, { samples: opts.samples, random: opts.random }).correct) {
+      return wrong({ misconception: trap.misconception, feedback: trap.feedback });
+    }
+  }
+  return wrong(extra);
+}
+
+/**
+ * Every symbol an expression reads, excluding the ones mathjs resolves itself.
+ *
+ * `pi` and `e` parse as symbol nodes but need no binding, and treating them as
+ * unknown constants would let `e` absorb a real error in an antiderivative
+ * check. Function names are excluded too: in `sin(x)` only `x` is a value.
+ */
+function freeSymbols(node: math.MathNode): string[] {
+  const builtin = new Set(['pi', 'e', 'PI', 'E', 'i', 'Infinity', 'NaN', 'tau', 'phi']);
+  const found = new Set<string>();
+  node.traverse((child, _path, parent) => {
+    if (child.type !== 'SymbolNode') return;
+    const name = (child as math.SymbolNode).name;
+    if (builtin.has(name)) return;
+    // The callee of a function call is a SymbolNode too; it names an operation.
+    if (parent?.type === 'FunctionNode' && (parent as math.FunctionNode).fn === child) return;
+    found.add(name);
+  });
+  return [...found];
 }
 
 export function checkTruthTable(rows: readonly boolean[], answer: TruthTableAnswer): CheckResult {
@@ -232,7 +316,7 @@ export function checkAnswer(response: Response, item: Item): CheckResult {
 
     case 'symbolic':
       if (response.kind !== 'text') return mismatch('a typed expression');
-      return checkSymbolic(response.value, answer);
+      return checkSymbolic(response.value, answer, { traps: item.misconceptionTraps });
 
     case 'choice':
       if (response.kind !== 'choice') return mismatch('a selected option');
