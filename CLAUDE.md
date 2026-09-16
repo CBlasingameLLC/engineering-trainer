@@ -52,6 +52,7 @@ pnpm --filter @et/desktop build
 pnpm --filter @et/desktop preview &     # 127.0.0.1:4173
 pnpm --filter @et/desktop e2e           # placement -> gap report
 pnpm --filter @et/desktop e2e:lab       # skill tree + schematic editor + solver
+pnpm --filter @et/desktop e2e:misconceptions  # answer into traps -> feed -> drill
 ```
 
 The container's preinstalled Chromium can lag the installed Playwright. When the
@@ -159,6 +160,16 @@ checks; the load-bearing ones:
   steps, then a sixth number that doesn't follow) and nothing structural catches it.
 - **regeneration** — re-run the generator at the stored seed; require an exact match.
 
+- **symbolic-residual** — re-derive the answer numerically by a *different*
+  method than the one that produced it. Without this a symbolic item is
+  effectively unverified: self-consistency grades the stored expression against
+  itself and always passes, and explanation-agreement reads numeric keys only,
+  so regeneration is the only check left and it proves determinism rather than
+  correctness. A symbolic answer declares a `residual` (`derivative-of`,
+  `antiderivative-of`, `ode-solution`) and the gate differentiates, integrates
+  or substitutes to confirm it. Finite differences know nothing about the power
+  rule and so cannot inherit a mistake in it.
+
 Know the limit: for generator items verification is near-total. For model-written
 numeric items there is no independent solver, so the gate proves internal
 consistency, not physics — it cannot catch reasoning and an answer that are
@@ -201,6 +212,24 @@ packs by the schema, and never enters a release build. Don't weaken that.
   addition as a product regression. This bug class has appeared twice (a stale
   pack-cli fixture, then the e2e expectation regex); the current driver records
   `missedKcs` *during* the session and asserts against that.
+- **A generator belongs to exactly one pack.** `generatorsForCourse` routes by
+  the *highest-weighted* KC, not by any referenced KC. Generators span courses
+  on purpose — a forced first-order ODE is 80% DiffEq and 20% exponentials —
+  but matching on any reference emitted the same item id into two packs, and an
+  item loaded twice counts twice as evidence. The duplicate-stem guard in
+  `buildItems` works within a pack and cannot see across them.
+- **An e2e driver must load every pack, not a named one.** `placement-flow.mjs`
+  read `ee2300-core-v1.json` by name; when the math packs landed, 9 served items
+  fell through to a catch-all that types `1`, so they were answered wrong and
+  then reported as gaps in KCs the run believed it had answered correctly. The
+  app was right and the harness was lying about it.
+- **Symbolic answers accept a family, not a string.** An antiderivative is
+  defined up to a constant, so `x^4/4`, `x^4/4 + 5` and `x^4/4 + C` are all
+  correct. `checkSymbolic` derives that from the item's declared residual rather
+  than from a flag an author has to remember, and compares differences instead
+  of values. Unknown symbols in the learner's input are bound to one fixed
+  arbitrary value for the run, which is what makes "differs by a constant"
+  testable.
 - **No `any` in domain code** — `@typescript-eslint/no-explicit-any` is an
   error outside `test/` and the e2e driver.
 - **Vite is pinned to `127.0.0.1`** in `apps/desktop/vite.config.ts`. `localhost`
@@ -259,6 +288,40 @@ Things that will bite:
 - Design tasks are graded on **measured behaviour, never topology**, so two
   2.35k resistors in series pass a 4.7k spec.
 
+### The misconception loop
+
+Every distractor and trap names the error that produces it, and those tags have
+been recorded since the first placement exam. `packages/domain/misconception/`
+is what reads them.
+
+Ranking is a judgement about three things, and getting any of them wrong
+produces a plausible-looking feed that points at the wrong work:
+
+- **Recency.** Five sign errors last March and none since is solved. A raw count
+  cannot tell that apart from five this week, so hits are weighted by an
+  exponential half-life and stale ones drop out entirely.
+- **Spread.** The same error under six KCs is a habit; six hits under one KC is
+  confusion about one topic. The first is more valuable to fix and invisible to
+  any per-course view — the competency-axis argument applied to mistakes.
+- **Direction.** `trend` compares the two halves of the window, and reserves
+  `worsening` for a real increase. A first appearance is `new`: labelling every
+  error in a learner's first session as deteriorating is both false and
+  indistinguishable from the case that genuinely is.
+
+`content/misconceptions/families.yaml` declares the cross-course families, and
+only that — per-item feedback already names the number the learner actually
+wrote, and duplicating it centrally would create two descriptions that drift.
+The catalog lives outside `content/curriculum/` because everything in that
+directory is parsed as a course document.
+
+A drill is built **only from items that can detect the target error**. A clean
+run through items that could not have caught it proves nothing, which is why
+`assembleDrill` filters on tagged traps rather than on KC, spreads across topics
+so the habit is tested rather than one question memorised, and aims *below* the
+learner's ability — adaptive selection matches difficulty to ability to measure,
+but remediation wants the question answerable so the correction is the only hard
+part.
+
 ### Gamification is built to discourage grinding
 
 `xpForAttempt` pays a bonus scaled by how far FSRS retrievability had *fallen*
@@ -278,19 +341,26 @@ Plan Phases 0–3 are complete. The EE 2300 vertical slice runs end to end
 (onboard → adaptive placement → gap report → dashboard), plus the skill tree,
 XP/streaks/quests/challenge exams, and the circuit lab with its own MNA solver.
 
+The cross-course claim is now testable rather than inferred. All 34 KCs carry
+items, including the six math KCs that Circuits I points at, so a propagated
+diagnosis ("your calculus is the problem") can be confirmed by asking instead of
+only asserted.
+
 Not built:
 
-- **Curriculum breadth** (Phase 4) — the 6 math KCs referenced as cross-course
-  prerequisites have no items; `pnpm content stats` lists them. Also no
-  `truth-table` or `symbolic` items yet, though both are in the schema and the
-  answer engine grades them.
+- **Curriculum breadth** (Phase 4) — Tier 1 is covered except EE 2320 Digital
+  Logic. No `truth-table` items yet: the type is in the schema and the answer
+  engine grades it by canonical comparison, but the session player has no grid
+  input, so nothing can be answered. That widget unlocks two courses — EE 2320
+  and the propositional-logic half of MATH 2358 Discrete Mathematics.
 - **Nonlinear devices** — diodes and transistors need Newton-Raphson around the
   existing stamping code plus a device-model library. Nothing in Circuits I/II
   requires them.
 - **Schematic reconstruction from a netlist.** Importing a deck gives topology
   with no geometry; the Lab says so rather than inventing a layout.
-- **Misconception feed** — misconception events are recorded and stored, but
-  nothing surfaces the recurring ones or launches a targeted drill.
+- **Nothing reads the competency radar for remediation.** The misconception
+  families carry a `competency`, and the dashboard draws that axis, but the two
+  are not joined.
 
 **The desktop build works and has been run.** `tauri build` produces `.deb`,
 `.rpm` and `.AppImage`; the app has been launched headless under Xvfb, driven

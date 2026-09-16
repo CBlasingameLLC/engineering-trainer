@@ -7,6 +7,7 @@ import { Dashboard } from '@/routes/Dashboard';
 import { Credentials } from '@/routes/Credentials';
 import { SkillTree } from '@/routes/SkillTree';
 import { CircuitLab } from '@/routes/CircuitLab';
+import { Misconceptions } from '@/routes/Misconceptions';
 
 export function App(): React.ReactElement {
   const route = useApp((s) => s.route);
@@ -70,5 +71,7 @@ export function App(): React.ReactElement {
       return <SkillTree />;
     case 'circuitLab':
       return <CircuitLab />;
+    case 'misconceptions':
+      return <Misconceptions />;
   }
 }

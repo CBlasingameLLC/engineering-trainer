@@ -1,0 +1,167 @@
+# Misconception families.
+#
+# The point of this file is the one claim no item can make about itself: that an
+# error under one topic is the same mistake as an error under another. A sign
+# dropped in a KVL loop and a sign dropped in a characteristic root are one
+# habit, and nothing in EE 2300's pack or MATH 3323's pack is in a position to
+# notice. Grouping them is what turns "you missed nine questions" into "you drop
+# signs", which is the only version a learner can act on.
+#
+# Per-item feedback lives on the items, where it can name the actual number the
+# learner wrote. Nothing here repeats it.
+
+schemaVersion: '1.0.0'
+
+families:
+  - id: sign-convention-discipline
+    title: Sign discipline
+    competency: math-execution
+    description: >-
+      Losing or inverting a sign while carrying a quantity through a
+      calculation. The single most portable error in the whole degree: it costs
+      marks in circuits, calculus and differential equations identically, and
+      it is never a gap in understanding — it is bookkeeping.
+
+  - id: ratio-inversion
+    title: Inverted ratios
+    competency: math-execution
+    description: >-
+      Writing a ratio upside down. Dividers, Ohm's law, Cramer's rule and
+      logarithmic decay all reduce to putting the right quantity on top, and
+      the error looks different in each while being the same slip.
+
+  - id: exponent-bookkeeping
+    title: Exponent bookkeeping
+    competency: math-execution
+    description: >-
+      Mishandling the exponent when differentiating or integrating a power.
+      Purely mechanical, and directly under every energy, transient and
+      stored-charge result in the circuits sequence.
+
+  - id: initial-conditions
+    title: Initial and boundary conditions
+    competency: modeling
+    description: >-
+      Solving the general problem and then failing to pin it to the specific
+      one. The differential equation, the definite integral and the charged
+      capacitor all have a family of answers until a stated condition picks
+      one, and skipping that step is invisible until the number is wrong.
+
+  - id: network-topology
+    title: Reading the topology
+    competency: visual
+    description: >-
+      Misreading how a network is connected before any arithmetic starts.
+      Series read as parallel, the wrong pair of nodes, the wrong equivalent
+      resistance. No amount of correct algebra survives it.
+
+  - id: source-handling
+    title: Handling sources
+    competency: strategy
+    description: >-
+      Treating a source incorrectly when a method demands something specific of
+      it — suppressing the wrong way for a Thevenin resistance, ignoring a
+      source inside a supermesh, or holding a dependent source's control
+      variable fixed.
+
+  - id: dynamic-response
+    title: Shape of a dynamic response
+    competency: concept
+    description: >-
+      Choosing the wrong form for how something evolves in time: a decay where
+      there is a rise, an oscillation where there is none, or a regime
+      classified from the wrong quantity. This is the family that connects
+      RLC damping to the discriminant of a quadratic.
+
+  - id: formula-substitution
+    title: Substituting into a remembered formula
+    competency: numeracy
+    description: >-
+      Recalling a result nearly correctly — a dropped factor of two, gains
+      added where they multiply, a term averaged where it should be summed.
+      The characteristic error of learning results instead of derivations.
+
+  - id: system-solving
+    title: Solving simultaneous systems
+    competency: math-execution
+    description: >-
+      Errors in carrying a linear system to its solution, including reporting
+      the wrong unknown at the end. Directly under every nodal and mesh
+      analysis, which is why a weakness here reads as a circuits weakness.
+
+misconceptions:
+  # --- sign discipline ------------------------------------------------------
+  - { id: psc.sign-dropped,                   family: sign-convention-discipline, title: "Dropped a sign in the passive sign convention" }
+  - { id: op-amp.sign-dropped,                family: sign-convention-discipline, title: "Dropped the inverting amplifier's minus sign" }
+  - { id: nodal.source-sign-error,            family: sign-convention-discipline, title: "Wrong sign on a source term in a node equation" }
+  - { id: supernode.constraint-sign-error,    family: sign-convention-discipline, title: "Wrong sign in a supernode constraint" }
+  - { id: supermesh.constraint-sign-error,    family: sign-convention-discipline, title: "Wrong sign in a supermesh constraint" }
+  - { id: ode.characteristic-root-sign,       family: sign-convention-discipline, title: "Characteristic root reported with the wrong sign" }
+  - { id: ode.decay-sign-inverted,            family: sign-convention-discipline, title: "Growing exponential where the solution decays" }
+
+  # --- inverted ratios ------------------------------------------------------
+  - { id: divider.inverted-ratio,             family: ratio-inversion, title: "Divider ratio inverted" }
+  - { id: ohms-law.inverted,                  family: ratio-inversion, title: "Ohm's law solved upside down" }
+  - { id: divider.current-same-resistor,      family: ratio-inversion, title: "Current divider used the same branch's resistance" }
+  - { id: linear-algebra.cramer-ratio-inverted, family: ratio-inversion, title: "Cramer's rule ratio inverted" }
+  - { id: calculus.logarithm-ratio-inverted,  family: ratio-inversion, title: "Logarithm taken of the reciprocal ratio" }
+  - { id: source-transform.divided,           family: ratio-inversion, title: "Divided where a source transformation multiplies" }
+  - { id: source-transform.multiplied,        family: ratio-inversion, title: "Multiplied where a source transformation divides" }
+
+  # --- exponent bookkeeping -------------------------------------------------
+  - { id: calculus.power-rule-exponent-kept,  family: exponent-bookkeeping, title: "Power rule applied without decrementing the exponent" }
+  - { id: calculus.antiderivative-exponent-not-incremented, family: exponent-bookkeeping, title: "Integral divided by the old exponent" }
+  - { id: calculus.integration-differentiates-instead, family: exponent-bookkeeping, title: "Differentiated where the question asked to integrate" }
+  - { id: calculus.constant-term-survives,    family: exponent-bookkeeping, title: "Constant term survived differentiation" }
+  - { id: calculus.integral-of-constant-dropped, family: exponent-bookkeeping, title: "Constant term dropped during integration" }
+  - { id: calculus.product-rule-as-product-of-derivatives, family: exponent-bookkeeping, title: "Product rule taken as a product of derivatives" }
+  - { id: calculus.chain-rule-inner-dropped,  family: exponent-bookkeeping, title: "Chain rule missing its inner derivative" }
+  - { id: energy.not-squared,                 family: exponent-bookkeeping, title: "Stored energy computed without squaring" }
+
+  # --- initial and boundary conditions --------------------------------------
+  - { id: transient.initial-condition-ignored, family: initial-conditions, title: "Transient started from zero regardless of its initial value" }
+  - { id: ode.initial-condition-ignored,      family: initial-conditions, title: "Constants never fitted to the initial conditions" }
+  - { id: ode.particular-solution-omitted,    family: initial-conditions, title: "Homogeneous solution given for a driven system" }
+  - { id: calculus.definite-integral-lower-limit-dropped, family: initial-conditions, title: "Definite integral evaluated at one limit only" }
+  - { id: supernode.constraint-omitted,       family: initial-conditions, title: "Supernode constraint equation omitted" }
+
+  # --- reading the topology -------------------------------------------------
+  - { id: series-parallel.all-series,         family: network-topology, title: "Whole network read as series" }
+  - { id: series-parallel.all-parallel,       family: network-topology, title: "Whole network read as parallel" }
+  - { id: delta-wye.opposite-resistors,       family: network-topology, title: "Delta-wye used the wrong pair of resistors" }
+  - { id: delta-wye.denominator-incomplete,   family: network-topology, title: "Delta-wye denominator missing a term" }
+  - { id: transient.resistances-added,        family: network-topology, title: "Time-constant resistances added instead of combined" }
+  - { id: transient.wrong-equivalent-resistance, family: network-topology, title: "Wrong equivalent resistance seen by the storage element" }
+  - { id: norton.wrong-resistance,            family: network-topology, title: "Norton resistance taken from the wrong network" }
+  - { id: thevenin.r3-drop-assumed,           family: network-topology, title: "Assumed a drop across a resistor carrying no current" }
+  - { id: inductor.ohmic-treatment,           family: network-topology, title: "Inductor treated as a resistance" }
+
+  # --- handling sources -----------------------------------------------------
+  - { id: thevenin.source-not-suppressed,     family: source-handling, title: "Source left active while finding Thevenin resistance" }
+  - { id: thevenin.source-opened,             family: source-handling, title: "Voltage source opened instead of shorted" }
+  - { id: dependent.treated-as-absent,        family: source-handling, title: "Dependent source ignored" }
+  - { id: dependent.control-variable-fixed,   family: source-handling, title: "Dependent source's control variable held fixed" }
+  - { id: supermesh.source-ignored,           family: source-handling, title: "Shared current source ignored in a supermesh" }
+  - { id: mesh.coupling-term-dropped,         family: source-handling, title: "Shared-branch coupling term dropped from a mesh equation" }
+  - { id: rlc.resistance-ignored,             family: source-handling, title: "Damping resistance left out of an RLC response" }
+
+  # --- shape of a dynamic response ------------------------------------------
+  - { id: transient.decay-form-misapplied,    family: dynamic-response, title: "Pure decay form used for a rising transient" }
+  - { id: rlc.regime-misclassified,           family: dynamic-response, title: "RLC damping regime misclassified" }
+  - { id: ode.discriminant-misread,           family: dynamic-response, title: "Damping regime read from the wrong sign of the discriminant" }
+  - { id: ode.root-ordering-confused,         family: dynamic-response, title: "Characteristic roots reported in the wrong order" }
+  - { id: ode.damping-term-ignored,           family: dynamic-response, title: "Damping term ignored when classifying a response" }
+  - { id: calculus.time-constant-not-applied, family: dynamic-response, title: "Time constant omitted from an exponential result" }
+
+  # --- substituting into a remembered formula -------------------------------
+  - { id: max-power.missing-factor-four,      family: formula-substitution, title: "Maximum power missing its factor of four" }
+  - { id: max-power.total-power,              family: formula-substitution, title: "Total power reported instead of load power" }
+  - { id: cascade.gains-added,                family: formula-substitution, title: "Cascaded gains added instead of multiplied" }
+  - { id: op-amp.summing-averaged,            family: formula-substitution, title: "Summing amplifier output averaged" }
+  - { id: op-amp.noninverting-missing-unity,  family: formula-substitution, title: "Non-inverting gain missing its unity term" }
+  - { id: energy.half-dropped,                family: formula-substitution, title: "Stored energy missing its factor of one half" }
+
+  # --- solving simultaneous systems -----------------------------------------
+  - { id: linear-algebra.wrong-variable-reported, family: system-solving, title: "Correct solution, wrong unknown reported" }
+  - { id: linear-algebra.singular-system-unnoticed, family: system-solving, title: "Singular system not recognised" }
+  - { id: linear-algebra.consistency-misjudged, family: system-solving, title: "Inconsistent and dependent systems confused" }

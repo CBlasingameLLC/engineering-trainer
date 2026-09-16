@@ -37,6 +37,13 @@ export interface LearnerModel {
   retention: Map<KcId, RetentionState>;
   masteries: KcMastery[];
   byKc: Map<KcId, KcMastery>;
+  /**
+   * Every item already answered. Falls out of the same replay that builds the
+   * rest of the model, and is what lets a targeted drill prefer material the
+   * learner has not seen — re-serving the exact item they missed tests recall
+   * of that question rather than whether the underlying habit is gone.
+   */
+  attemptedItemIds: Set<string>;
 }
 
 /**
@@ -101,7 +108,9 @@ export function buildLearnerModel(
 
   // 3. Direct responses, replayed in order. Always wins over the above.
   const latencies = new Map<KcId, number[]>();
+  const attemptedItemIds = new Set<string>();
   for (const attempt of attempts) {
+    attemptedItemIds.add(attempt.itemId);
     const difficulty = { b: 0, n: 50 }; // item difficulty is calibrated in the bank, not here
     const updated = updateElo(abilities, difficulty, attempt.kcRefs, attempt.correct, DEFAULT_ELO_PARAMS);
     for (const [kcId, ability] of updated.abilities) abilities.set(kcId, ability);
@@ -139,6 +148,7 @@ export function buildLearnerModel(
     retention,
     masteries,
     byKc: new Map(masteries.map((m) => [m.kcId, m])),
+    attemptedItemIds,
   };
 }
 

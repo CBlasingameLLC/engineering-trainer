@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import {
   DEFAULT_CAT_CONFIG,
+  assembleDrill,
   createCatSession,
   dailyQuest,
   finalizePlacement,
@@ -22,7 +23,7 @@ import {
 import { checkAnswer, type CheckResult, type Response } from '@et/answer-engine';
 import { gradeCircuit, parseNetlist, toNetlist, type GradeResult, type Schematic } from '@et/circuits';
 import type { Item } from '@et/content-schema';
-import { loadContent, itemsForCourses, itemsForKcs, type LoadedContent } from '@/content';
+import { loadContent, drillCandidates, itemsForCourses, itemsForKcs, type LoadedContent } from '@/content';
 import { buildLearnerModel, type LearnerModel } from '@/features/learner-model';
 import { WebStorageAdapter } from '@/storage/web';
 import { TauriSqlAdapter, isTauri } from '@/storage/tauri';
@@ -32,6 +33,7 @@ import {
   type CircuitRecord,
   type CompletedCourse,
   type InferredPrior,
+  type MisconceptionEvent,
   type Profile,
   type SessionMode,
   type StorageAdapter,
@@ -46,7 +48,9 @@ import {
  * browser.
  */
 
-type Route = 'loading' | 'onboarding' | 'dashboard' | 'session' | 'report' | 'credentials' | 'skillTree' | 'circuitLab';
+type Route =
+  | 'loading' | 'onboarding' | 'dashboard' | 'session' | 'report'
+  | 'credentials' | 'skillTree' | 'circuitLab' | 'misconceptions';
 
 export interface ActiveItem {
   item: Item;
@@ -66,6 +70,23 @@ export interface Graded {
   circuit?: GradeResult;
 }
 
+/**
+ * How a targeted drill went.
+ *
+ * `refired` is the number that matters. Getting items right is encouraging but
+ * ambiguous — the learner may have avoided the trap by luck or by working more
+ * slowly than they will next week. A drill built only from items that *can*
+ * catch the error turns "the misconception did not fire once across five
+ * questions and three topics" into the real evidence that the habit is gone.
+ */
+export interface DrillResult {
+  misconceptionId: string;
+  asked: number;
+  correct: number;
+  /** Times the same misconception fired again during the drill. */
+  refired: number;
+}
+
 interface AppState {
   route: Route;
   content: LoadedContent | null;
@@ -73,6 +94,12 @@ interface AppState {
   profile: Profile;
   model: LearnerModel | null;
   circuits: CircuitRecord[];
+  /**
+   * Every recorded misconception hit. Held in state rather than re-read per
+   * render because the feed is a pure projection over the whole log, the same
+   * way the learner model is.
+   */
+  misconceptionEvents: MisconceptionEvent[];
   /**
    * Why startup failed, if it did. Without this a storage failure leaves the
    * app on "Loading..." forever with nothing on screen and nothing in the UI to
@@ -95,6 +122,9 @@ interface AppState {
   lastPlacement: PlacementResult | null;
   lastChallenge: ChallengeResult | null;
   lastStreak: StreakUpdate | null;
+  /** Which error a drill is remediating, and how it went. */
+  drillTarget: string | null;
+  lastDrill: DrillResult | null;
   /** Course under examination, for a challenge run. */
   challengeCourse: string | null;
   challengeResponses: ChallengeResponse[];
@@ -106,6 +136,7 @@ interface AppState {
   startPlacement(courseCodes: string[]): void;
   startQuest(): void;
   startChallenge(courseCode: string): void;
+  startDrill(misconceptionId: string): void;
   submit(response: Response, raw: string): Promise<void>;
   submitCircuit(schematic: Schematic): Promise<void>;
   submitCircuitNetlist(deck: string): Promise<void>;
@@ -135,6 +166,9 @@ function buildBank(items: readonly Item[]): { bank: CatItem[]; itemsById: Map<st
 
 export const useApp = create<AppState>((set, get) => ({
   route: 'loading',
+  misconceptionEvents: [],
+  drillTarget: null,
+  lastDrill: null,
   content: null,
   storage: null,
   profile: emptyProfile(),
@@ -170,10 +204,11 @@ export const useApp = create<AppState>((set, get) => ({
       await storage.init();
 
       const profile = await storage.getProfile();
-      const [attempts, priors, circuits] = await Promise.all([
+      const [attempts, priors, circuits, misconceptionEvents] = await Promise.all([
         storage.listAttempts(),
         storage.listPriors(),
         storage.listCircuits(),
+        storage.listMisconceptionEvents(),
       ]);
       const model = buildLearnerModel(content.graph, profile, attempts, priors);
 
@@ -183,6 +218,7 @@ export const useApp = create<AppState>((set, get) => ({
         profile,
         model,
         circuits,
+        misconceptionEvents,
         bootError: null,
         route: profile.onboarded ? 'dashboard' : 'onboarding',
       });
@@ -272,6 +308,57 @@ export const useApp = create<AppState>((set, get) => ({
       bank,
       itemsById,
       challengeCourse: courseCode,
+    });
+  },
+
+  /**
+   * A drill aimed at one error rather than one topic.
+   *
+   * The bank is restricted to items that can actually detect the misconception,
+   * which is what makes the result mean anything: a clean run through items
+   * that could not have caught the error proves nothing about whether it is
+   * gone. CAT still does the serving, and with `minItems` at 8 a five-item
+   * drill can only end by exhausting its bank — so every selected item is
+   * asked, and the habit gets tested across each topic in the set rather than
+   * the session converging after two.
+   */
+  startDrill(misconceptionId) {
+    const { content, model } = get();
+    if (!content || !model) return;
+
+    // Aim the drill at the learner's ability *in the topics where this error
+    // actually fires*, not at a global average. Someone who drops signs only in
+    // op-amp work should meet op-amp-level questions, and a whole-model mean
+    // would pull that toward whatever else they have practised most.
+    const affected = get()
+      .misconceptionEvents.filter((e) => e.misconceptionId === misconceptionId)
+      .map((e) => e.kcId);
+    const thetas = [...new Set(affected)]
+      .map((kc) => model.abilities.get(kc)?.theta)
+      .filter((t): t is number => t !== undefined);
+    const ability = thetas.length > 0 ? thetas.reduce((a, b) => a + b, 0) / thetas.length : undefined;
+
+    const chosen = assembleDrill(misconceptionId, drillCandidates(content.items), {
+      attempted: model.attemptedItemIds,
+      ...(ability !== undefined ? { ability } : {}),
+    });
+    if (chosen.length === 0) return;
+
+    const wanted = new Set(chosen.map((c) => c.itemId));
+    const items = content.items.filter((item) => wanted.has(item.id));
+    const { bank, itemsById } = buildBank(items);
+
+    const kcIds = [...new Set(chosen.map((c) => c.kcId))];
+    const priors = new Map(
+      kcIds.map((kc) => [kc, model.pMastery.get(kc) ?? DEFAULT_CAT_CONFIG.bkt.pInit]),
+    );
+
+    beginSession(set, get, {
+      mode: 'drill',
+      cat: createCatSession(kcIds, priors),
+      bank,
+      itemsById,
+      drillTarget: misconceptionId,
     });
   },
 
@@ -372,8 +459,15 @@ export const useApp = create<AppState>((set, get) => ({
     let placement: PlacementResult | null = null;
     let challenge: ChallengeResult | null = null;
 
+    const drillTarget = get().drillTarget;
+
     if (mode === 'challenge' && get().challengeCourse) {
       challenge = gradeChallenge(get().challengeCourse!, content.graph, get().challengeResponses);
+    } else if (mode === 'drill') {
+      // Deliberately no placement inference. A drill is five items chosen for
+      // one property, not a sample of the learner's ability, and propagating
+      // priors from it would push conclusions about a whole course out of a set
+      // that was never representative of one.
     } else {
       // Mine the prerequisite graph for everything the responses imply, and
       // persist those inferences separately from the evidence.
@@ -412,17 +506,37 @@ export const useApp = create<AppState>((set, get) => ({
     };
     await storage.saveProfile(profile);
 
-    const [attempts, allPriors] = await Promise.all([storage.listAttempts(), storage.listPriors()]);
+    const [attempts, allPriors, misconceptionEvents] = await Promise.all([
+      storage.listAttempts(),
+      storage.listPriors(),
+      storage.listMisconceptionEvents(),
+    ]);
+
+    let drill: DrillResult | null = null;
+    if (mode === 'drill' && drillTarget) {
+      const inSession = attempts.filter((a) => a.sessionId === sessionId);
+      drill = {
+        misconceptionId: drillTarget,
+        asked: inSession.length,
+        correct: inSession.filter((a) => a.correct).length,
+        refired: misconceptionEvents.filter(
+          (e) => e.misconceptionId === drillTarget && inSession.some((a) => a.id === e.attemptId),
+        ).length,
+      };
+    }
+
     set({
       profile,
       model: buildLearnerModel(content.graph, profile, attempts, allPriors),
+      misconceptionEvents,
       lastPlacement: placement,
       lastChallenge: challenge,
       lastStreak: streakUpdate,
+      lastDrill: drill,
       active: null,
       graded: null,
       workingSchematic: null,
-      route: 'report',
+      route: mode === 'drill' ? 'misconceptions' : 'report',
     });
   },
 
@@ -514,6 +628,7 @@ function beginSession(
     bank: CatItem[];
     itemsById: Map<string, Item>;
     challengeCourse?: string;
+    drillTarget?: string;
   },
 ): void {
   const first = selectNextItem(options.cat, options.bank, DEFAULT_CAT_CONFIG);
@@ -531,6 +646,7 @@ function beginSession(
     sessionXp: 0,
     challengeCourse: options.challengeCourse ?? null,
     challengeResponses: [],
+    drillTarget: options.drillTarget ?? null,
     workingSchematic: null,
     route: 'session',
   });

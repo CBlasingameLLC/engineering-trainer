@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import {
-  byCompetency, byDomain, challengeReadiness, dailyQuest, levelProgress, streakAsOf,
-  type Competency,
+  byCompetency, byDomain, challengeReadiness, dailyQuest, levelProgress, rankMisconceptions,
+  streakAsOf, type Competency,
 } from '@et/domain';
 import { useApp } from '@/store';
 import { upcomingDecay } from '@/features/learner-model';
@@ -35,6 +35,12 @@ export function Dashboard(): React.ReactElement {
   const goTo = useApp((s) => s.goTo);
   const resetAll = useApp((s) => s.resetAll);
   const lastPlacement = useApp((s) => s.lastPlacement);
+  const misconceptionEvents = useApp((s) => s.misconceptionEvents);
+
+  const ranked = useMemo(
+    () => rankMisconceptions(misconceptionEvents.map((e) => ({ ...e, at: new Date(e.at) }))),
+    [misconceptionEvents],
+  );
 
   const view = useMemo(() => {
     if (!model || !content) return null;
@@ -62,6 +68,7 @@ export function Dashboard(): React.ReactElement {
 
   const courseCodes = content.courses.map((c) => c.code);
   const hasData = view.tested.length > 0;
+  const drillsDue = ranked.filter((r) => r.drillDue).length;
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
@@ -70,9 +77,23 @@ export function Dashboard(): React.ReactElement {
         {profile.targetTerm && (
           <span className="text-sm text-slate-500">preparing for {profile.targetTerm}</span>
         )}
-        <nav className="ml-auto flex gap-3 text-sm">
+        <nav className="ml-auto flex items-center gap-3 text-sm">
           <button className="text-slate-500 underline" onClick={() => goTo('skillTree')}>Skill tree</button>
           <button className="text-slate-500 underline" onClick={() => goTo('circuitLab')}>Circuit lab</button>
+          <button
+            className="text-slate-500 underline"
+            onClick={() => goTo('misconceptions')}
+            data-testid="nav-misconceptions"
+          >
+            Recurring errors
+          </button>
+          {/* Only badged when something has crossed the drill threshold. A count
+              that is always on screen stops being a signal. */}
+          {drillsDue > 0 && (
+            <span className="rounded-full bg-sky-100 px-2 py-0.5 text-xs font-medium text-sky-800">
+              {drillsDue} drill{drillsDue === 1 ? '' : 's'} due
+            </span>
+          )}
           <button className="text-slate-500 underline" onClick={() => goTo('credentials')}>Credentials</button>
         </nav>
       </header>

@@ -13,6 +13,10 @@ export * from './session/streak.js';
 export * from './session/quest.js';
 export * from './session/challenge.js';
 
+export * from './misconception/rank.js';
+export * from './misconception/family.js';
+export * from './misconception/drill.js';
+
 export * from './cat/propagation.js';
 export * from './cat/session.js';
 

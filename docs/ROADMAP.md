@@ -17,6 +17,9 @@ machinery exists.
 | Adaptive placement | CAT with DAG prior propagation across course boundaries |
 | Content pipeline | One schema, five producers, `validate / verify / stats / build / import` |
 | EE 2300 Circuits I | 28 KCs, 26 generators, 467 verified items |
+| MATH 2471 / 3323 / 3376 | 13 generators, 209 verified items, all 6 cross-course KCs covered |
+| Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
+| Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills |
 | Circuit lab | MNA solver (DC / DC sweep / AC / transient), schematic editor, node equations |
 | Design grading | `circuit-build` items graded by simulation |
 | Skill tree | Real prerequisite DAG, locked/available/learning/proficient/mastered |
@@ -35,15 +38,16 @@ is drawn and only the item banks are missing.
 
 | Course | KCs | Why now | Blocked on |
 |---|---|---|---|
-| **MATH 2472** Calculus II | 3 stubs | `integration-by-parts` and `exponential-functions` gate RC/RL transient analysis | Symbolic item type (engine exists, no content) |
-| **MATH 3323** Differential Equations | 2 stubs | `second-order-ode` gates RLC damping and every Circuits II transient | Symbolic item type |
-| **MATH 3376** Linear Algebra | 1 stub | `linear-systems` gates nodal and mesh analysis | Nothing — numeric items work today |
-| **EE 2320** Digital Logic | not started | Only Tier 1 course with no graph yet | Truth-table and K-map item types |
+| **MATH 2471** Calculus I | **done** | 99 items | — |
+| **MATH 3323** Differential Equations | **done** | 56 items | — |
+| **MATH 3376** Linear Algebra | **done** | 54 items | — |
+| **MATH 2358** Discrete Mathematics | not started | **In progress this term.** Propositional logic and Boolean algebra are where truth tables actually live | Truth-table grid UI in the session player |
+| **EE 2320** Digital Logic | not started | Last Tier 1 course with no graph | The same grid UI, plus K-map items |
 
-**MATH 3376 is the cheapest**: numeric generators over small systems need no new
-machinery. **EE 2320 has the highest ceiling** — the `truth-table` answer type is
-already in the schema and graded by the answer engine, so a generator is the only
-missing piece, and it opens a whole course.
+**The truth-table widget is now a two-course unlock, not one.** The type is in
+the schema and the answer engine grades it by canonical comparison, but
+`Session.tsx` has no grid input, so a truth-table item cannot be answered at all.
+Building it opens MATH 2358 (current) and EE 2320 (retroactive) at once.
 
 ### Tier 2 — this year
 
@@ -70,30 +74,26 @@ cost.
 
 Ranked by leverage, not by size.
 
-### 1. Misconception feed and targeted drills
+### 1. Truth-table entry, then MATH 2358 and EE 2320
 
-**The largest gap between what is built and what was designed.** Misconception
-events are tagged on every distractor, recorded on every wrong answer, and
-persisted — and then nothing reads them. The Duolingo-style loop the whole
-misconception system exists to serve does not close.
+The session player renders multiple-choice, numeric, symbolic and circuit-build
+items. A truth-table item has no input widget, so it cannot be answered — the
+one item type the engine grades but the app cannot serve. A clickable grid
+unlocks Discrete Mathematics (in progress now) and Digital Logic together.
 
-What it needs: a ranked feed of recurring errors, a rule that fires a drill when
-a misconception repeats N times in a window, and generators that can target one
-misconception rather than one KC. Roll-up across courses so sign errors in KVL
-and sign errors in integration both feed `sign-convention-discipline`.
-
-### 2. Symbolic and truth-table item types
-
-Both are in the schema. Both are graded by the answer engine — symbolic by
-random-point sampling, truth tables by canonical comparison. Neither has a single
-item. This is the one place where writing generators unlocks four courses at once
-(Calc II, DiffEq, Digital Logic, and the symbolic half of Circuits II).
-
-### 3. AC / phasor content for Circuits II
+### 2. AC / phasor content for Circuits II
 
 The solver already does complex-admittance AC and is validated against ngspice on
 magnitude and phase. Impedance, resonance, transfer functions and Bode reading are
-generator work over proven machinery.
+generator work over proven machinery — and this is the course in progress right
+now, so the content gets used the week it lands.
+
+### 3. Join the misconception families to the competency radar
+
+Each family declares a `competency`, and the dashboard already draws that axis.
+Nothing connects them. Doing so turns "weak math-execution" on the radar into
+the specific list of habits producing it, which is the difference between a
+diagnosis and a score.
 
 ### 4. Book import
 

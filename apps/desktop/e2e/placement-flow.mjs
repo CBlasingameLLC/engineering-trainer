@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
-import { readFileSync, mkdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { readFileSync, readdirSync, mkdirSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 /**
@@ -28,10 +28,16 @@ mkdirSync(SHOT, { recursive: true });
 // The generated bank is the source of truth for correct answers, so the driver
 // can answer honestly rather than guessing — which is what makes the placement
 // result meaningful instead of random.
-const pack = JSON.parse(
-  readFileSync(resolve(REPO, 'content/packs/shared/ee2300-core-v1.json'), 'utf8'),
-);
-const byId = new Map(pack.items.map((i) => [i.id, i]));
+// Every shipped pack, not a named one. Naming a single file made the driver
+// silently wrong the moment a second course was added: items it could not
+// identify fell through to a catch-all that types "1", so they were answered
+// incorrectly and then reported as gaps in KCs the run believed it had got
+// right. The app was behaving correctly and the harness was lying about it.
+const PACKS = resolve(REPO, 'content/packs/shared');
+const byId = new Map();
+for (const file of readdirSync(PACKS).filter((f) => f.endsWith('.json'))) {
+  for (const item of JSON.parse(readFileSync(join(PACKS, file), 'utf8')).items) byId.set(item.id, item);
+}
 
 const browser = await chromium.launch(CHROME ? { executablePath: CHROME } : {});
 const page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });
@@ -120,6 +126,14 @@ while (answered < 60) {
   } else if (item?.answer?.kind === 'numeric') {
     const value = shouldMiss ? item.answer.value * 1.8 : item.answer.value;
     await page.locator('#answer').fill(String(value));
+    await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'symbolic') {
+    // Scaling the whole expression keeps it parseable and evaluable while
+    // making it wrong, which is what a missed item should look like. Falling
+    // through to the catch-all below would type "1" and mark every symbolic
+    // item wrong regardless of the weak-topic list, skewing the whole run.
+    const expr = shouldMiss ? `2*(${item.answer.expression})` : item.answer.expression;
+    await page.locator('#answer').fill(expr);
     await page.getByRole('button', { name: 'Submit' }).click();
   } else {
     // Unidentified item: answer something so the session can proceed.

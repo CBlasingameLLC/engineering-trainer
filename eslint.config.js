@@ -76,4 +76,14 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
+  {
+    // An e2e driver is a Node script that also ships snippets to be evaluated
+    // inside the page — `page.waitForFunction` and `evaluateAll` callbacks run
+    // in the browser, where `document` and `window` are real. Linting the file
+    // under Node globals alone reports those as undefined.
+    files: ['apps/desktop/e2e/**/*.mjs'],
+    languageOptions: {
+      globals: { document: 'readonly', window: 'readonly', Node: 'readonly' },
+    },
+  },
 );
