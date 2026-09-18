@@ -18,8 +18,12 @@ machinery exists.
 | Content pipeline | One schema, five producers, `validate / verify / stats / build / import` |
 | EE 2300 Circuits I | 28 KCs, 26 generators, 467 verified items |
 | MATH 2471 / 3323 / 3376 | 13 generators, 209 verified items, all 6 cross-course KCs covered |
+| MATH 2358 Discrete Mathematics | 25 KCs, 309 items across all five units |
+| EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
+| Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |
 | Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills |
+| Display | Dark mode (system/light/dark, persisted) and fullscreen |
 | Circuit lab | MNA solver (DC / DC sweep / AC / transient), schematic editor, node equations |
 | Design grading | `circuit-build` items graded by simulation |
 | Skill tree | Real prerequisite DAG, locked/available/learning/proficient/mastered |
@@ -41,13 +45,12 @@ is drawn and only the item banks are missing.
 | **MATH 2471** Calculus I | **done** | 99 items | — |
 | **MATH 3323** Differential Equations | **done** | 56 items | — |
 | **MATH 3376** Linear Algebra | **done** | 54 items | — |
-| **MATH 2358** Discrete Mathematics | not started | **In progress this term.** Propositional logic and Boolean algebra are where truth tables actually live | Truth-table grid UI in the session player |
-| **EE 2320** Digital Logic | not started | Last Tier 1 course with no graph | The same grid UI, plus K-map items |
+| **MATH 2358** Discrete Mathematics | **done** | 309 items | — |
+| **EE 2320** Digital Logic | **done** | 229 items | — |
 
-**The truth-table widget is now a two-course unlock, not one.** The type is in
-the schema and the answer engine grades it by canonical comparison, but
-`Session.tsx` has no grid input, so a truth-table item cannot be answered at all.
-Building it opens MATH 2358 (current) and EE 2320 (retroactive) at once.
+**Tier 1 is complete.** All 82 knowledge components across six courses carry
+items, none too thin for the adaptive engine to bracket. The next course is a
+Tier 2 one.
 
 ### Tier 2 — this year
 
@@ -74,19 +77,22 @@ cost.
 
 Ranked by leverage, not by size.
 
-### 1. Truth-table entry, then MATH 2358 and EE 2320
+### 1. EE 3300 Circuits II — AC and phasors
 
-The session player renders multiple-choice, numeric, symbolic and circuit-build
-items. A truth-table item has no input widget, so it cannot be answered — the
-one item type the engine grades but the app cannot serve. A clickable grid
-unlocks Discrete Mathematics (in progress now) and Digital Logic together.
+The highest-value course left, and the cheapest of the Tier 2 set. The MNA
+solver already does complex-admittance AC and is validated against ngspice on
+both magnitude and phase, so impedance, resonance, transfer functions and Bode
+reading are generator work over machinery that exists. It is also the course in
+progress right now, so the content gets used the week it lands.
 
-### 2. AC / phasor content for Circuits II
+### 2. Narrow both new courses against your own material
 
-The solver already does complex-admittance AC and is validated against ngspice on
-magnitude and phase. Impedance, resonance, transfer functions and Bode reading are
-generator work over proven machinery — and this is the course in progress right
-now, so the content gets used the week it lands.
+Both were built broadly, on purpose. The next pass is the one that makes them
+*yours*: transcribe problems from the discrete maths textbook and the quizzes
+into `content/packs/personal/`, which is gitignored, marked `personal-only` by
+the schema, excluded from any redistributable build, and gated by the same
+verification as everything else. What is missing is the ingestion front end — a
+screen to type a problem, tag its KC, and run it through the gate.
 
 ### 3. Join the misconception families to the competency radar
 
@@ -115,14 +121,15 @@ Diodes, BJTs and MOSFETs need Newton-Raphson iteration around the existing
 stamping code plus a device model library. Nothing in Circuits I or II requires
 them; **EE 3350 Microelectronics does**, and it is a concentration course.
 
-### 7. Windows and macOS installers
+### 7. macOS installer, and running the Windows one
 
-The Linux bundles (`.deb`, `.rpm`, `.AppImage`) are built and the SQLite path is
-verified on Linux. Tauri cannot cross-compile these, so Windows (`.msi`/`.exe`)
-and macOS (`.dmg`) have to be built on their own platforms — either locally or by
-adding `windows-latest` and `macos-latest` jobs to CI. Worth doing early: the
-first compile on Linux found two defects that only appear in the desktop build,
-and there is no reason to assume the other platforms are cleaner.
+Windows `.msi` and `.exe` are built by `.github/workflows/windows.yml` on
+`windows-latest` and published as run artifacts. They **compile**; nobody has
+run them. The first Linux compile found two defects that only appear in a
+desktop build, and there is no reason to assume Windows is cleaner — so the
+first real launch is worth doing attentively.
+
+macOS (`.dmg`) needs a `macos-latest` job on the same pattern.
 
 Also worth a look while there: `tauri-plugin-dialog` and `tauri-plugin-fs` are
 registered in `main.rs` but used by nothing in the renderer and granted no
@@ -136,6 +143,11 @@ the book-import feature above; until then they could come out.
 - **Bode and waveform plots on items**, not just in the lab.
 - **Schematic reconstruction from a netlist** — imports currently give topology
   with no geometry.
+- **Theme the skill tree's SVG.** Its node fills are hardcoded hex, so they stay
+  light cards on the dark canvas. Readable, but not themed.
+- **K-map and state-diagram visuals.** EE 2320 minimisation is asked
+  symbolically; a drawn map the learner groups would be a better instrument,
+  and the schematic editor shows the machinery already exists.
 - **Per-item analytics**: which generated variants are miscalibrated, using the
   real response data the attempt log already holds.
 

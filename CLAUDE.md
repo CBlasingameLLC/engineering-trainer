@@ -53,6 +53,7 @@ pnpm --filter @et/desktop preview &     # 127.0.0.1:4173
 pnpm --filter @et/desktop e2e           # placement -> gap report
 pnpm --filter @et/desktop e2e:lab       # skill tree + schematic editor + solver
 pnpm --filter @et/desktop e2e:misconceptions  # answer into traps -> feed -> drill
+pnpm --filter @et/desktop e2e:theme     # theme cycle + dark-mode contrast, all routes
 ```
 
 The container's preinstalled Chromium can lag the installed Playwright. When the
@@ -80,7 +81,7 @@ underneath it. Nearly every design decision below follows from that.
 |---|---|---|
 | `packages/domain` | Mastery model, KC graph, adaptive testing | **Pure. Zero I/O. Imports nothing from `apps/`.** Verifiable without a browser. |
 | `packages/content-schema` | Zod contract for items, packs, curriculum, credentials | The single shape every content producer emits |
-| `packages/answer-engine` | Grading: numeric+units, symbolic, truth-table, choice | Same code path grades a learner *and* verifies an author |
+| `packages/answer-engine` | Grading: numeric+units, symbolic, Boolean, truth-table, choice | Same code path grades a learner *and* verifies an author |
 | `packages/generators` | Parameterized item generators | Answers computed from parameters, never transcribed |
 | `packages/circuits` | Netlist model, MNA solver, schematic net extraction, grading | Zero runtime deps. ngspice is a **test-only** oracle |
 | `tools/pack-cli` | `validate`/`verify`/`stats`/`build`/`import` | The gate all content passes through |
@@ -212,6 +213,23 @@ packs by the schema, and never enters a release build. Don't weaken that.
   addition as a product regression. This bug class has appeared twice (a stale
   pack-cli fixture, then the e2e expectation regex); the current driver records
   `missedKcs` *during* the session and asserts against that.
+- **Boolean equivalence is decided, not sampled.** `checkSymbolic` infers
+  equality from agreement at random points, which is right over the reals.
+  `checkBoolean` enumerates all `2^n` assignments, so a pass is a proof. Never
+  route a Boolean item through the symbolic path: for courses whose subject is
+  *when two expressions are equal*, grading by inference is the wrong tool.
+- **Adjacent letters are an implicit AND, so variables are one letter plus
+  digits.** `AB` must mean `A AND B` for digital logic, so `Cin` parses as
+  `C AND i AND n`. Column headings are passed separately from expression
+  variables; `rowsOf` rejects the mismatch with that explanation rather than
+  failing deep inside evaluation.
+- **A simplification item needs a literal budget.** Without `maxLiterals` a
+  minimisation question grades its own input correct — the unsimplified
+  expression is equivalent to itself. The budget comes from `minimalSop`, which
+  is pinned against all 256 three-variable functions for both equivalence and
+  for never claiming a budget its own output exceeds. An equivalence *trap* for
+  the unsimplified form is impossible by construction; the grader names
+  `boolean.not-fully-simplified` instead.
 - **A generator belongs to exactly one pack.** `generatorsForCourse` routes by
   the *highest-weighted* KC, not by any referenced KC. Generators span courses
   on purpose — a forced first-order ODE is 80% DiffEq and 20% exponentials —
@@ -230,6 +248,20 @@ packs by the schema, and never enters a release build. Don't weaken that.
   of values. Unknown symbols in the learner's input are bound to one fixed
   arbitrary value for the run, which is what makes "differs by a constant"
   testable.
+- **Truth-table cells are tri-state, not boolean.** An all-false grid is a
+  valid answer, so a `boolean[]` cannot distinguish "every row is 0" from "not
+  started" — and submitting the second as the first records a wrong answer
+  against someone who never answered. Unset rows keep Submit disabled.
+- **LaTeX in a template literal needs doubled backslashes.** `\\ldots` in
+  source produces `\ldots` in the string; a single backslash is eaten by JS
+  escaping and renders as `ldots`. eslint's `no-useless-escape` catches it,
+  which is why that rule is worth keeping loud.
+- **Display preferences live in `localStorage`, never in the storage adapter.**
+  The attempt log is the durable record the model replays from; a theme toggle
+  has no business appearing in an export of someone's learning history.
+- **Tauri window permissions are granted explicitly**, like the SQL ones.
+  `core:window:allow-set-fullscreen` and `-is-fullscreen` are listed in
+  `capabilities/default.json` rather than assumed from `core:default`.
 - **No `any` in domain code** — `@typescript-eslint/no-explicit-any` is an
   error outside `test/` and the e2e driver.
 - **Vite is pinned to `127.0.0.1`** in `apps/desktop/vite.config.ts`. `localhost`
@@ -348,11 +380,10 @@ only asserted.
 
 Not built:
 
-- **Curriculum breadth** (Phase 4) — Tier 1 is covered except EE 2320 Digital
-  Logic. No `truth-table` items yet: the type is in the schema and the answer
-  engine grades it by canonical comparison, but the session player has no grid
-  input, so nothing can be answered. That widget unlocks two courses — EE 2320
-  and the propositional-logic half of MATH 2358 Discrete Mathematics.
+- **Curriculum breadth** (Phase 4) — Tier 1 is complete. Tier 2 is not:
+  EE 3300 Circuits II, EE 3370 Signals, EE 3340 Electromagnetics and the rest
+  have no graph yet. EE 3300 is the cheapest of them, because the MNA solver
+  already does ngspice-validated complex-admittance AC.
 - **Nonlinear devices** — diodes and transistors need Newton-Raphson around the
   existing stamping code plus a device-model library. Nothing in Circuits I/II
   requires them.
@@ -365,6 +396,12 @@ Not built:
 **The desktop build works and has been run.** `tauri build` produces `.deb`,
 `.rpm` and `.AppImage`; the app has been launched headless under Xvfb, driven
 through onboarding, and confirmed to apply both migrations and write to SQLite.
+
+**Windows is built in CI, not here.** `cargo-xwin` installs and the MSVC target
+adds cleanly, but `xwin` must fetch the MSVC CRT from Microsoft and the
+container's network policy denies that host. `.github/workflows/windows.yml`
+builds `.msi` and `.exe` on `windows-latest` and uploads them as run artifacts.
+Nobody has run those binaries — they compile, which is not the same claim.
 
 Compiling it the first time found two defects the browser path cannot surface,
 both now fixed and both worth knowing about:
