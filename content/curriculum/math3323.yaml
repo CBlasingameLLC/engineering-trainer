@@ -1,0 +1,39 @@
+# MATH 3323 — Differential Equations (Texas State University, 2026 catalog)
+#
+# Taken concurrently with EE 2300 in the degree plan, but the dependency is
+# real regardless: RC/RL transients are first-order ODEs and RLC is a
+# second-order one. Modelling the edge exposes where two concurrent courses
+# interlock, which is exactly where students silently fall behind.
+
+code: MATH3323
+title: Differential Equations
+institution: Texas State University
+catalogYear: 2026
+tier: 1
+credits: 3
+
+kcs:
+  - id: math3323.first-order-ode
+    title: First-order linear ODEs
+    unit: First-Order Equations
+    domain: math
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.1
+    description: >-
+      Separable and linear first-order equations, and recognising the
+      exponential solution form that first-order circuit transients take.
+    prerequisites:
+      - math2471.integration-basics
+      - math2471.exponential-functions
+
+  - id: math3323.second-order-ode
+    title: Second-order linear ODEs with constant coefficients
+    unit: Second-Order Equations
+    domain: math
+    competencies: [math-execution, concept, strategy]
+    difficultyPrior: 0.8
+    description: >-
+      Characteristic roots and the three solution regimes. The damping
+      classification in RLC circuits is this result wearing different units.
+    prerequisites:
+      - math3323.first-order-ode

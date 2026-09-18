@@ -1,0 +1,48 @@
+# MATH 2471 — Calculus I (Texas State University, 2026 catalog)
+#
+# Scoped to the KCs that EE 2300 and the junior block actually load on. The
+# full Calculus I graph arrives in Phase 4; these exist now so the cross-course
+# prerequisite edges from Circuits I resolve against real nodes, which is what
+# lets a circuits failure be traced back to calculus.
+
+code: MATH2471
+title: Calculus I
+institution: Texas State University
+catalogYear: 2026
+tier: 1
+credits: 4
+
+kcs:
+  - id: math2471.derivative-basics
+    title: Derivatives of elementary functions
+    unit: Differentiation
+    domain: math
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.9
+    description: >-
+      Power, product, quotient and chain rules applied accurately. Loaded
+      directly by the capacitor and inductor i-v relationships.
+    prerequisites: []
+
+  - id: math2471.integration-basics
+    title: Definite and indefinite integration
+    unit: Integration
+    domain: math
+    competencies: [math-execution]
+    difficultyPrior: -0.5
+    description: >-
+      Antiderivatives and the fundamental theorem. Loaded by stored-energy
+      calculations for capacitors and inductors.
+    prerequisites:
+      - math2471.derivative-basics
+
+  - id: math2471.exponential-functions
+    title: Exponential and logarithmic functions
+    unit: Transcendental Functions
+    domain: math
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.6
+    description: >-
+      Behaviour of e^{kt}, solving for t, and reading a decay constant. The
+      algebra underneath every first-order transient.
+    prerequisites: []

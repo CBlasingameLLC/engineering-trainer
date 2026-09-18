@@ -1,0 +1,37 @@
+{
+  "name": "engineering-trainer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gamified gap-finder and mastery analysis trainer for electrical engineering",
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --build --force",
+    "lint": "eslint .",
+    "dev": "pnpm --filter @et/desktop dev",
+    "tauri": "pnpm --filter @et/desktop tauri",
+    "content": "tsx tools/pack-cli/src/cli.ts",
+    "portable": "node tools/portable/pack.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.10.2",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.12.0",
+    "playwright": "^1.63.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^2.1.8"
+  },
+  "dependencies": {
+    "mathjs": "^15.2.0",
+    "yaml": "^2.9.1"
+  }
+}

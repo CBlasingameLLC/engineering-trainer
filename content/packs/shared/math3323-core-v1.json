@@ -1,0 +1,3983 @@
+{
+  "schemaVersion": "1.0.0",
+  "packId": "math3323-core-v1",
+  "version": 1,
+  "course": "MATH3323",
+  "title": "Differential equations prerequisite bank",
+  "provenance": {
+    "producer": "generator",
+    "sourceRef": "@et/generators",
+    "licenseTier": "redistributable",
+    "createdAt": "1970-01-01T00:00:00.000Z"
+  },
+  "items": [
+    {
+      "id": "math3323.first-order.step-solution.s1",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 5y = 5, \\qquad y(0) = 4$$",
+      "seed": 1,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1 + (4 - 1)*exp(-5*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "5",
+          "forcing": "5",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 4
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "4*exp(-5*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 5/5 = 1$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "1*(1 - exp(-5*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 4$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "1 + (4 - 1)*exp(5*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -5$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $5y_\\infty = 5$, so $y_\\infty = 1$.",
+          "The homogeneous equation $y' + 5y = 0$ has root $s = -5$, giving $Ke^{-5t}$.",
+          "The complete solution is $y(t) = 1 + Ke^{-5t}$.",
+          "Apply $y(0) = 4$: $4 = 1 + K$, so $K = 3$ and $y(t) = 1 + (3)e^{-5t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s2",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 5y = 10, \\qquad y(0) = 4$$",
+      "seed": 2,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "2 + (4 - 2)*exp(-5*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "5",
+          "forcing": "10",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 4
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "4*exp(-5*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 10/5 = 2$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "2*(1 - exp(-5*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 4$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "2 + (4 - 2)*exp(5*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -5$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $5y_\\infty = 10$, so $y_\\infty = 2$.",
+          "The homogeneous equation $y' + 5y = 0$ has root $s = -5$, giving $Ke^{-5t}$.",
+          "The complete solution is $y(t) = 2 + Ke^{-5t}$.",
+          "Apply $y(0) = 4$: $4 = 2 + K$, so $K = 2$ and $y(t) = 2 + (2)e^{-5t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s4",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 6y = 12, \\qquad y(0) = 1$$",
+      "seed": 4,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "2 + (1 - 2)*exp(-6*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "6",
+          "forcing": "12",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 1
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "1*exp(-6*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 12/6 = 2$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "2*(1 - exp(-6*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 1$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "2 + (1 - 2)*exp(6*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -6$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $6y_\\infty = 12$, so $y_\\infty = 2$.",
+          "The homogeneous equation $y' + 6y = 0$ has root $s = -6$, giving $Ke^{-6t}$.",
+          "The complete solution is $y(t) = 2 + Ke^{-6t}$.",
+          "Apply $y(0) = 1$: $1 = 2 + K$, so $K = -1$ and $y(t) = 2 + (-1)e^{-6t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s5",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.95,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 5y = 20, \\qquad y(0) = 1$$",
+      "seed": 5,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4 + (1 - 4)*exp(-5*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "5",
+          "forcing": "20",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 1
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "1*exp(-5*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 20/5 = 4$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "4*(1 - exp(-5*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 1$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "4 + (1 - 4)*exp(5*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -5$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $5y_\\infty = 20$, so $y_\\infty = 4$.",
+          "The homogeneous equation $y' + 5y = 0$ has root $s = -5$, giving $Ke^{-5t}$.",
+          "The complete solution is $y(t) = 4 + Ke^{-5t}$.",
+          "Apply $y(0) = 1$: $1 = 4 + K$, so $K = -3$ and $y(t) = 4 + (-3)e^{-5t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s6",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 4y = 4, \\qquad y(0) = 5$$",
+      "seed": 6,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1 + (5 - 1)*exp(-4*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "4",
+          "forcing": "4",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 5
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "5*exp(-4*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 4/4 = 1$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "1*(1 - exp(-4*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 5$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "1 + (5 - 1)*exp(4*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -4$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $4y_\\infty = 4$, so $y_\\infty = 1$.",
+          "The homogeneous equation $y' + 4y = 0$ has root $s = -4$, giving $Ke^{-4t}$.",
+          "The complete solution is $y(t) = 1 + Ke^{-4t}$.",
+          "Apply $y(0) = 5$: $5 = 1 + K$, so $K = 4$ and $y(t) = 1 + (4)e^{-4t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s7",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 2y = 2, \\qquad y(0) = 8$$",
+      "seed": 7,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1 + (8 - 1)*exp(-2*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "2",
+          "forcing": "2",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 8
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "8*exp(-2*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 2/2 = 1$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "1*(1 - exp(-2*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 8$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "1 + (8 - 1)*exp(2*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -2$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $2y_\\infty = 2$, so $y_\\infty = 1$.",
+          "The homogeneous equation $y' + 2y = 0$ has root $s = -2$, giving $Ke^{-2t}$.",
+          "The complete solution is $y(t) = 1 + Ke^{-2t}$.",
+          "Apply $y(0) = 8$: $8 = 1 + K$, so $K = 7$ and $y(t) = 1 + (7)e^{-2t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s8",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.95,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 2y = 8, \\qquad y(0) = 2$$",
+      "seed": 8,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4 + (2 - 4)*exp(-2*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "2",
+          "forcing": "8",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 2
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "2*exp(-2*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 8/2 = 4$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "4*(1 - exp(-2*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 2$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "4 + (2 - 4)*exp(2*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -2$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $2y_\\infty = 8$, so $y_\\infty = 4$.",
+          "The homogeneous equation $y' + 2y = 0$ has root $s = -2$, giving $Ke^{-2t}$.",
+          "The complete solution is $y(t) = 4 + Ke^{-2t}$.",
+          "Apply $y(0) = 2$: $2 = 4 + K$, so $K = -2$ and $y(t) = 4 + (-2)e^{-2t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s9",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.95,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 2y = 10, \\qquad y(0) = 1$$",
+      "seed": 9,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "5 + (1 - 5)*exp(-2*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "2",
+          "forcing": "10",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 1
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "1*exp(-2*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 10/2 = 5$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "5*(1 - exp(-2*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 1$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "5 + (1 - 5)*exp(2*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -2$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $2y_\\infty = 10$, so $y_\\infty = 5$.",
+          "The homogeneous equation $y' + 2y = 0$ has root $s = -2$, giving $Ke^{-2t}$.",
+          "The complete solution is $y(t) = 5 + Ke^{-2t}$.",
+          "Apply $y(0) = 1$: $1 = 5 + K$, so $K = -4$ and $y(t) = 5 + (-4)e^{-2t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s10",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.95,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 4y = 20, \\qquad y(0) = 6$$",
+      "seed": 10,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "5 + (6 - 5)*exp(-4*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "4",
+          "forcing": "20",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 6
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "6*exp(-4*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 20/4 = 5$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "5*(1 - exp(-4*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 6$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "5 + (6 - 5)*exp(4*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -4$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $4y_\\infty = 20$, so $y_\\infty = 5$.",
+          "The homogeneous equation $y' + 4y = 0$ has root $s = -4$, giving $Ke^{-4t}$.",
+          "The complete solution is $y(t) = 5 + Ke^{-4t}$.",
+          "Apply $y(0) = 6$: $6 = 5 + K$, so $K = 1$ and $y(t) = 5 + (1)e^{-4t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s11",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 4y = 12, \\qquad y(0) = 5$$",
+      "seed": 11,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "3 + (5 - 3)*exp(-4*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "4",
+          "forcing": "12",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 5
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "5*exp(-4*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 12/4 = 3$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "3*(1 - exp(-4*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 5$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "3 + (5 - 3)*exp(4*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -4$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $4y_\\infty = 12$, so $y_\\infty = 3$.",
+          "The homogeneous equation $y' + 4y = 0$ has root $s = -4$, giving $Ke^{-4t}$.",
+          "The complete solution is $y(t) = 3 + Ke^{-4t}$.",
+          "Apply $y(0) = 5$: $5 = 3 + K$, so $K = 2$ and $y(t) = 3 + (2)e^{-4t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s12",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 3y = 3, \\qquad y(0) = 5$$",
+      "seed": 12,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1 + (5 - 1)*exp(-3*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "3",
+          "forcing": "3",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 5
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "5*exp(-3*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 3/3 = 1$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "1*(1 - exp(-3*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 5$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "1 + (5 - 1)*exp(3*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -3$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $3y_\\infty = 3$, so $y_\\infty = 1$.",
+          "The homogeneous equation $y' + 3y = 0$ has root $s = -3$, giving $Ke^{-3t}$.",
+          "The complete solution is $y(t) = 1 + Ke^{-3t}$.",
+          "Apply $y(0) = 5$: $5 = 1 + K$, so $K = 4$ and $y(t) = 1 + (4)e^{-3t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s13",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": -0.13,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 4y = 8, \\qquad y(0) = 0$$",
+      "seed": 13,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "2 + (0 - 2)*exp(-4*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "4",
+          "forcing": "8",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "0*exp(-4*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 8/4 = 2$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "2 + (0 - 2)*exp(4*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -4$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $4y_\\infty = 8$, so $y_\\infty = 2$.",
+          "The homogeneous equation $y' + 4y = 0$ has root $s = -4$, giving $Ke^{-4t}$.",
+          "The complete solution is $y(t) = 2 + Ke^{-4t}$.",
+          "Apply $y(0) = 0$: $0 = 2 + K$, so $K = -2$ and $y(t) = 2 + (-2)e^{-4t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s14",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 4y = 12, \\qquad y(0) = 4$$",
+      "seed": 14,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "3 + (4 - 3)*exp(-4*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "4",
+          "forcing": "12",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 4
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "4*exp(-4*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 12/4 = 3$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "3*(1 - exp(-4*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 4$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "3 + (4 - 3)*exp(4*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -4$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $4y_\\infty = 12$, so $y_\\infty = 3$.",
+          "The homogeneous equation $y' + 4y = 0$ has root $s = -4$, giving $Ke^{-4t}$.",
+          "The complete solution is $y(t) = 3 + Ke^{-4t}$.",
+          "Apply $y(0) = 4$: $4 = 3 + K$, so $K = 1$ and $y(t) = 3 + (1)e^{-4t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s15",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 3y = 9, \\qquad y(0) = 4$$",
+      "seed": 15,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "3 + (4 - 3)*exp(-3*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "3",
+          "forcing": "9",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 4
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "4*exp(-3*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 9/3 = 3$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "3*(1 - exp(-3*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 4$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "3 + (4 - 3)*exp(3*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -3$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $3y_\\infty = 9$, so $y_\\infty = 3$.",
+          "The homogeneous equation $y' + 3y = 0$ has root $s = -3$, giving $Ke^{-3t}$.",
+          "The complete solution is $y(t) = 3 + Ke^{-3t}$.",
+          "Apply $y(0) = 4$: $4 = 3 + K$, so $K = 1$ and $y(t) = 3 + (1)e^{-3t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s16",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.59,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 5y = 5, \\qquad y(0) = 6$$",
+      "seed": 16,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1 + (6 - 1)*exp(-5*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "5",
+          "forcing": "5",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 6
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "6*exp(-5*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 5/5 = 1$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "1*(1 - exp(-5*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 6$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "1 + (6 - 1)*exp(5*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -5$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $5y_\\infty = 5$, so $y_\\infty = 1$.",
+          "The homogeneous equation $y' + 5y = 0$ has root $s = -5$, giving $Ke^{-5t}$.",
+          "The complete solution is $y(t) = 1 + Ke^{-5t}$.",
+          "Apply $y(0) = 6$: $6 = 1 + K$, so $K = 5$ and $y(t) = 1 + (5)e^{-5t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.first-order.step-solution.s18",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.first-order-ode",
+          "weight": 0.8
+        },
+        {
+          "kc": "math2471.exponential-functions",
+          "weight": 0.2
+        }
+      ],
+      "difficultyB": 0.95,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$\\frac{dy}{dt} + 3y = 12, \\qquad y(0) = 1$$",
+      "seed": 18,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4 + (1 - 4)*exp(-3*t)",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "0",
+          "first": "1",
+          "zeroth": "3",
+          "forcing": "12",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 1
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.particular-solution-omitted",
+          "expression": "1*exp(-3*t)",
+          "feedback": "That is the homogeneous solution only — it decays to zero, but this equation is **driven** and settles at $y_\\infty = 12/3 = 4$. The complete solution is particular plus homogeneous."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "4*(1 - exp(-3*t))",
+          "feedback": "You used the standard rise from zero, but $y(0) = 1$, not $0$. The general shape is $y_\\infty + (y_0 - y_\\infty)e^{-at}$ — the exponential decays the **difference**, not the whole value."
+        },
+        {
+          "misconception": "ode.decay-sign-inverted",
+          "expression": "4 + (1 - 4)*exp(3*t)",
+          "feedback": "The exponent's sign is inverted, so your solution grows without bound. A positive coefficient on $y$ makes the root negative: $s = -3$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "The steady state is where $dy/dt = 0$: $3y_\\infty = 12$, so $y_\\infty = 4$.",
+          "The homogeneous equation $y' + 3y = 0$ has root $s = -3$, giving $Ke^{-3t}$.",
+          "The complete solution is $y(t) = 4 + Ke^{-3t}$.",
+          "Apply $y(0) = 1$: $1 = 4 + K$, so $K = -3$ and $y(t) = 4 + (-3)e^{-3t}$."
+        ],
+        "principle": "Every driven first-order system is its steady state plus a decaying correction sized by the initial condition.",
+        "hints": [
+          "Where does the solution end up if you wait long enough?",
+          "Find the general solution first; the initial condition only fixes the constant."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.first-order.step-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s1",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.15,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 5y' + 4y = 0$$",
+      "seed": 1,
+      "answer": {
+        "kind": "numeric",
+        "value": -4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 5s + 4 = 0$, and the quadratic formula puts $-5$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-1$ is closer to zero than $-4$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 5s + 4 = 0$.",
+          "Discriminant: $5^2 - 4(4) = 9$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-5 \\pm \\sqrt{9}}{2} = \\frac{-5 \\pm 3}{2}$.",
+          "The roots are $-1$ and $-4$; the more negative one is $-4$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s2",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.825,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 7y' + 12y = 0$$",
+      "seed": 2,
+      "answer": {
+        "kind": "numeric",
+        "value": -4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 7s + 12 = 0$, and the quadratic formula puts $-7$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-3$ is closer to zero than $-4$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 7s + 12 = 0$.",
+          "Discriminant: $7^2 - 4(12) = 1$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-7 \\pm \\sqrt{1}}{2} = \\frac{-7 \\pm 1}{2}$.",
+          "The roots are $-3$ and $-4$; the more negative one is $-4$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s4",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.15,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 8y' + 15y = 0$$",
+      "seed": 4,
+      "answer": {
+        "kind": "numeric",
+        "value": -5,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 5,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 8s + 15 = 0$, and the quadratic formula puts $-8$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-3$ is closer to zero than $-5$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 8s + 15 = 0$.",
+          "Discriminant: $8^2 - 4(15) = 4$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-8 \\pm \\sqrt{4}}{2} = \\frac{-8 \\pm 2}{2}$.",
+          "The roots are $-3$ and $-5$; the more negative one is $-5$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s5",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.6,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 11y' + 28y = 0$$",
+      "seed": 5,
+      "answer": {
+        "kind": "numeric",
+        "value": -7,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 7,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 11s + 28 = 0$, and the quadratic formula puts $-11$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-4$ is closer to zero than $-7$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 11s + 28 = 0$.",
+          "Discriminant: $11^2 - 4(28) = 9$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-11 \\pm \\sqrt{9}}{2} = \\frac{-11 \\pm 3}{2}$.",
+          "The roots are $-4$ and $-7$; the more negative one is $-7$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s6",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.15,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 4y' + 3y = 0$$",
+      "seed": 6,
+      "answer": {
+        "kind": "numeric",
+        "value": -3,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 4s + 3 = 0$, and the quadratic formula puts $-4$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-1$ is closer to zero than $-3$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 4s + 3 = 0$.",
+          "Discriminant: $4^2 - 4(3) = 4$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-4 \\pm \\sqrt{4}}{2} = \\frac{-4 \\pm 2}{2}$.",
+          "The roots are $-1$ and $-3$; the more negative one is $-3$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s7",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.6,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 10y' + 9y = 0$$",
+      "seed": 7,
+      "answer": {
+        "kind": "numeric",
+        "value": -9,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 9,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 10s + 9 = 0$, and the quadratic formula puts $-10$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-1$ is closer to zero than $-9$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 10s + 9 = 0$.",
+          "Discriminant: $10^2 - 4(9) = 64$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-10 \\pm \\sqrt{64}}{2} = \\frac{-10 \\pm 8}{2}$.",
+          "The roots are $-1$ and $-9$; the more negative one is $-9$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s8",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.15,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 7y' + 6y = 0$$",
+      "seed": 8,
+      "answer": {
+        "kind": "numeric",
+        "value": -6,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 6,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 7s + 6 = 0$, and the quadratic formula puts $-7$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-1$ is closer to zero than $-6$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 7s + 6 = 0$.",
+          "Discriminant: $7^2 - 4(6) = 25$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-7 \\pm \\sqrt{25}}{2} = \\frac{-7 \\pm 5}{2}$.",
+          "The roots are $-1$ and $-6$; the more negative one is $-6$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s9",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.6,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 9y' + 8y = 0$$",
+      "seed": 9,
+      "answer": {
+        "kind": "numeric",
+        "value": -8,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 8,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 9s + 8 = 0$, and the quadratic formula puts $-9$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-1$ is closer to zero than $-8$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 9s + 8 = 0$.",
+          "Discriminant: $9^2 - 4(8) = 49$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-9 \\pm \\sqrt{49}}{2} = \\frac{-9 \\pm 7}{2}$.",
+          "The roots are $-1$ and $-8$; the more negative one is $-8$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s10",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.6,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 12y' + 27y = 0$$",
+      "seed": 10,
+      "answer": {
+        "kind": "numeric",
+        "value": -9,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 9,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 12s + 27 = 0$, and the quadratic formula puts $-12$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-3$ is closer to zero than $-9$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 12s + 27 = 0$.",
+          "Discriminant: $12^2 - 4(27) = 36$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-12 \\pm \\sqrt{36}}{2} = \\frac{-12 \\pm 6}{2}$.",
+          "The roots are $-3$ and $-9$; the more negative one is $-9$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s12",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.825,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 3y' + 2y = 0$$",
+      "seed": 12,
+      "answer": {
+        "kind": "numeric",
+        "value": -2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 3s + 2 = 0$, and the quadratic formula puts $-3$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-1$ is closer to zero than $-2$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 3s + 2 = 0$.",
+          "Discriminant: $3^2 - 4(2) = 1$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-3 \\pm \\sqrt{1}}{2} = \\frac{-3 \\pm 1}{2}$.",
+          "The roots are $-1$ and $-2$; the more negative one is $-2$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s15",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.15,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 6y' + 8y = 0$$",
+      "seed": 15,
+      "answer": {
+        "kind": "numeric",
+        "value": -4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 6s + 8 = 0$, and the quadratic formula puts $-6$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-2$ is closer to zero than $-4$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 6s + 8 = 0$.",
+          "Discriminant: $6^2 - 4(8) = 4$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-6 \\pm \\sqrt{4}}{2} = \\frac{-6 \\pm 2}{2}$.",
+          "The roots are $-2$ and $-4$; the more negative one is $-4$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.characteristic-roots.s18",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.15,
+      "stem": "Find the more negative characteristic root of:\n\n$$y'' + 8y' + 12y = 0$$",
+      "seed": 18,
+      "answer": {
+        "kind": "numeric",
+        "value": -6,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "value": 6,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "Right magnitude, wrong sign. The characteristic equation is $s^2 + 8s + 12 = 0$, and the quadratic formula puts $-8$ in the numerator — a stable system has roots in the left half-plane."
+        },
+        {
+          "misconception": "ode.root-ordering-confused",
+          "value": -2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other root. $-2$ is closer to zero than $-6$, so it decays more slowly and is the one that dominates late in the response — but the question asked for the more negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Substitute $y = e^{st}$ to get the characteristic equation $s^2 + 8s + 12 = 0$.",
+          "Discriminant: $8^2 - 4(12) = 16$, which is positive, so the roots are real and distinct.",
+          "$s = \\frac{-8 \\pm \\sqrt{16}}{2} = \\frac{-8 \\pm 4}{2}$.",
+          "The roots are $-2$ and $-6$; the more negative one is $-6$."
+        ],
+        "principle": "The characteristic roots are the whole answer: they set both the decay rates and the damping regime.",
+        "hints": [
+          "Try a solution of the form $e^{st}$.",
+          "Check the sign of the discriminant before anything else."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.characteristic-roots",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s1",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 6y' + 8y = 0, \\qquad y(0) = 0, \\quad y'(0) = 8$$",
+      "seed": 1,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4*(exp(-2*t) - exp(-4*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "6",
+          "zeroth": "8",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 8
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "4*(exp(2*t) - exp(4*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 6s + 8$ are $-2$ and $-4$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-2*t) - exp(-4*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 8$ forces $A(-2 - -4) = 8$, so $A = 4$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 6s + 8 = 0$ has distinct real roots $-2$ and $-4$ — overdamped.",
+          "General solution: $y(t) = Ae^{-2t} + Be^{-4t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 8$ gives $A(-2) + B(-4) = A(-2 - -4) = 8$, so $A = 4$ and $y(t) = 4\\left(e^{-2t} - e^{-4t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s2",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 8y' + 15y = 0, \\qquad y(0) = 0, \\quad y'(0) = 4$$",
+      "seed": 2,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "2*(exp(-3*t) - exp(-5*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "8",
+          "zeroth": "15",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 4
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "2*(exp(3*t) - exp(5*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 8s + 15$ are $-3$ and $-5$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-3*t) - exp(-5*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 4$ forces $A(-3 - -5) = 4$, so $A = 2$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 8s + 15 = 0$ has distinct real roots $-3$ and $-5$ — overdamped.",
+          "General solution: $y(t) = Ae^{-3t} + Be^{-5t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 4$ gives $A(-3) + B(-5) = A(-3 - -5) = 4$, so $A = 2$ and $y(t) = 2\\left(e^{-3t} - e^{-5t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s3",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 7y' + 12y = 0, \\qquad y(0) = 0, \\quad y'(0) = 3$$",
+      "seed": 3,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "3*(exp(-3*t) - exp(-4*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "7",
+          "zeroth": "12",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 3
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "3*(exp(3*t) - exp(4*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 7s + 12$ are $-3$ and $-4$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-3*t) - exp(-4*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 3$ forces $A(-3 - -4) = 3$, so $A = 3$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 7s + 12 = 0$ has distinct real roots $-3$ and $-4$ — overdamped.",
+          "General solution: $y(t) = Ae^{-3t} + Be^{-4t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 3$ gives $A(-3) + B(-4) = A(-3 - -4) = 3$, so $A = 3$ and $y(t) = 3\\left(e^{-3t} - e^{-4t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s5",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 10y' + 21y = 0, \\qquad y(0) = 0, \\quad y'(0) = 8$$",
+      "seed": 5,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "2*(exp(-3*t) - exp(-7*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "10",
+          "zeroth": "21",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 8
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "2*(exp(3*t) - exp(7*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 10s + 21$ are $-3$ and $-7$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-3*t) - exp(-7*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 8$ forces $A(-3 - -7) = 8$, so $A = 2$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 10s + 21 = 0$ has distinct real roots $-3$ and $-7$ — overdamped.",
+          "General solution: $y(t) = Ae^{-3t} + Be^{-7t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 8$ gives $A(-3) + B(-7) = A(-3 - -7) = 8$, so $A = 2$ and $y(t) = 2\\left(e^{-3t} - e^{-7t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s7",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 5y' + 4y = 0, \\qquad y(0) = 0, \\quad y'(0) = 18$$",
+      "seed": 7,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "6*(exp(-1*t) - exp(-4*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "5",
+          "zeroth": "4",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 18
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "6*(exp(1*t) - exp(4*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 5s + 4$ are $-1$ and $-4$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-1*t) - exp(-4*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 18$ forces $A(-1 - -4) = 18$, so $A = 6$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 5s + 4 = 0$ has distinct real roots $-1$ and $-4$ — overdamped.",
+          "General solution: $y(t) = Ae^{-1t} + Be^{-4t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 18$ gives $A(-1) + B(-4) = A(-1 - -4) = 18$, so $A = 6$ and $y(t) = 6\\left(e^{-1t} - e^{-4t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s8",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.65,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 8y' + 7y = 0, \\qquad y(0) = 0, \\quad y'(0) = 12$$",
+      "seed": 8,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "2*(exp(-1*t) - exp(-7*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "8",
+          "zeroth": "7",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 12
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "2*(exp(1*t) - exp(7*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 8s + 7$ are $-1$ and $-7$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-1*t) - exp(-7*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 12$ forces $A(-1 - -7) = 12$, so $A = 2$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 8s + 7 = 0$ has distinct real roots $-1$ and $-7$ — overdamped.",
+          "General solution: $y(t) = Ae^{-1t} + Be^{-7t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 12$ gives $A(-1) + B(-7) = A(-1 - -7) = 12$, so $A = 2$ and $y(t) = 2\\left(e^{-1t} - e^{-7t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s9",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.65,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 9y' + 8y = 0, \\qquad y(0) = 0, \\quad y'(0) = 7$$",
+      "seed": 9,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1*(exp(-1*t) - exp(-8*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "9",
+          "zeroth": "8",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 7
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "1*(exp(1*t) - exp(8*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 9s + 8$ are $-1$ and $-8$ — both negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 9s + 8 = 0$ has distinct real roots $-1$ and $-8$ — overdamped.",
+          "General solution: $y(t) = Ae^{-1t} + Be^{-8t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 7$ gives $A(-1) + B(-8) = A(-1 - -8) = 7$, so $A = 1$ and $y(t) = 1\\left(e^{-1t} - e^{-8t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s10",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.65,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 10y' + 16y = 0, \\qquad y(0) = 0, \\quad y'(0) = 30$$",
+      "seed": 10,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "5*(exp(-2*t) - exp(-8*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "10",
+          "zeroth": "16",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 30
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "5*(exp(2*t) - exp(8*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 10s + 16$ are $-2$ and $-8$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-2*t) - exp(-8*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 30$ forces $A(-2 - -8) = 30$, so $A = 5$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 10s + 16 = 0$ has distinct real roots $-2$ and $-8$ — overdamped.",
+          "General solution: $y(t) = Ae^{-2t} + Be^{-8t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 30$ gives $A(-2) + B(-8) = A(-2 - -8) = 30$, so $A = 5$ and $y(t) = 5\\left(e^{-2t} - e^{-8t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s11",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 8y' + 12y = 0, \\qquad y(0) = 0, \\quad y'(0) = 16$$",
+      "seed": 11,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4*(exp(-2*t) - exp(-6*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "8",
+          "zeroth": "12",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 16
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "4*(exp(2*t) - exp(6*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 8s + 12$ are $-2$ and $-6$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-2*t) - exp(-6*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 16$ forces $A(-2 - -6) = 16$, so $A = 4$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 8s + 12 = 0$ has distinct real roots $-2$ and $-6$ — overdamped.",
+          "General solution: $y(t) = Ae^{-2t} + Be^{-6t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 16$ gives $A(-2) + B(-6) = A(-2 - -6) = 16$, so $A = 4$ and $y(t) = 4\\left(e^{-2t} - e^{-6t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s12",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 5y' + 4y = 0, \\qquad y(0) = 0, \\quad y'(0) = 12$$",
+      "seed": 12,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4*(exp(-1*t) - exp(-4*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "5",
+          "zeroth": "4",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 12
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "4*(exp(1*t) - exp(4*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 5s + 4$ are $-1$ and $-4$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-1*t) - exp(-4*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 12$ forces $A(-1 - -4) = 12$, so $A = 4$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 5s + 4 = 0$ has distinct real roots $-1$ and $-4$ — overdamped.",
+          "General solution: $y(t) = Ae^{-1t} + Be^{-4t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 12$ gives $A(-1) + B(-4) = A(-1 - -4) = 12$, so $A = 4$ and $y(t) = 4\\left(e^{-1t} - e^{-4t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s13",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 7y' + 10y = 0, \\qquad y(0) = 0, \\quad y'(0) = 3$$",
+      "seed": 13,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "1*(exp(-2*t) - exp(-5*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "7",
+          "zeroth": "10",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 3
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "1*(exp(2*t) - exp(5*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 7s + 10$ are $-2$ and $-5$ — both negative."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 7s + 10 = 0$ has distinct real roots $-2$ and $-5$ — overdamped.",
+          "General solution: $y(t) = Ae^{-2t} + Be^{-5t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 3$ gives $A(-2) + B(-5) = A(-2 - -5) = 3$, so $A = 1$ and $y(t) = 1\\left(e^{-2t} - e^{-5t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s15",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 7y' + 6y = 0, \\qquad y(0) = 0, \\quad y'(0) = 15$$",
+      "seed": 15,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "3*(exp(-1*t) - exp(-6*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "7",
+          "zeroth": "6",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 15
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "3*(exp(1*t) - exp(6*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 7s + 6$ are $-1$ and $-6$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-1*t) - exp(-6*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 15$ forces $A(-1 - -6) = 15$, so $A = 3$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 7s + 6 = 0$ has distinct real roots $-1$ and $-6$ — overdamped.",
+          "General solution: $y(t) = Ae^{-1t} + Be^{-6t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 15$ gives $A(-1) + B(-6) = A(-1 - -6) = 15$, so $A = 3$ and $y(t) = 3\\left(e^{-1t} - e^{-6t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s16",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 6y' + 8y = 0, \\qquad y(0) = 0, \\quad y'(0) = 10$$",
+      "seed": 16,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "5*(exp(-2*t) - exp(-4*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "6",
+          "zeroth": "8",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 10
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "5*(exp(2*t) - exp(4*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 6s + 8$ are $-2$ and $-4$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-2*t) - exp(-4*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 10$ forces $A(-2 - -4) = 10$, so $A = 5$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 6s + 8 = 0$ has distinct real roots $-2$ and $-4$ — overdamped.",
+          "General solution: $y(t) = Ae^{-2t} + Be^{-4t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 10$ gives $A(-2) + B(-4) = A(-2 - -4) = 10$, so $A = 5$ and $y(t) = 5\\left(e^{-2t} - e^{-4t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s17",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 7y' + 12y = 0, \\qquad y(0) = 0, \\quad y'(0) = 4$$",
+      "seed": 17,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4*(exp(-3*t) - exp(-4*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "7",
+          "zeroth": "12",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 4
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "4*(exp(3*t) - exp(4*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 7s + 12$ are $-3$ and $-4$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-3*t) - exp(-4*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 4$ forces $A(-3 - -4) = 4$, so $A = 4$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 7s + 12 = 0$ has distinct real roots $-3$ and $-4$ — overdamped.",
+          "General solution: $y(t) = Ae^{-3t} + Be^{-4t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 4$ gives $A(-3) + B(-4) = A(-3 - -4) = 4$, so $A = 4$ and $y(t) = 4\\left(e^{-3t} - e^{-4t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.overdamped-solution.s18",
+      "type": "symbolic",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 1.82,
+      "stem": "Solve the initial value problem for $y(t)$:\n\n$$y'' + 9y' + 14y = 0, \\qquad y(0) = 0, \\quad y'(0) = 20$$",
+      "seed": 18,
+      "answer": {
+        "kind": "symbolic",
+        "expression": "4*(exp(-2*t) - exp(-7*t))",
+        "variables": [
+          "t"
+        ],
+        "domain": {
+          "t": [
+            0.05,
+            1.5
+          ]
+        },
+        "residual": {
+          "kind": "ode-solution",
+          "variable": "t",
+          "second": "1",
+          "first": "9",
+          "zeroth": "14",
+          "forcing": "0",
+          "initial": [
+            {
+              "at": 0,
+              "order": 0,
+              "value": 0
+            },
+            {
+              "at": 0,
+              "order": 1,
+              "value": 20
+            }
+          ]
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ode.characteristic-root-sign",
+          "expression": "4*(exp(2*t) - exp(7*t))",
+          "feedback": "Both exponents have the wrong sign, so your solution grows instead of decaying. The roots of $s^2 + 9s + 14$ are $-2$ and $-7$ — both negative."
+        },
+        {
+          "misconception": "ode.initial-condition-ignored",
+          "expression": "exp(-2*t) - exp(-7*t)",
+          "feedback": "The form is right but the amplitude was never fitted. $y'(0) = 20$ forces $A(-2 - -7) = 20$, so $A = 4$ rather than $1$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Characteristic equation $s^2 + 9s + 14 = 0$ has distinct real roots $-2$ and $-7$ — overdamped.",
+          "General solution: $y(t) = Ae^{-2t} + Be^{-7t}$.",
+          "$y(0) = 0$ gives $A + B = 0$, so $B = -A$.",
+          "$y'(0) = 20$ gives $A(-2) + B(-7) = A(-2 - -7) = 20$, so $A = 4$ and $y(t) = 4\\left(e^{-2t} - e^{-7t}\\right)$."
+        ],
+        "principle": "Two initial conditions fix the two constants that the two characteristic roots leave free.",
+        "hints": [
+          "Distinct real roots mean a sum of two plain exponentials.",
+          "Apply y(0) first — it relates the constants before you differentiate."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.overdamped-solution",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s1",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.9,
+      "stem": "Classify the damping of:\n\n$$y'' + 4y' + 4y = 0$$",
+      "seed": 1,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $0$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "rationale": "$b^2 - 4c = 0$ exactly, so both roots equal $-2$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $0$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $4y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 4s + 4 = 0$.",
+          "$b^2 - 4c = 4^2 - 4(4) = 0$.",
+          "Exactly zero, so a repeated root at $-2$: **critically damped**, the fastest non-oscillating return."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s2",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 4y' + 9y = 0$$",
+      "seed": 2,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $-20$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = -20$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "rationale": "$b^2 - 4c = -20 < 0$, so the roots are complex and the response rings."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $4y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 4s + 9 = 0$.",
+          "$b^2 - 4c = 4^2 - 4(9) = -20$.",
+          "Negative, so a complex conjugate pair: **underdamped**, and the response oscillates as it decays."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s3",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 2y' + 4y = 0$$",
+      "seed": 3,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $-12$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = -12$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "rationale": "$b^2 - 4c = -12 < 0$, so the roots are complex and the response rings."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $2y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 2s + 4 = 0$.",
+          "$b^2 - 4c = 2^2 - 4(4) = -12$.",
+          "Negative, so a complex conjugate pair: **underdamped**, and the response oscillates as it decays."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s5",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 9y' + 36y = 0$$",
+      "seed": 5,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $-63$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = -63$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "rationale": "$b^2 - 4c = -63 < 0$, so the roots are complex and the response rings."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $9y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 9s + 36 = 0$.",
+          "$b^2 - 4c = 9^2 - 4(36) = -63$.",
+          "Negative, so a complex conjugate pair: **underdamped**, and the response oscillates as it decays."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s7",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 9y' + 4y = 0$$",
+      "seed": 7,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "rationale": "$b^2 - 4c = 65 > 0$, so the roots are real and distinct."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = 65$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $65$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $9y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 9s + 4 = 0$.",
+          "$b^2 - 4c = 9^2 - 4(4) = 65$.",
+          "Positive, so two distinct real roots: **overdamped**, no oscillation."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s8",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 12y' + 25y = 0$$",
+      "seed": 8,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "rationale": "$b^2 - 4c = 44 > 0$, so the roots are real and distinct."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = 44$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $44$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $12y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 12s + 25 = 0$.",
+          "$b^2 - 4c = 12^2 - 4(25) = 44$.",
+          "Positive, so two distinct real roots: **overdamped**, no oscillation."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s9",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 15y' + 49y = 0$$",
+      "seed": 9,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "rationale": "$b^2 - 4c = 29 > 0$, so the roots are real and distinct."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = 29$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $29$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $15y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 15s + 49 = 0$.",
+          "$b^2 - 4c = 15^2 - 4(49) = 29$.",
+          "Positive, so two distinct real roots: **overdamped**, no oscillation."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s10",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.9,
+      "stem": "Classify the damping of:\n\n$$y'' + 14y' + 49y = 0$$",
+      "seed": 10,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $0$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "rationale": "$b^2 - 4c = 0$ exactly, so both roots equal $-7$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $0$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $14y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 14s + 49 = 0$.",
+          "$b^2 - 4c = 14^2 - 4(49) = 0$.",
+          "Exactly zero, so a repeated root at $-7$: **critically damped**, the fastest non-oscillating return."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s11",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.9,
+      "stem": "Classify the damping of:\n\n$$y'' + 10y' + 25y = 0$$",
+      "seed": 11,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $0$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "rationale": "$b^2 - 4c = 0$ exactly, so both roots equal $-5$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $0$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $10y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 10s + 25 = 0$.",
+          "$b^2 - 4c = 10^2 - 4(25) = 0$.",
+          "Exactly zero, so a repeated root at $-5$: **critically damped**, the fastest non-oscillating return."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s12",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 7y' + 4y = 0$$",
+      "seed": 12,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "rationale": "$b^2 - 4c = 33 > 0$, so the roots are real and distinct."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = 33$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $33$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $7y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 7s + 4 = 0$.",
+          "$b^2 - 4c = 7^2 - 4(4) = 33$.",
+          "Positive, so two distinct real roots: **overdamped**, no oscillation."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s13",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.9,
+      "stem": "Classify the damping of:\n\n$$y'' + 8y' + 16y = 0$$",
+      "seed": 13,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $0$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "rationale": "$b^2 - 4c = 0$ exactly, so both roots equal $-4$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $0$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $8y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 8s + 16 = 0$.",
+          "$b^2 - 4c = 8^2 - 4(16) = 0$.",
+          "Exactly zero, so a repeated root at $-4$: **critically damped**, the fastest non-oscillating return."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s15",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 11y' + 16y = 0$$",
+      "seed": 15,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "rationale": "$b^2 - 4c = 57 > 0$, so the roots are real and distinct."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = 57$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Oscillation requires $b^2 - 4c < 0$; here it is $57$."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $11y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 11s + 16 = 0$.",
+          "$b^2 - 4c = 11^2 - 4(16) = 57$.",
+          "Positive, so two distinct real roots: **overdamped**, no oscillation."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3323.second-order.damping-regime.s17",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3323.second-order-ode",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.54,
+      "stem": "Classify the damping of:\n\n$$y'' + 3y' + 9y = 0$$",
+      "seed": 17,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Overdamped — two distinct real roots",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Overdamped needs $b^2 - 4c > 0$; here it is $-27$."
+        },
+        {
+          "id": "b",
+          "text": "Critically damped — a repeated real root",
+          "misconception": "ode.discriminant-misread",
+          "rationale": "Critical damping is the knife edge $b^2 = 4c$; here $b^2 - 4c = -27$."
+        },
+        {
+          "id": "c",
+          "text": "Underdamped — a complex conjugate pair, so the response oscillates",
+          "rationale": "$b^2 - 4c = -27 < 0$, so the roots are complex and the response rings."
+        },
+        {
+          "id": "d",
+          "text": "Undamped — purely imaginary roots, so it oscillates forever",
+          "misconception": "ode.damping-term-ignored",
+          "rationale": "An undamped system has no first-derivative term at all. The $3y'$ term removes energy, so the response cannot persist."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The regime is decided entirely by the discriminant of $s^2 + 3s + 9 = 0$.",
+          "$b^2 - 4c = 3^2 - 4(9) = -27$.",
+          "Negative, so a complex conjugate pair: **underdamped**, and the response oscillates as it decays."
+        ],
+        "principle": "One number — the discriminant — decides whether a second-order system rings, and it is the same number that decides it for an RLC circuit.",
+        "hints": [
+          "Write the characteristic equation.",
+          "You do not need the roots themselves, only the sign under the radical."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3323.second-order.damping-regime",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    }
+  ]
+}

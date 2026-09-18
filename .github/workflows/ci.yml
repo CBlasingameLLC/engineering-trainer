@@ -1,0 +1,159 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Lint, types and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # `version` pins pnpm itself, and is deliberately not moved with the
+      # action: the committed lockfile was written by pnpm 10, and a newer
+      # major would rewrite it and fail the frozen install below.
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck packages and tools
+        run: pnpm exec tsc --noEmit -p tsconfig.json
+
+      - name: Typecheck desktop app
+        run: pnpm exec tsc --noEmit -p apps/desktop/tsconfig.json
+
+      - name: Unit tests
+        run: pnpm test
+
+  content:
+    name: Content verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Structural checks: schema, KC references resolve, no prerequisite cycles.
+      - name: Validate curriculum and packs
+        run: pnpm content validate
+
+      # Rebuild from the generators and confirm the committed bank still matches.
+      # Item ids embed their seed, so a drifted bank shows up as a diff here
+      # rather than as a learner meeting a stale question with a wrong answer.
+      - name: Rebuild the bank and check it is unchanged
+        run: |
+          pnpm content build --variants=18
+          git diff --exit-code --stat content/packs/shared/ \
+            || (echo "::error::The committed bank differs from what the generators now produce. Run 'pnpm content build --variants=18' and commit the result." && exit 1)
+
+      # The gate that matters: every stated answer independently reproduced.
+      #
+      # --strict, because the shared bank is entirely generator output and the
+      # warnings are all things a generator should never emit: an item with no
+      # misconception trap, a symbolic answer with no residual to re-derive it,
+      # a worked solution whose closing steps never state the result. Running
+      # this non-strict let seven trapless items ship unnoticed — they graded
+      # correctly and diagnosed nothing, which is the failure mode hardest to
+      # see from the outside.
+      #
+      # If hand-authored or imported content ever lands in content/packs/shared
+      # this will fail on `regeneration` (no generator to re-run), and that is
+      # the right moment to scope the flag rather than now.
+      - name: Verify every answer
+        run: pnpm content verify --strict
+
+  e2e:
+    name: End-to-end placement flow
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Build the renderer
+        run: pnpm --filter @et/desktop build
+
+      - name: Serve and drive a real placement session
+        run: |
+          pnpm --filter @et/desktop preview > preview.log 2>&1 &
+          # Poll rather than pulling in a wait-for-it dependency. The server is
+          # pinned to 127.0.0.1 in vite.config.ts, so this dials the same
+          # interface it listens on.
+          for _ in $(seq 1 60); do
+            curl -sf http://127.0.0.1:4173 -o /dev/null && break
+            sleep 1
+          done
+          if ! curl -sf http://127.0.0.1:4173 -o /dev/null; then
+            echo "::error::preview server never came up on 127.0.0.1:4173"
+            echo "--- preview output ---"; cat preview.log || true
+            echo "--- listening sockets ---"; ss -tlnp || true
+            exit 1
+          fi
+          pnpm --filter @et/desktop e2e
+
+      # Drives the schematic editor by clicking - place parts, draw wires - and
+      # checks the solver returns the voltage the drawing implies. This is the
+      # only test covering the step from geometry to circuit.
+      - name: Drive the circuit lab and skill tree
+        run: pnpm --filter @et/desktop e2e:lab
+
+      # Answers into each item's own misconception traps, then asserts the feed
+      # reports every error the run committed. Expectations are built during
+      # the run, never kept beside the content. This covers the join between
+      # grading, storage and the feed - each of which has unit tests, and all of
+      # which were disconnected for most of this project's life.
+      - name: Drive the misconception feed and a targeted drill
+        run: pnpm --filter @et/desktop e2e:misconceptions
+
+      # Reads computed colours out of the running page on every route. A dark
+      # mode fails in a way no unit test sees: the class applies, the store is
+      # right, and one region is invisible because a utility never got its
+      # variant.
+      - name: Check dark mode contrast and the theme control
+        run: pnpm --filter @et/desktop e2e:theme
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-screenshots
+          path: apps/desktop/e2e/screenshots/
+          if-no-files-found: ignore
