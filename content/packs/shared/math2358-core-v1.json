@@ -5120,11 +5120,11 @@
         }
       ],
       "difficultyB": -1.5,
-      "stem": "Given $|A| = 5$ and $|B| = 2$, find $|A \\times B|$.",
+      "stem": "Given $|A| = 2$ and $|B| = 4$, find $|A \\times B|$.",
       "seed": 1,
       "answer": {
         "kind": "numeric",
-        "value": 10,
+        "value": 8,
         "unit": "",
         "tolerance": {
           "abs": 0.01
@@ -5134,7 +5134,7 @@
       "misconceptionTraps": [
         {
           "misconception": "sets.power-set-size-linear",
-          "value": 7,
+          "value": 6,
           "tolerance": {
             "abs": 0.01
           },
@@ -5142,7 +5142,7 @@
         },
         {
           "misconception": "sets.product-then-power-confused",
-          "value": 25,
+          "value": 4,
           "tolerance": {
             "abs": 0.01
           },
@@ -5151,8 +5151,8 @@
       ],
       "explanation": {
         "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 5 \\cdot 2 = 10$.",
-          "So $|A \\times B| = 10$."
+          "$|A \\times B| = |A|\\cdot|B| = 2 \\cdot 4 = 8$.",
+          "So $|A \\times B| = 8$."
         ],
         "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
         "hints": [
@@ -5180,12 +5180,12 @@
           "weight": 0.4
         }
       ],
-      "difficultyB": -0.6,
-      "stem": "Given $|A| = 5$ and $|B| = 3$, find $|\\mathcal{P}(A)|$.",
+      "difficultyB": 0.3,
+      "stem": "Given $|A| = 3$ and $|B| = 3$, find $|\\mathcal{P}(A \\times B)|$.",
       "seed": 2,
       "answer": {
         "kind": "numeric",
-        "value": 32,
+        "value": 512,
         "unit": "",
         "tolerance": {
           "abs": 0.01
@@ -5195,7 +5195,7 @@
       "misconceptionTraps": [
         {
           "misconception": "sets.power-set-size-linear",
-          "value": 10,
+          "value": 6,
           "tolerance": {
             "abs": 0.01
           },
@@ -5203,7 +5203,7 @@
         },
         {
           "misconception": "sets.product-then-power-confused",
-          "value": 25,
+          "value": 64,
           "tolerance": {
             "abs": 0.01
           },
@@ -5212,8 +5212,69 @@
       ],
       "explanation": {
         "steps": [
-          "Each of the 5 elements is either in a subset or not, independently.",
-          "So $|\\mathcal{P}(A)| = 2^{5} = 32$."
+          "$|A \\times B| = |A|\\cdot|B| = 3 \\cdot 3 = 9$.",
+          "Then $|\\mathcal{P}(A \\times B)| = 2^{9} = 512$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s3",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.3,
+      "stem": "Given $|A| = 2$ and $|B| = 3$, find $|\\mathcal{P}(A \\times B)|$.",
+      "seed": 3,
+      "answer": {
+        "kind": "numeric",
+        "value": 64,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 32,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "$|A \\times B| = |A|\\cdot|B| = 2 \\cdot 3 = 6$.",
+          "Then $|\\mathcal{P}(A \\times B)| = 2^{6} = 64$."
         ],
         "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
         "hints": [
@@ -5241,8 +5302,8 @@
           "weight": 0.4
         }
       ],
-      "difficultyB": -0.6,
-      "stem": "Given $|A| = 6$ and $|B| = 3$, find $|\\mathcal{P}(A)|$.",
+      "difficultyB": 0.3,
+      "stem": "Given $|A| = 3$ and $|B| = 2$, find $|\\mathcal{P}(A \\times B)|$.",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -5256,7 +5317,7 @@
       "misconceptionTraps": [
         {
           "misconception": "sets.power-set-size-linear",
-          "value": 12,
+          "value": 6,
           "tolerance": {
             "abs": 0.01
           },
@@ -5264,7 +5325,7 @@
         },
         {
           "misconception": "sets.product-then-power-confused",
-          "value": 36,
+          "value": 32,
           "tolerance": {
             "abs": 0.01
           },
@@ -5273,8 +5334,8 @@
       ],
       "explanation": {
         "steps": [
-          "Each of the 6 elements is either in a subset or not, independently.",
-          "So $|\\mathcal{P}(A)| = 2^{6} = 64$."
+          "$|A \\times B| = |A|\\cdot|B| = 3 \\cdot 2 = 6$.",
+          "Then $|\\mathcal{P}(A \\times B)| = 2^{6} = 64$."
         ],
         "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
         "hints": [
@@ -5302,614 +5363,9 @@
           "weight": 0.4
         }
       ],
-      "difficultyB": -0.6,
-      "stem": "Given $|A| = 5$ and $|B| = 5$, find $|\\mathcal{P}(A)|$.",
-      "seed": 5,
-      "answer": {
-        "kind": "numeric",
-        "value": 32,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 10,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
-        },
-        {
-          "misconception": "sets.product-then-power-confused",
-          "value": 25,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "Each of the 5 elements is either in a subset or not, independently.",
-          "So $|\\mathcal{P}(A)| = 2^{5} = 32$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s6",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -1.5,
-      "stem": "Given $|A| = 4$ and $|B| = 2$, find $|A \\times B|$.",
-      "seed": 6,
-      "answer": {
-        "kind": "numeric",
-        "value": 8,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 6,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
-        },
-        {
-          "misconception": "sets.product-then-power-confused",
-          "value": 16,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 4 \\cdot 2 = 8$.",
-          "So $|A \\times B| = 8$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s7",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": 0.3,
-      "stem": "Given $|A| = 2$ and $|B| = 2$, find $|\\mathcal{P}(A \\times B)|$.",
-      "seed": 7,
-      "answer": {
-        "kind": "numeric",
-        "value": 16,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 4,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 2 \\cdot 2 = 4$.",
-          "Then $|\\mathcal{P}(A \\times B)| = 2^{4} = 16$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s8",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -0.6,
-      "stem": "Given $|A| = 2$ and $|B| = 4$, find $|\\mathcal{P}(A)|$.",
-      "seed": 8,
-      "answer": {
-        "kind": "numeric",
-        "value": 4,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [],
-      "explanation": {
-        "steps": [
-          "Each of the 2 elements is either in a subset or not, independently.",
-          "So $|\\mathcal{P}(A)| = 2^{2} = 4$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s9",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -0.6,
-      "stem": "Given $|A| = 2$ and $|B| = 5$, find $|\\mathcal{P}(A)|$.",
-      "seed": 9,
-      "answer": {
-        "kind": "numeric",
-        "value": 4,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [],
-      "explanation": {
-        "steps": [
-          "Each of the 2 elements is either in a subset or not, independently.",
-          "So $|\\mathcal{P}(A)| = 2^{2} = 4$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s10",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": 0.3,
-      "stem": "Given $|A| = 4$ and $|B| = 5$, find $|\\mathcal{P}(A \\times B)|$.",
-      "seed": 10,
-      "answer": {
-        "kind": "numeric",
-        "value": 1048576,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 8,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
-        },
-        {
-          "misconception": "sets.product-then-power-confused",
-          "value": 512,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 4 \\cdot 5 = 20$.",
-          "Then $|\\mathcal{P}(A \\times B)| = 2^{20} = 1048576$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s11",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -1.5,
-      "stem": "Given $|A| = 4$ and $|B| = 4$, find $|A \\times B|$.",
-      "seed": 11,
-      "answer": {
-        "kind": "numeric",
-        "value": 16,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 8,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 4 \\cdot 4 = 16$.",
-          "So $|A \\times B| = 16$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s12",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -1.5,
-      "stem": "Given $|A| = 3$ and $|B| = 2$, find $|A \\times B|$.",
-      "seed": 12,
-      "answer": {
-        "kind": "numeric",
-        "value": 6,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 5,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
-        },
-        {
-          "misconception": "sets.product-then-power-confused",
-          "value": 9,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 3 \\cdot 2 = 6$.",
-          "So $|A \\times B| = 6$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s13",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -0.6,
-      "stem": "Given $|A| = 4$ and $|B| = 3$, find $|\\mathcal{P}(A)|$.",
-      "seed": 13,
-      "answer": {
-        "kind": "numeric",
-        "value": 16,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 8,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "Each of the 4 elements is either in a subset or not, independently.",
-          "So $|\\mathcal{P}(A)| = 2^{4} = 16$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s14",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -1.5,
-      "stem": "Given $|A| = 4$ and $|B| = 3$, find $|A \\times B|$.",
-      "seed": 14,
-      "answer": {
-        "kind": "numeric",
-        "value": 12,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 7,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
-        },
-        {
-          "misconception": "sets.product-then-power-confused",
-          "value": 16,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 4 \\cdot 3 = 12$.",
-          "So $|A \\times B| = 12$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s15",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
-      "difficultyB": -1.5,
-      "stem": "Given $|A| = 3$ and $|B| = 3$, find $|A \\times B|$.",
-      "seed": 15,
-      "answer": {
-        "kind": "numeric",
-        "value": 9,
-        "unit": "",
-        "tolerance": {
-          "abs": 0.01
-        }
-      },
-      "options": [],
-      "misconceptionTraps": [
-        {
-          "misconception": "sets.power-set-size-linear",
-          "value": 6,
-          "tolerance": {
-            "abs": 0.01
-          },
-          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
-        }
-      ],
-      "explanation": {
-        "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 3 \\cdot 3 = 9$.",
-          "So $|A \\times B| = 9$."
-        ],
-        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
-        "hints": [
-          "How many independent binary choices are there?",
-          "Work from the inside out."
-        ]
-      },
-      "provenance": {
-        "producer": "generator",
-        "sourceRef": "math2358.sets.power-set",
-        "licenseTier": "redistributable",
-        "createdAt": "1970-01-01T00:00:00.000Z"
-      }
-    },
-    {
-      "id": "math2358.sets.power-set.s16",
-      "type": "numeric",
-      "kcRefs": [
-        {
-          "kc": "math2358.cartesian-products",
-          "weight": 0.6
-        },
-        {
-          "kc": "math2358.set-operations",
-          "weight": 0.4
-        }
-      ],
       "difficultyB": 0.3,
       "stem": "Given $|A| = 5$ and $|B| = 2$, find $|\\mathcal{P}(A \\times B)|$.",
-      "seed": 16,
+      "seed": 5,
       "answer": {
         "kind": "numeric",
         "value": 1024,
@@ -5956,7 +5412,190 @@
       }
     },
     {
-      "id": "math2358.sets.power-set.s18",
+      "id": "math2358.sets.power-set.s7",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.6,
+      "stem": "Given $|A| = 5$ and $|B| = 4$, find $|\\mathcal{P}(A)|$.",
+      "seed": 7,
+      "answer": {
+        "kind": "numeric",
+        "value": 32,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 10,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 25,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Each of the 5 elements is either in a subset or not, independently.",
+          "So $|\\mathcal{P}(A)| = 2^{5} = 32$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s8",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.6,
+      "stem": "Given $|A| = 5$ and $|B| = 3$, find $|\\mathcal{P}(A)|$.",
+      "seed": 8,
+      "answer": {
+        "kind": "numeric",
+        "value": 32,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 10,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 25,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Each of the 5 elements is either in a subset or not, independently.",
+          "So $|\\mathcal{P}(A)| = 2^{5} = 32$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s9",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.6,
+      "stem": "Given $|A| = 6$ and $|B| = 2$, find $|\\mathcal{P}(A)|$.",
+      "seed": 9,
+      "answer": {
+        "kind": "numeric",
+        "value": 64,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 12,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 36,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Each of the 6 elements is either in a subset or not, independently.",
+          "So $|\\mathcal{P}(A)| = 2^{6} = 64$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s10",
       "type": "numeric",
       "kcRefs": [
         {
@@ -5969,11 +5608,255 @@
         }
       ],
       "difficultyB": -1.5,
-      "stem": "Given $|A| = 3$ and $|B| = 4$, find $|A \\times B|$.",
-      "seed": 18,
+      "stem": "Given $|A| = 6$ and $|B| = 4$, find $|A \\times B|$.",
+      "seed": 10,
       "answer": {
         "kind": "numeric",
-        "value": 12,
+        "value": 24,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 10,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 36,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "$|A \\times B| = |A|\\cdot|B| = 6 \\cdot 4 = 24$.",
+          "So $|A \\times B| = 24$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s11",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.5,
+      "stem": "Given $|A| = 4$ and $|B| = 5$, find $|A \\times B|$.",
+      "seed": 11,
+      "answer": {
+        "kind": "numeric",
+        "value": 20,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 9,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 16,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "$|A \\times B| = |A|\\cdot|B| = 4 \\cdot 5 = 20$.",
+          "So $|A \\times B| = 20$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s13",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.5,
+      "stem": "Given $|A| = 3$ and $|B| = 2$, find $|A \\times B|$.",
+      "seed": 13,
+      "answer": {
+        "kind": "numeric",
+        "value": 6,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 5,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 9,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "$|A \\times B| = |A|\\cdot|B| = 3 \\cdot 2 = 6$.",
+          "So $|A \\times B| = 6$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s15",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -0.6,
+      "stem": "Given $|A| = 5$ and $|B| = 5$, find $|\\mathcal{P}(A)|$.",
+      "seed": 15,
+      "answer": {
+        "kind": "numeric",
+        "value": 32,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 10,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 25,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Each of the 5 elements is either in a subset or not, independently.",
+          "So $|\\mathcal{P}(A)| = 2^{5} = 32$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s16",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.5,
+      "stem": "Given $|A| = 2$ and $|B| = 5$, find $|A \\times B|$.",
+      "seed": 16,
+      "answer": {
+        "kind": "numeric",
+        "value": 10,
         "unit": "",
         "tolerance": {
           "abs": 0.01
@@ -5991,7 +5874,7 @@
         },
         {
           "misconception": "sets.product-then-power-confused",
-          "value": 9,
+          "value": 4,
           "tolerance": {
             "abs": 0.01
           },
@@ -6000,8 +5883,130 @@
       ],
       "explanation": {
         "steps": [
-          "$|A \\times B| = |A|\\cdot|B| = 3 \\cdot 4 = 12$.",
-          "So $|A \\times B| = 12$."
+          "$|A \\times B| = |A|\\cdot|B| = 2 \\cdot 5 = 10$.",
+          "So $|A \\times B| = 10$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s17",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": 0.3,
+      "stem": "Given $|A| = 2$ and $|B| = 4$, find $|\\mathcal{P}(A \\times B)|$.",
+      "seed": 17,
+      "answer": {
+        "kind": "numeric",
+        "value": 256,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "A power set is not twice the size — it is $2^{|A|}$, because each element is independently in or out of a subset."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 64,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "$|A \\times B| = |A|\\cdot|B| = 2 \\cdot 4 = 8$.",
+          "Then $|\\mathcal{P}(A \\times B)| = 2^{8} = 256$."
+        ],
+        "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
+        "hints": [
+          "How many independent binary choices are there?",
+          "Work from the inside out."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math2358.sets.power-set",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math2358.sets.power-set.s18",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math2358.cartesian-products",
+          "weight": 0.6
+        },
+        {
+          "kc": "math2358.set-operations",
+          "weight": 0.4
+        }
+      ],
+      "difficultyB": -1.5,
+      "stem": "Given $|A| = 5$ and $|B| = 4$, find $|A \\times B|$.",
+      "seed": 18,
+      "answer": {
+        "kind": "numeric",
+        "value": 20,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.01
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "sets.power-set-size-linear",
+          "value": 9,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "You added the sizes. A Cartesian product pairs *every* element of $A$ with *every* element of $B$, so the sizes multiply."
+        },
+        {
+          "misconception": "sets.product-then-power-confused",
+          "value": 25,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "Build the inner set first and take its size, then apply the outer operation to that number."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "$|A \\times B| = |A|\\cdot|B| = 5 \\cdot 4 = 20$.",
+          "So $|A \\times B| = 20$."
         ],
         "principle": "Products multiply and power sets exponentiate, because one is a choice per pair and the other a choice per element.",
         "hints": [
@@ -16943,7 +16948,7 @@
         }
       ],
       "difficultyB": 0.53,
-      "stem": "Compute $6^{6} \\bmod 9$.",
+      "stem": "Compute $6^{8} \\bmod 9$.",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -16954,11 +16959,20 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "numbertheory.modulus-applied-to-exponent",
+          "value": 3,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "You reduced the exponent against the modulus. Exponents do not reduce mod $n$ — reduce the *running product* instead, at every multiplication."
+        }
+      ],
       "explanation": {
         "steps": [
           "Reduce after every multiplication so the numbers stay small.",
-          "$6^{6} \\bmod 9$: multiply by $6$ and take the remainder, 6 times.",
+          "$6^{8} \\bmod 9$: multiply by $6$ and take the remainder, 8 times.",
           "The result is $0$."
         ],
         "principle": "Modular reduction commutes with multiplication, which is why you never have to form the huge number.",

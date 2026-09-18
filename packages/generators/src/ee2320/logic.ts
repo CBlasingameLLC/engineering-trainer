@@ -339,6 +339,23 @@ export const universalGates: Generator = {
             `Each inversion costs a gate too. A ${using} with its inputs tied together is an inverter, and it still ` +
             `counts toward the total.`,
         },
+        // NOT costs one gate, so the undercount trap clamps onto the answer and
+        // is dropped — leaving the easiest item in the generator unable to
+        // diagnose anything. Here the error runs the other way: not knowing that
+        // tying the inputs together turns the gate itself into the inverter.
+        ...(target === 'NOT'
+          ? [
+              {
+                misconception: 'gates.tied-input-inverter-missed',
+                value: value + 1,
+                tolerance: { abs: 0.01 },
+                feedback:
+                  `One gate is enough. Tie both inputs of a ${using} to the same signal and it computes ` +
+                  `${using === 'NAND' ? '$\\overline{A \\cdot A} = \\overline{A}$' : '$\\overline{A + A} = \\overline{A}$'}` +
+                  ` — that is why ${using} is universal in the first place.`,
+              },
+            ]
+          : []),
       ]),
       explanation: {
         steps: [

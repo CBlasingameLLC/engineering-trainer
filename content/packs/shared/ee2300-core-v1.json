@@ -131,7 +131,24 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 6e-8,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = 0.0006 \\times 10000$."
+        },
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 16666666.666666668,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply."
+        }
+      ],
       "explanation": {
         "steps": [
           "Ohm's law gives the voltage directly: $V = IR$.",
@@ -170,7 +187,24 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 8.25e-9,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = 0.000165 \\times 20000$."
+        },
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 121212121.21212122,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply."
+        }
+      ],
       "explanation": {
         "steps": [
           "Ohm's law gives the voltage directly: $V = IR$.",
@@ -259,7 +293,24 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 0.000012,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = 0.012 \\times 1000$."
+        },
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 83333.33333333333,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply."
+        }
+      ],
       "explanation": {
         "steps": [
           "Ohm's law gives the voltage directly: $V = IR$.",
@@ -593,7 +644,24 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 3.099173553719008e-7,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = 0.0006818 \\times 2200$."
+        },
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 3226666.6666666665,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply."
+        }
+      ],
       "explanation": {
         "steps": [
           "Ohm's law gives the voltage directly: $V = IR$.",
@@ -782,7 +850,24 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 3.9999999999999994e-8,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = 0.0006 \\times 15000$."
+        },
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 25000000.000000004,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply."
+        }
+      ],
       "explanation": {
         "steps": [
           "Ohm's law gives the voltage directly: $V = IR$.",
@@ -821,7 +906,24 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 5.91715976331361e-7,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = 0.002308 \\times 3900$."
+        },
+        {
+          "misconception": "ohms-law.inverted",
+          "value": 1689999.9999999998,
+          "tolerance": {
+            "rel": 0.02
+          },
+          "feedback": "That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply."
+        }
+      ],
       "explanation": {
         "steps": [
           "Ohm's law gives the voltage directly: $V = IR$.",
@@ -7942,12 +8044,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.25,
-      "stem": "A 12\\,\\text{V} source drives mesh 1 through $R_1 = 330\\,\\text{\\Omega}$. $R_3 = 390\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 9.1\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
+      "difficultyB": -0.65,
+      "stem": "A 12\\,\\text{V} source drives mesh 1 through $R_1 = 160\\,\\text{\\Omega}$. $R_3 = 240\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 300\\,\\text{\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
       "seed": 1,
       "answer": {
         "kind": "numeric",
-        "value": 0.017046117921774663,
+        "value": 0.04090909090909091,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -7957,7 +8059,7 @@
       "misconceptionTraps": [
         {
           "misconception": "mesh.coupling-term-dropped",
-          "value": 0.016666666666666666,
+          "value": 0.03,
           "tolerance": {
             "rel": 0.015
           },
@@ -7970,8 +8072,8 @@
           "Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = 12$.",
           "Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.",
           "From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:",
-          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 17\\,\\text{mA}$, and $i_2 = 701\\,\\text{\\mu A}$.",
-          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 374\\,\\text{\\Omega}$, so $i_1 = \\dfrac{12}{704} = 17\\,\\text{mA}$ — the same value."
+          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 40.9\\,\\text{mA}$, and $i_2 = 18.2\\,\\text{mA}$.",
+          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 133\\,\\text{\\Omega}$, so $i_1 = \\dfrac{12}{293.3} = 40.9\\,\\text{mA}$ — the same value."
         ],
         "principle": "A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.",
         "hints": [
@@ -8227,12 +8329,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.75,
-      "stem": "A 9\\,\\text{V} source drives mesh 1 through $R_1 = 430\\,\\text{\\Omega}$. $R_3 = 100\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 360\\,\\text{\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
+      "difficultyB": 1.012,
+      "stem": "A 9\\,\\text{V} source drives mesh 1 through $R_1 = 910\\,\\text{\\Omega}$. $R_3 = 6.8\\,\\text{k\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 1.8\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
       "seed": 6,
       "answer": {
         "kind": "numeric",
-        "value": 0.01770744225834046,
+        "value": 0.0038572710056812517,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -8242,7 +8344,7 @@
       "misconceptionTraps": [
         {
           "misconception": "mesh.coupling-term-dropped",
-          "value": 0.016981132075471698,
+          "value": 0.0011673151750972762,
           "tolerance": {
             "rel": 0.015
           },
@@ -8255,8 +8357,8 @@
           "Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = 9$.",
           "Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.",
           "From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:",
-          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 17.7\\,\\text{mA}$, and $i_2 = 3.85\\,\\text{mA}$.",
-          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 78.3\\,\\text{\\Omega}$, so $i_1 = \\dfrac{9}{508.3} = 17.7\\,\\text{mA}$ — the same value."
+          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 3.86\\,\\text{mA}$, and $i_2 = 3.05\\,\\text{mA}$.",
+          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 1.42\\,\\text{k\\Omega}$, so $i_1 = \\dfrac{9}{2333} = 3.86\\,\\text{mA}$ — the same value."
         ],
         "principle": "A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.",
         "hints": [
@@ -8284,12 +8386,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.584,
-      "stem": "A 1.5\\,\\text{V} source drives mesh 1 through $R_1 = 910\\,\\text{\\Omega}$. $R_3 = 300\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 3.3\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
+      "difficultyB": 0.267,
+      "stem": "A 1.5\\,\\text{V} source drives mesh 1 through $R_1 = 360\\,\\text{\\Omega}$. $R_3 = 560\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 1.8\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
       "seed": 7,
       "answer": {
         "kind": "numeric",
-        "value": 0.0012658227848101266,
+        "value": 0.0019056847545219637,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -8299,7 +8401,7 @@
       "misconceptionTraps": [
         {
           "misconception": "mesh.coupling-term-dropped",
-          "value": 0.0012396694214876034,
+          "value": 0.0016304347826086956,
           "tolerance": {
             "rel": 0.015
           },
@@ -8312,8 +8414,8 @@
           "Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = 1.5$.",
           "Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.",
           "From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:",
-          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 1.27\\,\\text{mA}$, and $i_2 = 105\\,\\text{\\mu A}$.",
-          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 275\\,\\text{\\Omega}$, so $i_1 = \\dfrac{1.5}{1185} = 1.27\\,\\text{mA}$ — the same value."
+          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 1.91\\,\\text{mA}$, and $i_2 = 452\\,\\text{\\mu A}$.",
+          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 427\\,\\text{\\Omega}$, so $i_1 = \\dfrac{1.5}{787.1} = 1.91\\,\\text{mA}$ — the same value."
         ],
         "principle": "A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.",
         "hints": [
@@ -8341,12 +8443,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.613,
-      "stem": "A 3\\,\\text{V} source drives mesh 1 through $R_1 = 2\\,\\text{k\\Omega}$. $R_3 = 620\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 3.9\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
+      "difficultyB": 0.25,
+      "stem": "A 3\\,\\text{V} source drives mesh 1 through $R_1 = 330\\,\\text{\\Omega}$. $R_3 = 360\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 330\\,\\text{\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
       "seed": 8,
       "answer": {
         "kind": "numeric",
-        "value": 0.001183452609530459,
+        "value": 0.0059740259740259745,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -8356,7 +8458,7 @@
       "misconceptionTraps": [
         {
           "misconception": "mesh.coupling-term-dropped",
-          "value": 0.0011450381679389313,
+          "value": 0.004347826086956522,
           "tolerance": {
             "rel": 0.015
           },
@@ -8369,8 +8471,8 @@
           "Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = 3$.",
           "Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.",
           "From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:",
-          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 1.18\\,\\text{mA}$, and $i_2 = 162\\,\\text{\\mu A}$.",
-          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 535\\,\\text{\\Omega}$, so $i_1 = \\dfrac{3}{2535} = 1.18\\,\\text{mA}$ — the same value."
+          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 5.97\\,\\text{mA}$, and $i_2 = 3.12\\,\\text{mA}$.",
+          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 172\\,\\text{\\Omega}$, so $i_1 = \\dfrac{3}{502.2} = 5.97\\,\\text{mA}$ — the same value."
         ],
         "principle": "A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.",
         "hints": [
@@ -8456,26 +8558,35 @@
         }
       ],
       "difficultyB": 1.15,
-      "stem": "A 9\\,\\text{V} source drives mesh 1 through $R_1 = 4.7\\,\\text{k\\Omega}$. $R_3 = 150\\,\\text{\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 2.7\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
+      "stem": "A 9\\,\\text{V} source drives mesh 1 through $R_1 = 270\\,\\text{\\Omega}$. $R_3 = 8.2\\,\\text{k\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 1.8\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
       "seed": 10,
       "answer": {
         "kind": "numeric",
-        "value": 0.001858695652173913,
+        "value": 0.005154639175257732,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "mesh.coupling-term-dropped",
+          "value": 0.0010625737898465172,
+          "tolerance": {
+            "rel": 0.015
+          },
+          "feedback": "You solved mesh 1 alone as $V_s/(R_1+R_3)$, dropping the $-R_3 i_2$ coupling term. The shared resistor carries **both** mesh currents, so the two equations cannot be separated."
+        }
+      ],
       "explanation": {
         "steps": [
           "The shared resistor carries the difference of the two mesh currents, so KVL around each loop gives:",
           "Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = 9$.",
           "Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.",
           "From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:",
-          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 1.86\\,\\text{mA}$, and $i_2 = 97.8\\,\\text{\\mu A}$.",
-          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 142\\,\\text{\\Omega}$, so $i_1 = \\dfrac{9}{4842} = 1.86\\,\\text{mA}$ — the same value."
+          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 5.15\\,\\text{mA}$, and $i_2 = 4.23\\,\\text{mA}$.",
+          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 1.48\\,\\text{k\\Omega}$, so $i_1 = \\dfrac{9}{1746} = 5.15\\,\\text{mA}$ — the same value."
         ],
         "principle": "A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.",
         "hints": [
@@ -8503,12 +8614,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.658,
-      "stem": "A 9\\,\\text{V} source drives mesh 1 through $R_1 = 3.9\\,\\text{k\\Omega}$. $R_3 = 1.1\\,\\text{k\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 6.8\\,\\text{k\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
+      "difficultyB": -0.65,
+      "stem": "A 9\\,\\text{V} source drives mesh 1 through $R_1 = 3.9\\,\\text{k\\Omega}$. $R_3 = 2.7\\,\\text{k\\Omega}$ is the shared branch between mesh 1 and mesh 2, and $R_2 = 300\\,\\text{\\Omega}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.",
       "seed": 11,
       "answer": {
         "kind": "numeric",
-        "value": 0.0018568816923478714,
+        "value": 0.002158273381294964,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -8518,7 +8629,7 @@
       "misconceptionTraps": [
         {
           "misconception": "mesh.coupling-term-dropped",
-          "value": 0.0018,
+          "value": 0.0013636363636363637,
           "tolerance": {
             "rel": 0.015
           },
@@ -8531,8 +8642,8 @@
           "Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = 9$.",
           "Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.",
           "From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:",
-          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 1.86\\,\\text{mA}$, and $i_2 = 259\\,\\text{\\mu A}$.",
-          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 947\\,\\text{\\Omega}$, so $i_1 = \\dfrac{9}{4847} = 1.86\\,\\text{mA}$ — the same value."
+          "$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = 2.16\\,\\text{mA}$, and $i_2 = 1.94\\,\\text{mA}$.",
+          "Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = 270\\,\\text{\\Omega}$, so $i_1 = \\dfrac{9}{4170} = 2.16\\,\\text{mA}$ — the same value."
         ],
         "principle": "A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.",
         "hints": [
@@ -9154,12 +9265,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 1.321,
-      "stem": "Two clockwise meshes share a branch containing a 2\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.002$ A. Mesh 1 also contains a 24\\,\\text{V} source and $R_1 = 110\\,\\text{\\Omega}$; mesh 2 also contains $R_2 = 330\\,\\text{\\Omega}$. Find $i_1$.",
+      "difficultyB": 1.65,
+      "stem": "Two clockwise meshes share a branch containing a 1\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.001$ A. Mesh 1 also contains a 24\\,\\text{V} source and $R_1 = 3.9\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 5.6\\,\\text{k\\Omega}$. Find $i_1$.",
       "seed": 4,
       "answer": {
         "kind": "numeric",
-        "value": 0.05304545454545455,
+        "value": 0.0019368421052631578,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -9169,7 +9280,7 @@
       "misconceptionTraps": [
         {
           "misconception": "supermesh.source-ignored",
-          "value": 0.05454545454545454,
+          "value": 0.0025263157894736842,
           "tolerance": {
             "rel": 0.015
           },
@@ -9177,11 +9288,11 @@
         },
         {
           "misconception": "supermesh.constraint-sign-error",
-          "value": 0.056045454545454544,
+          "value": 0.0031157894736842107,
           "tolerance": {
             "rel": 0.015
           },
-          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.002$, substituting $i_2 = i_1 + 0.002$ makes the $R_2 I_s$ term **subtract** from $V_s$."
+          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.001$, substituting $i_2 = i_1 + 0.001$ makes the $R_2 I_s$ term **subtract** from $V_s$."
         }
       ],
       "explanation": {
@@ -9189,8 +9300,8 @@
           "The voltage across an ideal current source is unknown, so KVL cannot be written through that branch.",
           "Draw the loop **around** the source instead — the supermesh — and apply KVL to the outer path:",
           "$-24 + R_1 i_1 + R_2 i_2 = 0$.",
-          "The source supplies the missing equation: $i_2 - i_1 = 0.002$.",
-          "Substituting $i_2 = i_1 + 0.002$: $i_1 = \\dfrac{24 - (330)(0.002)}{110 + 330} = 53\\,\\text{mA}$, and $i_2 = 55\\,\\text{mA}$.",
+          "The source supplies the missing equation: $i_2 - i_1 = 0.001$.",
+          "Substituting $i_2 = i_1 + 0.001$: $i_1 = \\dfrac{24 - (5600)(0.001)}{3900 + 5600} = 1.94\\,\\text{mA}$, and $i_2 = 2.94\\,\\text{mA}$.",
           "Note the symmetry with the supernode: unknown current there, unknown voltage here, and in both cases the source itself provides the constraint."
         ],
         "principle": "A supermesh routes KVL around a shared current source, and the source supplies the constraint between the two mesh currents.",
@@ -9674,12 +9785,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.75,
-      "stem": "Two clockwise meshes share a branch containing a 1\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.001$ A. Mesh 1 also contains a 3.3\\,\\text{V} source and $R_1 = 8.2\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 100\\,\\text{\\Omega}$. Find $i_1$.",
+      "difficultyB": 1.235,
+      "stem": "Two clockwise meshes share a branch containing a 4\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.004$ A. Mesh 1 also contains a 3.3\\,\\text{V} source and $R_1 = 3.6\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 1\\,\\text{k\\Omega}$. Find $i_1$.",
       "seed": 12,
       "answer": {
         "kind": "numeric",
-        "value": 0.0003855421686746988,
+        "value": -0.0001521739130434783,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -9689,7 +9800,7 @@
       "misconceptionTraps": [
         {
           "misconception": "supermesh.source-ignored",
-          "value": 0.0003975903614457831,
+          "value": 0.0007173913043478261,
           "tolerance": {
             "rel": 0.015
           },
@@ -9697,11 +9808,11 @@
         },
         {
           "misconception": "supermesh.constraint-sign-error",
-          "value": 0.0004096385542168675,
+          "value": 0.0015869565217391305,
           "tolerance": {
             "rel": 0.015
           },
-          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.001$, substituting $i_2 = i_1 + 0.001$ makes the $R_2 I_s$ term **subtract** from $V_s$."
+          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.004$, substituting $i_2 = i_1 + 0.004$ makes the $R_2 I_s$ term **subtract** from $V_s$."
         }
       ],
       "explanation": {
@@ -9709,8 +9820,8 @@
           "The voltage across an ideal current source is unknown, so KVL cannot be written through that branch.",
           "Draw the loop **around** the source instead — the supermesh — and apply KVL to the outer path:",
           "$-3.3 + R_1 i_1 + R_2 i_2 = 0$.",
-          "The source supplies the missing equation: $i_2 - i_1 = 0.001$.",
-          "Substituting $i_2 = i_1 + 0.001$: $i_1 = \\dfrac{3.3 - (100)(0.001)}{8200 + 100} = 386\\,\\text{\\mu A}$, and $i_2 = 1.39\\,\\text{mA}$.",
+          "The source supplies the missing equation: $i_2 - i_1 = 0.004$.",
+          "Substituting $i_2 = i_1 + 0.004$: $i_1 = \\dfrac{3.3 - (1000)(0.004)}{3600 + 1000} = -152\\,\\text{\\mu A}$, and $i_2 = 3.85\\,\\text{mA}$.",
           "Note the symmetry with the supernode: unknown current there, unknown voltage here, and in both cases the source itself provides the constraint."
         ],
         "principle": "A supermesh routes KVL around a shared current source, and the source supplies the constraint between the two mesh currents.",
@@ -9739,12 +9850,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 1.65,
-      "stem": "Two clockwise meshes share a branch containing a 2\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.002$ A. Mesh 1 also contains a 9\\,\\text{V} source and $R_1 = 110\\,\\text{\\Omega}$; mesh 2 also contains $R_2 = 100\\,\\text{\\Omega}$. Find $i_1$.",
+      "difficultyB": 0.75,
+      "stem": "Two clockwise meshes share a branch containing a 1\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.001$ A. Mesh 1 also contains a 9\\,\\text{V} source and $R_1 = 360\\,\\text{\\Omega}$; mesh 2 also contains $R_2 = 4.3\\,\\text{k\\Omega}$. Find $i_1$.",
       "seed": 13,
       "answer": {
         "kind": "numeric",
-        "value": 0.04190476190476191,
+        "value": 0.0010085836909871245,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -9754,7 +9865,7 @@
       "misconceptionTraps": [
         {
           "misconception": "supermesh.source-ignored",
-          "value": 0.04285714285714286,
+          "value": 0.0019313304721030042,
           "tolerance": {
             "rel": 0.015
           },
@@ -9762,11 +9873,11 @@
         },
         {
           "misconception": "supermesh.constraint-sign-error",
-          "value": 0.043809523809523805,
+          "value": 0.0028540772532188842,
           "tolerance": {
             "rel": 0.015
           },
-          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.002$, substituting $i_2 = i_1 + 0.002$ makes the $R_2 I_s$ term **subtract** from $V_s$."
+          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.001$, substituting $i_2 = i_1 + 0.001$ makes the $R_2 I_s$ term **subtract** from $V_s$."
         }
       ],
       "explanation": {
@@ -9774,8 +9885,8 @@
           "The voltage across an ideal current source is unknown, so KVL cannot be written through that branch.",
           "Draw the loop **around** the source instead — the supermesh — and apply KVL to the outer path:",
           "$-9 + R_1 i_1 + R_2 i_2 = 0$.",
-          "The source supplies the missing equation: $i_2 - i_1 = 0.002$.",
-          "Substituting $i_2 = i_1 + 0.002$: $i_1 = \\dfrac{9 - (100)(0.002)}{110 + 100} = 41.9\\,\\text{mA}$, and $i_2 = 43.9\\,\\text{mA}$.",
+          "The source supplies the missing equation: $i_2 - i_1 = 0.001$.",
+          "Substituting $i_2 = i_1 + 0.001$: $i_1 = \\dfrac{9 - (4300)(0.001)}{360 + 4300} = 1.01\\,\\text{mA}$, and $i_2 = 2.01\\,\\text{mA}$.",
           "Note the symmetry with the supernode: unknown current there, unknown voltage here, and in both cases the source itself provides the constraint."
         ],
         "principle": "A supermesh routes KVL around a shared current source, and the source supplies the constraint between the two mesh currents.",
@@ -9934,26 +10045,43 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 0.75,
-      "stem": "Two clockwise meshes share a branch containing a 1\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.001$ A. Mesh 1 also contains a 12\\,\\text{V} source and $R_1 = 2.4\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 100\\,\\text{\\Omega}$. Find $i_1$.",
+      "difficultyB": 1.564,
+      "stem": "Two clockwise meshes share a branch containing a 5\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.005$ A. Mesh 1 also contains a 12\\,\\text{V} source and $R_1 = 1.5\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 2.7\\,\\text{k\\Omega}$. Find $i_1$.",
       "seed": 16,
       "answer": {
         "kind": "numeric",
-        "value": 0.00476,
+        "value": -0.00035714285714285714,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "supermesh.source-ignored",
+          "value": 0.002857142857142857,
+          "tolerance": {
+            "rel": 0.015
+          },
+          "feedback": "You solved a single loop as if the current source were not there. The source forces a fixed difference between the mesh currents, and that constraint changes the answer."
+        },
+        {
+          "misconception": "supermesh.constraint-sign-error",
+          "value": 0.006071428571428571,
+          "tolerance": {
+            "rel": 0.015
+          },
+          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.005$, substituting $i_2 = i_1 + 0.005$ makes the $R_2 I_s$ term **subtract** from $V_s$."
+        }
+      ],
       "explanation": {
         "steps": [
           "The voltage across an ideal current source is unknown, so KVL cannot be written through that branch.",
           "Draw the loop **around** the source instead — the supermesh — and apply KVL to the outer path:",
           "$-12 + R_1 i_1 + R_2 i_2 = 0$.",
-          "The source supplies the missing equation: $i_2 - i_1 = 0.001$.",
-          "Substituting $i_2 = i_1 + 0.001$: $i_1 = \\dfrac{12 - (100)(0.001)}{2400 + 100} = 4.76\\,\\text{mA}$, and $i_2 = 5.76\\,\\text{mA}$.",
+          "The source supplies the missing equation: $i_2 - i_1 = 0.005$.",
+          "Substituting $i_2 = i_1 + 0.005$: $i_1 = \\dfrac{12 - (2700)(0.005)}{1500 + 2700} = -357\\,\\text{\\mu A}$, and $i_2 = 4.64\\,\\text{mA}$.",
           "Note the symmetry with the supernode: unknown current there, unknown voltage here, and in both cases the source itself provides the constraint."
         ],
         "principle": "A supermesh routes KVL around a shared current source, and the source supplies the constraint between the two mesh currents.",
@@ -9982,12 +10110,12 @@
           "weight": 0.2
         }
       ],
-      "difficultyB": 1.443,
-      "stem": "Two clockwise meshes share a branch containing a 1\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.001$ A. Mesh 1 also contains a 12\\,\\text{V} source and $R_1 = 1.3\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 560\\,\\text{\\Omega}$. Find $i_1$.",
+      "difficultyB": 1.256,
+      "stem": "Two clockwise meshes share a branch containing a 2\\,\\text{mA} current source, oriented so that $i_2 - i_1 = 0.002$ A. Mesh 1 also contains a 12\\,\\text{V} source and $R_1 = 1.8\\,\\text{k\\Omega}$; mesh 2 also contains $R_2 = 6.2\\,\\text{k\\Omega}$. Find $i_1$.",
       "seed": 17,
       "answer": {
         "kind": "numeric",
-        "value": 0.006150537634408602,
+        "value": -0.00005000000000000004,
         "unit": "A",
         "tolerance": {
           "rel": 0.02
@@ -9997,7 +10125,7 @@
       "misconceptionTraps": [
         {
           "misconception": "supermesh.source-ignored",
-          "value": 0.0064516129032258064,
+          "value": 0.0015,
           "tolerance": {
             "rel": 0.015
           },
@@ -10005,11 +10133,11 @@
         },
         {
           "misconception": "supermesh.constraint-sign-error",
-          "value": 0.006752688172043011,
+          "value": 0.0030499999999999998,
           "tolerance": {
             "rel": 0.015
           },
-          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.001$, substituting $i_2 = i_1 + 0.001$ makes the $R_2 I_s$ term **subtract** from $V_s$."
+          "feedback": "Your constraint runs the wrong way. With $i_2 - i_1 = +0.002$, substituting $i_2 = i_1 + 0.002$ makes the $R_2 I_s$ term **subtract** from $V_s$."
         }
       ],
       "explanation": {
@@ -10017,8 +10145,8 @@
           "The voltage across an ideal current source is unknown, so KVL cannot be written through that branch.",
           "Draw the loop **around** the source instead — the supermesh — and apply KVL to the outer path:",
           "$-12 + R_1 i_1 + R_2 i_2 = 0$.",
-          "The source supplies the missing equation: $i_2 - i_1 = 0.001$.",
-          "Substituting $i_2 = i_1 + 0.001$: $i_1 = \\dfrac{12 - (560)(0.001)}{1300 + 560} = 6.15\\,\\text{mA}$, and $i_2 = 7.15\\,\\text{mA}$.",
+          "The source supplies the missing equation: $i_2 - i_1 = 0.002$.",
+          "Substituting $i_2 = i_1 + 0.002$: $i_1 = \\dfrac{12 - (6200)(0.002)}{1800 + 6200} = -50\\,\\text{\\mu A}$, and $i_2 = 1.95\\,\\text{mA}$.",
           "Note the symmetry with the supernode: unknown current there, unknown voltage here, and in both cases the source itself provides the constraint."
         ],
         "principle": "A supermesh routes KVL around a shared current source, and the source supplies the constraint between the two mesh currents.",

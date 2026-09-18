@@ -73,8 +73,20 @@ jobs:
             || (echo "::error::The committed bank differs from what the generators now produce. Run 'pnpm content build --variants=18' and commit the result." && exit 1)
 
       # The gate that matters: every stated answer independently reproduced.
+      #
+      # --strict, because the shared bank is entirely generator output and the
+      # warnings are all things a generator should never emit: an item with no
+      # misconception trap, a symbolic answer with no residual to re-derive it,
+      # a worked solution whose closing steps never state the result. Running
+      # this non-strict let seven trapless items ship unnoticed — they graded
+      # correctly and diagnosed nothing, which is the failure mode hardest to
+      # see from the outside.
+      #
+      # If hand-authored or imported content ever lands in content/packs/shared
+      # this will fail on `regeneration` (no generator to re-run), and that is
+      # the right moment to scope the flag rather than now.
       - name: Verify every answer
-        run: pnpm content verify
+        run: pnpm content verify --strict
 
   e2e:
     name: End-to-end placement flow

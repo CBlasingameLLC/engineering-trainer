@@ -153,9 +153,24 @@ export const powerSetAndProducts: Generator = {
   ],
   difficultyB: -0.6,
   generate(rng: Rng) {
-    const sizeA = intBetween(rng, 2, 6);
-    const sizeB = intBetween(rng, 2, 5);
     const kind = pick(rng, ['power', 'product', 'product-power'] as const);
+
+    // 2 is the one size where 2^n, 2n and n^2 all coincide, so a power draw at
+    // |A| = 2 puts both traps exactly on the answer and `separatedTraps`
+    // rightly deletes them — shipping an item that cannot diagnose anything.
+    // The same happens to the product form whenever |A| = |B| (the squared
+    // trap lands on the answer) or |A| = |B| = 2 (so does the additive one).
+    // Constrain the draw rather than leaving the backstop to empty it.
+    const [sizeA, sizeB] = resampleUntil(
+      rng,
+      (r) => [intBetween(r, 2, 6), intBetween(r, 2, 5)] as [number, number],
+      ([a, b]) => {
+        const answer = kind === 'power' ? 2 ** a : kind === 'product' ? a * b : 2 ** (a * b);
+        const linear = kind === 'product' ? a + b : 2 * a;
+        const confused = kind === 'product-power' ? 2 ** a * 2 ** b : a ** 2;
+        return linear !== answer && confused !== answer;
+      },
+    );
 
     const value =
       kind === 'power' ? 2 ** sizeA

@@ -1,8 +1,8 @@
 import type { Generator } from '../types.js';
 import { DEFAULT_TOLERANCE } from '../types.js';
 import {
-  adjustDifficulty, amps, mantissaDifficulty, ohms, pick, ratioDifficulty, resistor, supplyVoltage,
-  trimNumber, volts, type Rng,
+  adjustDifficulty, amps, mantissaDifficulty, ohms, pick, ratioDifficulty, resampleUntil, resistor,
+  supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
 import { separatedTraps } from '../traps.js';
 
@@ -96,9 +96,21 @@ export const meshTwoLoop: Generator = {
   difficultyB: 0.25,
   generate(rng: Rng) {
     const vs = supplyVoltage(rng);
-    const r1 = resistor(rng, { minDecade: 2, maxDecade: 3 });
-    const r2 = resistor(rng, { minDecade: 2, maxDecade: 3 });
-    const r3 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    // The coupling term is worth R3^2/((R1+R3)(R2+R3)) of the answer, so a small
+    // shared branch makes the "solved mesh 1 alone" trap land within answer
+    // tolerance of the right value — `separatedTraps` then deletes it and the
+    // item ships unable to detect the one error it was built around. Require
+    // the two to differ by enough that answering either is a decision.
+    const [r1, r2, r3] = resampleUntil(
+      rng,
+      (r) =>
+        [
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+        ] as [number, number, number],
+      ([a, b, c]) => (c * c) / ((a + c) * (b + c)) >= 0.06,
+    );
 
     // (R1+R3) i1 - R3 i2 = Vs ;  -R3 i1 + (R2+R3) i2 = 0
     const det = (r1 + r3) * (r2 + r3) - r3 * r3; // = R1(R2+R3) + R2 R3
@@ -250,10 +262,22 @@ export const supermesh: Generator = {
   difficultyB: 0.75,
   generate(rng: Rng) {
     const vs = supplyVoltage(rng);
-    const isMa = pick(rng, [1, 2, 3, 4, 5]);
+    // Both traps here differ from the answer only by the R2*Is term, so when
+    // that term is a small fraction of Vs they both fall inside answer
+    // tolerance and the item ships with nothing to diagnose. The source has to
+    // be doing visible work for "you ignored the source" to be a distinguishable
+    // wrong answer.
+    const [isMa, r1, r2] = resampleUntil(
+      rng,
+      (r) =>
+        [
+          pick(r, [1, 2, 3, 4, 5]),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+        ] as [number, number, number],
+      ([ma, , b]) => (b * (ma / 1000)) / vs >= 0.08,
+    );
     const is = isMa / 1000;
-    const r1 = resistor(rng, { minDecade: 2, maxDecade: 3 });
-    const r2 = resistor(rng, { minDecade: 2, maxDecade: 3 });
 
     // Supermesh KVL: -Vs + R1*i1 + R2*i2 = 0, with constraint i2 - i1 = Is.
     const i1 = (vs - r2 * is) / (r1 + r2);

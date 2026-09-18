@@ -338,9 +338,20 @@ export const gcdAndModular: Generator = {
     const base = intBetween(rng, 2, modulus - 1);
 
     if (mode === 'mod-power') {
-      const exponent = intBetween(rng, 3, 8);
-      let value = 1;
-      for (let i = 0; i < exponent; i++) value = (value * base) % modulus;
+      const modPow = (b: number, e: number) => {
+        let acc = 1;
+        for (let i = 0; i < e; i++) acc = (acc * b) % modulus;
+        return acc;
+      };
+      // Whenever base^e and base*e happen to agree mod n the trap lands on the
+      // answer — 6^6 = 0 and 6*6 = 0 (mod 9) is one of several — and the item
+      // ships with nothing to diagnose. Resample instead.
+      const exponent = resampleUntil(
+        rng,
+        (r) => intBetween(r, 3, 8),
+        (e) => (base * e) % modulus !== modPow(base, e),
+      );
+      const value = modPow(base, exponent);
       return {
         type: 'numeric' as const,
         kcRefs: this.kcRefs,

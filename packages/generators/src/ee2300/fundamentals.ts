@@ -65,7 +65,27 @@ export const ohmsLaw: Generator = {
         stem: `A current of ${amps(i)} flows through a ${ohms(r)} resistor. Find the voltage across it.`,
         answer: { kind: 'numeric' as const, value: v, unit: 'V', tolerance: DEFAULT_TOLERANCE },
         options: [],
-        misconceptionTraps: [],
+        // The other two branches carry traps and this one shipped with none,
+        // on the reasoning that a direct multiplication has nothing to get
+        // wrong. It does: the learner who has memorised "Ohm's law is a
+        // division" divides here too, and which way round they divide says
+        // which of the two rearrangements they half-remember. Leaving it empty
+        // made the easiest item in the course the only one that could observe
+        // nothing.
+        misconceptionTraps: separatedTraps(v, DEFAULT_TOLERANCE, [
+          {
+            misconception: 'ohms-law.inverted',
+            value: i / r,
+            tolerance: { rel: 0.02 },
+            feedback: `You divided. With the current and the resistance both known, Ohm's law is used forwards: $V = IR = ${trimNumber(i)} \\times ${trimNumber(r)}$.`,
+          },
+          {
+            misconception: 'ohms-law.inverted',
+            value: r / i,
+            tolerance: { rel: 0.02 },
+            feedback: `That is $R/I$. Dividing is what you do when the voltage is the *known* quantity; here it is the unknown, so multiply.`,
+          },
+        ]),
         explanation: {
           steps: [
             `Ohm's law gives the voltage directly: $V = IR$.`,

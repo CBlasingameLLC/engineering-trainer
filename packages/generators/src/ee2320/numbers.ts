@@ -272,7 +272,11 @@ export const binaryCodes: Generator = {
     const width = 4;
 
     if (mode === 'gray') {
-      const value = intBetween(rng, 0, 15);
+      // v ^ (v >> 1) == v exactly when v >> 1 == 0, so 0 and 1 are their own
+      // Gray codes and the "you answered the original binary" trap lands on the
+      // answer. Both are legitimate questions and neither can diagnose the one
+      // error this item exists to catch, so they are excluded at the draw.
+      const value = intBetween(rng, 2, 15);
       const gray = value ^ (value >> 1);
       return {
         type: 'numeric' as const,

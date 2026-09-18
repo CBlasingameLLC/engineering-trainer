@@ -3059,23 +3059,32 @@
         }
       ],
       "difficultyB": 0.06,
-      "stem": "Convert the 4-bit binary value $0000_2$ to Gray code. Enter the result as a binary number.",
+      "stem": "Convert the 4-bit binary value $0010_2$ to Gray code. Enter the result as a binary number.",
       "seed": 7,
       "answer": {
         "kind": "numeric",
-        "value": 0,
+        "value": 11,
         "unit": "",
         "tolerance": {
           "abs": 0.01
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "codes.gray-conversion-reversed",
+          "value": 10,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "That is the original binary. Gray code XORs each bit with the one above it, so consecutive values differ in exactly one bit."
+        }
+      ],
       "explanation": {
         "steps": [
           "Gray code: keep the MSB, then XOR each bit with the bit to its left.",
-          "$0000 \\rightarrow 0000$.",
-          "Enter 0000."
+          "$0010 \\rightarrow 0011$.",
+          "Enter 0011."
         ],
         "principle": "Gray code changes one bit between adjacent values, which is exactly why Karnaugh map rows and columns are labelled with it.",
         "hints": [
@@ -3300,23 +3309,32 @@
         }
       ],
       "difficultyB": 0.06,
-      "stem": "Convert the 4-bit binary value $0001_2$ to Gray code. Enter the result as a binary number.",
+      "stem": "Convert the 4-bit binary value $0011_2$ to Gray code. Enter the result as a binary number.",
       "seed": 12,
       "answer": {
         "kind": "numeric",
-        "value": 1,
+        "value": 10,
         "unit": "",
         "tolerance": {
           "abs": 0.01
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "codes.gray-conversion-reversed",
+          "value": 11,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "That is the original binary. Gray code XORs each bit with the one above it, so consecutive values differ in exactly one bit."
+        }
+      ],
       "explanation": {
         "steps": [
           "Gray code: keep the MSB, then XOR each bit with the bit to its left.",
-          "$0001 \\rightarrow 0001$.",
-          "Enter 0001."
+          "$0011 \\rightarrow 0010$.",
+          "Enter 0010."
         ],
         "principle": "Gray code changes one bit between adjacent values, which is exactly why Karnaugh map rows and columns are labelled with it.",
         "hints": [
@@ -3441,11 +3459,11 @@
         }
       ],
       "difficultyB": 0.06,
-      "stem": "Convert the 4-bit binary value $0110_2$ to Gray code. Enter the result as a binary number.",
+      "stem": "Convert the 4-bit binary value $0111_2$ to Gray code. Enter the result as a binary number.",
       "seed": 15,
       "answer": {
         "kind": "numeric",
-        "value": 101,
+        "value": 100,
         "unit": "",
         "tolerance": {
           "abs": 0.01
@@ -3455,7 +3473,7 @@
       "misconceptionTraps": [
         {
           "misconception": "codes.gray-conversion-reversed",
-          "value": 110,
+          "value": 111,
           "tolerance": {
             "abs": 0.01
           },
@@ -3465,8 +3483,8 @@
       "explanation": {
         "steps": [
           "Gray code: keep the MSB, then XOR each bit with the bit to its left.",
-          "$0110 \\rightarrow 0101$.",
-          "Enter 0101."
+          "$0111 \\rightarrow 0100$.",
+          "Enter 0100."
         ],
         "principle": "Gray code changes one bit between adjacent values, which is exactly why Karnaugh map rows and columns are labelled with it.",
         "hints": [
@@ -6680,7 +6698,16 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "gates.tied-input-inverter-missed",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "One gate is enough. Tie both inputs of a NAND to the same signal and it computes $\\overline{A \\cdot A} = \\overline{A}$ — that is why NAND is universal in the first place."
+        }
+      ],
       "explanation": {
         "steps": [
           "NAND with both inputs tied is an inverter — that is the first building block.",
@@ -6771,7 +6798,16 @@
         }
       },
       "options": [],
-      "misconceptionTraps": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "gates.tied-input-inverter-missed",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.01
+          },
+          "feedback": "One gate is enough. Tie both inputs of a NOR to the same signal and it computes $\\overline{A + A} = \\overline{A}$ — that is why NOR is universal in the first place."
+        }
+      ],
       "explanation": {
         "steps": [
           "NOR with both inputs tied is an inverter — that is the first building block.",

@@ -277,6 +277,7 @@ misconceptions:
   - { id: decoder.active-level-ignored,              family: network-topology, title: "Active level of a decoder output ignored" }
   - { id: decoder.output-count-confused,             family: network-topology, title: "Decoder input value confused with an output count" }
   - { id: gates.inverter-not-counted,                family: network-topology, title: "Inverter stages not counted in a gate total" }
+  - { id: gates.tied-input-inverter-missed,          family: network-topology, title: "Did not use a tied-input gate as the inverter" }
   - { id: graphs.handshake-factor-two,               family: network-topology, title: "Degree sum confused with edge count" }
   - { id: graphs.tree-edge-count-off-by-one,         family: network-topology, title: "Tree edge count off by one" }
   - { id: graphs.tree-edges-doubled,                 family: network-topology, title: "Tree edge count doubled" }
