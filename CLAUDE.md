@@ -187,6 +187,18 @@ packs by the schema, and never enters a release build. Don't weaken that.
   `pnpm content build --variants=18` and fails on any diff under
   `content/packs/shared/`. Item ids embed the seed (`<generator-id>.s<seed>`),
   so this catches drift rather than silently renumbering.
+- **CI verifies `--strict`, and an item with no trap fails it.** The shared
+  bank is entirely generator output, so every strict warning is something a
+  generator should never emit: a numeric item with no misconception trap, a
+  symbolic answer with no residual, a worked solution whose closing steps never
+  state the result. Running it non-strict let 14 trapless items ship — they
+  graded correctly and diagnosed nothing, which looks identical to working.
+  When `separatedTraps` empties a trap list, the fix is at the *draw*: constrain
+  the parameters so the trap cannot collide with the answer (power sets at
+  |A| = 2 make 2^n, 2n and n^2 coincide; a two-mesh circuit with a tiny shared
+  branch puts the uncoupled shortcut inside answer tolerance). A trap that
+  clamps onto the answer — `max(1, value - 1)` when the answer is 1 — needs a
+  different trap, not a different draw.
 - **Never synthesize a study history to seed FSRS.** A semester of fabricated
   reviews inflates stability to S≈270d, so a year-old prerequisite reports
   R≈0.88 and looks perfectly retained — defeating the entire product. Use
@@ -401,7 +413,16 @@ through onboarding, and confirmed to apply both migrations and write to SQLite.
 adds cleanly, but `xwin` must fetch the MSVC CRT from Microsoft and the
 container's network policy denies that host. `.github/workflows/windows.yml`
 builds `.msi` and `.exe` on `windows-latest` and uploads them as run artifacts.
-Nobody has run those binaries — they compile, which is not the same claim.
+Nobody has run those binaries — they compile and bundle, which is not the same
+claim.
+
+That build found a third defect of the same shape as the two below: the `.exe`
+compiled cleanly and then WiX failed with `Couldn't find a .ico icon`, because
+`bundle.icon` in `tauri.conf.json` declared only `icons/icon.png` while
+`icons/icon.ico` sat undeclared on disk. **The Linux bundler tolerates a
+partial icon list and the Windows ones do not**, so the omission was invisible
+on the only platform that had ever run a bundler. All five standard variants
+are declared now; don't prune it back to what one platform needs.
 
 Compiling it the first time found two defects the browser path cannot surface,
 both now fixed and both worth knowing about:

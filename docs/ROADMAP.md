@@ -18,7 +18,7 @@ machinery exists.
 | Content pipeline | One schema, five producers, `validate / verify / stats / build / import` |
 | EE 2300 Circuits I | 28 KCs, 26 generators, 467 verified items |
 | MATH 2471 / 3323 / 3376 | 13 generators, 209 verified items, all 6 cross-course KCs covered |
-| MATH 2358 Discrete Mathematics | 25 KCs, 309 items across all five units |
+| MATH 2358 Discrete Mathematics | 25 KCs, 308 items across all four units |
 | EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
 | Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |
@@ -29,6 +29,7 @@ machinery exists.
 | Skill tree | Real prerequisite DAG, locked/available/learning/proficient/mastered |
 | Progression | Difficulty-weighted XP with retrieval bonus, streaks with freezes, daily quests, challenge exams |
 | Credentials | 17 entries ranked against measured gaps |
+| Windows package | `.msi` and `.exe` built and bundled in CI, published as run artifacts |
 
 ---
 
@@ -123,11 +124,18 @@ them; **EE 3350 Microelectronics does**, and it is a concentration course.
 
 ### 7. macOS installer, and running the Windows one
 
-Windows `.msi` and `.exe` are built by `.github/workflows/windows.yml` on
-`windows-latest` and published as run artifacts. They **compile**; nobody has
-run them. The first Linux compile found two defects that only appear in a
-desktop build, and there is no reason to assume Windows is cleaner — so the
-first real launch is worth doing attentively.
+`.github/workflows/windows.yml` builds `Engineering Trainer_0.1.0_x64_en-US.msi`
+(4.7 MB) and `Engineering Trainer_0.1.0_x64-setup.exe` (3.8 MB) on
+`windows-latest` and publishes them as run artifacts, kept 30 days.
+
+They **compile and bundle**; nobody has run them. That is a real distinction:
+the first Windows attempt compiled the `.exe` cleanly and then failed at
+bundling, because `bundle.icon` declared only `icons/icon.png` while WiX and
+NSIS both require a `.ico`. The Linux bundler tolerates the omission, so the
+defect was invisible on the only platform that had ever bundled. The first
+Linux compile found two defects of the same shape (an uninstalled plugin
+package hidden by a `.d.ts` shim, and a Tauri v2 capability that was never
+granted), so the first real launch on Windows is worth doing attentively.
 
 macOS (`.dmg`) needs a `macos-latest` job on the same pattern.
 
