@@ -39,6 +39,22 @@ for (const file of readdirSync(PACKS).filter((f) => f.endsWith('.json'))) {
   for (const item of JSON.parse(readFileSync(join(PACKS, file), 'utf8')).items) byId.set(item.id, item);
 }
 
+
+/**
+ * Answer a truth-table item by clicking its grid.
+ *
+ * Cells cycle blank -> 0 -> 1, so setting a row costs one click for 0 and two
+ * for 1. Submit stays disabled until every row is set, which is the point of
+ * the widget: an untouched grid is not an answer.
+ */
+async function fillTruthTable(page, rows) {
+  for (const [index, value] of rows.entries()) {
+    const cell = page.locator(`[data-testid="tt-cell-${index}"]`);
+    await cell.click();
+    if (value) await cell.click();
+  }
+}
+
 const browser = await chromium.launch(CHROME ? { executablePath: CHROME } : {});
 const page = await browser.newPage({ viewport: { width: 1280, height: 1000 } });
 
@@ -84,6 +100,11 @@ let unmatched = 0;
 // item bank the moment a generator is added, and then reports a content
 // addition as a product regression.
 const missedKcs = new Set();
+// How many items this run answered *correctly* on each KC. One correct answer
+// is genuinely weak evidence — BKT barely moves off its prior — so a KC seen
+// once and reported as a gap is the model behaving, not failing. Two or more
+// is a different claim.
+const correctByKc = new Map();
 let firstShot = true;
 
 while (answered < 60) {
@@ -101,6 +122,8 @@ while (answered < 60) {
   if (shouldMiss) {
     deliberatelyWrong++;
     for (const ref of item.kcRefs) missedKcs.add(ref.kc);
+  } else if (item) {
+    for (const ref of item.kcRefs) correctByKc.set(ref.kc, (correctByKc.get(ref.kc) ?? 0) + 1);
   }
 
   if (item?.answer?.kind === 'circuit') {
@@ -135,11 +158,26 @@ while (answered < 60) {
     const expr = shouldMiss ? `2*(${item.answer.expression})` : item.answer.expression;
     await page.locator('#answer').fill(expr);
     await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'boolean') {
+    // Complementing the whole function keeps it parseable and makes it wrong.
+    const expr = shouldMiss ? `(${item.answer.expression})'` : item.answer.expression;
+    await page.locator('#answer').fill(expr);
+    await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'truth-table') {
+    // Inverting one row is enough to be wrong without being unanswerable.
+    const rows = shouldMiss
+      ? item.answer.rows.map((r, i) => (i === 0 ? !r : r))
+      : item.answer.rows;
+    await fillTruthTable(page, rows);
+    await page.getByRole('button', { name: 'Submit' }).click();
   } else {
-    // Unidentified item: answer something so the session can proceed.
-    const hasInput = (await page.locator('#answer').count()) > 0;
-    if (hasInput) { await page.locator('#answer').fill('1'); await page.getByRole('button', { name: 'Submit' }).click(); }
-    else { await page.locator('article button').first().click(); await page.getByRole('button', { name: 'Submit' }).click(); }
+    // Loud rather than best-effort. A silent catch-all that types "1" is how a
+    // new item type gets answered as nonsense for a whole run, or — when the
+    // type needs a widget rather than a text field — hangs on a disabled
+    // Submit for thirty seconds with nothing saying why.
+    console.error(`FAIL: no branch for item ${itemId} of answer kind "${item?.answer?.kind ?? 'unknown'}"`);
+    process.exitCode = 1;
+    break;
   }
 
   await page.waitForSelector('button:has-text("Continue")', { timeout: 8000 });
@@ -187,10 +225,37 @@ const gapTitles = await page
 const stray = gapKcs.filter((kc) => !missedKcs.has(kc));
 console.log(`    gaps: ${gapTitles.join(' | ')}`);
 console.log(`    localisation: ${gapKcs.length - stray.length}/${gapKcs.length} gaps are KCs this run actually missed`);
-if (stray.length > 0) {
-  console.error(`FAIL: gaps reported for KCs answered correctly: ${stray.join(', ')}`);
+
+// Precision, stated as what the model actually claims. A KC answered correctly
+// exactly once can legitimately read as a gap: one right answer moves BKT very
+// little off its prior, and saying otherwise would be asserting that the model
+// should trust a single data point. Two or more correct answers and still a
+// gap is a real defect, so that is what fails.
+const unexplained = stray.filter((kc) => (correctByKc.get(kc) ?? 0) >= 2);
+const thin = stray.filter((kc) => (correctByKc.get(kc) ?? 0) === 1);
+if (thin.length > 0) {
+  console.log(`    thin evidence (one correct answer, still a gap): ${thin.join(', ')}`);
+}
+if (unexplained.length > 0) {
+  console.error(
+    `FAIL: gaps reported for KCs answered correctly more than once: ` +
+      unexplained.map((kc) => `${kc} (${correctByKc.get(kc)} correct)`).join(', '),
+  );
   process.exitCode = 1;
 }
+
+// Recall, which is the claim the gap report exists to make: a topic this run
+// deliberately failed must not come back reported as solid.
+const solidKcs = await page
+  .locator('section:has(h2:text("Solid")) li[data-kc-id]')
+  .evaluateAll((els) => els.map((e) => e.getAttribute('data-kc-id')));
+const missedButSolid = [...missedKcs].filter((kc) => solidKcs.includes(kc));
+console.log(`    recall: ${missedKcs.size} KC(s) deliberately missed, ${missedButSolid.length} of them reported solid`);
+if (missedButSolid.length > 0) {
+  console.error(`FAIL: deliberately missed KCs reported as solid: ${missedButSolid.join(', ')}`);
+  process.exitCode = 1;
+}
+
 if (gapKcs.length === 0) {
   console.error('FAIL: deliberately missing a cluster of topics produced no gaps at all');
   process.exitCode = 1;

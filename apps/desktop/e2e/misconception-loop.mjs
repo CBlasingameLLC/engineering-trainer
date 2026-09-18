@@ -37,6 +37,22 @@ for (const file of readdirSync(PACKS).filter((f) => f.endsWith('.json'))) {
 }
 console.log(`[0] loaded ${byId.size} items from ${readdirSync(PACKS).length} packs`);
 
+
+/**
+ * Answer a truth-table item by clicking its grid.
+ *
+ * Cells cycle blank -> 0 -> 1, so setting a row costs one click for 0 and two
+ * for 1. Submit stays disabled until every row is set, which is the point of
+ * the widget: an untouched grid is not an answer.
+ */
+async function fillTruthTable(page, rows) {
+  for (const [index, value] of rows.entries()) {
+    const cell = page.locator(`[data-testid="tt-cell-${index}"]`);
+    await cell.click();
+    if (value) await cell.click();
+  }
+}
+
 const browser = await chromium.launch(CHROME ? { executablePath: CHROME } : {});
 const page = await browser.newPage({ viewport: { width: 1400, height: 1100 } });
 
@@ -128,9 +144,24 @@ while (answered < 60) {
     await page.locator('button[data-circuit-input="netlist"]').click();
     await page.locator('#netlist').fill(item.answer.reference);
     await page.getByRole('button', { name: 'Submit' }).click();
-  } else {
-    await page.locator('#answer').fill('1');
+  } else if (item?.answer?.kind === 'boolean') {
+    const traps = (item.misconceptionTraps ?? []).filter((t) => t.expression !== undefined);
+    const trap = traps.find((t) => committed.has(t.misconception)) ?? traps[0];
+    if (trap) {
+      note(trap.misconception);
+      await page.locator('#answer').fill(trap.expression);
+    } else {
+      await page.locator('#answer').fill(item.answer.expression);
+    }
     await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'truth-table') {
+    // Truth tables carry no traps — a wrong grid is a wrong grid, not a named
+    // error — so this one is answered correctly and simply moves the run on.
+    await fillTruthTable(page, item.answer.rows);
+    await page.getByRole('button', { name: 'Submit' }).click();
+  } else {
+    fail(`no branch for item ${itemId} of answer kind "${item?.answer?.kind ?? 'unknown'}"`);
+    break;
   }
 
   await page.getByRole('button', { name: 'Continue' }).click();
@@ -216,6 +247,10 @@ if (drillCount === 0) {
     } else if (item?.answer?.kind === 'choice') {
       await page.locator('article button')
         .filter({ hasText: new RegExp(`^${item.answer.correctId.toUpperCase()}`) }).first().click();
+    } else if (item?.answer?.kind === 'boolean') {
+      await page.locator('#answer').fill(item.answer.expression);
+    } else if (item?.answer?.kind === 'truth-table') {
+      await fillTruthTable(page, item.answer.rows);
     } else if (item?.answer?.kind === 'circuit') {
       await page.locator('button[data-circuit-input="netlist"]').click();
       await page.locator('#netlist').fill(item.answer.reference);

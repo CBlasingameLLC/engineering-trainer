@@ -131,6 +131,13 @@ jobs:
       - name: Drive the misconception feed and a targeted drill
         run: pnpm --filter @et/desktop e2e:misconceptions
 
+      # Reads computed colours out of the running page on every route. A dark
+      # mode fails in a way no unit test sees: the class applies, the store is
+      # right, and one region is invisible because a utility never got its
+      # variant.
+      - name: Check dark mode contrast and the theme control
+        run: pnpm --filter @et/desktop e2e:theme
+
       - name: Upload screenshots on failure
         if: failure()
         uses: actions/upload-artifact@v7
