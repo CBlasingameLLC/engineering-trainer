@@ -200,7 +200,7 @@ describe('checkSymbolic', () => {
 
 describe('checkTruthTable', () => {
   const xorAnswer: TruthTableAnswer = {
-    kind: 'truth-table', inputs: ['A', 'B'], rows: [false, true, true, false],
+    kind: 'truth-table', inputs: ['A', 'B'], output: 'F', rows: [false, true, true, false],
   };
 
   it('accepts an exactly matching table', () => {

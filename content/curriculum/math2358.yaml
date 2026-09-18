@@ -1,0 +1,311 @@
+# MATH 2358 — Discrete Mathematics (Texas State University, 2026 catalog)
+#
+# On the computer science pathway rather than the EE one, and included anyway
+# because the overlap with EE 2320 is the point. Propositional logic, De Morgan
+# and Boolean algebra are the same mathematics a digital logic course applies to
+# gates, and a student who has met both has two chances to notice a gap in
+# either. The cross-course edges declared in ee2320.yaml are what let a failure
+# on one side be traced to the other.
+#
+# Scoped broadly on purpose: the whole syllabus, before narrowing against the
+# actual textbook and quizzes.
+
+code: MATH2358
+title: Discrete Mathematics
+institution: Texas State University
+catalogYear: 2026
+tier: 1
+credits: 3
+
+kcs:
+  # --- Unit 1: Logic and proof ----------------------------------------------
+  - id: math2358.propositional-logic
+    title: Propositional logic and connectives
+    unit: Logic and Proof
+    domain: math
+    competencies: [concept, math-execution]
+    difficultyPrior: -1.4
+    description: >-
+      Negation, conjunction, disjunction, exclusive or, and building the truth
+      table of a compound proposition. The foundation the rest of the course
+      and every logic gate stand on.
+    prerequisites: []
+
+  - id: math2358.conditional-statements
+    title: Conditionals, converse, inverse and contrapositive
+    unit: Logic and Proof
+    domain: math
+    competencies: [concept, strategy]
+    difficultyPrior: -0.6
+    description: >-
+      The implication p -> q, its three relatives, and which of them are
+      logically equivalent to it. The contrapositive being equivalent while the
+      converse is not is the single most reused fact in the course.
+    prerequisites:
+      - math2358.propositional-logic
+
+  - id: math2358.logical-equivalence
+    title: Logical equivalence and De Morgan's laws
+    unit: Logic and Proof
+    domain: math
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.3
+    description: >-
+      Tautology, contradiction, and rewriting a proposition into an equivalent
+      form. De Morgan appears here first and then again in sets, in Boolean
+      algebra and in gate minimisation — it is one theorem wearing four
+      notations.
+    prerequisites:
+      - math2358.propositional-logic
+
+  - id: math2358.boolean-algebra
+    title: Boolean algebra as an algebraic system
+    unit: Logic and Proof
+    domain: math
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.1
+    description: >-
+      The axioms, the duality principle, and simplifying an expression by
+      algebraic manipulation rather than by table. The abstract structure that
+      EE 2320 applies to hardware.
+    prerequisites:
+      - math2358.logical-equivalence
+
+  - id: math2358.predicate-logic
+    title: Predicates and quantifiers
+    unit: Logic and Proof
+    domain: math
+    competencies: [concept, modeling]
+    difficultyPrior: 0.4
+    description: >-
+      Universal and existential quantification, nested quantifiers, and
+      negating a quantified statement. Order of nested quantifiers changes
+      meaning and is where most of the marks go.
+    prerequisites:
+      - math2358.propositional-logic
+
+  - id: math2358.proof-methods
+    title: Direct proof, contraposition and contradiction
+    unit: Logic and Proof
+    domain: math
+    competencies: [strategy, concept]
+    difficultyPrior: 0.7
+    description: >-
+      Choosing a proof strategy and knowing what each one assumes and must
+      establish. Recognising which method a statement invites is the skill;
+      executing it is comparatively mechanical.
+    prerequisites:
+      - math2358.conditional-statements
+      - math2358.predicate-logic
+
+  # --- Unit 2: Sets, relations and functions --------------------------------
+  - id: math2358.set-operations
+    title: Set operations and membership
+    unit: Sets, Relations and Functions
+    domain: math
+    competencies: [concept, visual]
+    difficultyPrior: -1.2
+    description: >-
+      Union, intersection, complement, difference, subset and power set, with
+      Venn diagrams and membership tables as the two ways of seeing them.
+    prerequisites: []
+
+  - id: math2358.set-identities
+    title: Set identities and membership tables
+    unit: Sets, Relations and Functions
+    domain: math
+    competencies: [math-execution, visual]
+    difficultyPrior: -0.2
+    description: >-
+      Proving set identities by membership table or by algebraic manipulation.
+      A membership table is a truth table with different labels, which is why
+      the same widget serves both.
+    prerequisites:
+      - math2358.set-operations
+      - kc: math2358.logical-equivalence
+        strength: 0.7
+
+  - id: math2358.cartesian-products
+    title: Cartesian products and ordered pairs
+    unit: Sets, Relations and Functions
+    domain: math
+    competencies: [concept, numeracy]
+    difficultyPrior: -0.5
+    prerequisites:
+      - math2358.set-operations
+
+  - id: math2358.relation-properties
+    title: Properties of relations
+    unit: Sets, Relations and Functions
+    domain: math
+    competencies: [concept, modeling]
+    difficultyPrior: 0.3
+    description: >-
+      Reflexive, symmetric, antisymmetric and transitive, tested against a
+      relation given as a set of pairs or as a matrix. Antisymmetric is not the
+      negation of symmetric, and treating it as one is the standard error.
+    prerequisites:
+      - math2358.cartesian-products
+
+  - id: math2358.equivalence-relations
+    title: Equivalence relations and partitions
+    unit: Sets, Relations and Functions
+    domain: math
+    competencies: [concept, strategy]
+    difficultyPrior: 0.6
+    description: >-
+      The correspondence between an equivalence relation and a partition of its
+      underlying set, and finding equivalence classes.
+    prerequisites:
+      - math2358.relation-properties
+
+  - id: math2358.functions
+    title: Injective, surjective and bijective functions
+    unit: Sets, Relations and Functions
+    domain: math
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.2
+    description: >-
+      Classifying a function, composing functions, and when an inverse exists.
+    prerequisites:
+      - math2358.cartesian-products
+
+  # --- Unit 3: Combinatorics ------------------------------------------------
+  - id: math2358.counting-principles
+    title: Product and sum rules
+    unit: Combinatorics
+    domain: math
+    competencies: [strategy, numeracy]
+    difficultyPrior: -1.0
+    description: >-
+      Deciding whether choices multiply or add. Nearly every counting error in
+      the course is this decision made wrongly at the first step.
+    prerequisites: []
+
+  - id: math2358.permutations
+    title: Permutations
+    unit: Combinatorics
+    domain: math
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -0.4
+    prerequisites:
+      - math2358.counting-principles
+
+  - id: math2358.combinations
+    title: Combinations
+    unit: Combinatorics
+    domain: math
+    competencies: [math-execution, strategy]
+    difficultyPrior: 0.0
+    description: >-
+      C(n,k) and, more importantly, telling it apart from P(n,k). Whether order
+      matters is the whole question.
+    prerequisites:
+      - math2358.permutations
+
+  - id: math2358.pigeonhole
+    title: The pigeonhole principle
+    unit: Combinatorics
+    domain: math
+    competencies: [strategy, concept]
+    difficultyPrior: 0.5
+    prerequisites:
+      - math2358.counting-principles
+
+  - id: math2358.inclusion-exclusion
+    title: Inclusion-exclusion
+    unit: Combinatorics
+    domain: math
+    competencies: [math-execution, visual]
+    difficultyPrior: 0.6
+    prerequisites:
+      - math2358.counting-principles
+      - math2358.set-operations
+
+  - id: math2358.binomial-theorem
+    title: The binomial theorem and Pascal's identity
+    unit: Combinatorics
+    domain: math
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.4
+    prerequisites:
+      - math2358.combinations
+
+  # --- Unit 4: Induction, recursion, graphs ---------------------------------
+  - id: math2358.mathematical-induction
+    title: Mathematical induction
+    unit: Induction, Recursion and Graphs
+    domain: math
+    competencies: [strategy, math-execution]
+    difficultyPrior: 0.8
+    description: >-
+      Base case, inductive hypothesis, inductive step. Most failed inductions
+      fail at the step where the hypothesis has to actually be used.
+    prerequisites:
+      - math2358.proof-methods
+
+  - id: math2358.recurrence-relations
+    title: Recurrence relations and closed forms
+    unit: Induction, Recursion and Graphs
+    domain: math
+    competencies: [math-execution, modeling]
+    difficultyPrior: 1.0
+    description: >-
+      Solving linear homogeneous recurrences by characteristic root. The same
+      characteristic-equation method as a second-order ODE, over integers.
+    prerequisites:
+      - math2358.mathematical-induction
+
+  - id: math2358.graph-basics
+    title: Graphs, degree and the handshake theorem
+    unit: Induction, Recursion and Graphs
+    domain: math
+    competencies: [concept, visual]
+    difficultyPrior: -0.3
+    prerequisites:
+      - math2358.cartesian-products
+
+  - id: math2358.graph-connectivity
+    title: Paths, connectivity, Euler and Hamilton
+    unit: Induction, Recursion and Graphs
+    domain: math
+    competencies: [concept, strategy, visual]
+    difficultyPrior: 0.5
+    description: >-
+      Walks, paths and circuits, and the degree conditions that decide whether
+      an Euler circuit exists. Euler has a clean criterion and Hamilton does
+      not, which is itself the lesson.
+    prerequisites:
+      - math2358.graph-basics
+
+  - id: math2358.trees
+    title: Trees and their properties
+    unit: Induction, Recursion and Graphs
+    domain: math
+    competencies: [concept, visual]
+    difficultyPrior: 0.3
+    description: >-
+      Edge and vertex counts, rooted trees, and traversals.
+    prerequisites:
+      - math2358.graph-connectivity
+
+  # --- Unit 5: Number theory ------------------------------------------------
+  - id: math2358.gcd-euclidean
+    title: Divisibility and the Euclidean algorithm
+    unit: Number Theory
+    domain: math
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -0.2
+    prerequisites: []
+
+  - id: math2358.modular-arithmetic
+    title: Modular arithmetic and congruences
+    unit: Number Theory
+    domain: math
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.2
+    description: >-
+      Congruence, modular addition and multiplication, and inverses. The same
+      repeated-division-with-remainder that converts a number between bases.
+    prerequisites:
+      - math2358.gcd-euclidean

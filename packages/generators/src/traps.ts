@@ -1,5 +1,5 @@
-import { checkSymbolic } from '@et/answer-engine';
-import type { MisconceptionTrap, SymbolicAnswer } from '@et/content-schema';
+import { checkBoolean, checkSymbolic } from '@et/answer-engine';
+import type { BooleanAnswer, MisconceptionTrap, SymbolicAnswer } from '@et/content-schema';
 
 import { makeRng } from './rng.js';
 
@@ -61,5 +61,25 @@ export function separatedExpressionTraps(
     if (trap.expression === undefined) return true;
     const bare: SymbolicAnswer = { ...answer, residual: undefined };
     return !checkSymbolic(trap.expression, bare, { random, samples: 12 }).correct;
+  });
+}
+
+/**
+ * Drop any Boolean trap that is the same function as the answer.
+ *
+ * Sharper than the numeric and symbolic cases, because equivalence here is
+ * decidable: a trap either denotes the same function as the key or it does
+ * not, and the filter is a proof rather than a sample. The hazard is identical
+ * though — a "forgot to flip the connective" trap for De Morgan collapses onto
+ * the correct answer whenever the drawn expression happens to be self-dual, and
+ * a collapsed trap diagnoses a *correct* answer as an error.
+ */
+export function separatedBooleanTraps(
+  answer: BooleanAnswer,
+  candidates: readonly MisconceptionTrap[],
+): MisconceptionTrap[] {
+  return candidates.filter((trap) => {
+    if (trap.expression === undefined) return true;
+    return !checkBoolean(trap.expression, { ...answer, maxLiterals: undefined }).correct;
   });
 }

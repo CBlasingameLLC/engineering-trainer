@@ -125,6 +125,36 @@ export const symbolicAnswerSchema = z.object({
   residual: symbolicResidualSchema.optional(),
 });
 
+/**
+ * A Boolean expression, graded by exhaustive truth-table comparison.
+ *
+ * Separate from `symbolic` because the domain is finite. Symbolic equivalence
+ * over the reals is settled by sampling and is therefore a very strong
+ * inference; Boolean equivalence over `n` variables enumerates all `2^n`
+ * assignments and is a proof. For a course whose subject *is* when two
+ * expressions are equal, grading by inference would be the wrong tool.
+ *
+ * `variables` is stored rather than inferred, because a correct answer may
+ * legitimately use fewer: `AB + AB'` reduces to `A`, and comparing over the
+ * variables that survive would call the right answer wrong.
+ */
+export const booleanAnswerSchema = z.object({
+  kind: z.literal('boolean'),
+  /** A correct expression. Any equivalent form is accepted. */
+  expression: z.string().min(1),
+  /** Variables the truth table ranges over, most significant first. */
+  variables: z.array(z.string().min(1)).min(1).max(6),
+  /**
+   * Literal budget for "simplify" questions.
+   *
+   * Without it a minimisation task grades its own input as correct — the
+   * unsimplified expression is, after all, equivalent to itself. Setting a
+   * budget is what turns "is this the same function" into "is this the same
+   * function *and* actually reduced".
+   */
+  maxLiterals: z.number().int().positive().optional(),
+});
+
 export const choiceAnswerSchema = z.object({
   kind: z.literal('choice'),
   correctId: z.string().min(1),
@@ -133,6 +163,8 @@ export const choiceAnswerSchema = z.object({
 export const truthTableAnswerSchema = z.object({
   kind: z.literal('truth-table'),
   inputs: z.array(z.string().min(1)).min(1).max(6),
+  /** Column heading for the output, e.g. "F" or "Q(next)". */
+  output: z.string().min(1).default('F'),
   /** Output rows in ascending binary order of the input vector. */
   rows: z.array(z.boolean()).min(2),
 });
@@ -174,6 +206,7 @@ export const circuitAnswerSchema = z.object({
 export const answerSchema = z.discriminatedUnion('kind', [
   numericAnswerSchema,
   symbolicAnswerSchema,
+  booleanAnswerSchema,
   choiceAnswerSchema,
   truthTableAnswerSchema,
   circuitAnswerSchema,
@@ -258,7 +291,7 @@ export const explanationSchema = z.object({
 });
 
 export const ITEM_TYPES = [
-  'numeric', 'symbolic', 'multiple-choice', 'truth-table',
+  'numeric', 'symbolic', 'boolean', 'multiple-choice', 'truth-table',
   'circuit-build', 'derivation-order', 'short-answer',
 ] as const;
 
@@ -397,6 +430,7 @@ export type Provenance = z.infer<typeof provenanceSchema>;
 export type Answer = z.infer<typeof answerSchema>;
 export type NumericAnswer = z.infer<typeof numericAnswerSchema>;
 export type SymbolicAnswer = z.infer<typeof symbolicAnswerSchema>;
+export type BooleanAnswer = z.infer<typeof booleanAnswerSchema>;
 export type SymbolicResidual = z.infer<typeof symbolicResidualSchema>;
 export type ChoiceAnswer = z.infer<typeof choiceAnswerSchema>;
 export type TruthTableAnswer = z.infer<typeof truthTableAnswerSchema>;

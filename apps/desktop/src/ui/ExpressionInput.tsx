@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import katex from 'katex';
 import * as math from 'mathjs';
-import type { SymbolicAnswer } from '@et/content-schema';
+import { booleanToTex, parseBoolean } from '@et/answer-engine';
+import type { BooleanAnswer, SymbolicAnswer } from '@et/content-schema';
 
 /**
  * Expression entry with a live typeset preview.
@@ -22,7 +23,7 @@ import type { SymbolicAnswer } from '@et/content-schema';
  */
 
 interface ExpressionInputProps {
-  answer: SymbolicAnswer;
+  answer: SymbolicAnswer | BooleanAnswer;
   value: string;
   disabled: boolean;
   onChange: (value: string) => void;
@@ -35,11 +36,16 @@ type Preview =
   | { kind: 'ok'; html: string }
   | { kind: 'incomplete' };
 
-function preview(source: string): Preview {
+function preview(source: string, boolean: boolean): Preview {
   const trimmed = source.trim();
   if (trimmed === '') return { kind: 'empty' };
   try {
-    const tex = math.parse(trimmed).toTex({ parenthesis: 'auto' });
+    // Boolean input needs its own typesetting: mathjs would read `A'` as a
+    // derivative and `AB` as an unknown two-letter symbol, so the preview would
+    // confidently show something the grader never saw.
+    const tex = boolean
+      ? booleanToTex(parseBoolean(trimmed))
+      : math.parse(trimmed).toTex({ parenthesis: 'auto' });
     return { kind: 'ok', html: katex.renderToString(tex, { throwOnError: false, displayMode: false }) };
   } catch {
     // Half-typed input throws constantly — `3*x +` is not an error, it is a
@@ -52,14 +58,16 @@ function preview(source: string): Preview {
 export function ExpressionInput({
   answer, value, disabled, onChange, onSubmit, inputRef,
 }: ExpressionInputProps): React.ReactElement {
-  const parsed = useMemo(() => preview(value), [value]);
+  const isBoolean = answer.kind === 'boolean';
+  const parsed = useMemo(() => preview(value, isBoolean), [value, isBoolean]);
   const variables = answer.variables.join(', ');
-  const upToConstant = answer.residual?.kind === 'antiderivative-of';
+  const upToConstant = answer.kind === 'symbolic' && answer.residual?.kind === 'antiderivative-of';
+  const budget = answer.kind === 'boolean' ? answer.maxLiterals : undefined;
 
   return (
     <div className="mt-6">
       <label className="label" htmlFor="answer">
-        Your answer — an expression in {variables}
+        Your answer — {isBoolean ? 'a Boolean expression' : 'an expression'} in {variables}
       </label>
       <input
         id="answer"
@@ -68,7 +76,7 @@ export function ExpressionInput({
         disabled={disabled}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={(e) => e.key === 'Enter' && onSubmit()}
-        placeholder="e.g. 3*x^2 - 2*x + 5"
+        placeholder={isBoolean ? "e.g. A'B + AC" : 'e.g. 3*x^2 - 2*x + 5'}
         autoComplete="off"
         spellCheck={false}
         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-mono text-sm
@@ -85,13 +93,25 @@ export function ExpressionInput({
         )}
       </div>
 
-      <p className="mt-1 text-xs text-slate-400">
-        Use <code className="font-mono">^</code> for powers and <code className="font-mono">*</code> for
-        multiplication; <code className="font-mono">exp(x)</code>, <code className="font-mono">ln(x)</code>,{' '}
-        <code className="font-mono">sqrt(x)</code> and the trig functions all work. Any equivalent form is
-        accepted — check the preview reads the way you meant.
-        {upToConstant ? ' A constant of integration is optional.' : ''}
-      </p>
+      {isBoolean ? (
+        <p className="mt-1 text-xs text-slate-400">
+          Write it however your course does: <code className="font-mono">AB&apos; + C</code>,{' '}
+          <code className="font-mono">A*not B + C</code> and{' '}
+          <code className="font-mono">(A ∧ ¬B) ∨ C</code> are all read the same way. Adjacent variables
+          mean AND. Any equivalent form is accepted — check the preview groups the way you meant.
+          {budget !== undefined
+            ? ` This one is a simplification: the minimal form uses ${budget} literal${budget === 1 ? '' : 's'}.`
+            : ''}
+        </p>
+      ) : (
+        <p className="mt-1 text-xs text-slate-400">
+          Use <code className="font-mono">^</code> for powers and <code className="font-mono">*</code> for
+          multiplication; <code className="font-mono">exp(x)</code>, <code className="font-mono">ln(x)</code>,{' '}
+          <code className="font-mono">sqrt(x)</code> and the trig functions all work. Any equivalent form is
+          accepted — check the preview reads the way you meant.
+          {upToConstant ? ' A constant of integration is optional.' : ''}
+        </p>
+      )}
     </div>
   );
 }

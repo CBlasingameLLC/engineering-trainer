@@ -250,6 +250,8 @@ const PACK_TARGETS: readonly { course: string; packId: string; title: string }[]
   { course: 'MATH2471', packId: 'math2471-core-v1', title: 'Calculus I prerequisite bank' },
   { course: 'MATH3323', packId: 'math3323-core-v1', title: 'Differential equations prerequisite bank' },
   { course: 'MATH3376', packId: 'math3376-core-v1', title: 'Linear algebra prerequisite bank' },
+  { course: 'MATH2358', packId: 'math2358-core-v1', title: 'Discrete mathematics bank' },
+  { course: 'EE2320', packId: 'ee2320-core-v1', title: 'Digital logic bank' },
 ];
 
 function cmdBuild(args: string[]): number {

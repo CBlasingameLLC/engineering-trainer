@@ -1,6 +1,7 @@
 import * as math from 'mathjs';
 import type {
   Answer,
+  BooleanAnswer,
   Item,
   MisconceptionTrap,
   NumericAnswer,
@@ -8,6 +9,9 @@ import type {
   TruthTableAnswer,
 } from '@et/content-schema';
 import { normalizeInput } from './normalize.js';
+import {
+  BooleanParseError, booleanEquivalent, literalCount, parseBoolean,
+} from './boolean.js';
 
 /**
  * Answer checking.
@@ -279,6 +283,115 @@ function freeSymbols(node: math.MathNode): string[] {
   return [...found];
 }
 
+/**
+ * Boolean expression grading: exact, not sampled.
+ *
+ * Every assignment over the stated variables is compared, so a pass is a proof
+ * of equivalence rather than an inference from agreement at sampled points.
+ * Any notation the parser accepts is accepted here — `AB' + CD`, `(p ∧ ¬q) ∨ r`
+ * and `A and not B` are the same claim written by three different textbooks,
+ * and marking one wrong would be grading notation instead of understanding.
+ *
+ * When the item sets a literal budget, equivalence alone is not enough. A
+ * minimisation question whose grader only checks equivalence accepts the
+ * question's own expression as its answer, which teaches nothing and measures
+ * less.
+ */
+export function checkBoolean(
+  raw: string,
+  answer: BooleanAnswer,
+  traps: readonly MisconceptionTrap[] = [],
+): CheckResult {
+  const text = raw.trim();
+  if (text === '') return { correct: false, outcome: 'unparseable', feedback: 'No expression entered.' };
+
+  let learner;
+  try {
+    learner = parseBoolean(text);
+  } catch (error) {
+    const detail = error instanceof BooleanParseError ? error.message : 'Could not read that expression.';
+    return { correct: false, outcome: 'unparseable', feedback: detail };
+  }
+
+  let reference;
+  try {
+    reference = parseBoolean(answer.expression);
+  } catch {
+    return { correct: false, outcome: 'unparseable', feedback: 'The stored answer expression is invalid.' };
+  }
+
+  // A variable the item never mentions cannot be part of a correct answer, and
+  // saying so names the problem better than a bare "incorrect".
+  const declared = new Set(answer.variables);
+  const stray = booleanVariablesOf(text).filter((name) => !declared.has(name));
+  if (stray.length > 0) {
+    return {
+      correct: false,
+      outcome: 'unparseable',
+      feedback: `"${stray.join('", "')}" ${stray.length === 1 ? 'is not a variable' : 'are not variables'} in this problem. Use ${answer.variables.join(', ')}.`,
+    };
+  }
+
+  if (!booleanEquivalent(learner, reference, answer.variables)) {
+    return booleanMiss(text, answer, traps);
+  }
+
+  if (answer.maxLiterals !== undefined) {
+    const used = literalCount(learner);
+    if (used > answer.maxLiterals) {
+      // Named rather than left as bare feedback: "stops simplifying too early"
+      // is a habit worth tracking across both courses, and an unnamed wrong
+      // answer tells the misconception feed nothing.
+      return wrong({
+        misconception: 'boolean.not-fully-simplified',
+        feedback:
+          `That is the right function, but not reduced: it uses ${used} literals and the minimal form uses ` +
+          `${answer.maxLiterals}. Equivalence was never in question — the question is how far it simplifies.`,
+      });
+    }
+  }
+
+  return ok();
+}
+
+/** Variables read by an expression, without re-throwing on malformed input. */
+function booleanVariablesOf(text: string): string[] {
+  try {
+    const node = parseBoolean(text);
+    const seen: string[] = [];
+    const walk = (n: ReturnType<typeof parseBoolean>): void => {
+      if (n.kind === 'var') { if (!seen.includes(n.name)) seen.push(n.name); }
+      else if (n.kind === 'not') walk(n.operand);
+      else if (n.kind === 'binary') { walk(n.left); walk(n.right); }
+    };
+    walk(node);
+    return seen;
+  } catch {
+    return [];
+  }
+}
+
+/** Attribute a wrong Boolean expression to a tagged error, when one explains it. */
+function booleanMiss(
+  text: string,
+  answer: BooleanAnswer,
+  traps: readonly MisconceptionTrap[],
+): CheckResult {
+  for (const trap of traps) {
+    if (trap.expression === undefined) continue;
+    try {
+      const wrongForm = parseBoolean(trap.expression);
+      const learner = parseBoolean(text);
+      if (booleanEquivalent(learner, wrongForm, answer.variables)) {
+        return wrong({ misconception: trap.misconception, feedback: trap.feedback });
+      }
+    } catch {
+      continue;
+    }
+  }
+  return wrong();
+}
+
 export function checkTruthTable(rows: readonly boolean[], answer: TruthTableAnswer): CheckResult {
   if (rows.length !== answer.rows.length) {
     return { correct: false, outcome: 'unparseable', feedback: `Expected ${answer.rows.length} rows.` };
@@ -321,6 +434,10 @@ export function checkAnswer(response: Response, item: Item): CheckResult {
     case 'choice':
       if (response.kind !== 'choice') return mismatch('a selected option');
       return checkChoice(response.optionId, item);
+
+    case 'boolean':
+      if (response.kind !== 'text') return mismatch('a typed Boolean expression');
+      return checkBoolean(response.value, answer, item.misconceptionTraps);
 
     case 'truth-table':
       if (response.kind !== 'truth-table') return mismatch('a completed truth table');

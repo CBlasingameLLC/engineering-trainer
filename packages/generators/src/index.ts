@@ -15,6 +15,14 @@ import { dividerDesign, opAmpGainDesign, rcTimeConstantDesign } from './ee2300/d
 import { CALCULUS_GENERATORS } from './math/calculus.js';
 import { ODE_GENERATORS } from './math/odes.js';
 import { LINEAR_ALGEBRA_GENERATORS } from './math/linear.js';
+import { MATH2358_LOGIC_GENERATORS } from './math2358/logic.js';
+import { MATH2358_SET_GENERATORS } from './math2358/sets.js';
+import { MATH2358_COUNTING_GENERATORS } from './math2358/counting.js';
+import { MATH2358_GRAPH_GENERATORS } from './math2358/graphs.js';
+import { EE2320_NUMBER_GENERATORS } from './ee2320/numbers.js';
+import { EE2320_LOGIC_GENERATORS } from './ee2320/logic.js';
+import { EE2320_BLOCK_GENERATORS } from './ee2320/blocks.js';
+import { EE2320_SEQUENTIAL_GENERATORS } from './ee2320/sequential.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -55,6 +63,17 @@ export const GENERATORS: readonly Generator[] = [
   ...CALCULUS_GENERATORS,
   ...ODE_GENERATORS,
   ...LINEAR_ALGEBRA_GENERATORS,
+  // Discrete maths and digital logic. Built together because they are the same
+  // Boolean algebra in two notations, and kept as separate courses because
+  // which notation a weakness shows up in is itself the diagnosis.
+  ...MATH2358_LOGIC_GENERATORS,
+  ...MATH2358_SET_GENERATORS,
+  ...MATH2358_COUNTING_GENERATORS,
+  ...MATH2358_GRAPH_GENERATORS,
+  ...EE2320_NUMBER_GENERATORS,
+  ...EE2320_LOGIC_GENERATORS,
+  ...EE2320_BLOCK_GENERATORS,
+  ...EE2320_SEQUENTIAL_GENERATORS,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>

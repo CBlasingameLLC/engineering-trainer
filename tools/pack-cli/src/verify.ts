@@ -57,7 +57,7 @@ function checkSelfConsistency(item: Item): VerifyFinding[] {
         ? { kind: 'truth-table', rows: [...item.answer.rows] }
         : item.answer.kind === 'numeric'
           ? { kind: 'text', value: String(item.answer.value) }
-          : item.answer.kind === 'symbolic'
+          : item.answer.kind === 'symbolic' || item.answer.kind === 'boolean'
             ? { kind: 'text', value: item.answer.expression }
             : null;
 
@@ -235,8 +235,19 @@ function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
   // Symbolic items diagnose through expression traps. Without them a wrong
   // answer records only that the learner missed, and the misconception feed
   // never learns that a whole course's worth of errors were chain-rule errors.
-  if (item.type === 'symbolic' && !item.misconceptionTraps.some((t) => t.expression !== undefined)) {
-    return [warn(item.id, 'misconception-coverage', 'symbolic item defines no expression traps')];
+  // A Boolean item with a literal budget already has a diagnostic path: the
+  // grader names `boolean.not-fully-simplified` when the answer is equivalent
+  // but unreduced, which is the error such an item exists to catch. Demanding
+  // an equivalence trap on top would be asking for one that cannot exist —
+  // the unsimplified form is equivalent by construction, so any such trap is
+  // dropped by `separatedBooleanTraps` as indistinguishable from the answer.
+  const hasBudget = item.answer.kind === 'boolean' && item.answer.maxLiterals !== undefined;
+  if (
+    (item.type === 'symbolic' || item.type === 'boolean') &&
+    !hasBudget &&
+    !item.misconceptionTraps.some((t) => t.expression !== undefined)
+  ) {
+    return [warn(item.id, 'misconception-coverage', `${item.type} item defines no expression traps`)];
   }
   return [];
 }

@@ -1,0 +1,290 @@
+# EE 2320 — Digital Logic (Texas State University, 2026 catalog)
+#
+# Already taken, which makes it a decay target rather than a learning target,
+# and it is also the course that shares the most mathematics with something
+# being taken right now. The cross-course prerequisite edges below are declared
+# here because the dependency runs this way: propositional logic and De Morgan
+# are the abstract statements, and gates and K-maps are what you get when you
+# apply them to hardware. A weakness in gate minimisation that is really a
+# weakness in logical equivalence is exactly the diagnosis the graph exists to
+# make, and it can only be drawn if the edge is present.
+
+code: EE2320
+title: Digital Logic
+institution: Texas State University
+catalogYear: 2026
+tier: 1
+credits: 3
+
+kcs:
+  # --- Unit 1: Number systems -----------------------------------------------
+  - id: ee2320.number-systems
+    title: Binary, octal and hexadecimal conversion
+    unit: Number Systems
+    domain: digital
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -1.3
+    description: >-
+      Converting between bases in both directions. Repeated division with
+      remainder, which is modular arithmetic under a different name.
+    prerequisites:
+      - kc: math2358.modular-arithmetic
+        strength: 0.4
+
+  - id: ee2320.signed-numbers
+    title: Two's complement and signed representations
+    unit: Number Systems
+    domain: digital
+    competencies: [concept, math-execution]
+    difficultyPrior: -0.5
+    description: >-
+      Sign-magnitude, one's complement and two's complement, and the range each
+      can represent. The asymmetry of two's complement range is the detail that
+      separates understanding it from memorising the flip-and-add-one recipe.
+    prerequisites:
+      - ee2320.number-systems
+
+  - id: ee2320.binary-arithmetic
+    title: Binary addition and overflow
+    unit: Number Systems
+    domain: digital
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.1
+    description: >-
+      Adding in two's complement and detecting signed overflow. Carry out of the
+      MSB is not overflow, and confusing the two is the classic error.
+    prerequisites:
+      - ee2320.signed-numbers
+
+  - id: ee2320.binary-codes
+    title: BCD, Gray code and parity
+    unit: Number Systems
+    domain: digital
+    competencies: [concept, numeracy]
+    difficultyPrior: -0.4
+    prerequisites:
+      - ee2320.number-systems
+
+  # --- Unit 2: Boolean algebra and gates ------------------------------------
+  - id: ee2320.logic-gates
+    title: Logic gates and their truth tables
+    unit: Boolean Algebra and Gates
+    domain: digital
+    competencies: [concept, visual]
+    difficultyPrior: -1.2
+    description: >-
+      AND, OR, NOT, NAND, NOR, XOR and XNOR as functions of their inputs.
+    prerequisites:
+      - kc: math2358.propositional-logic
+        strength: 0.8
+
+  - id: ee2320.boolean-algebra
+    title: Boolean algebra and simplification
+    unit: Boolean Algebra and Gates
+    domain: digital
+    competencies: [math-execution, strategy]
+    difficultyPrior: -0.2
+    description: >-
+      The theorems and the algebraic route to a simpler expression.
+    prerequisites:
+      - ee2320.logic-gates
+      - kc: math2358.logical-equivalence
+        strength: 0.8
+
+  - id: ee2320.demorgan
+    title: De Morgan's theorem and bubble pushing
+    unit: Boolean Algebra and Gates
+    domain: digital
+    competencies: [math-execution, visual]
+    difficultyPrior: 0.0
+    description: >-
+      Complementing across a gate, and the graphical form that makes NAND-NAND
+      networks readable.
+    prerequisites:
+      - ee2320.boolean-algebra
+
+  - id: ee2320.canonical-forms
+    title: Sum of products, product of sums, minterms and maxterms
+    unit: Boolean Algebra and Gates
+    domain: digital
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.2
+    description: >-
+      Writing a function canonically from its truth table and indexing minterms
+      correctly. Off-by-one in minterm numbering is silent and fatal.
+    prerequisites:
+      - ee2320.logic-gates
+      - ee2320.number-systems
+
+  - id: ee2320.truth-table-to-expression
+    title: Deriving an expression from a specification
+    unit: Boolean Algebra and Gates
+    domain: digital
+    competencies: [modeling, strategy]
+    difficultyPrior: 0.3
+    description: >-
+      Going from a stated behaviour to a truth table to an expression. The
+      modelling step, and the one a purely algebraic course never exercises.
+    prerequisites:
+      - ee2320.canonical-forms
+
+  # --- Unit 3: Minimisation -------------------------------------------------
+  - id: ee2320.karnaugh-maps
+    title: Karnaugh map minimisation
+    unit: Minimisation
+    domain: digital
+    competencies: [visual, strategy]
+    difficultyPrior: 0.4
+    description: >-
+      Grouping adjacent minterms into the largest legal groups. The map is Gray
+      coded so that adjacency on the grid means a single variable changes, and
+      forgetting that wraparound counts as adjacency is the usual miss.
+    prerequisites:
+      - ee2320.canonical-forms
+      - kc: math2358.logical-equivalence
+        strength: 0.5
+
+  - id: ee2320.dont-cares
+    title: Don't-care conditions
+    unit: Minimisation
+    domain: digital
+    competencies: [strategy, visual]
+    difficultyPrior: 0.7
+    description: >-
+      Using unspecified outputs to enlarge a group, and only when it helps.
+    prerequisites:
+      - ee2320.karnaugh-maps
+
+  - id: ee2320.universal-gates
+    title: NAND and NOR as universal gates
+    unit: Minimisation
+    domain: digital
+    competencies: [concept, visual]
+    difficultyPrior: 0.5
+    prerequisites:
+      - ee2320.demorgan
+
+  # --- Unit 4: Combinational building blocks --------------------------------
+  - id: ee2320.adders
+    title: Half adders, full adders and ripple carry
+    unit: Combinational Blocks
+    domain: digital
+    competencies: [modeling, concept]
+    difficultyPrior: 0.3
+    prerequisites:
+      - ee2320.binary-arithmetic
+      - ee2320.truth-table-to-expression
+
+  - id: ee2320.multiplexers
+    title: Multiplexers and demultiplexers
+    unit: Combinational Blocks
+    domain: digital
+    competencies: [concept, modeling]
+    difficultyPrior: 0.2
+    description: >-
+      Selecting one of 2^n inputs, and using a mux as a general function
+      generator.
+    prerequisites:
+      - ee2320.canonical-forms
+
+  - id: ee2320.decoders-encoders
+    title: Decoders, encoders and priority encoders
+    unit: Combinational Blocks
+    domain: digital
+    competencies: [concept, modeling]
+    difficultyPrior: 0.2
+    prerequisites:
+      - ee2320.canonical-forms
+
+  - id: ee2320.comparators
+    title: Magnitude comparators
+    unit: Combinational Blocks
+    domain: digital
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.4
+    prerequisites:
+      - ee2320.truth-table-to-expression
+
+  # --- Unit 5: Sequential logic ---------------------------------------------
+  - id: ee2320.latches
+    title: SR and gated D latches
+    unit: Sequential Logic
+    domain: digital
+    competencies: [concept, visual]
+    difficultyPrior: 0.4
+    description: >-
+      Cross-coupled gates, the hold state, and the forbidden input combination.
+      The first circuit in the course whose output depends on its own past.
+    prerequisites:
+      - ee2320.logic-gates
+
+  - id: ee2320.flip-flops
+    title: D, JK and T flip-flops
+    unit: Sequential Logic
+    domain: digital
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.6
+    description: >-
+      Characteristic tables and next-state behaviour, and the difference
+      between level-sensitive and edge-triggered storage.
+    prerequisites:
+      - ee2320.latches
+
+  - id: ee2320.flip-flop-timing
+    title: Setup, hold and propagation delay
+    unit: Sequential Logic
+    domain: digital
+    competencies: [concept, numeracy]
+    difficultyPrior: 0.9
+    description: >-
+      The timing window around a clock edge and the maximum frequency it
+      implies. Where a design that is logically correct stops working.
+    prerequisites:
+      - ee2320.flip-flops
+
+  - id: ee2320.registers
+    title: Registers and shift registers
+    unit: Sequential Logic
+    domain: digital
+    competencies: [concept, visual]
+    difficultyPrior: 0.5
+    prerequisites:
+      - ee2320.flip-flops
+
+  - id: ee2320.counters
+    title: Ripple, synchronous and modulo-N counters
+    unit: Sequential Logic
+    domain: digital
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.7
+    description: >-
+      Counting sequences, and why a ripple counter's outputs are not
+      simultaneous while a synchronous counter's are.
+    prerequisites:
+      - ee2320.flip-flops
+
+  - id: ee2320.state-diagrams
+    title: State diagrams and state tables
+    unit: Sequential Logic
+    domain: digital
+    competencies: [modeling, visual]
+    difficultyPrior: 0.8
+    description: >-
+      Describing a sequential machine as states and transitions, in both
+      Moore and Mealy form.
+    prerequisites:
+      - ee2320.flip-flops
+
+  - id: ee2320.fsm-design
+    title: Finite state machine design
+    unit: Sequential Logic
+    domain: digital
+    competencies: [modeling, strategy]
+    difficultyPrior: 1.2
+    description: >-
+      State assignment, excitation tables and next-state logic. The synthesis
+      task the whole course builds toward, and the one that uses minimisation,
+      flip-flop behaviour and modelling at the same time.
+    prerequisites:
+      - ee2320.state-diagrams
+      - ee2320.karnaugh-maps

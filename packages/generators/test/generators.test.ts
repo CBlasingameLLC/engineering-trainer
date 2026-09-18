@@ -89,7 +89,7 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
       const response =
         item.answer.kind === 'choice'
           ? ({ kind: 'choice', optionId: item.answer.correctId } as const)
-          : item.answer.kind === 'symbolic'
+          : item.answer.kind === 'symbolic' || item.answer.kind === 'boolean'
             ? ({ kind: 'text', value: item.answer.expression } as const)
             : item.answer.kind === 'truth-table'
               ? ({ kind: 'truth-table' as const, rows: [...item.answer.rows] })

@@ -5,6 +5,7 @@ import type { Response } from '@et/answer-engine';
 import { useApp } from '@/store';
 import { MathText } from '@/ui/Math';
 import { ExpressionInput } from '@/ui/ExpressionInput';
+import { TruthTableInput } from '@/ui/TruthTableInput';
 import { SchematicEditor } from '@/features/schematic/SchematicEditor';
 
 /**
@@ -38,6 +39,7 @@ export function Session(): React.ReactElement {
   const [schematic, setSchematic] = useState<Schematic>(() => emptySchematic('my design'));
   const [circuitInput, setCircuitInput] = useState<'draw' | 'netlist'>('draw');
   const [deck, setDeck] = useState('');
+  const [tableRows, setTableRows] = useState<(boolean | null)[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Clear the field and refocus when a new item arrives, so the learner can
@@ -47,8 +49,13 @@ export function Session(): React.ReactElement {
     setChoice(null);
     setSchematic(emptySchematic('my design'));
     setDeck('');
+    setTableRows(
+      active?.item.answer.kind === 'truth-table'
+        ? Array.from({ length: active.item.answer.rows.length }, () => null)
+        : [],
+    );
     inputRef.current?.focus();
-  }, [active?.item.id]);
+  }, [active]);
 
   if (!active || !cat) {
     return <div className="grid h-full place-items-center text-sm text-slate-400">Preparing…</div>;
@@ -57,7 +64,9 @@ export function Session(): React.ReactElement {
   const { item } = active;
   const isChoice = item.type === 'multiple-choice';
   const isCircuit = item.type === 'circuit-build';
-  const isSymbolic = item.answer.kind === 'symbolic';
+  const isSymbolic = item.answer.kind === 'symbolic' || item.answer.kind === 'boolean';
+  const isTable = item.answer.kind === 'truth-table';
+  const tableComplete = tableRows.length > 0 && tableRows.every((r) => r !== null);
   const budget = DEFAULT_CAT_CONFIG.maxItems;
   const outstanding = shouldStop(cat, bank, DEFAULT_CAT_CONFIG).outstanding.length;
 
@@ -74,10 +83,21 @@ export function Session(): React.ReactElement {
       ? choice
         ? { kind: 'choice', optionId: choice }
         : null
-      : text.trim()
-        ? { kind: 'text', value: text }
-        : null;
-    if (response) void submit(response, isChoice ? (choice ?? '') : text);
+      : isTable
+        ? tableComplete
+          ? { kind: 'truth-table', rows: tableRows.map((r) => r === true) }
+          : null
+        : text.trim()
+          ? { kind: 'text', value: text }
+          : null;
+    if (response) {
+      const raw = isChoice
+        ? (choice ?? '')
+        : isTable
+          ? tableRows.map((r) => (r === true ? '1' : '0')).join('')
+          : text;
+      void submit(response, raw);
+    }
   };
 
   const needsCorrection =
@@ -188,7 +208,15 @@ export function Session(): React.ReactElement {
                 );
               })}
             </div>
-          ) : isSymbolic && item.answer.kind === 'symbolic' ? (
+          ) : isTable && item.answer.kind === 'truth-table' ? (
+            <TruthTableInput
+              answer={item.answer}
+              rows={tableRows}
+              disabled={settled}
+              expected={settled ? item.answer.rows : undefined}
+              onChange={setTableRows}
+            />
+          ) : isSymbolic && (item.answer.kind === 'symbolic' || item.answer.kind === 'boolean') ? (
             <ExpressionInput
               answer={item.answer}
               value={text}
@@ -248,7 +276,9 @@ export function Session(): React.ReactElement {
                       : schematic.components.length === 0
                     : isChoice
                       ? !choice
-                      : !text.trim()
+                      : isTable
+                        ? !tableComplete
+                        : !text.trim()
                 }
               >
                 Submit
