@@ -8,6 +8,11 @@ REQUIREMENTS
   Node.js 18 or newer.  Check with:  node --version
   Download from https://nodejs.org if you do not have it.
 
+  On Windows you probably want the native installer instead - the .exe or
+  .msi needs nothing else installed, starts in its own window rather than a
+  browser tab, and stores your progress in a single SQLite file you can copy.
+  This portable build exists for machines where you cannot install software.
+
 RUN IT
   Windows   double-click  start.cmd
   macOS     double-click  start.command      (first time: right-click > Open)
