@@ -56,7 +56,7 @@ export function TruthTableInput({
     <div className="mt-6" data-testid="truth-table-input">
       <div className="flex items-baseline gap-3">
         <span className="label">Complete the output column</span>
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-slate-400 dark:text-slate-500">
           {filled} of {rows.length} rows set · click a cell to cycle 0 → 1 → blank
         </span>
       </div>
@@ -95,11 +95,11 @@ export function TruthTableInput({
                       'h-7 w-12 rounded border font-mono text-sm transition-colors',
                       expected !== undefined
                         ? wrong
-                          ? 'border-red-400 bg-red-50 text-red-800 dark:border-red-500 dark:bg-red-950 dark:text-red-200'
+                          ? 'border-red-400 bg-red-50 text-red-800 dark:border-red-500 dark:bg-red-950 dark:text-red-200 dark:border-red-600'
                           : 'border-emerald-400 bg-emerald-50 text-emerald-800 dark:border-emerald-500 dark:bg-emerald-950 dark:text-emerald-200'
                         : value === null
                           ? 'border-dashed border-slate-300 text-slate-300 hover:border-slate-500 dark:border-slate-600 dark:text-slate-600'
-                          : 'border-slate-900 bg-slate-900 text-white dark:border-slate-200 dark:bg-slate-200 dark:text-slate-900',
+                          : 'border-slate-900 bg-slate-900 text-white dark:border-slate-200 dark:bg-slate-200 dark:text-slate-900 dark:bg-slate-100',
                       disabled ? 'cursor-default opacity-90' : 'cursor-pointer',
                     ].join(' ')}
                   >

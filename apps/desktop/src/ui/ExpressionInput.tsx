@@ -80,21 +80,22 @@ export function ExpressionInput({
         autoComplete="off"
         spellCheck={false}
         className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-mono text-sm
-                   focus:border-slate-900 focus:outline-none disabled:bg-slate-50"
+                   focus:border-slate-900 focus:outline-none disabled:bg-slate-50
+                   dark:border-slate-600"
       />
 
-      <div className="mt-2 min-h-[2.25rem] rounded-md bg-slate-50 px-3 py-2" data-testid="expression-preview">
+      <div className="mt-2 min-h-[2.25rem] rounded-md bg-slate-50 px-3 py-2 dark:bg-slate-900" data-testid="expression-preview">
         {parsed.kind === 'empty' ? (
-          <span className="text-xs text-slate-400">Your expression will appear here as you type.</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">Your expression will appear here as you type.</span>
         ) : parsed.kind === 'incomplete' ? (
-          <span className="text-xs text-slate-400">Still reading…</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">Still reading…</span>
         ) : (
-          <span className="text-sm text-slate-800" dangerouslySetInnerHTML={{ __html: parsed.html }} />
+          <span className="text-sm text-slate-800 dark:text-slate-200" dangerouslySetInnerHTML={{ __html: parsed.html }} />
         )}
       </div>
 
       {isBoolean ? (
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
           Write it however your course does: <code className="font-mono">AB&apos; + C</code>,{' '}
           <code className="font-mono">A*not B + C</code> and{' '}
           <code className="font-mono">(A ∧ ¬B) ∨ C</code> are all read the same way. Adjacent variables
@@ -104,7 +105,7 @@ export function ExpressionInput({
             : ''}
         </p>
       ) : (
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
           Use <code className="font-mono">^</code> for powers and <code className="font-mono">*</code> for
           multiplication; <code className="font-mono">exp(x)</code>, <code className="font-mono">ln(x)</code>,{' '}
           <code className="font-mono">sqrt(x)</code> and the trig functions all work. Any equivalent form is

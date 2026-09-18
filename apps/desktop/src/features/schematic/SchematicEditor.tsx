@@ -128,29 +128,29 @@ export function SchematicEditor({
       {!readOnly && (
         <div className="w-44 shrink-0 space-y-1">
           <button
-            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'select' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'select' ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
             onClick={() => { setTool('select'); setDraft([]); }}
           >
             Select
           </button>
           <button
-            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'wire' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'wire' ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
             onClick={() => { setTool('wire'); setSelected(null); }}
           >
-            Wire {tool === 'wire' && <span className="text-slate-300">· click the last point to finish</span>}
+            Wire {tool === 'wire' && <span className="text-slate-300 dark:text-slate-600">· click the last point to finish</span>}
           </button>
           <button
-            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'ground' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'ground' ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
             onClick={() => { setTool('ground'); setSelected(null); }}
           >
             Ground
           </button>
 
-          <div className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Parts</div>
+          <div className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Parts</div>
           {PALETTE.map((entry) => (
             <button
               key={entry.kind}
-              className={`w-full rounded px-2 py-1 text-left text-xs ${tool === entry.kind ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+              className={`w-full rounded px-2 py-1 text-left text-xs ${tool === entry.kind ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
               onClick={() => { setTool(entry.kind); setSelected(null); setDraft([]); }}
             >
               {entry.label}
@@ -158,13 +158,13 @@ export function SchematicEditor({
           ))}
 
           {selectedComponent && (
-            <div className="mt-3 rounded border border-slate-200 p-2">
-              <div className="font-mono text-xs font-semibold text-slate-900">{selectedComponent.id}</div>
+            <div className="mt-3 rounded border border-slate-200 p-2 dark:border-slate-700">
+              <div className="font-mono text-xs font-semibold text-slate-900 dark:text-slate-100">{selectedComponent.id}</div>
               {selectedComponent.kind !== 'opamp' && (
-                <label className="mt-2 block text-[11px] text-slate-500">
+                <label className="mt-2 block text-[11px] text-slate-500 dark:text-slate-400">
                   Value
                   <input
-                    className="mt-0.5 w-full rounded border border-slate-300 px-1 py-0.5 text-xs tabular-nums"
+                    className="mt-0.5 w-full rounded border border-slate-300 px-1 py-0.5 text-xs tabular-nums dark:border-slate-600"
                     defaultValue={formatValue(selectedComponent.value)}
                     onBlur={(e) => {
                       const parsed = Number(e.target.value) || parseSuffixed(e.target.value);
@@ -175,7 +175,7 @@ export function SchematicEditor({
               )}
               <div className="mt-2 flex gap-1">
                 <button
-                  className="flex-1 rounded bg-slate-100 px-1 py-0.5 text-[11px]"
+                  className="flex-1 rounded bg-slate-100 px-1 py-0.5 text-[11px] dark:bg-slate-800"
                   onClick={() =>
                     update(selectedComponent.id, {
                       rotation: (((selectedComponent.rotation + 90) % 360) as Rotation),
@@ -184,7 +184,7 @@ export function SchematicEditor({
                 >
                   Rotate
                 </button>
-                <button className="flex-1 rounded bg-red-50 px-1 py-0.5 text-[11px] text-red-700" onClick={removeSelected}>
+                <button className="flex-1 rounded bg-red-50 px-1 py-0.5 text-[11px] text-red-700 dark:bg-red-950 dark:text-red-300" onClick={removeSelected}>
                   Delete
                 </button>
               </div>
@@ -198,7 +198,7 @@ export function SchematicEditor({
           ref={svgRef}
           width={width}
           height={height}
-          className="rounded border border-slate-200 bg-white"
+          className="rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
           onClick={handleClick}
           onMouseMove={(e) => tool === 'wire' && setCursor(toGrid(e))}
           data-testid="schematic-canvas"
@@ -302,7 +302,7 @@ export function SchematicEditor({
           )}
         </svg>
 
-        <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500">
+        <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
           <span>{value.components.length} part(s)</span>
           <span>{Math.max(0, nets.byNet.size - 1)} net(s)</span>
           {built.issues.length > 0 && (
@@ -311,7 +311,7 @@ export function SchematicEditor({
             </span>
           )}
           {built.issues.length === 0 && value.components.length > 0 && (
-            <span className="text-emerald-700">connected</span>
+            <span className="text-emerald-700 dark:text-emerald-300">connected</span>
           )}
         </div>
       </div>

@@ -47,7 +47,7 @@ export function SkillTree(): React.ReactElement {
   );
 
   if (!content || !graph || !layout) {
-    return <div className="grid h-full place-items-center text-sm text-slate-400">Loading…</div>;
+    return <div className="grid h-full place-items-center text-sm text-slate-400 dark:text-slate-500">Loading…</div>;
   }
 
   const nodeById = new Map(layout.nodes.map((n) => [n.kcId, n]));
@@ -63,16 +63,16 @@ export function SkillTree(): React.ReactElement {
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
       <header className="flex flex-wrap items-baseline gap-4">
-        <h1 className="text-2xl font-semibold text-slate-900">Skill tree</h1>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Skill tree</h1>
         <select
-          className="rounded border border-slate-300 px-2 py-1 text-sm"
+          className="rounded border border-slate-300 px-2 py-1 text-sm dark:border-slate-600"
           value={courseFilter}
           onChange={(e) => { setCourseFilter(e.target.value); setFocused(null); }}
         >
           <option value="all">All courses</option>
           {courses.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
-        <button className="ml-auto text-sm text-slate-500 underline" onClick={() => goTo('dashboard')}>
+        <button className="ml-auto text-sm text-slate-500 underline dark:text-slate-400" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
       </header>
@@ -84,8 +84,8 @@ export function SkillTree(): React.ReactElement {
               className="inline-block h-3 w-3 rounded-sm border"
               style={{ background: STATE_STYLE[state].fill, borderColor: STATE_STYLE[state].stroke }}
             />
-            <span className="text-slate-600">{STATE_STYLE[state].label}</span>
-            <span className="tabular-nums text-slate-400">{tally[state] ?? 0}</span>
+            <span className="text-slate-600 dark:text-slate-400">{STATE_STYLE[state].label}</span>
+            <span className="tabular-nums text-slate-400 dark:text-slate-500">{tally[state] ?? 0}</span>
           </span>
         ))}
       </div>
@@ -160,8 +160,8 @@ export function SkillTree(): React.ReactElement {
       {focusedKc && (
         <section className="card mt-4 p-4">
           <div className="flex flex-wrap items-baseline gap-2">
-            <h2 className="text-base font-semibold text-slate-900">{focusedKc.title}</h2>
-            <span className="text-xs text-slate-400">{focusedKc.courseId} · {focusedKc.unit}</span>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">{focusedKc.title}</h2>
+            <span className="text-xs text-slate-400 dark:text-slate-500">{focusedKc.courseId} · {focusedKc.unit}</span>
             <span
               className="rounded px-1.5 py-0.5 text-xs"
               style={{
@@ -173,7 +173,7 @@ export function SkillTree(): React.ReactElement {
             </span>
           </div>
 
-          {focusedKc.description && <p className="mt-2 text-sm text-slate-600">{focusedKc.description}</p>}
+          {focusedKc.description && <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{focusedKc.description}</p>}
 
           {focusedMastery && focusedMastery.attempts > 0 ? (
             <dl className="mt-3 flex flex-wrap gap-6 text-sm">
@@ -183,21 +183,21 @@ export function SkillTree(): React.ReactElement {
               <Stat label="Attempts" value={String(focusedMastery.attempts)} />
             </dl>
           ) : (
-            <p className="mt-3 text-sm text-slate-500">No evidence yet — this topic has not been tested.</p>
+            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">No evidence yet — this topic has not been tested.</p>
           )}
 
           {blockers.length > 0 && (
             <div className="mt-3 rounded border-l-2 border-orange-300 pl-3">
-              <p className="text-sm text-slate-700">
+              <p className="text-sm text-slate-700 dark:text-slate-300">
                 Locked because {blockers.length === 1 ? 'this prerequisite is' : 'these prerequisites are'} not in place:
               </p>
               <ul className="mt-1 space-y-0.5 text-sm">
                 {blockers.map((id) => (
                   <li key={id}>
-                    <button className="text-slate-900 underline" onClick={() => setFocused(id)}>
+                    <button className="text-slate-900 underline dark:text-slate-100" onClick={() => setFocused(id)}>
                       {content.graph.kcs.get(id)?.title ?? id}
                     </button>
-                    <span className="ml-2 text-xs text-slate-400">
+                    <span className="ml-2 text-xs text-slate-400 dark:text-slate-500">
                       {content.graph.kcs.get(id)?.courseId}
                     </span>
                   </li>
@@ -208,7 +208,7 @@ export function SkillTree(): React.ReactElement {
         </section>
       )}
 
-      <p className="mt-4 text-xs text-slate-500">
+      <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
         Dashed purple edges cross a course boundary — those are the dependencies a per-course
         gradebook cannot represent.
       </p>
@@ -219,8 +219,8 @@ export function SkillTree(): React.ReactElement {
 function Stat({ label, value }: { label: string; value: string }): React.ReactElement {
   return (
     <div>
-      <dt className="text-xs uppercase tracking-wide text-slate-400">{label}</dt>
-      <dd className="tabular-nums text-slate-900">{value}</dd>
+      <dt className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</dt>
+      <dd className="tabular-nums text-slate-900 dark:text-slate-100">{value}</dd>
     </div>
   );
 }

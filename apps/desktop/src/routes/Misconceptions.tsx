@@ -28,10 +28,10 @@ import { MathText } from '@/ui/Math';
  */
 
 const TREND_STYLE: Record<MisconceptionTrend, { label: string; className: string }> = {
-  new: { label: 'new', className: 'bg-slate-100 text-slate-600' },
-  worsening: { label: 'getting worse', className: 'bg-red-50 text-red-700' },
-  steady: { label: 'steady', className: 'bg-slate-100 text-slate-600' },
-  fading: { label: 'fading', className: 'bg-emerald-50 text-emerald-700' },
+  new: { label: 'new', className: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
+  worsening: { label: 'getting worse', className: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300' },
+  steady: { label: 'steady', className: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
+  fading: { label: 'fading', className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' },
 };
 
 export function Misconceptions(): React.ReactElement {
@@ -80,29 +80,29 @@ export function Misconceptions(): React.ReactElement {
   return (
     <div className="mx-auto max-w-4xl px-6 py-8">
       <header className="flex items-baseline gap-4">
-        <h1 className="text-lg font-semibold text-slate-900">Recurring errors</h1>
-        <button className="text-sm text-slate-500 hover:text-slate-900" onClick={() => goTo('dashboard')}>
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Recurring errors</h1>
+        <button className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
       </header>
 
       {lastDrill && (
         <section
-          className="mt-4 rounded-md border border-slate-200 bg-white p-4"
+          className="mt-4 rounded-md border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
           data-testid="drill-result"
         >
-          <h2 className="text-sm font-medium text-slate-900">
+          <h2 className="text-sm font-medium text-slate-900 dark:text-slate-100">
             Drill finished — {titleOf(lastDrill.misconceptionId)}
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             {lastDrill.correct} of {lastDrill.asked} correct.{' '}
             {lastDrill.refired === 0 ? (
-              <span className="text-emerald-700">
+              <span className="text-emerald-700 dark:text-emerald-300">
                 The error did not reappear once. That is the result worth having — every item in a
                 drill is one that <em>could</em> have caught it.
               </span>
             ) : (
-              <span className="text-amber-800">
+              <span className="text-amber-800 dark:text-amber-200">
                 It reappeared {lastDrill.refired} time{lastDrill.refired === 1 ? '' : 's'}. Worth
                 another pass.
               </span>
@@ -112,7 +112,7 @@ export function Misconceptions(): React.ReactElement {
       )}
 
       {ranked.length === 0 ? (
-        <p className="mt-8 text-sm text-slate-500">
+        <p className="mt-8 text-sm text-slate-500 dark:text-slate-400">
           No recurring errors recorded yet. Wrong answers get tagged with the specific mistake that
           produces them, so this fills in as you work — and stays empty if nothing repeats.
         </p>
@@ -120,8 +120,8 @@ export function Misconceptions(): React.ReactElement {
         <>
           {families.some((f) => f.crossCourse) && (
             <section className="mt-6" data-testid="habit-rollup">
-              <h2 className="text-sm font-medium text-slate-900">Habits crossing course boundaries</h2>
-              <p className="mt-1 text-xs text-slate-500">
+              <h2 className="text-sm font-medium text-slate-900 dark:text-slate-100">Habits crossing course boundaries</h2>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 The same mistake in more than one course is one habit, not several problems. This is
                 the view a gradebook cannot produce.
               </p>
@@ -131,16 +131,16 @@ export function Misconceptions(): React.ReactElement {
                   .map((family) => (
                     <div
                       key={family.family.id}
-                      className="rounded-md border border-amber-200 bg-amber-50 p-3"
+                      className="rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950"
                       data-family-id={family.family.id}
                     >
                       <div className="flex items-baseline gap-2">
-                        <span className="text-sm font-medium text-amber-900">{family.family.title}</span>
-                        <span className="text-xs text-amber-700">
+                        <span className="text-sm font-medium text-amber-900 dark:text-amber-100">{family.family.title}</span>
+                        <span className="text-xs text-amber-700 dark:text-amber-300">
                           {family.totalHits} across {family.courses.map((c) => c.toUpperCase()).join(', ')}
                         </span>
                       </div>
-                      <p className="mt-1 text-xs text-amber-800">{family.family.description}</p>
+                      <p className="mt-1 text-xs text-amber-800 dark:text-amber-200">{family.family.description}</p>
                     </div>
                   ))}
               </div>
@@ -148,7 +148,7 @@ export function Misconceptions(): React.ReactElement {
           )}
 
           <section className="mt-8">
-            <h2 className="text-sm font-medium text-slate-900">Ranked by what is costing you now</h2>
+            <h2 className="text-sm font-medium text-slate-900 dark:text-slate-100">Ranked by what is costing you now</h2>
             <ul className="mt-3 space-y-3">
               {ranked.map((entry) => (
                 <MisconceptionCard
@@ -186,17 +186,17 @@ function MisconceptionCard({
   return (
     <li className="card p-4" data-misconception-id={entry.misconceptionId}>
       <div className="flex flex-wrap items-baseline gap-2">
-        <span className="text-sm font-medium text-slate-900">{title}</span>
+        <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{title}</span>
         {familyTitle && (
-          <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">{familyTitle}</span>
+          <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-400">{familyTitle}</span>
         )}
         <span className={`rounded px-1.5 py-0.5 text-xs ${trend.className}`}>{trend.label}</span>
         {entry.drillDue && (
-          <span className="rounded bg-sky-100 px-1.5 py-0.5 text-xs text-sky-800">drill due</span>
+          <span className="rounded bg-sky-100 px-1.5 py-0.5 text-xs text-sky-800 dark:bg-sky-900 dark:text-sky-200">drill due</span>
         )}
       </div>
 
-      <p className="mt-1 text-xs text-slate-500">
+      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
         {entry.totalHits} time{entry.totalHits === 1 ? '' : 's'} total, {entry.recentHits} in the last{' '}
         {DEFAULT_MISCONCEPTION_CONFIG.windowDays} days · {entry.kcs.length} topic
         {entry.kcs.length === 1 ? '' : 's'}
@@ -204,7 +204,7 @@ function MisconceptionCard({
       </p>
 
       {feedback && (
-        <MathText className="mt-2 block text-sm leading-relaxed text-slate-700">{feedback}</MathText>
+        <MathText className="mt-2 block text-sm leading-relaxed text-slate-700 dark:text-slate-300">{feedback}</MathText>
       )}
 
       <div className="mt-3">
@@ -213,7 +213,7 @@ function MisconceptionCard({
             Drill this
           </button>
         ) : (
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             No items in the bank can currently catch this error, so a drill would not be able to tell
             you whether it is fixed.
           </p>

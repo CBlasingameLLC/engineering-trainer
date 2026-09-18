@@ -10,7 +10,8 @@
     "tauri": "tauri",
     "e2e": "node e2e/placement-flow.mjs",
     "e2e:lab": "node e2e/lab-and-tree.mjs",
-    "e2e:misconceptions": "node e2e/misconception-loop.mjs"
+    "e2e:misconceptions": "node e2e/misconception-loop.mjs",
+    "e2e:theme": "node e2e/theme-and-fullscreen.mjs"
   },
   "dependencies": {
     "@et/answer-engine": "workspace:*",

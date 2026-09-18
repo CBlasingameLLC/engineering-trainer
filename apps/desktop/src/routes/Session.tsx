@@ -58,7 +58,7 @@ export function Session(): React.ReactElement {
   }, [active]);
 
   if (!active || !cat) {
-    return <div className="grid h-full place-items-center text-sm text-slate-400">Preparing…</div>;
+    return <div className="grid h-full place-items-center text-sm text-slate-400 dark:text-slate-500">Preparing…</div>;
   }
 
   const { item } = active;
@@ -107,25 +107,25 @@ export function Session(): React.ReactElement {
   return (
     <div className="mx-auto flex h-full max-w-3xl flex-col px-6 py-8">
       <header className="flex items-center gap-4 text-sm">
-        <span className="font-medium text-slate-900">
+        <span className="font-medium text-slate-900 dark:text-slate-100">
           {mode === 'challenge' ? 'Challenge exam' : mode === 'practice' ? 'Daily quest' : 'Placement'}
         </span>
-        <span className="text-slate-400">
+        <span className="text-slate-400 dark:text-slate-500">
           item {answered + 1} of at most {budget}
         </span>
-        <span className="tabular-nums text-amber-700">{sessionXp} XP</span>
-        <span className="ml-auto tabular-nums text-slate-500">
+        <span className="tabular-nums text-amber-700 dark:text-amber-300">{sessionXp} XP</span>
+        <span className="ml-auto tabular-nums text-slate-500 dark:text-slate-400">
           {correct}/{answered} correct
         </span>
       </header>
 
-      <div className="mt-3 h-1 overflow-hidden rounded bg-slate-200">
+      <div className="mt-3 h-1 overflow-hidden rounded bg-slate-200 dark:bg-slate-700">
         <div
-          className="h-full bg-slate-900 transition-all duration-300"
+          className="h-full bg-slate-900 transition-all duration-300 dark:bg-slate-100"
           style={{ width: `${Math.min(100, (answered / budget) * 100)}%` }}
         />
       </div>
-      <p className="mt-2 text-xs text-slate-400">
+      <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
         {outstanding} concept{outstanding === 1 ? '' : 's'} still need evidence
       </p>
 
@@ -134,7 +134,7 @@ export function Session(): React.ReactElement {
             identify exactly which variant was on screen. KaTeX rewrites the
             stem text, so the rendered DOM is not a reliable identifier. */}
         <article className="card p-6" data-item-id={item.id} data-item-type={item.type}>
-          <MathText className="block text-base leading-relaxed text-slate-800">{item.stem}</MathText>
+          <MathText className="block text-base leading-relaxed text-slate-800 dark:text-slate-200">{item.stem}</MathText>
 
           {isCircuit ? (
             <div className="mt-6">
@@ -144,13 +144,13 @@ export function Session(): React.ReactElement {
                     key={choice}
                     disabled={settled}
                     onClick={() => setCircuitInput(choice)}
-                    className={`rounded px-2 py-1 text-xs ${circuitInput === choice ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+                    className={`rounded px-2 py-1 text-xs ${circuitInput === choice ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
                     data-circuit-input={choice}
                   >
                     {choice === 'draw' ? 'Draw it' : 'Write a netlist'}
                   </button>
                 ))}
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-500 dark:text-slate-400">
                   Graded by simulating what you build — any circuit meeting the specification counts.
                 </span>
               </div>
@@ -173,9 +173,10 @@ export function Session(): React.ReactElement {
                     spellCheck={false}
                     placeholder={'my design\nV1 in 0 1\nR1 in inv 2.2k\nRf inv out 22k\nXU1 out 0 inv opamp\n.op'}
                     className="h-44 w-full rounded-md border border-slate-300 p-2 font-mono text-xs
-                               focus:border-slate-900 focus:outline-none disabled:bg-slate-50"
+                               focus:border-slate-900 focus:outline-none disabled:bg-slate-50
+                   dark:border-slate-600"
                   />
-                  <p className="mt-1 text-xs text-slate-400">
+                  <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                     SPICE subset. First line is the title. Node names from the question must match.
                   </p>
                 </div>
@@ -194,15 +195,15 @@ export function Session(): React.ReactElement {
                     className={[
                       'flex w-full items-start gap-3 rounded-md border p-3 text-left text-sm transition-colors',
                       isAnswer
-                        ? 'border-emerald-500 bg-emerald-50'
+                        ? 'border-emerald-500 bg-emerald-50 dark:border-emerald-600 dark:bg-emerald-950'
                         : chosenThis
-                          ? 'border-red-400 bg-red-50'
+                          ? 'border-red-400 bg-red-50 dark:border-red-600 dark:bg-red-950'
                           : choice === option.id
-                            ? 'border-slate-900 bg-slate-50'
-                            : 'border-slate-200 hover:bg-slate-50',
+                            ? 'border-slate-900 bg-slate-50 dark:border-slate-200 dark:bg-slate-900'
+                            : 'border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800',
                     ].join(' ')}
                   >
-                    <span className="font-mono text-xs text-slate-400">{option.id.toUpperCase()}</span>
+                    <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{option.id.toUpperCase()}</span>
                     <MathText>{option.text}</MathText>
                   </button>
                 );
@@ -240,16 +241,17 @@ export function Session(): React.ReactElement {
                 onKeyDown={(e) => e.key === 'Enter' && send()}
                 placeholder="e.g. 4.7k, 6.2 V, 5 kΩ"
                 className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-mono text-sm
-                           focus:border-slate-900 focus:outline-none disabled:bg-slate-50"
+                           focus:border-slate-900 focus:outline-none disabled:bg-slate-50
+                   dark:border-slate-600"
               />
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
                 Engineering notation, SI prefixes and units are all accepted.
               </p>
             </div>
           )}
 
           {needsCorrection && (
-            <p className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            <p className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-200">
               {graded.result.feedback}
             </p>
           )}
@@ -257,7 +259,7 @@ export function Session(): React.ReactElement {
           {hintsShown > 0 && !settled && (
             <div className="mt-4 space-y-2">
               {item.explanation.hints.slice(0, hintsShown).map((hint, i) => (
-                <p key={i} className="rounded-md bg-sky-50 px-3 py-2 text-sm text-sky-900">
+                <p key={i} className="rounded-md bg-sky-50 px-3 py-2 text-sm text-sky-900 dark:bg-sky-950 dark:text-sky-100">
                   <MathText>{hint}</MathText>
                 </p>
               ))}
@@ -288,7 +290,7 @@ export function Session(): React.ReactElement {
                   Hint
                 </button>
               )}
-              <span className="ml-auto text-xs text-slate-400">
+              <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">
                 {hintsShown > 0 ? 'Hints used — this counts as a weaker recall' : 'Press Enter to submit'}
               </span>
             </div>
@@ -321,21 +323,21 @@ function Feedback(): React.ReactElement | null {
         <span
           className={[
             'rounded px-2 py-0.5 text-xs font-semibold',
-            result.correct ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800',
+            result.correct ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
           ].join(' ')}
         >
           {result.correct ? 'Correct' : 'Not quite'}
         </span>
         {result.misconception && (
-          <span className="font-mono text-xs text-slate-400">{result.misconception}</span>
+          <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{result.misconception}</span>
         )}
         {graded.xpAwarded > 0 && (
-          <span className="ml-auto text-xs tabular-nums text-amber-700">+{graded.xpAwarded} XP</span>
+          <span className="ml-auto text-xs tabular-nums text-amber-700 dark:text-amber-300">+{graded.xpAwarded} XP</span>
         )}
       </div>
 
       {result.feedback && !result.correct && (
-        <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-900">
+        <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-900 dark:bg-red-950">
           <MathText>{result.feedback}</MathText>
         </p>
       )}
@@ -343,7 +345,7 @@ function Feedback(): React.ReactElement | null {
       {graded.circuit && (
         <table className="mt-3 w-full text-sm">
           <thead>
-            <tr className="text-left text-xs uppercase tracking-wide text-slate-400">
+            <tr className="text-left text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">
               <th className="pb-1 font-medium">Measurement</th>
               <th className="pb-1 text-right font-medium">Required</th>
               <th className="pb-1 text-right font-medium">Your circuit</th>
@@ -351,10 +353,10 @@ function Feedback(): React.ReactElement | null {
           </thead>
           <tbody>
             {graded.circuit.results.map((row) => (
-              <tr key={row.probe} className="border-t border-slate-100">
-                <td className="py-1 font-mono text-xs text-slate-600">{row.probe}</td>
-                <td className="py-1 text-right tabular-nums text-slate-500">{formatValue(row.expected)}</td>
-                <td className={`py-1 text-right tabular-nums ${row.within ? 'text-emerald-700' : 'text-red-700'}`}>
+              <tr key={row.probe} className="border-t border-slate-100 dark:border-slate-800">
+                <td className="py-1 font-mono text-xs text-slate-600 dark:text-slate-400">{row.probe}</td>
+                <td className="py-1 text-right tabular-nums text-slate-500 dark:text-slate-400">{formatValue(row.expected)}</td>
+                <td className={`py-1 text-right tabular-nums ${row.within ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
                   {row.actual === null ? (row.message ?? 'not measurable') : formatValue(row.actual)}
                 </td>
               </tr>
@@ -365,14 +367,14 @@ function Feedback(): React.ReactElement | null {
 
       <ol className="mt-4 space-y-2">
         {item.explanation.steps.map((step, i) => (
-          <li key={i} className="flex gap-3 text-sm leading-relaxed text-slate-700">
-            <span className="mt-0.5 font-mono text-xs text-slate-300">{i + 1}</span>
+          <li key={i} className="flex gap-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            <span className="mt-0.5 font-mono text-xs text-slate-300 dark:text-slate-600">{i + 1}</span>
             <MathText>{step}</MathText>
           </li>
         ))}
       </ol>
 
-      <p className="mt-4 border-t border-slate-100 pt-3 text-sm italic text-slate-600">
+      <p className="mt-4 border-t border-slate-100 pt-3 text-sm italic text-slate-600 dark:border-slate-800 dark:text-slate-400">
         <MathText>{item.explanation.principle}</MathText>
       </p>
     </section>

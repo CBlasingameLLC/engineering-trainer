@@ -77,12 +77,12 @@ export function CircuitLab(): React.ReactElement {
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
       <header className="flex items-baseline gap-4">
-        <h1 className="text-2xl font-semibold text-slate-900">Circuit lab</h1>
-        <button className="ml-auto text-sm text-slate-500 underline" onClick={() => goTo('dashboard')}>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Circuit lab</h1>
+        <button className="ml-auto text-sm text-slate-500 underline dark:text-slate-400" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
       </header>
-      <p className="mt-2 max-w-3xl text-sm text-slate-600">
+      <p className="mt-2 max-w-3xl text-sm text-slate-600 dark:text-slate-400">
         Draw a circuit, then read the node equations it produces alongside the answer. The solver is
         cross-checked against ngspice in the test suite, so the numbers are trustworthy — but the
         equations are the point.
@@ -96,7 +96,7 @@ export function CircuitLab(): React.ReactElement {
         {(['op', 'ac', 'tran'] as const).map((m) => (
           <button
             key={m}
-            className={`rounded px-3 py-1 text-sm ${mode === m ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700'}`}
+            className={`rounded px-3 py-1 text-sm ${mode === m ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
             onClick={() => setMode(m)}
           >
             {m === 'op' ? 'Operating point' : m === 'ac' ? 'AC sweep' : 'Transient'}
@@ -104,24 +104,24 @@ export function CircuitLab(): React.ReactElement {
         ))}
 
         {mode === 'ac' && (
-          <span className="flex items-center gap-2 text-xs text-slate-500">
+          <span className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             <input
-              type="number" className="w-24 rounded border border-slate-300 px-1 py-0.5 tabular-nums"
+              type="number" className="w-24 rounded border border-slate-300 px-1 py-0.5 tabular-nums dark:border-slate-600"
               value={acRange.start} onChange={(e) => setAcRange({ ...acRange, start: Number(e.target.value) || 1 })}
             />
             to
             <input
-              type="number" className="w-28 rounded border border-slate-300 px-1 py-0.5 tabular-nums"
+              type="number" className="w-28 rounded border border-slate-300 px-1 py-0.5 tabular-nums dark:border-slate-600"
               value={acRange.stop} onChange={(e) => setAcRange({ ...acRange, stop: Number(e.target.value) || 1e6 })}
             />
             Hz
           </span>
         )}
         {mode === 'tran' && (
-          <span className="flex items-center gap-2 text-xs text-slate-500">
+          <span className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
             stop
             <input
-              type="number" step="0.001" className="w-28 rounded border border-slate-300 px-1 py-0.5 tabular-nums"
+              type="number" step="0.001" className="w-28 rounded border border-slate-300 px-1 py-0.5 tabular-nums dark:border-slate-600"
               value={tranStop} onChange={(e) => setTranStop(Number(e.target.value) || 1e-3)}
             />
             s
@@ -129,13 +129,13 @@ export function CircuitLab(): React.ReactElement {
         )}
 
         <button
-          className="ml-auto rounded bg-slate-100 px-3 py-1 text-sm text-slate-700"
+          className="ml-auto rounded bg-slate-100 px-3 py-1 text-sm text-slate-700 dark:bg-slate-800 dark:text-slate-300"
           onClick={() => { setShowNetlist(!showNetlist); setNetlistDraft(formatNetlist(built.netlist, [`.${mode}`])); }}
         >
           {showNetlist ? 'Hide netlist' : 'Netlist'}
         </button>
         <button
-          className="rounded bg-slate-800 px-3 py-1 text-sm text-white"
+          className="rounded bg-slate-800 px-3 py-1 text-sm text-white dark:bg-slate-700"
           onClick={() => void saveCircuit(schematic, formatNetlist(built.netlist))}
         >
           Save
@@ -145,22 +145,22 @@ export function CircuitLab(): React.ReactElement {
       {showNetlist && (
         <div className="card mt-3 p-3">
           <textarea
-            className="h-40 w-full rounded border border-slate-200 p-2 font-mono text-xs"
+            className="h-40 w-full rounded border border-slate-200 p-2 font-mono text-xs dark:border-slate-700"
             value={netlistDraft}
             onChange={(e) => setNetlistDraft(e.target.value)}
             spellCheck={false}
           />
           <div className="mt-2 flex items-center gap-3">
-            <button className="rounded bg-slate-100 px-2 py-1 text-xs" onClick={importNetlist}>
+            <button className="rounded bg-slate-100 px-2 py-1 text-xs dark:bg-slate-800" onClick={importNetlist}>
               Check deck
             </button>
-            {importError && <span className="text-xs text-slate-600">{importError}</span>}
+            {importError && <span className="text-xs text-slate-600 dark:text-slate-400">{importError}</span>}
           </div>
         </div>
       )}
 
       {built.issues.length > 0 && (
-        <ul className="mt-4 space-y-1 text-sm text-orange-800">
+        <ul className="mt-4 space-y-1 text-sm text-orange-800 dark:text-orange-200">
           {built.issues.map((issue, i) => (
             <li key={i}>• {issue.message}</li>
           ))}
@@ -168,24 +168,24 @@ export function CircuitLab(): React.ReactElement {
       )}
 
       {result?.kind === 'error' && (
-        <p className="mt-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800">{result.message}</p>
+        <p className="mt-4 rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200">{result.message}</p>
       )}
 
       {result?.kind === 'op' && (
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           <section className="card p-4">
-            <h2 className="text-sm font-semibold text-slate-900">Operating point</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Operating point</h2>
             <table className="mt-2 w-full text-sm">
               <tbody>
                 {[...result.data.voltages].filter(([n]) => n !== '0').map(([node, v]) => (
-                  <tr key={node} className="border-b border-slate-100 last:border-0">
-                    <td className="py-1 font-mono text-xs text-slate-500">v({node})</td>
+                  <tr key={node} className="border-b border-slate-100 last:border-0 dark:border-slate-800">
+                    <td className="py-1 font-mono text-xs text-slate-500 dark:text-slate-400">v({node})</td>
                     <td className="py-1 text-right tabular-nums">{formatValue(v)}V</td>
                   </tr>
                 ))}
                 {[...result.data.currents].map(([id, i]) => (
-                  <tr key={id} className="border-b border-slate-100 last:border-0">
-                    <td className="py-1 font-mono text-xs text-slate-500">i({id})</td>
+                  <tr key={id} className="border-b border-slate-100 last:border-0 dark:border-slate-800">
+                    <td className="py-1 font-mono text-xs text-slate-500 dark:text-slate-400">i({id})</td>
                     <td className="py-1 text-right tabular-nums">{formatValue(i)}A</td>
                   </tr>
                 ))}
@@ -194,20 +194,20 @@ export function CircuitLab(): React.ReactElement {
           </section>
 
           <section className="card p-4">
-            <h2 className="text-sm font-semibold text-slate-900">The equations you should have written</h2>
-            <p className="mt-1 text-xs text-slate-500">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">The equations you should have written</h2>
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
               One KCL equation per node, assembled from the parts you placed.
             </p>
-            <ul className="mt-2 space-y-1 font-mono text-xs text-slate-700" data-testid="node-equations">
+            <ul className="mt-2 space-y-1 font-mono text-xs text-slate-700 dark:text-slate-300" data-testid="node-equations">
               {result.data.equations.map((equation) => (
                 <li key={equation}>{equation}</li>
               ))}
             </ul>
-            <h3 className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400">What each part contributed</h3>
-            <ul className="mt-1 space-y-0.5 text-xs text-slate-600" data-testid="element-stamps">
+            <h3 className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">What each part contributed</h3>
+            <ul className="mt-1 space-y-0.5 text-xs text-slate-600 dark:text-slate-400" data-testid="element-stamps">
               {result.data.stamps.map((stamp) => (
                 <li key={stamp.elementId}>
-                  <span className="font-mono text-slate-900">{stamp.elementId}</span> — {stamp.description}
+                  <span className="font-mono text-slate-900 dark:text-slate-100">{stamp.elementId}</span> — {stamp.description}
                 </li>
               ))}
             </ul>
@@ -218,9 +218,9 @@ export function CircuitLab(): React.ReactElement {
       {result?.kind === 'ac' && activeProbe && (
         <section className="card mt-6 p-4">
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-semibold text-slate-900">Bode plot</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Bode plot</h2>
             <select
-              className="rounded border border-slate-300 px-2 py-0.5 text-xs"
+              className="rounded border border-slate-300 px-2 py-0.5 text-xs dark:border-slate-600"
               value={activeProbe}
               onChange={(e) => setProbe(e.target.value)}
             >
@@ -234,9 +234,9 @@ export function CircuitLab(): React.ReactElement {
       {result?.kind === 'tran' && activeProbe && (
         <section className="card mt-6 p-4">
           <div className="flex items-center gap-3">
-            <h2 className="text-sm font-semibold text-slate-900">Transient response</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Transient response</h2>
             <select
-              className="rounded border border-slate-300 px-2 py-0.5 text-xs"
+              className="rounded border border-slate-300 px-2 py-0.5 text-xs dark:border-slate-600"
               value={activeProbe}
               onChange={(e) => setProbe(e.target.value)}
             >
@@ -253,19 +253,19 @@ export function CircuitLab(): React.ReactElement {
 
       {circuits.length > 0 && (
         <section className="mt-8">
-          <h2 className="text-sm font-semibold text-slate-900">Saved circuits</h2>
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Saved circuits</h2>
           <ul className="mt-2 space-y-1">
             {circuits.map((record) => (
               <li key={record.id} className="card flex items-center gap-3 px-3 py-2 text-sm">
                 <button
-                  className="text-slate-900 underline"
+                  className="text-slate-900 underline dark:text-slate-100"
                   onClick={() => setSchematic(record.schematic as Schematic)}
                 >
                   {record.name}
                 </button>
-                <span className="text-xs text-slate-400">{record.updatedAt.slice(0, 16).replace('T', ' ')}</span>
+                <span className="text-xs text-slate-400 dark:text-slate-500">{record.updatedAt.slice(0, 16).replace('T', ' ')}</span>
                 <button
-                  className="ml-auto text-xs text-red-700"
+                  className="ml-auto text-xs text-red-700 dark:text-red-300"
                   onClick={() => void removeCircuit(record.id)}
                 >
                   Delete
@@ -282,7 +282,7 @@ export function CircuitLab(): React.ReactElement {
 const PLOT = { width: 640, height: 220, pad: 44 };
 
 function BodePlot({ curve }: { curve: { frequencyHz: number; magnitudeDb: number; phaseDeg: number }[] }): React.ReactElement {
-  if (curve.length < 2) return <p className="mt-2 text-sm text-slate-500">Not enough points.</p>;
+  if (curve.length < 2) return <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Not enough points.</p>;
 
   const xs = curve.map((p) => Math.log10(p.frequencyHz));
   const ys = curve.map((p) => p.magnitudeDb);
@@ -294,7 +294,7 @@ function BodePlot({ curve }: { curve: { frequencyHz: number; magnitudeDb: number
         <Axes xLabel="frequency (decades)" yLabel="dB" />
         <path d={path} fill="none" stroke="#0284c7" strokeWidth={2} />
       </svg>
-      <figcaption className="text-xs text-slate-500">
+      <figcaption className="text-xs text-slate-500 dark:text-slate-400">
         {Math.min(...curve.map((c) => c.frequencyHz)).toPrecision(3)} Hz to{' '}
         {Math.max(...curve.map((c) => c.frequencyHz)).toPrecision(3)} Hz ·{' '}
         {Math.min(...ys).toFixed(1)} to {Math.max(...ys).toFixed(1)} dB
@@ -304,7 +304,7 @@ function BodePlot({ curve }: { curve: { frequencyHz: number; magnitudeDb: number
 }
 
 function WavePlot({ points, xLabel, yLabel }: { points: { x: number; y: number }[]; xLabel: string; yLabel: string }): React.ReactElement {
-  if (points.length < 2) return <p className="mt-2 text-sm text-slate-500">Not enough points.</p>;
+  if (points.length < 2) return <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">Not enough points.</p>;
   const path = scalePath(points.map((p) => p.x), points.map((p) => p.y));
   const ys = points.map((p) => p.y);
 
@@ -314,7 +314,7 @@ function WavePlot({ points, xLabel, yLabel }: { points: { x: number; y: number }
         <Axes xLabel={xLabel} yLabel={yLabel} />
         <path d={path} fill="none" stroke="#0284c7" strokeWidth={2} />
       </svg>
-      <figcaption className="text-xs text-slate-500">
+      <figcaption className="text-xs text-slate-500 dark:text-slate-400">
         0 to {points[points.length - 1]!.x.toPrecision(3)} s · {Math.min(...ys).toPrecision(3)} to{' '}
         {Math.max(...ys).toPrecision(3)} V
       </figcaption>

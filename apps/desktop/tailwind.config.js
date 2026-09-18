@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
+  // Class-based rather than media-based: the app offers an explicit
+  // light/dark choice as well as following the system, and a media query
+  // cannot be overridden by a preference.
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {

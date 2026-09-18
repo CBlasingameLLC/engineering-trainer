@@ -46,41 +46,41 @@ export function Report(): React.ReactElement {
     return (
       <div className="mx-auto max-w-3xl px-6 py-10">
         <header className="flex items-baseline gap-3">
-          <h1 className="text-2xl font-semibold text-slate-900">
+          <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
             {challenge.courseId} challenge exam
           </h1>
           <span
             className={`rounded px-2 py-0.5 text-sm font-semibold ${
-              challenge.passed ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-700'
+              challenge.passed ? 'bg-amber-100 text-amber-900 dark:bg-amber-900 dark:text-amber-100' : 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
             }`}
           >
             {challenge.passed ? 'Passed — crest earned' : 'Not passed'}
           </span>
-          <button className="ml-auto text-sm text-slate-500 underline" onClick={() => goTo('dashboard')}>
+          <button className="ml-auto text-sm text-slate-500 underline dark:text-slate-400" onClick={() => goTo('dashboard')}>
             Back to dashboard
           </button>
         </header>
 
         <dl className="mt-6 flex flex-wrap gap-8">
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-400">Score</dt>
-            <dd className="text-xl tabular-nums text-slate-900">{pct(challenge.scoreFraction)}</dd>
-            <dd className="text-xs text-slate-500">{challenge.correctCount} of {challenge.itemsAnswered}</dd>
+            <dt className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">Score</dt>
+            <dd className="text-xl tabular-nums text-slate-900 dark:text-slate-100">{pct(challenge.scoreFraction)}</dd>
+            <dd className="text-xs text-slate-500 dark:text-slate-400">{challenge.correctCount} of {challenge.itemsAnswered}</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-400">Coverage</dt>
-            <dd className="text-xl tabular-nums text-slate-900">{pct(challenge.coverage)}</dd>
-            <dd className="text-xs text-slate-500">of the course's topics</dd>
+            <dt className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">Coverage</dt>
+            <dd className="text-xl tabular-nums text-slate-900 dark:text-slate-100">{pct(challenge.coverage)}</dd>
+            <dd className="text-xs text-slate-500 dark:text-slate-400">of the course's topics</dd>
           </div>
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-400">XP earned</dt>
-            <dd className="text-xl tabular-nums text-amber-700">{sessionXp}</dd>
+            <dt className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">XP earned</dt>
+            <dd className="text-xl tabular-nums text-amber-700 dark:text-amber-300">{sessionXp}</dd>
           </div>
           {streak && (
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-400">Streak</dt>
-              <dd className="text-xl tabular-nums text-slate-900">{streak.state.current}</dd>
-              <dd className="text-xs text-slate-500">
+              <dt className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">Streak</dt>
+              <dd className="text-xl tabular-nums text-slate-900 dark:text-slate-100">{streak.state.current}</dd>
+              <dd className="text-xs text-slate-500 dark:text-slate-400">
                 {streak.outcome === 'frozen'
                   ? `${streak.freezesSpent} freeze spent covering a missed day`
                   : streak.outcome === 'broken'
@@ -95,8 +95,8 @@ export function Report(): React.ReactElement {
 
         {!challenge.passed && challenge.reasons.length > 0 && (
           <section className="mt-6">
-            <h2 className="text-sm font-semibold text-slate-900">What stood in the way</h2>
-            <ul className="mt-2 space-y-1 text-sm text-slate-700">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">What stood in the way</h2>
+            <ul className="mt-2 space-y-1 text-sm text-slate-700 dark:text-slate-300">
               {challenge.reasons.map((reason) => (
                 <li key={reason}>• {reason}</li>
               ))}
@@ -106,11 +106,11 @@ export function Report(): React.ReactElement {
 
         {challenge.failedKcs.length > 0 && graph && (
           <section className="mt-6">
-            <h2 className="text-sm font-semibold text-slate-900">Topics below the floor</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Topics below the floor</h2>
             <ul className="mt-2 space-y-1">
               {challenge.failedKcs.map((id) => (
                 <li key={id} className="card px-4 py-2 text-sm" data-kc-id={id}>
-                  <span className="font-medium text-slate-900">{graph.kcs.get(id)?.title ?? id}</span>
+                  <span className="font-medium text-slate-900 dark:text-slate-100">{graph.kcs.get(id)?.title ?? id}</span>
                 </li>
               ))}
             </ul>
@@ -122,7 +122,7 @@ export function Report(): React.ReactElement {
 
   if (!placement || !grouped) {
     return (
-      <div className="mx-auto max-w-2xl p-8 text-sm text-slate-500">
+      <div className="mx-auto max-w-2xl p-8 text-sm text-slate-500 dark:text-slate-400">
         No placement results yet.{' '}
         <button className="underline" onClick={() => goTo('dashboard')}>
           Back to dashboard
@@ -139,8 +139,8 @@ export function Report(): React.ReactElement {
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
       <header>
-        <h1 className="text-2xl font-semibold text-slate-900">Placement results</h1>
-        <p className="mt-2 text-sm text-slate-600">
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Placement results</h1>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
           {placement.itemsAdministered} items measured {grouped.measured.length} concepts directly, and
           implied {grouped.inferred.length} more through the prerequisite graph.{' '}
           {placement.stopReason === 'targets-met'
@@ -152,10 +152,10 @@ export function Report(): React.ReactElement {
       </header>
 
       <div className="mt-8 grid grid-cols-4 gap-3">
-        <Tally label="Gaps" value={gaps.length} tone="bg-red-50 text-red-900" />
+        <Tally label="Gaps" value={gaps.length} tone="bg-red-50 text-red-900 dark:bg-red-950" />
         <Tally label="Decayed" value={decayed.length} tone="bg-violet-50 text-violet-900" />
-        <Tally label="Fragile" value={fragile.length} tone="bg-amber-50 text-amber-900" />
-        <Tally label="Solid" value={solid.length} tone="bg-emerald-50 text-emerald-900" />
+        <Tally label="Fragile" value={fragile.length} tone="bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100" />
+        <Tally label="Solid" value={solid.length} tone="bg-emerald-50 text-emerald-900 dark:bg-emerald-950" />
       </div>
 
       {gaps.length > 0 && (
@@ -181,8 +181,8 @@ export function Report(): React.ReactElement {
 
       {grouped.inferred.length > 0 && (
         <section className="mt-10">
-          <h2 className="text-sm font-semibold text-slate-900">Inferred, not tested</h2>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Inferred, not tested</h2>
+          <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">
             These were never asked about. Their standing follows from the prerequisite graph — solving a
             problem implies competence in what it rests on, and failing one limits what can rest on it.
             These are bounds, not estimates: an implied floor says the evidence supports{' '}
@@ -192,16 +192,16 @@ export function Report(): React.ReactElement {
           <ul className="mt-4 space-y-1">
             {grouped.inferred.map(({ adj, kc, sourceKc }) => (
               <li key={adj.kcId} className="card flex items-center gap-3 px-4 py-2 text-sm">
-                <span className="font-mono text-xs text-slate-400">{kc.courseId}</span>
-                <span className="text-slate-800">{kc.title}</span>
+                <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{kc.courseId}</span>
+                <span className="text-slate-800 dark:text-slate-200">{kc.title}</span>
                 {/* Upward inference establishes a floor, downward a ceiling.
                     Rendering a bare percentage would read as an ability
                     estimate, which is exactly what it is not. */}
-                <span className="ml-auto tabular-nums text-slate-500">
+                <span className="ml-auto tabular-nums text-slate-500 dark:text-slate-400">
                   {adj.direction === 'from-dependent' ? 'at least ' : 'at most '}
                   {pct(adj.prior)}
                 </span>
-                <span className="w-64 truncate text-right text-xs text-slate-400">
+                <span className="w-64 truncate text-right text-xs text-slate-400 dark:text-slate-500">
                   {adj.direction === 'from-dependent' ? 'implied by' : 'limited by'} {sourceKc?.title ?? adj.source}
                 </span>
               </li>
@@ -210,7 +210,7 @@ export function Report(): React.ReactElement {
         </section>
       )}
 
-      <footer className="mt-10 flex gap-3 border-t border-slate-200 pt-6">
+      <footer className="mt-10 flex gap-3 border-t border-slate-200 pt-6 dark:border-slate-700">
         <button className="btn-primary" onClick={() => goTo('dashboard')}>
           Go to dashboard
         </button>
@@ -246,8 +246,8 @@ function Group({
 }): React.ReactElement {
   return (
     <section className="mt-8">
-      <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
-      <p className="mt-1 max-w-2xl text-sm text-slate-600">{blurb}</p>
+      <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
+      <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-400">{blurb}</p>
       <ul className="mt-3 space-y-1">
         {(collapsed ? rows.slice(0, 5) : rows).map(({ kc, mastery }) => (
           // The KC id is exposed for the same reason the session player exposes
@@ -255,25 +255,25 @@ function Group({
           // and a driver matching on prose silently rots as content is added.
           <li key={kc.id} data-kc-id={kc.id} className="card px-4 py-3">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs text-slate-400">{kc.courseId}</span>
-              <span className="text-sm font-medium text-slate-900">{kc.title}</span>
+              <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{kc.courseId}</span>
+              <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{kc.title}</span>
               <span className={`rounded px-1.5 py-0.5 text-xs ${DIAGNOSIS_COPY[mastery.diagnosis].chip}`}>
                 {DIAGNOSIS_COPY[mastery.diagnosis].label}
               </span>
-              <span className="ml-auto text-xs text-slate-400">{kc.unit}</span>
+              <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">{kc.unit}</span>
             </div>
-            <div className="mt-2 flex items-center gap-4 text-xs text-slate-500">
+            <div className="mt-2 flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
               {/* Showing both factors, not just the product: it is the gap
                   between them that says whether to teach or to review. */}
               <span className="tabular-nums">learned {pct(mastery.pMastery)}</span>
               <span className="tabular-nums">retained {pct(mastery.retrievability)}</span>
-              <span className="tabular-nums font-medium text-slate-700">overall {pct(mastery.composite)}</span>
+              <span className="tabular-nums font-medium text-slate-700 dark:text-slate-300">overall {pct(mastery.composite)}</span>
               <span className="ml-auto">{mastery.attempts} response{mastery.attempts === 1 ? '' : 's'}</span>
             </div>
           </li>
         ))}
         {collapsed && rows.length > 5 && (
-          <li className="px-4 py-1 text-xs text-slate-400">and {rows.length - 5} more</li>
+          <li className="px-4 py-1 text-xs text-slate-400 dark:text-slate-500">and {rows.length - 5} more</li>
         )}
       </ul>
     </section>

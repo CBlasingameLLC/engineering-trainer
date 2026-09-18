@@ -83,7 +83,10 @@ export default tseslint.config(
     // under Node globals alone reports those as undefined.
     files: ['apps/desktop/e2e/**/*.mjs'],
     languageOptions: {
-      globals: { document: 'readonly', window: 'readonly', Node: 'readonly' },
+      globals: {
+        document: 'readonly', window: 'readonly', Node: 'readonly',
+        getComputedStyle: 'readonly', localStorage: 'readonly',
+      },
     },
   },
 );
