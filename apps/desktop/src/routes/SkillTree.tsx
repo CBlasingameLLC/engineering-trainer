@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { blockingPrerequisites, layoutGraph, skillStates, type KcId, type SkillState } from '@et/domain';
+import { usePanZoom } from '@/ui/pan-zoom';
 import { useApp } from '@/store';
 
 /**
@@ -11,6 +12,11 @@ import { useApp } from '@/store';
  * locks it is on screen. Cross-course edges are drawn differently because they
  * are the interesting ones — the reason a circuits topic is blocked by a
  * calculus topic is exactly the connection a gradebook cannot show.
+ *
+ * The camera is a viewBox, not a scroll container. A scrolled graph couples how
+ * much of it you can see to the size of the window and can never zoom out far
+ * enough to show its shape — which for a prerequisite DAG is the view that
+ * answers the only question worth asking of it.
  */
 
 const STATE_STYLE: Record<SkillState, { fill: string; stroke: string; text: string; label: string }> = {
@@ -45,6 +51,22 @@ export function SkillTree(): React.ReactElement {
     () => (graph ? skillStates(graph, model?.byKc ?? new Map()) : new Map<KcId, SkillState>()),
     [graph, model],
   );
+
+  // Hooks run before the early return, so the bounds have to tolerate a null
+  // layout; an empty graph gets a unit box rather than a NaN viewBox.
+  const bounds = useMemo(
+    () => ({
+      minX: -NODE.width / 2,
+      minY: -NODE.height / 2,
+      maxX: (layout?.width ?? 1) + NODE.width / 2,
+      maxY: (layout?.height ?? 1) + NODE.height / 2,
+    }),
+    [layout?.width, layout?.height],
+  );
+  const camera = usePanZoom({ content: bounds, padding: 32, minScale: 0.35, maxScale: 4 });
+
+  // A click that ends a drag is not a click on whatever is under the cursor.
+  const dragOrigin = useRef<{ x: number; y: number } | null>(null);
 
   if (!content || !graph || !layout) {
     return <div className="grid h-full place-items-center text-sm text-slate-400 dark:text-slate-500">Loading…</div>;
@@ -90,11 +112,24 @@ export function SkillTree(): React.ReactElement {
         ))}
       </div>
 
-      <div className="card mt-4 overflow-x-auto p-2">
+      <div className="card relative mt-4 overflow-hidden p-0">
+        <div className="pointer-events-none absolute right-3 top-3 z-10 flex flex-col gap-1">
+          <ZoomButton label="+" title="Zoom in" onClick={() => camera.zoomBy(1.3)} />
+          <ZoomButton label="−" title="Zoom out" onClick={() => camera.zoomBy(1 / 1.3)} />
+          <ZoomButton label="⤢" title="Fit to view" onClick={camera.fit} />
+        </div>
+        <span className="pointer-events-none absolute bottom-2 left-3 z-10 text-[11px] text-slate-400 dark:text-slate-500">
+          Scroll to zoom · drag to pan · {Math.round(camera.scale * 100)}%
+        </span>
         <svg
-          width={Math.max(layout.width, 640)}
-          height={layout.height + NODE.height}
-          className="min-w-full"
+          ref={camera.ref}
+          viewBox={camera.viewBox}
+          className={`h-[62vh] w-full touch-none select-none ${camera.isPanning ? 'cursor-grabbing' : 'cursor-grab'}`}
+          onPointerDown={(e) => {
+            if (e.button !== 0) return;
+            dragOrigin.current = { x: e.clientX, y: e.clientY };
+            camera.beginPan(e);
+          }}
           data-testid="skill-tree"
         >
           {layout.edges.map((edge, i) => {
@@ -126,7 +161,13 @@ export function SkillTree(): React.ReactElement {
               <g
                 key={node.kcId}
                 transform={`translate(${node.x - NODE.width / 2},${node.y - NODE.height / 2})`}
-                onClick={() => setFocused(isFocused ? null : node.kcId)}
+                onClick={(e) => {
+                  const start = dragOrigin.current;
+                  const moved = start
+                    ? Math.hypot(e.clientX - start.x, e.clientY - start.y) > 4
+                    : false;
+                  if (!moved) setFocused(isFocused ? null : node.kcId);
+                }}
                 className="cursor-pointer"
                 data-kc-id={node.kcId}
                 data-skill-state={state}
@@ -213,6 +254,22 @@ export function SkillTree(): React.ReactElement {
         gradebook cannot represent.
       </p>
     </div>
+  );
+}
+
+function ZoomButton({
+  label, title, onClick,
+}: { label: string; title: string; onClick: () => void }): React.ReactElement {
+  return (
+    <button
+      type="button"
+      title={title}
+      aria-label={title}
+      onClick={onClick}
+      className="pointer-events-auto h-7 w-7 rounded border border-slate-300 bg-white/90 text-sm leading-none text-slate-600 shadow-sm hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-300 dark:hover:bg-slate-800"
+    >
+      {label}
+    </button>
   );
 }
 

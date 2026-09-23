@@ -75,6 +75,42 @@ if (locked) {
 } else {
   console.log('    no locked nodes in this state (nothing to check)');
 }
+// The camera, not a scrollbar. Zooming must change the viewBox and fit must put
+// it back; a tree that only scrolls cannot be zoomed out to show its shape.
+const viewBoxOf = () => page.locator('[data-testid="skill-tree"]').getAttribute('viewBox');
+const fitted = await viewBoxOf();
+const box = await page.locator('[data-testid="skill-tree"]').boundingBox();
+await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+await page.mouse.wheel(0, -400);
+await page.waitForFunction(
+  (before) => document.querySelector('[data-testid="skill-tree"]')?.getAttribute('viewBox') !== before,
+  fitted,
+  { timeout: 3000 },
+);
+const zoomed = await viewBoxOf();
+const widthOf = (vb) => Number(vb.split(/\s+/)[2]);
+if (!(widthOf(zoomed) < widthOf(fitted))) fail(`wheel did not zoom in: ${fitted} -> ${zoomed}`);
+
+await page.getByRole('button', { name: 'Fit to view' }).click();
+await page.waitForFunction(
+  (target) => document.querySelector('[data-testid="skill-tree"]')?.getAttribute('viewBox') === target,
+  fitted,
+  { timeout: 3000 },
+);
+console.log(`    camera: fit ${widthOf(fitted).toFixed(0)}w, zoomed ${widthOf(zoomed).toFixed(0)}w, fit restored`);
+
+// No scrollbar anywhere in the chain that holds the tree: the whole point is
+// that the graph is navigated rather than scrolled.
+const scrollable = await page.evaluate(() => {
+  let node = document.querySelector('[data-testid="skill-tree"]')?.parentElement;
+  while (node && node !== document.body) {
+    if (node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1) return node.className;
+    node = node.parentElement;
+  }
+  return null;
+});
+if (scrollable !== null) fail(`the skill tree still scrolls (overflowing element: ${scrollable})`);
+
 await page.screenshot({ path: `${SHOT}/06-skill-tree.png`, fullPage: true });
 
 // --- Circuit lab ------------------------------------------------------------
