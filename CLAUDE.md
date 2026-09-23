@@ -291,6 +291,25 @@ packs by the schema, and never enters a release build. Don't weaken that.
   source produces `\ldots` in the string; a single backslash is eaten by JS
   escaping and renders as `ldots`. eslint's `no-useless-escape` catches it,
   which is why that rule is worth keeping loud.
+- **A 2px wire is a 2px hit target.** Every selectable thing in the schematic
+  editor carries an invisible fat hit shape: a 10px transparent stroke under
+  each wire, a body rect inside each component group, a disc under each ground.
+  Without them a drawn wire cannot be clicked at all, and a component symbol is
+  grabbable only along the strokes themselves. Note that a part's *bounding
+  box* is not its body — the designator and value labels extend it to the
+  right, so its centre is usually empty canvas. Drive gestures at grid
+  coordinates, not at bounding boxes.
+- **Never `setPointerCapture` on an element whose children must stay
+  clickable.** Capture retargets the subsequent `click` to the capture element,
+  so a canvas that captures on pointerdown to start a pan makes every node
+  inside it unclickable. Window-level `pointermove`/`pointerup` listeners give
+  the same drag-outside-the-element behaviour without touching targeting. Both
+  the skill tree and the Circuit Lab pan this way.
+- **A drag is one undo step.** The gesture takes a history checkpoint on its
+  first actual movement and then edits silently; pushing history inside
+  `onChange` would make undo walk back a pixel at a time. Drag offsets are
+  recomputed from the gesture's origin on every move rather than accumulated,
+  so crossing grid cells does not drift.
 - **Display preferences live in `localStorage`, never in the storage adapter.**
   The attempt log is the durable record the model replays from; a theme toggle
   has no business appearing in an export of someone's learning history.

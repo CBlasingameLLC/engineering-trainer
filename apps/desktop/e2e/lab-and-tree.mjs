@@ -124,30 +124,34 @@ console.log('[3] circuit lab rendered');
 const canvas = page.locator('[data-testid="schematic-canvas"]');
 const at = (x, y) => ({ position: { x: x * GRID, y: y * GRID } });
 
+// `data-tool`, not the label: the palette buttons carry hotkey badges now, and
+// a driver that matches rendered text reports a UI affordance as a regression.
+const tool = (name) => page.locator(`button[data-tool="${name}"]`);
+
 /** Place a part from the palette at a grid position. */
-async function place(label, x, y) {
-  await page.locator('button', { hasText: new RegExp(`^${label}$`) }).first().click();
+async function place(kind, x, y) {
+  await tool(kind).click();
   await canvas.click(at(x, y));
 }
 
 /** Draw a polyline; clicking the final point twice ends it. */
 async function wire(points) {
-  await page.locator('button', { hasText: /^Wire/ }).first().click();
+  await tool('wire').click();
   for (const [x, y] of points) await canvas.click(at(x, y));
   const [lx, ly] = points[points.length - 1];
   await canvas.click(at(lx, ly));
 }
 
 // A 1k/1k divider from the default 5 V source: v(mid) must be 2.5 V.
-await place('Voltage source', 4, 8);   // pins (4,6) and (4,10)
-await place('Resistor', 12, 4);        // pins (12,2) and (12,6)
-await place('Resistor', 12, 12);       // pins (12,10) and (12,14)
+await place('vsource', 4, 8);   // pins (4,6) and (4,10)
+await place('resistor', 12, 4);  // pins (12,2) and (12,6)
+await place('resistor', 12, 12); // pins (12,10) and (12,14)
 
 await wire([[4, 6], [4, 2], [12, 2]]);      // source + to R1 top
 await wire([[12, 6], [12, 10]]);            // R1 bottom to R2 top
 await wire([[12, 14], [12, 18], [4, 18], [4, 10]]); // R2 bottom back to source -
 
-await page.locator('button', { hasText: /^Ground$/ }).first().click();
+await tool('ground').click();
 await canvas.click(at(4, 10));
 
 await page.waitForTimeout(250);
@@ -198,6 +202,86 @@ if (!equations.every((e) => /^Node \S+:/.test(e) && /·v\(/.test(e))) {
   fail('a node equation did not reference any node voltage term');
 }
 if (stamps.length !== 3) fail(`expected one stamp per part, got ${stamps.length}`);
+
+// --- editing gestures -------------------------------------------------------
+// Everything below was impossible before: a placed part could not be moved, a
+// drawn wire could not be selected, and there was no undo. The gestures are
+// driven at known grid coordinates rather than at element bounding boxes,
+// because a part's box includes its designator and value labels, so its centre
+// sits in empty canvas to the right of the body.
+await tool('select').click();
+
+const canvasBox = await canvas.boundingBox();
+const client = (gx, gy) => [canvasBox.x + gx * GRID, canvasBox.y + gy * GRID];
+const clickGrid = async (gx, gy) => {
+  const [x, y] = client(gx, gy);
+  await page.mouse.click(x, y);
+};
+const transformOf = (id) => page.locator(`g[data-component-id="${id}"]`).getAttribute('transform');
+
+// V1 was placed at grid (4, 8).
+await clickGrid(4, 8);
+const partId = await page
+  .locator('[data-testid="schematic-canvas"] g[data-component-id][data-selected="true"]')
+  .getAttribute('data-component-id');
+if (!partId) fail('clicking a part did not select it');
+const before = await transformOf(partId);
+
+// Drag moves it.
+const [fromX, fromY] = client(4, 8);
+await page.mouse.move(fromX, fromY);
+await page.mouse.down();
+await page.mouse.move(fromX + 3 * GRID, fromY, { steps: 6 });
+await page.mouse.up();
+const after = await transformOf(partId);
+if (after === before) fail(`dragging part ${partId} did not move it (still ${before})`);
+console.log(`[7] drag moved ${partId}: ${before} -> ${after}`);
+
+// Ctrl+Z puts it back, exactly.
+await page.keyboard.press('Control+z');
+await page.waitForFunction(
+  ([id, target]) => document.querySelector(`g[data-component-id="${id}"]`)?.getAttribute('transform') === target,
+  [partId, before],
+  { timeout: 3000 },
+);
+console.log('    undo restored the original position');
+
+// A hotkey arms a tool; Escape disarms it.
+await page.keyboard.press('r');
+if ((await page.locator('button[data-tool="resistor"]').getAttribute('data-active')) !== 'true') {
+  fail('pressing R did not arm the resistor tool');
+}
+await page.keyboard.press('Escape');
+if ((await page.locator('button[data-tool="select"]').getAttribute('data-active')) !== 'true') {
+  fail('Escape did not return to the select tool');
+}
+console.log('    R armed the resistor tool, Escape returned to select');
+
+// A wire is selectable and deletable, and undo brings it back. The middle wire
+// runs (12,6) to (12,10), so (12,8) is on it and on nothing else.
+const wiresBefore = await page.locator('[data-testid="schematic-canvas"] g[data-wire-id]').count();
+await clickGrid(12, 8);
+await page.keyboard.press('Delete');
+const wiresAfter = await page.locator('[data-testid="schematic-canvas"] g[data-wire-id]').count();
+if (wiresAfter !== wiresBefore - 1) fail(`deleting a wire left ${wiresAfter} of ${wiresBefore}`);
+await page.keyboard.press('Control+z');
+const wiresRestored = await page.locator('[data-testid="schematic-canvas"] g[data-wire-id]').count();
+if (wiresRestored !== wiresBefore) fail(`undo left ${wiresRestored} wires, expected ${wiresBefore}`);
+console.log(`[8] wire selected, deleted (${wiresBefore} -> ${wiresAfter}) and restored by undo`);
+
+// Rubber band from empty canvas over everything selects all three parts.
+const [bandX, bandY] = client(24, 2);
+await page.mouse.move(bandX, bandY);
+await page.mouse.down();
+await page.mouse.move(canvasBox.x + 2, canvasBox.y + canvasBox.height - 2, { steps: 8 });
+await page.mouse.up();
+const selected = await page
+  .locator('[data-testid="schematic-canvas"] g[data-component-id][data-selected="true"]')
+  .count();
+if (selected !== 3) fail(`rubber band selected ${selected} parts, expected 3`);
+console.log(`[9] rubber band selected all ${selected} parts`);
+
+await page.screenshot({ path: `${SHOT}/08-circuit-lab-editing.png`, fullPage: true });
 
 console.log(errors.length === 0 ? '\nNo console errors.' : `\nConsole errors:\n${errors.join('\n')}`);
 await browser.close();

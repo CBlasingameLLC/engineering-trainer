@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   GROUND, extractNets, formatValue, nextDesignator, pinPositions, toNetlist,
   type ElementKind, type PlacedComponent, type Point, type Rotation, type Schematic,
 } from '@et/circuits';
+import { usePanZoom } from '@/ui/pan-zoom';
 import { ComponentSymbol, GroundSymbol, PALETTE } from './symbols';
 
 /**
@@ -16,11 +17,42 @@ import { ComponentSymbol, GroundSymbol, PALETTE } from './symbols';
  * Used both standalone in the Circuit Lab and inline in the session player for
  * `circuit-build` items, so it is a controlled component: the parent owns the
  * schematic and decides what saving means.
+ *
+ * The interaction model is the one a schematic capture tool has, because that
+ * is what people bring to it: parts drag, the selection is a set, wire vertices
+ * are handles, the wheel zooms, and every tool has a one-key shortcut. The
+ * previous version could place a part and then never move it, and a wire once
+ * drawn could not be selected at all — so the only way to fix a mistake was to
+ * start over.
  */
 
 const GRID = 18;
 
 export type Tool = 'select' | 'wire' | 'ground' | ElementKind;
+
+/**
+ * Selection ids are namespaced because the three things you can select live in
+ * three different arrays, and grounds have no identity of their own — they are
+ * bare points, addressed by index. Every mutation that reorders an array clears
+ * the selection rather than letting an index point at a different ground.
+ */
+type SelectionId = string;
+const componentId = (id: string): SelectionId => `c:${id}`;
+const wireId = (id: string): SelectionId => `w:${id}`;
+const groundId = (index: number): SelectionId => `g:${index}`;
+
+const HOTKEY_TOOL: Record<string, Tool> = {
+  s: 'select', w: 'wire', g: 'ground',
+  r: 'resistor', c: 'capacitor', l: 'inductor',
+  v: 'vsource', i: 'isource', o: 'opamp',
+};
+
+const HOTKEY_HINTS: [string, string][] = [
+  ['S', 'select'], ['W', 'wire'], ['G', 'ground'],
+  ['R', 'resistor'], ['C', 'capacitor'], ['L', 'inductor'],
+  ['V', 'V source'], ['I', 'I source'], ['O', 'op-amp'],
+  ['Space', 'rotate'], ['Del', 'delete'], ['Ctrl+Z', 'undo'], ['Esc', 'cancel'],
+];
 
 export interface SchematicEditorProps {
   value: Schematic;
@@ -40,21 +72,81 @@ export function SchematicEditor({
   columns = 34,
   readOnly = false,
 }: SchematicEditorProps): React.ReactElement {
-  const svgRef = useRef<SVGSVGElement | null>(null);
   const [tool, setTool] = useState<Tool>('select');
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selection, setSelection] = useState<ReadonlySet<SelectionId>>(new Set());
   const [draft, setDraft] = useState<Point[]>([]);
   const [cursor, setCursor] = useState<Point | null>(null);
+  const [marquee, setMarquee] = useState<{ from: Point; to: Point } | null>(null);
+  const [spaceHeld, setSpaceHeld] = useState(false);
+
+  const width = columns * GRID;
+  const height = rows * GRID;
+
+  // Padding 0 and a viewBox equal to the element's intrinsic size, so the
+  // default view is 1:1 with grid coordinates. Anything else would make
+  // "click at grid (4, 8)" mean something different from what it says.
+  const camera = usePanZoom({
+    content: useMemo(() => ({ minX: 0, minY: 0, maxX: width, maxY: height }), [width, height]),
+    padding: 0,
+    minScale: 0.3,
+    maxScale: 5,
+  });
 
   const nets = useMemo(() => extractNets(value), [value]);
   const built = useMemo(() => toNetlist(value), [value]);
 
-  const toGrid = useCallback((event: React.MouseEvent): Point => {
-    const rect = svgRef.current?.getBoundingClientRect();
-    if (!rect) return { x: 0, y: 0 };
-    return { x: snap(event.clientX - rect.left), y: snap(event.clientY - rect.top) };
+  // --- history -------------------------------------------------------------
+  // A drag emits a change on every pointermove, so pushing history inside
+  // `onChange` would make undo step back one pixel at a time. Instead the
+  // gesture pushes once when it starts and then edits silently.
+  const past = useRef<Schematic[]>([]);
+  const future = useRef<Schematic[]>([]);
+  const valueRef = useRef(value);
+  valueRef.current = value;
+
+  /** Record the current drawing as an undo point. */
+  const checkpoint = useCallback(() => {
+    past.current = [...past.current.slice(-49), valueRef.current];
+    future.current = [];
   }, []);
 
+  /** A discrete edit: one undo point, then the change. */
+  const commit = useCallback(
+    (next: Schematic) => {
+      checkpoint();
+      onChange(next);
+    },
+    [checkpoint, onChange],
+  );
+
+  const undo = useCallback(() => {
+    const previous = past.current.at(-1);
+    if (!previous) return;
+    past.current = past.current.slice(0, -1);
+    future.current = [...future.current, valueRef.current];
+    setSelection(new Set());
+    onChange(previous);
+  }, [onChange]);
+
+  const redo = useCallback(() => {
+    const next = future.current.at(-1);
+    if (!next) return;
+    future.current = future.current.slice(0, -1);
+    past.current = [...past.current, valueRef.current];
+    setSelection(new Set());
+    onChange(next);
+  }, [onChange]);
+
+  // --- coordinates ---------------------------------------------------------
+  const toGrid = useCallback(
+    (event: { clientX: number; clientY: number }): Point => {
+      const world = camera.toWorld(event);
+      return { x: snap(world.x), y: snap(world.y) };
+    },
+    [camera],
+  );
+
+  // --- mutation ------------------------------------------------------------
   const place = (kind: ElementKind, at: Point): void => {
     const entry = PALETTE.find((p) => p.kind === kind);
     const component: PlacedComponent = {
@@ -64,26 +156,260 @@ export function SchematicEditor({
       rotation: 0,
       value: entry?.defaultValue ?? 1000,
     };
-    onChange({ ...value, components: [...value.components, component] });
-    setSelected(component.id);
+    commit({ ...value, components: [...value.components, component] });
+    setSelection(new Set([componentId(component.id)]));
     setTool('select');
   };
 
-  const handleClick = (event: React.MouseEvent): void => {
-    if (readOnly) return;
-    const at = toGrid(event);
+  const commitWire = useCallback(() => {
+    if (draft.length >= 2) {
+      commit({
+        ...value,
+        wires: [...value.wires, { id: `w${value.wires.length + 1}-${Date.now()}`, points: draft }],
+      });
+    }
+    setDraft([]);
+    setTool('select');
+  }, [commit, draft, value]);
 
-    if (tool === 'select') {
-      setSelected(null);
+  const update = (id: string, patch: Partial<PlacedComponent>): void => {
+    commit({
+      ...value,
+      components: value.components.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+    });
+  };
+
+  const deleteSelection = useCallback(() => {
+    if (selection.size === 0) return;
+    commit({
+      ...value,
+      components: value.components.filter((c) => !selection.has(componentId(c.id))),
+      wires: value.wires.filter((w) => !selection.has(wireId(w.id))),
+      grounds: value.grounds.filter((_, i) => !selection.has(groundId(i))),
+    });
+    setSelection(new Set());
+  }, [commit, selection, value]);
+
+  const rotateSelection = useCallback(() => {
+    const ids = [...selection].filter((s) => s.startsWith('c:')).map((s) => s.slice(2));
+    if (ids.length === 0) return;
+    commit({
+      ...value,
+      components: value.components.map((c) =>
+        ids.includes(c.id) ? { ...c, rotation: (((c.rotation + 90) % 360) as Rotation) } : c,
+      ),
+    });
+  }, [commit, selection, value]);
+
+  // --- keyboard ------------------------------------------------------------
+  useEffect(() => {
+    if (readOnly) return;
+    const onKeyDown = (event: KeyboardEvent): void => {
+      const target = event.target as HTMLElement | null;
+      // Never steal a key from a field someone is typing into — the value box
+      // in this very panel accepts "4.7k", and `c` would otherwise drop a
+      // capacitor on the canvas mid-word.
+      if (target && (/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) || target.isContentEditable)) return;
+
+      const key = event.key.toLowerCase();
+
+      if ((event.ctrlKey || event.metaKey) && key === 'z') {
+        event.preventDefault();
+        if (event.shiftKey) redo();
+        else undo();
+        return;
+      }
+      if ((event.ctrlKey || event.metaKey) && key === 'y') {
+        event.preventDefault();
+        redo();
+        return;
+      }
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      if (event.key === 'Escape') {
+        setDraft([]);
+        setSelection(new Set());
+        setTool('select');
+        return;
+      }
+      if (event.key === 'Enter' && draft.length >= 2) {
+        event.preventDefault();
+        commitWire();
+        return;
+      }
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        event.preventDefault();
+        deleteSelection();
+        return;
+      }
+      if (event.key === ' ') {
+        // Space is the page-scroll key, and this canvas must not scroll.
+        event.preventDefault();
+        setSpaceHeld(true);
+        rotateSelection();
+        return;
+      }
+      const next = HOTKEY_TOOL[key];
+      if (next) {
+        event.preventDefault();
+        setTool(next);
+        setDraft([]);
+        if (next !== 'select') setSelection(new Set());
+      }
+    };
+    const onKeyUp = (event: KeyboardEvent): void => {
+      if (event.key === ' ') setSpaceHeld(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('keyup', onKeyUp);
+    };
+  }, [commitWire, deleteSelection, draft.length, readOnly, redo, rotateSelection, undo]);
+
+  // --- dragging ------------------------------------------------------------
+  /**
+   * Move everything selected, in one history entry.
+   *
+   * Offsets are recomputed from the gesture's own start each move rather than
+   * accumulated, so a drag that crosses grid cells lands exactly where the
+   * cursor is instead of drifting by the rounding error of every step.
+   */
+  const beginMove = (event: React.PointerEvent, ids: ReadonlySet<SelectionId>): void => {
+    const origin = toGrid(event);
+    const before = valueRef.current;
+    let moved = false;
+
+    const move = (e: PointerEvent): void => {
+      const now = toGrid(e);
+      const dx = now.x - origin.x;
+      const dy = now.y - origin.y;
+      if (dx === 0 && dy === 0 && !moved) return;
+      if (!moved) {
+        moved = true;
+        checkpoint();
+      }
+      onChange({
+        ...before,
+        components: before.components.map((c) =>
+          ids.has(componentId(c.id)) ? { ...c, at: { x: c.at.x + dx, y: c.at.y + dy } } : c,
+        ),
+        wires: before.wires.map((w) =>
+          ids.has(wireId(w.id))
+            ? { ...w, points: w.points.map((p) => ({ x: p.x + dx, y: p.y + dy })) }
+            : w,
+        ),
+        grounds: before.grounds.map((g, i) =>
+          ids.has(groundId(i)) ? { x: g.x + dx, y: g.y + dy } : g,
+        ),
+      });
+    };
+    const done = (): void => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', done);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', done);
+  };
+
+  /** Drag one vertex of one wire, which is how a route gets fixed. */
+  const beginVertexDrag = (event: React.PointerEvent, wire: string, index: number): void => {
+    event.stopPropagation();
+    const before = valueRef.current;
+    let moved = false;
+
+    const move = (e: PointerEvent): void => {
+      const at = toGrid(e);
+      if (!moved) {
+        moved = true;
+        checkpoint();
+      }
+      onChange({
+        ...before,
+        wires: before.wires.map((w) =>
+          w.id === wire ? { ...w, points: w.points.map((p, i) => (i === index ? at : p)) } : w,
+        ),
+      });
+    };
+    const done = (): void => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', done);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', done);
+  };
+
+  /** Rubber-band select: everything whose anchor falls inside the box. */
+  const beginMarquee = (event: React.PointerEvent, additive: boolean): void => {
+    const from = toGrid(event);
+    const base = additive ? new Set(selection) : new Set<SelectionId>();
+    setMarquee({ from, to: from });
+
+    const move = (e: PointerEvent): void => setMarquee({ from, to: toGrid(e) });
+    const done = (e: PointerEvent): void => {
+      const to = toGrid(e);
+      const minX = Math.min(from.x, to.x);
+      const maxX = Math.max(from.x, to.x);
+      const minY = Math.min(from.y, to.y);
+      const maxY = Math.max(from.y, to.y);
+      const inside = (p: Point): boolean => p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY;
+
+      const picked = new Set(base);
+      for (const c of valueRef.current.components) if (inside(c.at)) picked.add(componentId(c.id));
+      for (const w of valueRef.current.wires) if (w.points.every(inside)) picked.add(wireId(w.id));
+      valueRef.current.grounds.forEach((g, i) => { if (inside(g)) picked.add(groundId(i)); });
+
+      setSelection(picked);
+      setMarquee(null);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', done);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', done);
+  };
+
+  /** Pointer-down on a selectable thing, shared by parts, wires and grounds. */
+  const selectAndMaybeMove = (event: React.PointerEvent, id: SelectionId): void => {
+    if (readOnly || tool !== 'select' || event.button !== 0) return;
+    event.stopPropagation();
+
+    // Dragging one of several selected things moves the whole set; dragging
+    // something unselected selects just it first. Shift always toggles and
+    // never starts a move, so building a selection cannot nudge the drawing.
+    if (event.shiftKey) {
+      const next = new Set(selection);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      setSelection(next);
       return;
     }
+    const ids = selection.has(id) ? selection : new Set([id]);
+    if (!selection.has(id)) setSelection(ids);
+    beginMove(event, ids);
+  };
+
+  const onCanvasPointerDown = (event: React.PointerEvent): void => {
+    if (event.button === 1 || spaceHeld) {
+      event.preventDefault();
+      camera.beginPan(event);
+      return;
+    }
+    if (readOnly || event.button !== 0) return;
+    if (tool === 'select') beginMarquee(event, event.shiftKey);
+  };
+
+  const onCanvasClick = (event: React.MouseEvent): void => {
+    if (readOnly || spaceHeld) return;
+    const at = toGrid(event);
+
+    if (tool === 'select') return; // handled by pointerdown
     if (tool === 'ground') {
-      onChange({ ...value, grounds: [...value.grounds, at] });
+      commit({ ...value, grounds: [...value.grounds, at] });
       setTool('select');
       return;
     }
     if (tool === 'wire') {
-      // Double-click (same point twice) ends the polyline.
       const last = draft[draft.length - 1];
       if (last && last.x === at.x && last.y === at.y) {
         commitWire();
@@ -95,98 +421,80 @@ export function SchematicEditor({
     place(tool, at);
   };
 
-  const commitWire = (): void => {
-    if (draft.length >= 2) {
-      onChange({
-        ...value,
-        wires: [...value.wires, { id: `w${value.wires.length + 1}-${Date.now()}`, points: draft }],
-      });
-    }
-    setDraft([]);
-    setTool('select');
-  };
-
-  const update = (id: string, patch: Partial<PlacedComponent>): void => {
-    onChange({
-      ...value,
-      components: value.components.map((c) => (c.id === id ? { ...c, ...patch } : c)),
-    });
-  };
-
-  const removeSelected = (): void => {
-    if (!selected) return;
-    onChange({ ...value, components: value.components.filter((c) => c.id !== selected) });
-    setSelected(null);
-  };
-
-  const selectedComponent = value.components.find((c) => c.id === selected) ?? null;
-  const width = columns * GRID;
-  const height = rows * GRID;
+  const selectedComponents = value.components.filter((c) => selection.has(componentId(c.id)));
+  const only = selectedComponents.length === 1 ? selectedComponents[0]! : null;
+  const selectedWire =
+    [...selection].filter((s) => s.startsWith('w:')).length === 1
+      ? value.wires.find((w) => selection.has(wireId(w.id))) ?? null
+      : null;
 
   return (
     <div className="flex gap-4">
       {!readOnly && (
         <div className="w-44 shrink-0 space-y-1">
-          <button
-            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'select' ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
-            onClick={() => { setTool('select'); setDraft([]); }}
-          >
+          <ToolButton tool="select" active={tool === 'select'} hint="S" onClick={() => { setTool('select'); setDraft([]); }}>
             Select
-          </button>
-          <button
-            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'wire' ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
-            onClick={() => { setTool('wire'); setSelected(null); }}
-          >
-            Wire {tool === 'wire' && <span className="text-slate-300 dark:text-slate-600">· click the last point to finish</span>}
-          </button>
-          <button
-            className={`w-full rounded px-2 py-1 text-left text-xs ${tool === 'ground' ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
-            onClick={() => { setTool('ground'); setSelected(null); }}
-          >
+          </ToolButton>
+          <ToolButton tool="wire" active={tool === 'wire'} hint="W" onClick={() => { setTool('wire'); setSelection(new Set()); }}>
+            Wire{tool === 'wire' && <span className="ml-1 text-slate-300 dark:text-slate-600">· Enter to finish</span>}
+          </ToolButton>
+          <ToolButton tool="ground" active={tool === 'ground'} hint="G" onClick={() => { setTool('ground'); setSelection(new Set()); }}>
             Ground
-          </button>
+          </ToolButton>
 
           <div className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Parts</div>
           {PALETTE.map((entry) => (
-            <button
+            <ToolButton
               key={entry.kind}
-              className={`w-full rounded px-2 py-1 text-left text-xs ${tool === entry.kind ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
-              onClick={() => { setTool(entry.kind); setSelected(null); setDraft([]); }}
+              tool={entry.kind}
+              active={tool === entry.kind}
+              hint={Object.entries(HOTKEY_TOOL).find(([, t]) => t === entry.kind)?.[0]?.toUpperCase()}
+              onClick={() => { setTool(entry.kind); setSelection(new Set()); setDraft([]); }}
             >
               {entry.label}
-            </button>
+            </ToolButton>
           ))}
 
-          {selectedComponent && (
+          {selection.size > 1 && (
+            <div className="mt-3 rounded border border-slate-200 p-2 text-xs dark:border-slate-700">
+              <div className="text-slate-900 dark:text-slate-100">{selection.size} selected</div>
+              <div className="mt-2 flex gap-1">
+                <SmallButton onClick={rotateSelection}>Rotate</SmallButton>
+                <SmallButton tone="danger" onClick={deleteSelection}>Delete</SmallButton>
+              </div>
+            </div>
+          )}
+
+          {only && (
             <div className="mt-3 rounded border border-slate-200 p-2 dark:border-slate-700">
-              <div className="font-mono text-xs font-semibold text-slate-900 dark:text-slate-100">{selectedComponent.id}</div>
-              {selectedComponent.kind !== 'opamp' && (
+              <div className="font-mono text-xs font-semibold text-slate-900 dark:text-slate-100">{only.id}</div>
+              {only.kind !== 'opamp' && (
                 <label className="mt-2 block text-[11px] text-slate-500 dark:text-slate-400">
                   Value
                   <input
+                    key={only.id}
                     className="mt-0.5 w-full rounded border border-slate-300 px-1 py-0.5 text-xs tabular-nums dark:border-slate-600"
-                    defaultValue={formatValue(selectedComponent.value)}
+                    defaultValue={formatValue(only.value)}
                     onBlur={(e) => {
                       const parsed = Number(e.target.value) || parseSuffixed(e.target.value);
-                      if (Number.isFinite(parsed) && parsed !== 0) update(selectedComponent.id, { value: parsed });
+                      if (Number.isFinite(parsed) && parsed !== 0) update(only.id, { value: parsed });
                     }}
                   />
                 </label>
               )}
               <div className="mt-2 flex gap-1">
-                <button
-                  className="flex-1 rounded bg-slate-100 px-1 py-0.5 text-[11px] dark:bg-slate-800"
-                  onClick={() =>
-                    update(selectedComponent.id, {
-                      rotation: (((selectedComponent.rotation + 90) % 360) as Rotation),
-                    })
-                  }
-                >
-                  Rotate
-                </button>
-                <button className="flex-1 rounded bg-red-50 px-1 py-0.5 text-[11px] text-red-700 dark:bg-red-950 dark:text-red-300" onClick={removeSelected}>
-                  Delete
-                </button>
+                <SmallButton onClick={rotateSelection}>Rotate</SmallButton>
+                <SmallButton tone="danger" onClick={deleteSelection}>Delete</SmallButton>
+              </div>
+            </div>
+          )}
+
+          {selectedWire && (
+            <div className="mt-3 rounded border border-slate-200 p-2 text-xs dark:border-slate-700">
+              <div className="text-slate-900 dark:text-slate-100">Wire · {selectedWire.points.length} vertices</div>
+              <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Drag a handle to reroute.</p>
+              <div className="mt-2 flex gap-1">
+                <SmallButton tone="danger" onClick={deleteSelection}>Delete</SmallButton>
               </div>
             </div>
           )}
@@ -194,113 +502,174 @@ export function SchematicEditor({
       )}
 
       <div className="min-w-0 flex-1">
-        <svg
-          ref={svgRef}
-          width={width}
-          height={height}
-          className="rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900"
-          onClick={handleClick}
-          onMouseMove={(e) => tool === 'wire' && setCursor(toGrid(e))}
-          data-testid="schematic-canvas"
-        >
-          <defs>
-            <pattern id="grid" width={GRID} height={GRID} patternUnits="userSpaceOnUse">
-              <circle cx={0} cy={0} r={0.8} fill="#cbd5e1" />
-            </pattern>
-          </defs>
-          <rect width={width} height={height} fill="url(#grid)" />
-
-          {value.wires.map((wire) => (
-            <polyline
-              key={wire.id}
-              points={wire.points.map((p) => `${p.x * GRID},${p.y * GRID}`).join(' ')}
-              fill="none"
-              stroke="#0f172a"
-              strokeWidth={2}
-            />
-          ))}
-
-          {draft.length > 0 && (
-            <polyline
-              points={[...draft, ...(cursor ? [cursor] : [])]
-                .map((p) => `${p.x * GRID},${p.y * GRID}`)
-                .join(' ')}
-              fill="none"
-              stroke="#0ea5e9"
-              strokeWidth={2}
-              strokeDasharray="4 3"
-            />
+        <div className="relative overflow-hidden rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+          {!readOnly && (
+            <div className="pointer-events-none absolute right-2 top-2 z-10 flex flex-col gap-1">
+              <SmallSquare title="Zoom in" onClick={() => camera.zoomBy(1.3)}>+</SmallSquare>
+              <SmallSquare title="Zoom out" onClick={() => camera.zoomBy(1 / 1.3)}>−</SmallSquare>
+              <SmallSquare title="Fit to view" onClick={camera.fit}>⤢</SmallSquare>
+            </div>
           )}
+          <svg
+            ref={camera.ref}
+            width={width}
+            height={height}
+            viewBox={camera.viewBox}
+            className={`block touch-none select-none ${
+              camera.isPanning || spaceHeld ? 'cursor-grabbing' : tool === 'select' ? 'cursor-default' : 'cursor-crosshair'
+            }`}
+            onPointerDown={onCanvasPointerDown}
+            onClick={onCanvasClick}
+            onMouseMove={(e) => tool === 'wire' && setCursor(toGrid(e))}
+            data-testid="schematic-canvas"
+          >
+            <defs>
+              <pattern id="grid" width={GRID} height={GRID} patternUnits="userSpaceOnUse">
+                <circle cx={0} cy={0} r={0.8} fill="#cbd5e1" />
+              </pattern>
+            </defs>
+            {/* The grid follows the camera, so panning does not run off it. */}
+            <rect x={camera.view.x} y={camera.view.y} width={camera.view.w} height={camera.view.h} fill="url(#grid)" />
 
-          {value.grounds.map((g, i) => (
-            <g key={`gnd-${i}`} transform={`translate(${g.x * GRID},${g.y * GRID})`} stroke="#0f172a">
-              <GroundSymbol grid={GRID} />
-            </g>
-          ))}
+            {value.wires.map((wire) => {
+              const isSelected = selection.has(wireId(wire.id));
+              const points = wire.points.map((p) => `${p.x * GRID},${p.y * GRID}`).join(' ');
+              return (
+                <g key={wire.id} data-wire-id={wire.id}>
+                  {/* A 2px line is a 2px hit target. The invisible fat stroke
+                      underneath is what makes a wire clickable at all — without
+                      it a drawn wire could never be selected or deleted. */}
+                  <polyline
+                    points={points}
+                    fill="none"
+                    stroke="transparent"
+                    strokeWidth={10}
+                    className={readOnly || tool !== 'select' ? '' : 'cursor-pointer'}
+                    onPointerDown={(e) => selectAndMaybeMove(e, wireId(wire.id))}
+                  />
+                  <polyline
+                    points={points}
+                    fill="none"
+                    stroke={isSelected ? '#0284c7' : '#0f172a'}
+                    strokeWidth={isSelected ? 3 : 2}
+                    pointerEvents="none"
+                  />
+                </g>
+              );
+            })}
 
-          {value.components.map((component) => {
-            const isSelected = component.id === selected;
-            return (
+            {selectedWire?.points.map((p, i) => (
+              <rect
+                key={`vertex-${i}`}
+                x={p.x * GRID - 4}
+                y={p.y * GRID - 4}
+                width={8}
+                height={8}
+                fill="#ffffff"
+                stroke="#0284c7"
+                strokeWidth={1.5}
+                className="cursor-move"
+                onPointerDown={(e) => beginVertexDrag(e, selectedWire.id, i)}
+              />
+            ))}
+
+            {draft.length > 0 && (
+              <polyline
+                points={[...draft, ...(cursor ? [cursor] : [])].map((p) => `${p.x * GRID},${p.y * GRID}`).join(' ')}
+                fill="none"
+                stroke="#0ea5e9"
+                strokeWidth={2}
+                strokeDasharray="4 3"
+                pointerEvents="none"
+              />
+            )}
+
+            {value.grounds.map((g, i) => (
               <g
-                key={component.id}
-                transform={`translate(${component.at.x * GRID},${component.at.y * GRID}) rotate(${component.rotation})`}
-                stroke={isSelected ? '#0284c7' : '#0f172a'}
-                onClick={(e) => {
-                  if (readOnly || tool !== 'select') return;
-                  e.stopPropagation();
-                  setSelected(component.id);
-                }}
-                className={readOnly ? '' : 'cursor-pointer'}
-                data-component-id={component.id}
+                key={`gnd-${i}`}
+                transform={`translate(${g.x * GRID},${g.y * GRID})`}
+                stroke={selection.has(groundId(i)) ? '#0284c7' : '#0f172a'}
+                className={readOnly || tool !== 'select' ? '' : 'cursor-pointer'}
+                onPointerDown={(e) => selectAndMaybeMove(e, groundId(i))}
+                data-ground-index={i}
               >
-                <ComponentSymbol kind={component.kind} grid={GRID} />
-                <text
-                  x={GRID * 1.3}
-                  y={-GRID * 0.4}
-                  className="select-none"
-                  fontSize={10}
-                  fill={isSelected ? '#0284c7' : '#475569'}
-                  stroke="none"
-                  transform={`rotate(${-component.rotation})`}
+                <circle cx={0} cy={GRID * 0.5} r={GRID * 0.7} fill="transparent" stroke="none" />
+                <GroundSymbol grid={GRID} />
+              </g>
+            ))}
+
+            {value.components.map((component) => {
+              const isSelected = selection.has(componentId(component.id));
+              return (
+                <g
+                  key={component.id}
+                  transform={`translate(${component.at.x * GRID},${component.at.y * GRID}) rotate(${component.rotation})`}
+                  stroke={isSelected ? '#0284c7' : '#0f172a'}
+                  onPointerDown={(e) => selectAndMaybeMove(e, componentId(component.id))}
+                  className={readOnly ? '' : tool === 'select' ? 'cursor-move' : 'cursor-crosshair'}
+                  data-component-id={component.id}
+                  data-selected={isSelected ? 'true' : undefined}
                 >
-                  {component.id}
-                </text>
-                {component.kind !== 'opamp' && (
+                  {/* Body hit box: the symbol is strokes with no fill, so
+                      without this only the 2px lines themselves are grabbable. */}
+                  <rect
+                    x={-GRID * 1.1} y={-GRID * 2.2} width={GRID * 2.2} height={GRID * 4.4}
+                    fill="transparent" stroke="none"
+                  />
+                  <ComponentSymbol kind={component.kind} grid={GRID} />
                   <text
-                    x={GRID * 1.3}
-                    y={GRID * 0.7}
-                    className="select-none"
-                    fontSize={10}
-                    fill="#94a3b8"
-                    stroke="none"
+                    x={GRID * 1.3} y={-GRID * 0.4}
+                    className="select-none" fontSize={10}
+                    fill={isSelected ? '#0284c7' : '#475569'} stroke="none"
                     transform={`rotate(${-component.rotation})`}
                   >
-                    {formatValue(component.value)}
+                    {component.id}
                   </text>
-                )}
-              </g>
-            );
-          })}
-
-          {/* Pin dots, coloured by whether the pin resolved to a net. An
-              unconnected terminal is the single most common reason a drawing
-              that looks finished will not simulate. */}
-          {value.components.flatMap((component) =>
-            pinPositions(component).map((pin, i) => {
-              const net = nets.byPoint.get(`${pin.x},${pin.y}`);
-              const connected = net !== undefined && countAt(value, pin) > 1;
-              return (
-                <circle
-                  key={`${component.id}-${i}`}
-                  cx={pin.x * GRID}
-                  cy={pin.y * GRID}
-                  r={3}
-                  fill={connected ? (net === GROUND ? '#0f172a' : '#22c55e') : '#f97316'}
-                />
+                  {component.kind !== 'opamp' && (
+                    <text
+                      x={GRID * 1.3} y={GRID * 0.7}
+                      className="select-none" fontSize={10}
+                      fill="#94a3b8" stroke="none"
+                      transform={`rotate(${-component.rotation})`}
+                    >
+                      {formatValue(component.value)}
+                    </text>
+                  )}
+                </g>
               );
-            }),
-          )}
-        </svg>
+            })}
+
+            {/* Pin dots, coloured by whether the pin resolved to a net. An
+                unconnected terminal is the single most common reason a drawing
+                that looks finished will not simulate. */}
+            {value.components.flatMap((component) =>
+              pinPositions(component).map((pin, i) => {
+                const net = nets.byPoint.get(`${pin.x},${pin.y}`);
+                const connected = net !== undefined && countAt(value, pin) > 1;
+                return (
+                  <circle
+                    key={`${component.id}-${i}`}
+                    cx={pin.x * GRID} cy={pin.y * GRID} r={3}
+                    fill={connected ? (net === GROUND ? '#0f172a' : '#22c55e') : '#f97316'}
+                    pointerEvents="none"
+                  />
+                );
+              }),
+            )}
+
+            {marquee && (
+              <rect
+                x={Math.min(marquee.from.x, marquee.to.x) * GRID}
+                y={Math.min(marquee.from.y, marquee.to.y) * GRID}
+                width={Math.abs(marquee.to.x - marquee.from.x) * GRID}
+                height={Math.abs(marquee.to.y - marquee.from.y) * GRID}
+                fill="#0ea5e9" fillOpacity={0.08}
+                stroke="#0ea5e9" strokeWidth={1} strokeDasharray="4 3"
+                pointerEvents="none"
+              />
+            )}
+          </svg>
+        </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
           <span>{value.components.length} part(s)</span>
@@ -313,9 +682,84 @@ export function SchematicEditor({
           {built.issues.length === 0 && value.components.length > 0 && (
             <span className="text-emerald-700 dark:text-emerald-300">connected</span>
           )}
+          <span className="ml-auto tabular-nums">{Math.round(camera.scale * 100)}%</span>
         </div>
+
+        {!readOnly && (
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-400 dark:text-slate-500">
+            {HOTKEY_HINTS.map(([key, label]) => (
+              <span key={key}>
+                <kbd className="rounded border border-slate-300 px-1 font-mono dark:border-slate-600">{key}</kbd> {label}
+              </span>
+            ))}
+            <span>wheel zoom · middle-drag pan · shift-click multi-select</span>
+          </div>
+        )}
       </div>
     </div>
+  );
+}
+
+function ToolButton({
+  tool, active, hint, onClick, children,
+}: {
+  tool: Tool;
+  active: boolean;
+  hint?: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}): React.ReactElement {
+  return (
+    <button
+      // `data-tool`, because the label now carries a hotkey hint and anything
+      // matching on rendered text breaks the moment the label gains a badge.
+      data-tool={tool}
+      data-active={active ? 'true' : undefined}
+      className={`flex w-full items-center rounded px-2 py-1 text-left text-xs ${
+        active ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+      }`}
+      onClick={onClick}
+    >
+      <span className="min-w-0 flex-1 truncate">{children}</span>
+      {hint && (
+        <kbd className={`ml-1 shrink-0 font-mono text-[10px] ${active ? 'text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
+          {hint}
+        </kbd>
+      )}
+    </button>
+  );
+}
+
+function SmallButton({
+  onClick, tone, children,
+}: { onClick: () => void; tone?: 'danger'; children: React.ReactNode }): React.ReactElement {
+  return (
+    <button
+      className={`flex-1 rounded px-1 py-0.5 text-[11px] ${
+        tone === 'danger'
+          ? 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
+          : 'bg-slate-100 dark:bg-slate-800 dark:text-slate-300'
+      }`}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
+
+function SmallSquare({
+  title, onClick, children,
+}: { title: string; onClick: () => void; children: React.ReactNode }): React.ReactElement {
+  return (
+    <button
+      type="button"
+      title={title}
+      aria-label={title}
+      onClick={onClick}
+      className="pointer-events-auto h-7 w-7 rounded border border-slate-300 bg-white/90 text-sm leading-none text-slate-600 shadow-sm hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-300 dark:hover:bg-slate-800"
+    >
+      {children}
+    </button>
   );
 }
 
