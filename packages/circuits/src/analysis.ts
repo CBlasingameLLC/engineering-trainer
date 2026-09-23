@@ -1,6 +1,6 @@
 import { cAbs, cPhaseDeg, type Complex } from './linalg.js';
 import { buildSystem, nodeEquations, solveAc, solveSystem, type Solution } from './mna.js';
-import { GROUND, type Netlist, type NodeName } from './netlist.js';
+import { GROUND, type Element, type Netlist, type NodeName } from './netlist.js';
 
 /**
  * The four analyses a circuits course actually uses.
@@ -209,4 +209,36 @@ export function suggestedTimeStep(netlist: Netlist, stopTime: number): number {
   }
   if (constants.length === 0) return stopTime / 100;
   return Math.min(Math.min(...constants) / 50, stopTime / 50);
+}
+
+// ---------------------------------------------------------------------------
+
+/**
+ * Resistance looking into a node, with every independent source suppressed.
+ *
+ * This is the Thevenin-resistance procedure stated as code: kill the sources —
+ * a voltage source becomes a short, a current source an open — drive one amp
+ * into the node from ground, and read the voltage that appears. It exists so a
+ * figure with no source in it can still be checked. A drawing of a resistor
+ * network is a claim about topology and nothing else, and topology is precisely
+ * the part a generator can get wrong silently; without this the only figures
+ * the gate could hold to account would be the ones that happen to contain a
+ * source.
+ */
+export function inputResistance(netlist: Netlist, node: NodeName): number {
+  const suppressed: Element[] = [];
+  for (const element of netlist.elements) {
+    if (element.kind === 'isource') continue; // an open branch
+    suppressed.push(element.kind === 'vsource' ? { ...element, value: 0 } : element);
+  }
+  // One amp in, so the node voltage is the resistance. The probe drives from
+  // ground into `node`, which is the orientation that makes the reading
+  // positive for a passive network.
+  suppressed.push({
+    id: 'Iprobe__', kind: 'isource', nodes: [node, GROUND], value: 1,
+  } as Element);
+
+  const solution = solveSystem(buildSystem({ ...netlist, elements: suppressed }, 'dc'));
+  const voltage = solution.voltages.get(node);
+  return voltage === undefined ? Number.NaN : Math.abs(voltage);
 }

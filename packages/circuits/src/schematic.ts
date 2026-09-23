@@ -37,12 +37,28 @@ export interface Wire {
   points: Point[];
 }
 
+/**
+ * A name attached to a point, which becomes the name of whatever net that point
+ * belongs to.
+ *
+ * Nets are otherwise numbered by traversal order, which is deterministic but
+ * meaningless: nothing outside the drawing can say "measure the voltage at the
+ * node the question calls A". A label makes a net addressable, which is what
+ * turns a figure into something a gate can check.
+ */
+export interface NetLabel {
+  at: Point;
+  name: NodeName;
+}
+
 export interface Schematic {
   title: string;
   components: PlacedComponent[];
   wires: Wire[];
   /** Ground symbol anchor points. Any net touching one of these is node 0. */
   grounds: Point[];
+  /** Optional names for nets, drawn on the canvas and used for probing. */
+  labels?: NetLabel[];
 }
 
 export const emptySchematic = (title = 'untitled'): Schematic => ({
@@ -50,6 +66,7 @@ export const emptySchematic = (title = 'untitled'): Schematic => ({
   components: [],
   wires: [],
   grounds: [],
+  labels: [],
 });
 
 /**
@@ -148,6 +165,7 @@ export function extractNets(schematic: Schematic): NetMap {
   for (const component of schematic.components) points.push(...pinPositions(component));
   for (const wire of schematic.wires) points.push(...wire.points);
   points.push(...schematic.grounds);
+  for (const label of schematic.labels ?? []) points.push(label.at);
 
   for (const point of points) uf.find(key(point));
 
@@ -180,6 +198,14 @@ export function extractNets(schematic: Schematic): NetMap {
   }
 
   const groundRoots = new Set(schematic.grounds.map((g) => uf.find(key(g))));
+  // A label names the net its point lands on. Ground still wins: a net that is
+  // both grounded and labelled is node 0, because the simulator's reference
+  // node is not a naming choice.
+  const named = new Map<string, NodeName>();
+  for (const label of schematic.labels ?? []) {
+    const root = uf.find(key(label.at));
+    if (!groundRoots.has(root) && !named.has(root)) named.set(root, label.name);
+  }
   const byPoint = new Map<string, NodeName>();
   const byNet = new Map<NodeName, Point[]>();
 
@@ -192,8 +218,17 @@ export function extractNets(schematic: Schematic): NetMap {
     return ga - gb || a.localeCompare(b);
   });
 
+  // A numbered net must never collide with a labelled one, so the counter skips
+  // any number a label has already taken.
+  const taken = new Set(named.values());
   for (const root of roots) {
-    const name = groundRoots.has(root) ? GROUND : String(counter++);
+    let name: NodeName;
+    if (groundRoots.has(root)) name = GROUND;
+    else if (named.has(root)) name = named.get(root)!;
+    else {
+      while (taken.has(String(counter))) counter++;
+      name = String(counter++);
+    }
     const members = groups.get(root)!;
     byNet.set(name, members);
     for (const point of members) byPoint.set(key(point), name);

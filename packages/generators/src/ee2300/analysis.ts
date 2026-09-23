@@ -4,6 +4,7 @@ import {
   adjustDifficulty, amps, mantissaDifficulty, ohms, pick, ratioDifficulty, resampleUntil, resistor,
   supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
+import { figure } from '../figures.js';
 import { separatedTraps } from '../traps.js';
 
 /**
@@ -48,6 +49,23 @@ export const nodalTwoSource: Generator = {
         `a $${volts(vs2)}$ source through $R_3 = ${ohms(r3)}$, and $R_2 = ${ohms(r2)}$ to ground. ` +
         `Both sources have their negative terminals at ground. Find the node voltage $V_A$.`,
       answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Node A driven by two sources')
+        .v('V1', { x: 4, y: 12 }, vs1)
+        .r('R1', { x: 10, y: 6 }, r1, 90)
+        .r('R2', { x: 18, y: 10 }, r2)
+        .r('R3', { x: 26, y: 6 }, r3, 90)
+        .v('V2', { x: 32, y: 12 }, vs2)
+        .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 8, y: 6 })
+        .wire({ x: 12, y: 6 }, { x: 24, y: 6 })
+        .wire({ x: 28, y: 6 }, { x: 32, y: 6 }, { x: 32, y: 10 })
+        .wire({ x: 18, y: 8 }, { x: 18, y: 6 })
+        .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 32, y: 18 }, { x: 32, y: 14 })
+        .wire({ x: 18, y: 12 }, { x: 18, y: 18 })
+        .ground({ x: 18, y: 18 })
+        .label({ x: 18, y: 6 }, 'a')
+        .note({ x: 18, y: 4 }, 'A')
+        .expectVoltage('a', va)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(va, DEFAULT_TOLERANCE, [
         {
@@ -134,6 +152,23 @@ export const meshTwoLoop: Generator = {
         `$R_3 = ${ohms(r3)}$ is the shared branch between mesh 1 and mesh 2, and ` +
         `$R_2 = ${ohms(r2)}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.`,
       answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Two clockwise meshes sharing R3')
+        .v('V1', { x: 4, y: 12 }, vs)
+        .r('R1', { x: 12, y: 6 }, r1, 90)
+        .r('R3', { x: 16, y: 10 }, r3)
+        .r('R2', { x: 24, y: 6 }, r2, 90)
+        .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 10, y: 6 })
+        .wire({ x: 14, y: 6 }, { x: 22, y: 6 })
+        .wire({ x: 16, y: 8 }, { x: 16, y: 6 })
+        .wire({ x: 26, y: 6 }, { x: 30, y: 6 }, { x: 30, y: 18 })
+        .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 30, y: 18 })
+        .wire({ x: 16, y: 12 }, { x: 16, y: 18 })
+        .ground({ x: 16, y: 18 })
+        .label({ x: 20, y: 6 }, 'x')
+        .note({ x: 9, y: 12 }, 'mesh 1')
+        .note({ x: 23, y: 12 }, 'mesh 2')
+        .expectVoltage('x', vs - i1 * r1)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(i1, DEFAULT_TOLERANCE, [
         {
@@ -208,6 +243,26 @@ export const supernode: Generator = {
         `with its **+** terminal at $A$, so neither node is grounded through it. ` +
         `$R_1 = ${ohms(r1)}$ runs from $A$ to ground and $R_2 = ${ohms(r2)}$ from $B$ to ground. Find $V_A$.`,
       answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Floating source between A and B')
+        .i('I1', { x: 4, y: 10 }, is, 180)
+        .r('R1', { x: 12, y: 10 }, r1)
+        .v('V1', { x: 18, y: 6 }, vs, 270)
+        .r('R2', { x: 26, y: 10 }, r2)
+        .wire({ x: 4, y: 8 }, { x: 4, y: 6 }, { x: 16, y: 6 })
+        .wire({ x: 20, y: 6 }, { x: 26, y: 6 })
+        .wire({ x: 12, y: 8 }, { x: 12, y: 6 })
+        .wire({ x: 26, y: 8 }, { x: 26, y: 6 })
+        .wire({ x: 4, y: 12 }, { x: 4, y: 16 }, { x: 26, y: 16 })
+        .wire({ x: 12, y: 12 }, { x: 12, y: 16 })
+        .wire({ x: 26, y: 12 }, { x: 26, y: 16 })
+        .ground({ x: 12, y: 16 })
+        .label({ x: 8, y: 6 }, 'a')
+        .label({ x: 24, y: 6 }, 'b')
+        .note({ x: 8, y: 4 }, 'A')
+        .note({ x: 24, y: 4 }, 'B')
+        .expectVoltage('a', va)
+        .expectVoltage('b', vb)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(va, DEFAULT_TOLERANCE, [
         {
@@ -297,6 +352,23 @@ export const supermesh: Generator = {
         `$i_2 - i_1 = ${trimNumber(is)}$ A. Mesh 1 also contains a $${volts(vs)}$ source and $R_1 = ${ohms(r1)}$; ` +
         `mesh 2 also contains $R_2 = ${ohms(r2)}$. Find $i_1$.`,
       answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Supermesh: a current source in the shared branch')
+        .v('V1', { x: 4, y: 12 }, vs)
+        .r('R1', { x: 12, y: 6 }, r1, 90)
+        .i('I1', { x: 18, y: 10 }, is, 180)
+        .r('R2', { x: 28, y: 6 }, r2, 90)
+        .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 10, y: 6 })
+        .wire({ x: 14, y: 6 }, { x: 26, y: 6 })
+        .wire({ x: 18, y: 8 }, { x: 18, y: 6 })
+        .wire({ x: 30, y: 6 }, { x: 32, y: 6 }, { x: 32, y: 18 })
+        .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 32, y: 18 })
+        .wire({ x: 18, y: 12 }, { x: 18, y: 18 })
+        .ground({ x: 18, y: 18 })
+        .label({ x: 22, y: 6 }, 'x')
+        .note({ x: 9, y: 12 }, 'mesh 1')
+        .note({ x: 25, y: 12 }, 'mesh 2')
+        .expectVoltage('x', vs - i1 * r1)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(i1, DEFAULT_TOLERANCE, [
         {

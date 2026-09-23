@@ -1,6 +1,6 @@
 import { checkAnswer, toleranceFor, type Response } from '@et/answer-engine';
 import { findMarkupProblems, type Item, type Pack } from '@et/content-schema';
-import { generatorById, makeRng } from '@et/generators';
+import { generatorById, gradeFigure, makeRng } from '@et/generators';
 import { gradeCircuit, nodesOf, parseNetlist } from '@et/circuits';
 
 import { checkResidual } from './symbolic.js';
@@ -290,7 +290,36 @@ function checkMarkup(item: Item): VerifyFinding[] {
   );
 }
 
-/** Check 9 — KC references resolve against the loaded curriculum. */
+/**
+ * Check 9 — the drawing is the circuit the question is about.
+ *
+ * A figure is built from the same parameters as the answer, so its *values*
+ * agree by construction. Its geometry does not: a generator can wire a figure
+ * into a different circuit entirely and every other check still passes, because
+ * the answer key is right and the picture still looks like a circuit. The
+ * learner is the one who finds out, by reading a diagram that contradicts the
+ * question and having no way to know which to believe.
+ *
+ * So the drawing is turned back into a netlist and solved. A figure that
+ * declares nothing still has to build cleanly — an unconnected terminal in a
+ * diagram is a drawing that says the circuit is open when it is not.
+ */
+function checkFigure(item: Item): VerifyFinding[] {
+  if (!item.figure) return [];
+
+  const result = gradeFigure(item.figure);
+  if (result.error) {
+    return [error(item.id, 'figure-agreement', `the figure is not a well-formed circuit: ${result.error}`)];
+  }
+  if (result.correct) return [];
+
+  const failed = result.results
+    .filter((r) => !r.within)
+    .map((r) => `${r.probe} expected ${r.expected} but the drawing gives ${r.actual ?? 'nothing'}`);
+  return [error(item.id, 'figure-agreement', `simulating the figure disagrees with the item: ${failed.join('; ')}`)];
+}
+
+/** Check 10 — KC references resolve against the loaded curriculum. */
 function checkKcReferences(item: Item, knownKcs: ReadonlySet<string>): VerifyFinding[] {
   if (knownKcs.size === 0) return []; // no curriculum supplied
   return item.kcRefs
@@ -319,6 +348,7 @@ export function verifyPack(pack: Pack, options: VerifyOptions = {}): VerifyRepor
       ...checkSymbolicResidual(item),
       ...checkMisconceptionCoverage(item),
       ...checkMarkup(item),
+      ...checkFigure(item),
       ...checkKcReferences(item, knownKcs),
     ];
     findings.push(...itemFindings);

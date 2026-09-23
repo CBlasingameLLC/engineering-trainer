@@ -106,6 +106,10 @@ const missedKcs = new Set();
 // is a different claim.
 const correctByKc = new Map();
 let firstShot = true;
+// Figures are checked against their own simulation by `pack verify`; this is
+// the other half of the claim — that the drawing reaches the screen at all.
+let figuresServed = 0;
+let figuresDrawn = 0;
 
 while (answered < 60) {
   const done = await page.locator('text=Placement results').count();
@@ -117,6 +121,20 @@ while (answered < 60) {
   if (itemId === null) break;
   const item = byId.get(itemId);
   if (!item) { unmatched++; }
+
+  if (item?.figure) {
+    figuresServed++;
+    const svg = page.locator(`article[data-item-id="${itemId}"] [data-testid="schematic-figure"]`);
+    if ((await svg.count()) > 0) {
+      // A drawn figure means parts on screen, not just an empty frame.
+      const parts = await svg.locator('g[data-component-id]').count();
+      if (parts !== item.figure.components.length) {
+        console.error(`FAIL: ${itemId} figure drew ${parts} of ${item.figure.components.length} parts`);
+        process.exit(1);
+      }
+      figuresDrawn++;
+    }
+  }
 
   const shouldMiss = item ? WEAK.some((w) => item.stem.includes(w)) : false;
   if (shouldMiss) {
@@ -192,6 +210,11 @@ while (answered < 60) {
 
 const circuitItems = [...byId.values()].filter((i) => i.answer?.kind === 'circuit').length;
 console.log(`[5] answered ${answered} items (${deliberatelyWrong} deliberately missed, ${unmatched} unidentified)`);
+console.log(`    circuit figures: ${figuresDrawn} of ${figuresServed} served items drew their diagram`);
+if (figuresServed > 0 && figuresDrawn !== figuresServed) {
+  console.error(`FAIL: ${figuresServed - figuresDrawn} item(s) carried a figure that never rendered`);
+  process.exit(1);
+}
 console.log(`    bank contains ${circuitItems} design task(s) graded by simulation`);
 if (unmatched > 0) { console.error(`FAIL: ${unmatched} items could not be matched to the bank`); process.exitCode = 1; }
 

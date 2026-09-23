@@ -5,3 +5,4 @@ export * from './credential.js';
 export * from './misconception.js';
 export * from './load.js';
 export * from './markup.js';
+export * from './figure.js';

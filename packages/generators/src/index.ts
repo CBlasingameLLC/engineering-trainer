@@ -98,3 +98,4 @@ export const primaryCourse = (generator: Generator): string => {
 
 export const generatorsForCourse = (course: string): Generator[] =>
   GENERATORS.filter((g) => primaryCourse(g) === course.toUpperCase());
+export * from './figures.js';

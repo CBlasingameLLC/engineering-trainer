@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { figureSchema, measurementSchema } from './figure.js';
 
 /**
  * The content-pack contract.
@@ -185,22 +186,7 @@ export const circuitAnswerSchema = z.object({
   reference: z.string().min(1),
   /** Nodes the learner's design must expose, e.g. ["in", "out"]. */
   requiredNodes: z.array(z.string().min(1)).default([]),
-  measurements: z
-    .array(
-      z.object({
-        /** Measurement expression, e.g. "v(out)", "i(v1)", "db(v(out))". */
-        probe: z.string().min(1),
-        analysis: z.enum(['op', 'dc', 'ac', 'tran']),
-        expected: z.number().finite(),
-        unit: z.string(),
-        tolerance: z.object({ rel: z.number().positive().optional(), abs: z.number().positive().optional() }),
-        /** Required for `ac`: a gain specification means nothing without a frequency. */
-        frequencyHz: z.number().positive().optional(),
-        /** Required for `tran`: likewise, a transient value needs an instant. */
-        atTime: z.number().positive().optional(),
-      }),
-    )
-    .min(1),
+  measurements: z.array(measurementSchema).min(1),
 });
 
 export const answerSchema = z.discriminatedUnion('kind', [
@@ -312,8 +298,14 @@ export const itemSchema = z
     /** Known wrong values for free-response items; empty otherwise. */
     misconceptionTraps: z.array(misconceptionTrapSchema).default([]),
     explanation: explanationSchema,
-    /** Optional schematic payload for circuit items. */
-    schematic: z.unknown().optional(),
+    /**
+     * Drawn circuit accompanying the question.
+     *
+     * Emitted by the generator from the same parameters that produce the
+     * answer, so the drawing and the answer cannot disagree by construction —
+     * and `pack verify` simulates it to prove they do not.
+     */
+    figure: figureSchema.optional(),
     provenance: provenanceSchema,
   })
   .superRefine((item, ctx) => {

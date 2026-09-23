@@ -3,6 +3,7 @@ import { DEFAULT_CAT_CONFIG, shouldStop } from '@et/domain';
 import { emptySchematic, formatValue, type Schematic } from '@et/circuits';
 import type { Response } from '@et/answer-engine';
 import { useApp } from '@/store';
+import { SchematicFigure } from '@/features/schematic/SchematicFigure';
 import { MathText } from '@/ui/Math';
 import { ExpressionInput } from '@/ui/ExpressionInput';
 import { TruthTableInput } from '@/ui/TruthTableInput';
@@ -135,6 +136,11 @@ export function Session(): React.ReactElement {
             stem text, so the rendered DOM is not a reliable identifier. */}
         <article className="card p-6" data-item-id={item.id} data-item-type={item.type}>
           <MathText className="block text-base leading-relaxed text-slate-800 dark:text-slate-200">{item.stem}</MathText>
+
+          {/* Above the answer controls and below the question, which is where a
+              textbook puts it: the figure is what the question refers to, so it
+              has to be readable while the answer is being typed. */}
+          {item.figure && <SchematicFigure figure={item.figure} className="mt-4 max-w-xl" />}
 
           {isCircuit ? (
             <div className="mt-6">

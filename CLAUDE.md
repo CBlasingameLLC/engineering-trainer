@@ -222,6 +222,27 @@ packs by the schema, and never enters a release build. Don't weaken that.
   data is fine here — it is what keeps the cross-checks independent of the
   generator's own arithmetic — but it must not pin one typesetting macro, and a
   parse that comes up short must throw rather than compare against `NaN`.
+- **A figure's values agree with the answer by construction; its geometry does
+  not.** A generator draws a figure from the same parameters that produce the
+  answer, so the numbers on it are right for free. Wiring is not: a figure can
+  describe a different circuit entirely and every other check still passes,
+  because the answer key is correct and the picture still looks like a circuit.
+  So each figure declares what simulating it must produce, `gradeFigure` turns
+  the drawing back into a netlist and solves it, and both the generator tests
+  and the `figure-agreement` check in `pack verify` run it. A source-less
+  network asserts `r(node)` instead, graded by `inputResistance` — suppress the
+  sources, drive one amp in, read the voltage, which is the Thevenin procedure
+  stated as code.
+- **Net labels are what make a figure addressable.** Nets are otherwise
+  numbered by traversal order, so nothing outside the drawing can say "the node
+  the question calls A". `Schematic.labels` names a net from a point on it, and
+  ground still wins: a net that is both grounded and labelled is node 0,
+  because the reference node is not a naming choice.
+- **SPICE drives current from n+ through the source to n-.** A current source
+  that must push current *into* the node above it therefore has its n+ pin at
+  the bottom — rotation 180 in figure coordinates. Getting this backwards
+  negates the answer and nothing but a simulation notices, which is the whole
+  reason figures are simulated.
 - **Never synthesize a study history to seed FSRS.** A semester of fabricated
   reviews inflates stability to S≈270d, so a year-old prerequisite reports
   R≈0.88 and looks perfectly retained — defeating the entire product. Use

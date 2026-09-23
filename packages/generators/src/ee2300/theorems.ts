@@ -4,6 +4,7 @@ import {
   adjustDifficulty, amps, distinctResistorPair, mantissaDifficulty, ohms, pick, ratioDifficulty,
   resistor, supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
+import { figure } from '../figures.js';
 import { separatedTraps } from '../traps.js';
 
 const parallel = (a: number, b: number): number => (a * b) / (a + b);
@@ -23,6 +24,35 @@ function theveninNetwork(rng: Rng) {
   const signals = [ratioDifficulty(r1, r2), mantissaDifficulty(vs), ratioDifficulty(r3, parallel(r1, r2))];
   return { vs, r1, r2, r3, vth, rth, signals };
 }
+
+/**
+ * The drawing behind every generator in this file.
+ *
+ * All four questions are asked of the same network, so they share one figure
+ * rather than four that could drift apart. It carries both its open-circuit
+ * voltage and its resistance looking in at a-b, which means `pack verify`
+ * checks the two quantities the whole unit is about — and checks them against
+ * the drawing rather than against the prose that describes it.
+ */
+const theveninFigure = (n: ReturnType<typeof theveninNetwork>, title: string) =>
+  figure(title)
+    .v('V1', { x: 4, y: 12 }, n.vs)
+    .r('R1', { x: 10, y: 6 }, n.r1, 90)
+    .r('R2', { x: 16, y: 10 }, n.r2)
+    .r('R3', { x: 22, y: 6 }, n.r3, 90)
+    .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 8, y: 6 })
+    .wire({ x: 12, y: 6 }, { x: 20, y: 6 })
+    .wire({ x: 16, y: 8 }, { x: 16, y: 6 })
+    .wire({ x: 24, y: 6 }, { x: 30, y: 6 })
+    .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 30, y: 18 })
+    .wire({ x: 16, y: 12 }, { x: 16, y: 18 })
+    .ground({ x: 16, y: 18 })
+    .label({ x: 28, y: 6 }, 'a')
+    .note({ x: 31, y: 5 }, 'a', 'start')
+    .note({ x: 31, y: 17 }, 'b', 'start')
+    .expectVoltage('a', n.vth)
+    .expectResistance('a', n.rth)
+    .build();
 
 const networkDescription = (n: ReturnType<typeof theveninNetwork>): string =>
   `A $${volts(n.vs)}$ source drives $R_1 = ${ohms(n.r1)}$ into a node where $R_2 = ${ohms(n.r2)}$ ` +
@@ -53,6 +83,7 @@ export const theveninResistance: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem: `${networkDescription(n)} Find the Thevenin resistance $R_{th}$ seen from terminals $a$-$b$.`,
       answer: { kind: 'numeric' as const, value: n.rth, unit: 'ohm', tolerance: DEFAULT_TOLERANCE },
+      figure: theveninFigure(n, 'Thevenin resistance at a-b'),
       options: [],
       misconceptionTraps: separatedTraps(n.rth, DEFAULT_TOLERANCE, [
         {
@@ -107,6 +138,7 @@ export const theveninVoltage: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem: `${networkDescription(n)} Find the Thevenin voltage $V_{th}$ at terminals $a$-$b$.`,
       answer: { kind: 'numeric' as const, value: n.vth, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      figure: theveninFigure(n, 'Thevenin voltage at a-b'),
       options: [],
       misconceptionTraps: separatedTraps(n.vth, DEFAULT_TOLERANCE, [
         {
@@ -160,6 +192,7 @@ export const nortonCurrent: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, n.signals),
       stem: `${networkDescription(n)} Find the Norton current $I_N$ for terminals $a$-$b$.`,
       answer: { kind: 'numeric' as const, value: iN, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+      figure: theveninFigure(n, 'Norton equivalent at a-b'),
       options: [],
       misconceptionTraps: separatedTraps(iN, DEFAULT_TOLERANCE, [
         {
@@ -208,6 +241,7 @@ export const maxPowerTransfer: Generator = {
         `${networkDescription(n)} A load $R_L$ is connected across $a$-$b$ and chosen for maximum power transfer. ` +
         `Find the power delivered to that load.`,
       answer: { kind: 'numeric' as const, value: pMax, unit: 'W', tolerance: DEFAULT_TOLERANCE },
+      figure: theveninFigure(n, 'Maximum power transfer at a-b'),
       options: [],
       misconceptionTraps: separatedTraps(pMax, DEFAULT_TOLERANCE, [
         {

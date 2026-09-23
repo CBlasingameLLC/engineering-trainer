@@ -4,6 +4,7 @@ import {
   adjustDifficulty, amps, distinctResistorPair, mantissaDifficulty, ohms, ratioDifficulty,
   resampleUntil, resistor, sourceCurrentMa, supplyVoltage, trimNumber, volts, type Rng,
 } from '../rng.js';
+import { figure } from '../figures.js';
 import { separatedTraps } from '../traps.js';
 
 const parallel = (a: number, b: number): number => (a * b) / (a + b);
@@ -55,6 +56,21 @@ export const seriesParallel: Generator = {
         `$R_2 = ${ohms(r2)}$ and $R_3 = ${ohms(r3)}$. ` +
         `Find the equivalent resistance seen by the source.`,
       answer: { kind: 'numeric' as const, value: req, unit: 'ohm', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Series-parallel network at terminals a-b')
+        .r('R1', { x: 8, y: 6 }, r1, 90)
+        .r('R2', { x: 14, y: 10 }, r2)
+        .r('R3', { x: 22, y: 10 }, r3)
+        .wire({ x: 4, y: 6 }, { x: 6, y: 6 })
+        .wire({ x: 10, y: 6 }, { x: 22, y: 6 }, { x: 22, y: 8 })
+        .wire({ x: 14, y: 8 }, { x: 14, y: 6 })
+        .wire({ x: 14, y: 12 }, { x: 14, y: 16 }, { x: 22, y: 16 }, { x: 22, y: 12 })
+        .wire({ x: 4, y: 16 }, { x: 14, y: 16 })
+        .ground({ x: 14, y: 16 })
+        .label({ x: 4, y: 6 }, 'a')
+        .note({ x: 3, y: 5 }, 'a', 'end')
+        .note({ x: 3, y: 15 }, 'b', 'end')
+        .expectResistance('a', req)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(req, DEFAULT_TOLERANCE, [
         {
@@ -121,6 +137,17 @@ export const voltageDivider: Generator = {
         `A $${volts(vs)}$ source drives $R_1 = ${ohms(r1)}$ in series with $R_2 = ${ohms(r2)}$. ` +
         `Find the voltage across $R_2$.`,
       answer: { kind: 'numeric' as const, value: vout, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Voltage divider')
+        .v('V1', { x: 4, y: 10 }, vs)
+        .r('R1', { x: 14, y: 6 }, r1)
+        .r('R2', { x: 14, y: 14 }, r2)
+        .wire({ x: 4, y: 8 }, { x: 4, y: 4 }, { x: 14, y: 4 })
+        .wire({ x: 14, y: 8 }, { x: 14, y: 12 })
+        .wire({ x: 4, y: 12 }, { x: 4, y: 18 }, { x: 14, y: 18 }, { x: 14, y: 16 })
+        .ground({ x: 4, y: 12 })
+        .label({ x: 14, y: 10 }, 'out')
+        .expectVoltage('out', vout)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(vout, DEFAULT_TOLERANCE, [
         {
@@ -180,6 +207,18 @@ export const currentDivider: Generator = {
         `A $${amps(is)}$ current source feeds $R_1 = ${ohms(r1)}$ in parallel with $R_2 = ${ohms(r2)}$. ` +
         `Find the current through $R_1$.`,
       answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Current divider')
+        .i('I1', { x: 4, y: 10 }, is, 180)
+        .r('R1', { x: 14, y: 10 }, r1)
+        .r('R2', { x: 24, y: 10 }, r2)
+        .wire({ x: 4, y: 8 }, { x: 4, y: 6 }, { x: 24, y: 6 }, { x: 24, y: 8 })
+        .wire({ x: 14, y: 8 }, { x: 14, y: 6 })
+        .wire({ x: 4, y: 12 }, { x: 4, y: 16 }, { x: 24, y: 16 }, { x: 24, y: 12 })
+        .wire({ x: 14, y: 12 }, { x: 14, y: 16 })
+        .ground({ x: 14, y: 16 })
+        .label({ x: 8, y: 6 }, 'top')
+        .expectVoltage('top', i1 * r1)
+        .build(),
       options: [],
       misconceptionTraps: separatedTraps(i1, DEFAULT_TOLERANCE, [
         {
