@@ -2,12 +2,14 @@ import * as math from 'mathjs';
 import type {
   Answer,
   BooleanAnswer,
+  ComplexAnswer,
   Item,
   MisconceptionTrap,
   NumericAnswer,
   SymbolicAnswer,
   TruthTableAnswer,
 } from '@et/content-schema';
+import { comparePhasors, formatPhasor, matchPhasorTrap, parsePhasor } from './complex.js';
 import { normalizeInput } from './normalize.js';
 import {
   BooleanParseError, booleanEquivalent, literalCount, parseBoolean,
@@ -413,6 +415,41 @@ export function checkChoice(optionId: string, item: Item): CheckResult {
   });
 }
 
+/**
+ * Grade a phasor.
+ *
+ * The feedback is the point. "Incorrect" is nearly useless on a complex answer
+ * because there are two independent ways to be wrong and they mean different
+ * things: a magnitude error is arithmetic, and a phase error is almost always a
+ * sign convention — which reactance is negative, which way the current lags.
+ * Saying which of the two went wrong costs one comparison and is most of the
+ * diagnostic value the item has.
+ */
+export function checkComplex(
+  raw: string,
+  answer: ComplexAnswer,
+  traps: readonly MisconceptionTrap[] = [],
+): CheckResult {
+  const parsed = parsePhasor(raw);
+  if ('error' in parsed) {
+    return { correct: false, outcome: 'unparseable', feedback: parsed.error };
+  }
+
+  const comparison = comparePhasors(parsed.phasor, answer);
+  if (comparison.magnitudeOk && comparison.angleOk) return ok();
+
+  const trap = matchPhasorTrap(parsed.phasor, answer, traps);
+  if (trap) return wrong({ misconception: trap.misconception, feedback: trap.feedback });
+
+  const both = !comparison.magnitudeOk && !comparison.angleOk;
+  const feedback = both
+    ? `Both parts are off: you wrote ${formatPhasor(parsed.phasor, answer.unit)}.`
+    : comparison.magnitudeOk
+      ? `The magnitude is right, so the arithmetic holds — the phase is off by ${comparison.angleError.toFixed(1)}°. Check which reactance you made negative.`
+      : `The phase is right, so the sign conventions hold — the magnitude is off. You wrote ${formatPhasor(parsed.phasor, answer.unit)}.`;
+  return wrong({ feedback });
+}
+
 export type Response =
   | { kind: 'text'; value: string }
   | { kind: 'choice'; optionId: string }
@@ -442,6 +479,10 @@ export function checkAnswer(response: Response, item: Item): CheckResult {
     case 'truth-table':
       if (response.kind !== 'truth-table') return mismatch('a completed truth table');
       return checkTruthTable(response.rows, answer);
+
+    case 'complex':
+      if (response.kind !== 'text') return mismatch('a typed phasor');
+      return checkComplex(response.value, answer, item.misconceptionTraps);
 
     case 'circuit':
       // Graded by simulating the submitted netlist; see @et/circuits.

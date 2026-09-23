@@ -237,6 +237,7 @@ export function Session(): React.ReactElement {
               <label className="label" htmlFor="answer">
                 Your answer
                 {item.answer.kind === 'numeric' && item.answer.unit ? ` (${item.answer.unit})` : ''}
+                {item.answer.kind === 'complex' && item.answer.unit ? ` (${item.answer.unit})` : ''}
               </label>
               <input
                 id="answer"
@@ -245,7 +246,14 @@ export function Session(): React.ReactElement {
                 disabled={settled}
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && send()}
-                placeholder="e.g. 4.7k, 6.2 V, 5 kΩ"
+                // A phasor has six spellings in common use and the grader
+                // takes all of them; saying so up front is cheaper than a
+                // learner discovering it through a rejected correct answer.
+                placeholder={
+                  item.answer.kind === 'complex'
+                    ? 'e.g. 50∠53.1°, 30 + j40, 50 < 53.1'
+                    : 'e.g. 4.7k, 6.2 V, 5 kΩ'
+                }
                 className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-mono text-sm
                            focus:border-slate-900 focus:outline-none disabled:bg-slate-50
                    dark:border-slate-600"

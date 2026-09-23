@@ -236,6 +236,13 @@ function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
   if (item.type === 'numeric' && item.misconceptionTraps.length === 0) {
     return [warn(item.id, 'misconception-coverage', 'numeric item defines no misconception traps')];
   }
+  // A phasor has two independent ways to be wrong, and the interesting ones are
+  // wrong *forms* of the right number: the angle in radians, the conjugate, the
+  // reciprocal of the impedance. An item that names none of them can say only
+  // that the learner missed.
+  if (item.answer.kind === 'complex' && !item.misconceptionTraps.some((t) => t.complex !== undefined)) {
+    return [warn(item.id, 'misconception-coverage', 'phasor item defines no complex traps')];
+  }
   // Symbolic items diagnose through expression traps. Without them a wrong
   // answer records only that the learner missed, and the misconception feed
   // never learns that a whole course's worth of errors were chain-rule errors.

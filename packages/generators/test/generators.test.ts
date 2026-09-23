@@ -93,7 +93,16 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
             ? ({ kind: 'text', value: item.answer.expression } as const)
             : item.answer.kind === 'truth-table'
               ? ({ kind: 'truth-table' as const, rows: [...item.answer.rows] })
-              : ({ kind: 'text', value: String(item.answer.value) } as const);
+              : item.answer.kind === 'complex'
+                // The polar form, because that is what the item asks for and
+                // what the grader has to accept back.
+                ? ({
+                    kind: 'text',
+                    value: `${Math.hypot(item.answer.real, item.answer.imag)}∠${
+                      (Math.atan2(item.answer.imag, item.answer.real) * 180) / Math.PI
+                    }`,
+                  } as const)
+                : ({ kind: 'text', value: String(item.answer.value) } as const);
 
       const result = checkAnswer(response, item);
       expect(result.correct, `seed ${seed} rejected its own answer: ${result.feedback ?? ''}`).toBe(true);

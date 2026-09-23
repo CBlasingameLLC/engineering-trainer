@@ -189,6 +189,41 @@ export const circuitAnswerSchema = z.object({
   measurements: z.array(measurementSchema).min(1),
 });
 
+/**
+ * A complex-valued answer: a phasor, an impedance, a transfer function at a
+ * frequency.
+ *
+ * Stored in rectangular form because that is canonical — polar carries an
+ * ambiguity at the wrap point and another at zero magnitude — but graded in
+ * polar, because that is the form the error lives in. A learner who computes
+ * the right magnitude and puts the phase the wrong way round has made one
+ * specific, nameable mistake, and a rectangular comparison would report it as
+ * simply wrong.
+ *
+ * Tolerance is therefore two-part and the parts are not interchangeable: a
+ * relative one on magnitude, an absolute one on angle in degrees. Five percent
+ * of an angle means nothing — five percent of 2 degrees and five percent of
+ * 170 degrees are different demands on the same answer.
+ */
+export const complexAnswerSchema = z.object({
+  kind: z.literal('complex'),
+  real: z.number().finite(),
+  imag: z.number().finite(),
+  /** e.g. "V", "A", "ohm". "" means dimensionless, as for a transfer function. */
+  unit: z.string(),
+  tolerance: z
+    .object({
+      magRel: z.number().positive().optional(),
+      magAbs: z.number().positive().optional(),
+      /** Absolute, in degrees. Compared with wrapping, so +179 and -179 are 2 apart. */
+      angleDeg: z.number().positive().optional(),
+    })
+    .refine(
+      (t) => (t.magRel !== undefined || t.magAbs !== undefined) && t.angleDeg !== undefined,
+      'specify a magnitude tolerance and an angle tolerance',
+    ),
+});
+
 export const answerSchema = z.discriminatedUnion('kind', [
   numericAnswerSchema,
   symbolicAnswerSchema,
@@ -196,6 +231,7 @@ export const answerSchema = z.discriminatedUnion('kind', [
   choiceAnswerSchema,
   truthTableAnswerSchema,
   circuitAnswerSchema,
+  complexAnswerSchema,
 ]);
 
 /**
@@ -242,6 +278,13 @@ export const misconceptionTrapSchema = z
      * algebraically different spelling of the same mistake is still diagnosed.
      */
     expression: z.string().min(1).optional(),
+    /**
+     * Known wrong phasor. The classic errors here are not wrong numbers but
+     * wrong *forms* of the right number: the angle in radians, the conjugate,
+     * the reciprocal of the impedance. Each is a diagnosis; together they are
+     * most of what goes wrong in an AC course.
+     */
+    complex: z.object({ real: z.number().finite(), imag: z.number().finite() }).optional(),
     tolerance: z
       .object({ rel: z.number().positive().optional(), abs: z.number().positive().optional() })
       .refine((t) => t.rel !== undefined || t.abs !== undefined, 'specify rel or abs tolerance')
@@ -250,14 +293,15 @@ export const misconceptionTrapSchema = z
     feedback: z.string().min(1),
   })
   .superRefine((trap, ctx) => {
-    const hasValue = trap.value !== undefined;
-    const hasExpression = trap.expression !== undefined;
-    if (hasValue === hasExpression) {
+    const forms = [trap.value !== undefined, trap.expression !== undefined, trap.complex !== undefined];
+    if (forms.filter(Boolean).length !== 1) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'a trap sets exactly one of `value` (numeric items) or `expression` (symbolic items)',
+        message:
+          'a trap sets exactly one of `value` (numeric), `expression` (symbolic) or `complex` (phasor)',
       });
     }
+    const hasValue = trap.value !== undefined;
     if (hasValue && trap.tolerance === undefined) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -278,7 +322,7 @@ export const explanationSchema = z.object({
 
 export const ITEM_TYPES = [
   'numeric', 'symbolic', 'boolean', 'multiple-choice', 'truth-table',
-  'circuit-build', 'derivation-order', 'short-answer',
+  'circuit-build', 'derivation-order', 'short-answer', 'phasor',
 ] as const;
 
 export const itemSchema = z
@@ -422,6 +466,7 @@ export type Provenance = z.infer<typeof provenanceSchema>;
 export type Answer = z.infer<typeof answerSchema>;
 export type NumericAnswer = z.infer<typeof numericAnswerSchema>;
 export type SymbolicAnswer = z.infer<typeof symbolicAnswerSchema>;
+export type ComplexAnswer = z.infer<typeof complexAnswerSchema>;
 export type BooleanAnswer = z.infer<typeof booleanAnswerSchema>;
 export type SymbolicResidual = z.infer<typeof symbolicResidualSchema>;
 export type ChoiceAnswer = z.infer<typeof choiceAnswerSchema>;
