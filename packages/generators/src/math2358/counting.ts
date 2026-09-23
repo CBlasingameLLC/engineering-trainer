@@ -47,7 +47,7 @@ export const productRule: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [stages === 3 ? 0.6 : -0.6, independent ? -0.4 : 0.6]),
       stem:
-        `${scenario}, of sizes ${sizes.join(', ')}.\\n\\n` +
+        `${scenario}, of sizes ${sizes.join(', ')}.\n\n` +
         `How many ${independent ? 'combinations are possible' : 'single choices are available in total'}?`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],
@@ -158,7 +158,7 @@ export const pigeonholeMinimum: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [guarantee > 2 ? 0.8 : -0.6, holes > 8 ? 0.3 : -0.3]),
       stem:
-        `Suppose ${pick(rng, scenarios)}.\\n\\n` +
+        `Suppose ${pick(rng, scenarios)}.\n\n` +
         `What is the smallest number that **guarantees** at least ${guarantee} fall into the same category?`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],
@@ -214,7 +214,7 @@ export const inclusionExclusion: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [askNeither ? 0.6 : -0.6]),
       stem:
-        `Of ${total} students, ${a} take discrete mathematics, ${b} take digital logic, and ${both} take both.\\n\\n` +
+        `Of ${total} students, ${a} take discrete mathematics, ${b} take digital logic, and ${both} take both.\n\n` +
         `How many take ${askNeither ? '**neither**' : 'at least one of the two'}?`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],

@@ -35,7 +35,7 @@ export const handshakeDegree: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [askEdges ? 1 : -1, k > 3 ? 1 : -1]),
       stem:
-        `A simple graph has ${n} vertices, every one of degree ${k}.\\n\\n` +
+        `A simple graph has ${n} vertices, every one of degree ${k}.\n\n` +
         `How many ${askEdges ? 'edges' : 'does the sum of all degrees come to'}?`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],
@@ -82,7 +82,7 @@ export const eulerCircuit: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [oddCount === 4 ? 0.6 : -0.4]),
       stem:
-        `A connected graph has vertex degrees ${degrees.join(', ')}.\\n\\n` +
+        `A connected graph has vertex degrees ${degrees.join(', ')}.\n\n` +
         `What can be said about Euler paths and circuits?`,
       answer: { kind: 'choice' as const, correctId },
       options: [
@@ -192,7 +192,7 @@ export const inductionStep: Generator = {
       // hypothesis substituted into a doubling step, a triangular sum does not.
       difficultyB: adjustDifficulty(this.difficultyB, [chosen.claim.includes('2^i') ? 1 : -1]),
       stem:
-        `Proving $${chosen.claim}$ by induction, you have assumed $${chosen.hypothesis}$.\\n\\n` +
+        `Proving $${chosen.claim}$ by induction, you have assumed $${chosen.hypothesis}$.\n\n` +
         `What must the inductive step establish?`,
       answer: { kind: 'choice' as const, correctId: 'a' },
       options: [
@@ -253,7 +253,7 @@ export const recurrenceEvaluation: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [n > 5 ? 0.6 : -0.4, b > 1 ? 0.4 : -0.4]),
       stem:
-        `A sequence satisfies $a_k = ${a}a_{k-1} + ${b}a_{k-2}$ with $a_0 = ${a0}$ and $a_1 = ${a1}$.\\n\\n` +
+        `A sequence satisfies $a_k = ${a}a_{k-1} + ${b}a_{k-2}$ with $a_0 = ${a0}$ and $a_1 = ${a1}$.\n\n` +
         `Find $a_{${n}}$.`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],

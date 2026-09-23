@@ -70,7 +70,7 @@ export const opAmpGain: Generator = {
       difficultyB,
       stem:
         `An ideal op-amp is wired as a **${config}** amplifier with $R_{in} = ${ohms(rIn)}$ and ` +
-        `$R_f = ${ohms(rf)}$. For an input of ${volts(vin)}, find the output voltage.`,
+        `$R_f = ${ohms(rf)}$. For an input of $${volts(vin)}$, find the output voltage.`,
       answer: { kind: 'numeric' as const, value: vout, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
       misconceptionTraps: separatedTraps(vout, DEFAULT_TOLERANCE, traps),
@@ -124,8 +124,8 @@ export const opAmpSumming: Generator = {
       kcRefs: this.kcRefs,
       difficultyB,
       stem:
-        `An inverting summing amplifier has inputs ${volts(v1)} through $R_1 = ${ohms(r1)}$ and ` +
-        `${volts(v2)} through $R_2 = ${ohms(r2)}$, with feedback resistor $R_f = ${ohms(rf)}$. ` +
+        `An inverting summing amplifier has inputs $${volts(v1)}$ through $R_1 = ${ohms(r1)}$ and ` +
+        `$${volts(v2)}$ through $R_2 = ${ohms(r2)}$, with feedback resistor $R_f = ${ohms(rf)}$. ` +
         `Find the output voltage.`,
       answer: { kind: 'numeric' as const, value: vout, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -198,7 +198,7 @@ export const opAmpCascade: Generator = {
         ratioDifficulty(rf2, rIn2),
       ]),
       stem:
-        `A ${volts(vin)} signal feeds an **inverting** stage with $R_{in1} = ${ohms(rIn1)}$ and ` +
+        `A $${volts(vin)}$ signal feeds an **inverting** stage with $R_{in1} = ${ohms(rIn1)}$ and ` +
         `$R_{f1} = ${ohms(rf1)}$, whose output drives a **non-inverting** stage with ` +
         `$R_{in2} = ${ohms(rIn2)}$ and $R_{f2} = ${ohms(rf2)}$. Both op-amps are ideal. Find the final output voltage.`,
       answer: { kind: 'numeric' as const, value: vout, unit: 'V', tolerance: DEFAULT_TOLERANCE },

@@ -51,7 +51,7 @@ export const setOperationCount: Generator = {
       ]),
       stem:
         `In a universe of ${universe} elements, $|A| = ${sizeA}$, $|B| = ${sizeB}$ and ` +
-        `$|A \\cap B| = ${both}$.\\n\\nFind $|${label}|$.`,
+        `$|A \\cap B| = ${both}$.\n\nFind $|${label}|$.`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],
       misconceptionTraps: separatedTraps(value, { abs: 0.01 }, [
@@ -121,7 +121,7 @@ export const membershipTable: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [width === 3 ? 1 : -1]),
       stem:
-        `Complete the membership table for $${rendered}$.\\n\\n` +
+        `Complete the membership table for $${rendered}$.\n\n` +
         `Write 1 when an element belongs to the set and 0 when it does not.`,
       answer: { kind: 'truth-table' as const, inputs: sets, output: 'member', rows },
       options: [],
@@ -271,7 +271,7 @@ export const relationProperties: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [isReflexive === isSymmetric ? -0.5 : 0.5]),
       stem:
-        `On the set $\\{1, 2, 3\\}$, let $R = \\{${rendered}\\}$.\\n\\n` +
+        `On the set $\\{1, 2, 3\\}$, let $R = \\{${rendered}\\}$.\n\n` +
         `Which describes $R$?`,
       answer: { kind: 'choice' as const, correctId },
       options: [
@@ -376,7 +376,7 @@ export const equivalenceClasses: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [askClasses ? -1 : 1, modulus > 4 ? 0.5 : -0.5]),
       stem:
         `On $\\{1, 2, \\ldots, ${upper}\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{${modulus}}$. ` +
-        `This is an equivalence relation.\\n\\n` +
+        `This is an equivalence relation.\n\n` +
         (askClasses
           ? `How many distinct equivalence classes does it have?`
           : `How many elements are in each equivalence class?`),

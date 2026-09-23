@@ -25,7 +25,7 @@ function theveninNetwork(rng: Rng) {
 }
 
 const networkDescription = (n: ReturnType<typeof theveninNetwork>): string =>
-  `A ${volts(n.vs)} source drives $R_1 = ${ohms(n.r1)}$ into a node where $R_2 = ${ohms(n.r2)}$ ` +
+  `A $${volts(n.vs)}$ source drives $R_1 = ${ohms(n.r1)}$ into a node where $R_2 = ${ohms(n.r2)}$ ` +
   `returns to ground. From that node, $R_3 = ${ohms(n.r3)}$ runs out to terminal $a$; terminal $b$ is ground.`;
 
 /**
@@ -268,7 +268,7 @@ export const sourceTransformation: Generator = {
         kcRefs: this.kcRefs,
         difficultyB: adjustDifficulty(this.difficultyB, [mantissaDifficulty(rs), -0.5]),
         stem:
-          `A ${volts(vs)} source sits in series with $R_s = ${ohms(rs)}$. ` +
+          `A $${volts(vs)}$ source sits in series with $R_s = ${ohms(rs)}$. ` +
           `Find the current of the equivalent Norton-form source.`,
         answer: { kind: 'numeric' as const, value: is, unit: 'A', tolerance: DEFAULT_TOLERANCE },
         options: [],
@@ -302,7 +302,7 @@ export const sourceTransformation: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [mantissaDifficulty(rs), 0.5]),
       stem:
-        `A ${amps(is)} source sits in parallel with $R_s = ${ohms(rs)}$. ` +
+        `A $${amps(is)}$ source sits in parallel with $R_s = ${ohms(rs)}$. ` +
         `Find the voltage of the equivalent Thevenin-form source.`,
       answer: { kind: 'numeric' as const, value: vs, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],

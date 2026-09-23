@@ -4,3 +4,4 @@ export * from './curriculum.js';
 export * from './credential.js';
 export * from './misconception.js';
 export * from './load.js';
+export * from './markup.js';

@@ -40,7 +40,7 @@ export const specificationToTable: Generator = {
         spec.expr.includes('^') ? 1 : -0.5,
       ]),
       stem:
-        `A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where ${spec.text}.\\n\\n` +
+        `A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where ${spec.text}.\n\n` +
         `Complete the truth table.`,
       answer: { kind: 'truth-table' as const, inputs: variables, output: 'F', rows },
       options: [],
@@ -128,7 +128,7 @@ export const multiplexerOutput: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [selectBits === 3 ? 0.6 : -0.6]),
       stem:
         `A ${inputs}-to-1 multiplexer has data inputs $D_0 \\ldots D_{${inputs - 1}}$ set to ` +
-        `${data.join(', ')} respectively.\\n\\n` +
+        `${data.join(', ')} respectively.\n\n` +
         `The select lines are $S_{${selectBits - 1}}\\ldots S_0 = ${selectPattern}$. What is the output?`,
       answer: { kind: 'choice' as const, correctId: value === 1 ? 'a' : 'b' },
       options: [
@@ -178,7 +178,7 @@ export const decoderOutput: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [activeLow ? 0.8 : -0.8]),
       stem:
         `A ${bits}-to-${outputs} decoder with **active-${activeLow ? 'low' : 'high'}** outputs is enabled, ` +
-        `and its input is ${input.toString(2).padStart(bits, '0')}.\\n\\n` +
+        `and its input is ${input.toString(2).padStart(bits, '0')}.\n\n` +
         `How many of its ${outputs} outputs are at logic 1?`,
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],

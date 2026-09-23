@@ -173,14 +173,27 @@ function answerOf(generator: Generator, seed: number): number {
   return item.answer.value;
 }
 
-/** Recover the quantities a stem states, so the check does not reuse the generator's own maths. */
-function quantitiesFrom(stem: string): number[] {
-  // Values render as "4.7\,\text{kΩ}"; recover magnitude and SI prefix.
-  const matches = [...stem.matchAll(/(-?[\d.]+)\\,\\text\{(\\mu |[a-zA-Z])?\\?([a-zA-Z]+)?\}/g)];
+/**
+ * Recover the quantities a stem states, so the check does not reuse the
+ * generator's own maths.
+ *
+ * Both `\text` and `\mathrm`, because reading the rendered stem means this
+ * parser is coupled to typesetting: when the unit macro changed, every check
+ * here silently parsed nothing and compared against `NaN`. `expect(x).toBeLessThan(NaN)`
+ * happens to fail, but `expect(x).toBeGreaterThan(0)` happily passes on a stem
+ * that was never read — so a parse that comes up short throws instead.
+ */
+function quantitiesFrom(stem: string, expected?: number): number[] {
+  // Values render as "4.7\,\mathrm{kΩ}"; recover magnitude and SI prefix.
+  const matches = [...stem.matchAll(/(-?[\d.]+)\\,\\(?:text|mathrm)\{(\\mu |[a-zA-Z])?\\?([a-zA-Z]+)?\}/g)];
   const prefixes: Record<string, number> = {
     G: 1e9, M: 1e6, k: 1e3, m: 1e-3, n: 1e-9, p: 1e-12, '\\mu ': 1e-6, u: 1e-6,
   };
-  return matches.map(([, num, prefix]) => Number(num) * (prefix ? (prefixes[prefix] ?? 1) : 1));
+  const values = matches.map(([, num, prefix]) => Number(num) * (prefix ? (prefixes[prefix] ?? 1) : 1));
+  if (expected !== undefined && values.length < expected) {
+    throw new Error(`read ${values.length} of ${expected} quantities from: ${stem}`);
+  }
+  return values;
 }
 
 describe('physics cross-checks', () => {
@@ -188,7 +201,7 @@ describe('physics cross-checks', () => {
     const g = generatorById('ee2300.voltage-divider.output')!;
     for (const seed of SEEDS) {
       const item = itemSchema.parse(variant(g, seed));
-      const [vs] = quantitiesFrom(item.stem);
+      const [vs] = quantitiesFrom(item.stem, 1);
       const vout = answerOf(g, seed);
       expect(vout).toBeGreaterThan(0);
       expect(vout).toBeLessThan(vs! * 1.0001);
@@ -199,7 +212,7 @@ describe('physics cross-checks', () => {
     const g = generatorById('ee2300.current-divider.branch')!;
     for (const seed of SEEDS) {
       const item = itemSchema.parse(variant(g, seed));
-      const [is] = quantitiesFrom(item.stem);
+      const [is] = quantitiesFrom(item.stem, 1);
       const i1 = answerOf(g, seed);
       expect(i1).toBeGreaterThan(0);
       expect(i1).toBeLessThan(is! * 1.0001);
@@ -210,7 +223,7 @@ describe('physics cross-checks', () => {
     const g = generatorById('ee2300.series-parallel.equivalent')!;
     for (const seed of SEEDS) {
       const item = itemSchema.parse(variant(g, seed));
-      const [r1, r2, r3] = quantitiesFrom(item.stem) as [number, number, number];
+      const [r1, r2, r3] = quantitiesFrom(item.stem, 3) as [number, number, number];
       const expected = r1 + (r2 * r3) / (r2 + r3);
       expect(answerOf(g, seed)).toBeCloseTo(expected, 6);
       // Independent bound: adding a parallel branch can only lower resistance.
@@ -347,7 +360,7 @@ describe('physics cross-checks', () => {
     const g = generatorById('ee2300.delta-wye.to-wye')!;
     for (const seed of SEEDS) {
       const item = itemSchema.parse(variant(g, seed));
-      const [rab, rbc, rca] = quantitiesFrom(item.stem) as [number, number, number];
+      const [rab, rbc, rca] = quantitiesFrom(item.stem, 3) as [number, number, number];
       const sum = rab + rbc + rca;
 
       const r1 = (rab * rca) / sum;
@@ -434,7 +447,7 @@ describe('physics cross-checks', () => {
     for (const seed of SEEDS) {
       const item = itemSchema.parse(variant(g, seed));
       const vt = answerOf(g, seed);
-      const v0 = Number(/charged to ([\d.]+)\\,\\text\{V\}/.exec(item.stem)?.[1]);
+      const v0 = Number(/charged to \$?([\d.]+)\\,\\(?:text|mathrm)\{V\}/.exec(item.stem)?.[1]);
       const decades = Number(/t = ([\d.]+)\\tau/.exec(item.stem)?.[1]);
       expect(Number.isFinite(v0)).toBe(true);
       expect(Number.isFinite(decades)).toBe(true);
@@ -458,8 +471,8 @@ describe('physics cross-checks', () => {
       if (item.answer.unit === 'J') {
         // Energy must be recoverable as (1/2)L i^2 from the stated quantities.
         const lMh = Number(/L = ([\d.]+)/.exec(item.stem)?.[1]);
-        const i = Number(/of ([\d.]+)\\,\\text\{(m?)A\}/.exec(item.stem)?.[1]);
-        const scale = /\\text\{mA\}/.test(item.stem) ? 1e-3 : 1;
+        const i = Number(/of \$?([\d.]+)\\,\\(?:text|mathrm)\{(m?)A\}/.exec(item.stem)?.[1]);
+        const scale = /\\(?:text|mathrm)\{mA\}/.test(item.stem) ? 1e-3 : 1;
         expect(answer).toBeCloseTo(0.5 * (lMh / 1000) * (i * scale) ** 2, 9);
       } else {
         // v = L di/dt, so the voltage must scale with L and inversely with the ramp time.

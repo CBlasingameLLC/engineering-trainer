@@ -34,7 +34,7 @@ export const ohmsLaw: Generator = {
         type: 'numeric' as const,
         kcRefs: this.kcRefs,
         difficultyB,
-        stem: `A resistor of ${ohms(r)} has ${volts(v)} across it. Find the current through it.`,
+        stem: `A resistor of $${ohms(r)}$ has $${volts(v)}$ across it. Find the current through it.`,
         answer: { kind: 'numeric' as const, value: i, unit: 'A', tolerance: DEFAULT_TOLERANCE },
         options: [],
         misconceptionTraps: separatedTraps(i, DEFAULT_TOLERANCE, [
@@ -62,7 +62,7 @@ export const ohmsLaw: Generator = {
         type: 'numeric' as const,
         kcRefs: this.kcRefs,
         difficultyB,
-        stem: `A current of ${amps(i)} flows through a ${ohms(r)} resistor. Find the voltage across it.`,
+        stem: `A current of $${amps(i)}$ flows through a $${ohms(r)}$ resistor. Find the voltage across it.`,
         answer: { kind: 'numeric' as const, value: v, unit: 'V', tolerance: DEFAULT_TOLERANCE },
         options: [],
         // The other two branches carry traps and this one shipped with none,
@@ -101,7 +101,7 @@ export const ohmsLaw: Generator = {
       type: 'numeric' as const,
       kcRefs: this.kcRefs,
       difficultyB,
-      stem: `A resistor carries ${amps(i)} when ${volts(v)} is placed across it. Find its resistance.`,
+      stem: `A resistor carries $${amps(i)}$ when $${volts(v)}$ is placed across it. Find its resistance.`,
       answer: { kind: 'numeric' as const, value: r, unit: 'ohm', tolerance: DEFAULT_TOLERANCE },
       options: [],
       misconceptionTraps: separatedTraps(r, DEFAULT_TOLERANCE, [
@@ -155,8 +155,8 @@ export const powerSignConvention: Generator = {
       kcRefs: this.kcRefs,
       difficultyB,
       stem:
-        `An element has ${volts(v)} across it, with the reference **+** terminal at the top. ` +
-        `A current of ${amps(i)} is measured **${verb}** the **+** terminal. ` +
+        `An element has $${volts(v)}$ across it, with the reference **+** terminal at the top. ` +
+        `A current of $${amps(i)}$ is measured **${verb}** the **+** terminal. ` +
         `Find the power absorbed by the element, with sign.`,
       answer: { kind: 'numeric' as const, value: power, unit: 'W', tolerance: { rel: 0.02, abs: 1e-6 } },
       options: [],

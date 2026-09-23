@@ -92,7 +92,7 @@ export const deMorganTransform: Generator = {
       ]),
       stem:
         `Use De Morgan's law to write an equivalent expression with the negation applied to ` +
-        `the individual propositions:\\n\\n$$${tex(source)}$$`,
+        `the individual propositions:\n\n$$${tex(source)}$$`,
       answer: booleanAnswer,
       options: [],
       misconceptionTraps: separatedBooleanTraps(booleanAnswer, [
@@ -213,7 +213,7 @@ export const booleanSimplification: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [width === 3 ? 0.8 : -0.8, literals > 2 ? 0.4 : -0.4]),
       stem:
-        `Simplify to a minimal sum of products:\\n\\n$$${tex(expression)}$$\\n\\n` +
+        `Simplify to a minimal sum of products:\n\n$$${tex(expression)}$$\n\n` +
         `The minimal form uses ${literals} literal${literals === 1 ? '' : 's'}.`,
       answer: booleanAnswer,
       options: [],
@@ -357,7 +357,7 @@ export const proofMethodChoice: Generator = {
       type: 'multiple-choice' as const,
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [chosen.method === 'direct' ? -0.8 : 0.4]),
-      stem: `Which proof strategy is the natural first choice for:\\n\\n> ${chosen.claim}`,
+      stem: `Which proof strategy is the natural first choice for:\n\n> ${chosen.claim}`,
       answer: { kind: 'choice' as const, correctId: correct.id },
       options: options.map((o) => ({
         id: o.id,

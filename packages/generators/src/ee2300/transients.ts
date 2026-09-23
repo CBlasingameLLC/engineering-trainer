@@ -49,7 +49,7 @@ export const rcStepResponse: Generator = {
       difficultyB,
       stem:
         `A capacitor $C = ${trimNumber(c * 1e9)}\\,\\text{nF}$ charges through $R = ${ohms(r)}$ toward ` +
-        `${volts(vFinal)}. Its initial voltage is ${volts(v0)}. ` +
+        `$${volts(vFinal)}$. Its initial voltage is $${volts(v0)}$. ` +
         `Find the capacitor voltage at $t = ${trimNumber(tMultiple)}\\tau$.`,
       answer: { kind: 'numeric' as const, value: vt, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -60,7 +60,7 @@ export const rcStepResponse: Generator = {
           tolerance: { rel: 0.015 },
           feedback:
             `You used the pure decay form $V_f e^{-t/\\tau}$, which describes a capacitor discharging **to zero**. ` +
-            `This one is charging **toward** ${volts(vFinal)}, so the exponential must decay the *difference*.`,
+            `This one is charging **toward** $${volts(vFinal)}$, so the exponential must decay the *difference*.`,
         },
         ...(v0 !== 0
           ? [
@@ -69,7 +69,7 @@ export const rcStepResponse: Generator = {
                 value: noInitial,
                 tolerance: { rel: 0.015 },
                 feedback:
-                  `You assumed the capacitor started at 0 V. It starts at ${volts(v0)}, and that initial ` +
+                  `You assumed the capacitor started at 0 V. It starts at $${volts(v0)}$, and that initial ` +
                   `condition enters through the $(x_0 - x_\\infty)$ term.`,
               },
             ]
@@ -199,7 +199,7 @@ export const naturalResponseTau: Generator = {
         decades === 1 ? -1 : 0.5,
       ]),
       stem:
-        `A capacitor $C = ${trimNumber(c * 1e9)}\\,\\text{nF}$ is charged to ${volts(v0)} and then discharges ` +
+        `A capacitor $C = ${trimNumber(c * 1e9)}\\,\\text{nF}$ is charged to $${volts(v0)}$ and then discharges ` +
         `through $R_1 = ${ohms(r1)}$ **in parallel with** $R_2 = ${ohms(r2)}$, with no source connected. ` +
         `Find the capacitor voltage after $t = ${trimNumber(decades)}\\tau$.`,
       answer: { kind: 'numeric' as const, value: vt, unit: 'V', tolerance: DEFAULT_TOLERANCE },
@@ -264,7 +264,7 @@ export const inductorBehaviour: Generator = {
         kcRefs: this.kcRefs,
         difficultyB: adjustDifficulty(this.difficultyB, [mantissaDifficulty(i), 0.3]),
         stem:
-          `An inductor $L = ${trimNumber(l * 1e3)}\\,\\text{mH}$ carries a steady current of ${amps(i)}. ` +
+          `An inductor $L = ${trimNumber(l * 1e3)}\\,\\text{mH}$ carries a steady current of $${amps(i)}$. ` +
           `Find the energy stored in its magnetic field.`,
         answer: { kind: 'numeric' as const, value: energy, unit: 'J', tolerance: DEFAULT_TOLERANCE },
         options: [],
@@ -307,7 +307,7 @@ export const inductorBehaviour: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [mantissaDifficulty(dtMs), -0.3]),
       stem:
         `The current through an inductor $L = ${trimNumber(l * 1e3)}\\,\\text{mH}$ ramps linearly from 0 to ` +
-        `${amps(iFinal)} over ${trimNumber(dtMs)} ms. Find the voltage across it during the ramp.`,
+        `$${amps(iFinal)}$ over ${trimNumber(dtMs)} ms. Find the voltage across it during the ramp.`,
       answer: { kind: 'numeric' as const, value: v, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
       misconceptionTraps: separatedTraps(v, DEFAULT_TOLERANCE, [

@@ -4178,7 +4178,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 1\\,\\text{ms}$.\n\nAt what time $t$ does it reach 5.55?",
+      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 1\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 5.55?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -4204,7 +4204,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4212,7 +4212,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{5.55}{15} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{15}{5.55}\\right)$.",
-          "$t = (1\\,\\text{ms})(0.9943) = 994\\,\\text{\\mu s}$."
+          "$t = (1\\,\\mathrm{ms})(0.9943) = 994\\,\\mathrm{\\mu s}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4237,7 +4237,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 20e^{-t/\\tau}$ with $\\tau = 2.2\\,\\text{ms}$.\n\nAt what time $t$ does it reach 4?",
+      "stem": "A quantity decays as $v(t) = 20e^{-t/\\tau}$ with $\\tau = 2.2\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 4?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -4263,7 +4263,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 2.2\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 2.2\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4271,7 +4271,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{4}{20} = 0.2$.",
           "Take the natural log: $-t/\\tau = \\ln(0.2) = -1.609$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{20}{4}\\right)$.",
-          "$t = (2.2\\,\\text{ms})(1.609) = 3.54\\,\\text{ms}$."
+          "$t = (2.2\\,\\mathrm{ms})(1.609) = 3.54\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4296,7 +4296,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 20e^{-t/\\tau}$ with $\\tau = 1\\,\\text{ms}$.\n\nAt what time $t$ does it reach 5?",
+      "stem": "A quantity decays as $v(t) = 20e^{-t/\\tau}$ with $\\tau = 1\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 5?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -4322,7 +4322,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4330,7 +4330,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{5}{20} = 0.25$.",
           "Take the natural log: $-t/\\tau = \\ln(0.25) = -1.386$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{20}{5}\\right)$.",
-          "$t = (1\\,\\text{ms})(1.386) = 1.39\\,\\text{ms}$."
+          "$t = (1\\,\\mathrm{ms})(1.386) = 1.39\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4355,7 +4355,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 24e^{-t/\\tau}$ with $\\tau = 2.2\\,\\text{ms}$.\n\nAt what time $t$ does it reach 4.8?",
+      "stem": "A quantity decays as $v(t) = 24e^{-t/\\tau}$ with $\\tau = 2.2\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 4.8?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -4381,7 +4381,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 2.2\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 2.2\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4389,7 +4389,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{4.8}{24} = 0.2$.",
           "Take the natural log: $-t/\\tau = \\ln(0.2) = -1.609$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{24}{4.8}\\right)$.",
-          "$t = (2.2\\,\\text{ms})(1.609) = 3.54\\,\\text{ms}$."
+          "$t = (2.2\\,\\mathrm{ms})(1.609) = 3.54\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4414,7 +4414,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 22\\,\\text{ms}$.\n\nAt what time $t$ does it reach 3?",
+      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 22\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 3?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -4440,7 +4440,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 22\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 22\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4448,7 +4448,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{3}{15} = 0.2$.",
           "Take the natural log: $-t/\\tau = \\ln(0.2) = -1.609$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{15}{3}\\right)$.",
-          "$t = (22\\,\\text{ms})(1.609) = 35.4\\,\\text{ms}$."
+          "$t = (22\\,\\mathrm{ms})(1.609) = 35.4\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4473,7 +4473,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 1\\,\\text{ms}$.\n\nAt what time $t$ does it reach 4.44?",
+      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 1\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 4.44?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -4499,7 +4499,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4507,7 +4507,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{4.44}{12} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{12}{4.44}\\right)$.",
-          "$t = (1\\,\\text{ms})(0.9943) = 994\\,\\text{\\mu s}$."
+          "$t = (1\\,\\mathrm{ms})(0.9943) = 994\\,\\mathrm{\\mu s}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4532,7 +4532,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 5e^{-t/\\tau}$ with $\\tau = 1\\,\\text{ms}$.\n\nAt what time $t$ does it reach 3.75?",
+      "stem": "A quantity decays as $v(t) = 5e^{-t/\\tau}$ with $\\tau = 1\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 3.75?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -4558,7 +4558,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4566,7 +4566,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{3.75}{5} = 0.75$.",
           "Take the natural log: $-t/\\tau = \\ln(0.75) = -0.2877$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{5}{3.75}\\right)$.",
-          "$t = (1\\,\\text{ms})(0.2877) = 288\\,\\text{\\mu s}$."
+          "$t = (1\\,\\mathrm{ms})(0.2877) = 288\\,\\mathrm{\\mu s}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4591,7 +4591,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 9e^{-t/\\tau}$ with $\\tau = 10\\,\\text{ms}$.\n\nAt what time $t$ does it reach 1.8?",
+      "stem": "A quantity decays as $v(t) = 9e^{-t/\\tau}$ with $\\tau = 10\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 1.8?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -4617,7 +4617,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 10\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 10\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4625,7 +4625,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{1.8}{9} = 0.2$.",
           "Take the natural log: $-t/\\tau = \\ln(0.2) = -1.609$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{9}{1.8}\\right)$.",
-          "$t = (10\\,\\text{ms})(1.609) = 16.1\\,\\text{ms}$."
+          "$t = (10\\,\\mathrm{ms})(1.609) = 16.1\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4650,7 +4650,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "A quantity decays as $v(t) = 9e^{-t/\\tau}$ with $\\tau = 47\\,\\text{ms}$.\n\nAt what time $t$ does it reach 0.9?",
+      "stem": "A quantity decays as $v(t) = 9e^{-t/\\tau}$ with $\\tau = 47\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 0.9?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -4676,7 +4676,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 47\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 47\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4684,7 +4684,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{0.9}{9} = 0.1$.",
           "Take the natural log: $-t/\\tau = \\ln(0.1) = -2.303$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{9}{0.9}\\right)$.",
-          "$t = (47\\,\\text{ms})(2.303) = 108\\,\\text{ms}$."
+          "$t = (47\\,\\mathrm{ms})(2.303) = 108\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4709,7 +4709,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 47\\,\\text{ms}$.\n\nAt what time $t$ does it reach 6?",
+      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 47\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 6?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -4735,7 +4735,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 47\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 47\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4743,7 +4743,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{6}{12} = 0.5$.",
           "Take the natural log: $-t/\\tau = \\ln(0.5) = -0.6931$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{12}{6}\\right)$.",
-          "$t = (47\\,\\text{ms})(0.6931) = 32.6\\,\\text{ms}$."
+          "$t = (47\\,\\mathrm{ms})(0.6931) = 32.6\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4768,7 +4768,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 10\\,\\text{ms}$.\n\nAt what time $t$ does it reach 4.44?",
+      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 10\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 4.44?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -4794,7 +4794,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 10\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 10\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4802,7 +4802,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{4.44}{12} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{12}{4.44}\\right)$.",
-          "$t = (10\\,\\text{ms})(0.9943) = 9.94\\,\\text{ms}$."
+          "$t = (10\\,\\mathrm{ms})(0.9943) = 9.94\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4827,7 +4827,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 10e^{-t/\\tau}$ with $\\tau = 1\\,\\text{ms}$.\n\nAt what time $t$ does it reach 3.7?",
+      "stem": "A quantity decays as $v(t) = 10e^{-t/\\tau}$ with $\\tau = 1\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 3.7?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -4853,7 +4853,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4861,7 +4861,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{3.7}{10} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{10}{3.7}\\right)$.",
-          "$t = (1\\,\\text{ms})(0.9943) = 994\\,\\text{\\mu s}$."
+          "$t = (1\\,\\mathrm{ms})(0.9943) = 994\\,\\mathrm{\\mu s}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4886,7 +4886,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 4.7\\,\\text{ms}$.\n\nAt what time $t$ does it reach 1.2?",
+      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 4.7\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 1.2?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -4912,7 +4912,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 4.7\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 4.7\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4920,7 +4920,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{1.2}{12} = 0.1$.",
           "Take the natural log: $-t/\\tau = \\ln(0.1) = -2.303$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{12}{1.2}\\right)$.",
-          "$t = (4.7\\,\\text{ms})(2.303) = 10.8\\,\\text{ms}$."
+          "$t = (4.7\\,\\mathrm{ms})(2.303) = 10.8\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -4945,7 +4945,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 4.7\\,\\text{ms}$.\n\nAt what time $t$ does it reach 4.44?",
+      "stem": "A quantity decays as $v(t) = 12e^{-t/\\tau}$ with $\\tau = 4.7\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 4.44?",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -4971,7 +4971,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 4.7\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 4.7\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -4979,7 +4979,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{4.44}{12} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{12}{4.44}\\right)$.",
-          "$t = (4.7\\,\\text{ms})(0.9943) = 4.67\\,\\text{ms}$."
+          "$t = (4.7\\,\\mathrm{ms})(0.9943) = 4.67\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -5004,7 +5004,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 9e^{-t/\\tau}$ with $\\tau = 4.7\\,\\text{ms}$.\n\nAt what time $t$ does it reach 2.25?",
+      "stem": "A quantity decays as $v(t) = 9e^{-t/\\tau}$ with $\\tau = 4.7\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 2.25?",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -5030,7 +5030,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 4.7\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 4.7\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -5038,7 +5038,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{2.25}{9} = 0.25$.",
           "Take the natural log: $-t/\\tau = \\ln(0.25) = -1.386$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{9}{2.25}\\right)$.",
-          "$t = (4.7\\,\\text{ms})(1.386) = 6.52\\,\\text{ms}$."
+          "$t = (4.7\\,\\mathrm{ms})(1.386) = 6.52\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -5063,7 +5063,7 @@
         }
       ],
       "difficultyB": -0.1,
-      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 1\\,\\text{ms}$.\n\nAt what time $t$ does it reach 7.5?",
+      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 1\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 7.5?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -5089,7 +5089,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 1\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -5097,7 +5097,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{7.5}{15} = 0.5$.",
           "Take the natural log: $-t/\\tau = \\ln(0.5) = -0.6931$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{15}{7.5}\\right)$.",
-          "$t = (1\\,\\text{ms})(0.6931) = 693\\,\\text{\\mu s}$."
+          "$t = (1\\,\\mathrm{ms})(0.6931) = 693\\,\\mathrm{\\mu s}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -5122,7 +5122,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 2.2\\,\\text{ms}$.\n\nAt what time $t$ does it reach 5.55?",
+      "stem": "A quantity decays as $v(t) = 15e^{-t/\\tau}$ with $\\tau = 2.2\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 5.55?",
       "seed": 17,
       "answer": {
         "kind": "numeric",
@@ -5148,7 +5148,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 2.2\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 2.2\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -5156,7 +5156,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{5.55}{15} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{15}{5.55}\\right)$.",
-          "$t = (2.2\\,\\text{ms})(0.9943) = 2.19\\,\\text{ms}$."
+          "$t = (2.2\\,\\mathrm{ms})(0.9943) = 2.19\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -5181,7 +5181,7 @@
         }
       ],
       "difficultyB": -0.775,
-      "stem": "A quantity decays as $v(t) = 10e^{-t/\\tau}$ with $\\tau = 10\\,\\text{ms}$.\n\nAt what time $t$ does it reach 3.7?",
+      "stem": "A quantity decays as $v(t) = 10e^{-t/\\tau}$ with $\\tau = 10\\,\\mathrm{ms}$.\n\nAt what time $t$ does it reach 3.7?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -5207,7 +5207,7 @@
           "tolerance": {
             "rel": 0.01
           },
-          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 10\\,\\text{ms}$ to get a time."
+          "feedback": "You found $\\ln(v_0/v)$ but stopped there. That result is in units of $\\tau$, not seconds — multiply by $\\tau = 10\\,\\mathrm{ms}$ to get a time."
         }
       ],
       "explanation": {
@@ -5215,7 +5215,7 @@
           "Divide both sides by the initial value: $e^{-t/\\tau} = \\frac{3.7}{10} = 0.37$.",
           "Take the natural log: $-t/\\tau = \\ln(0.37) = -0.9943$.",
           "Multiply through by $-\\tau$: $t = \\tau\\ln\\!\\left(\\frac{10}{3.7}\\right)$.",
-          "$t = (10\\,\\text{ms})(0.9943) = 9.94\\,\\text{ms}$."
+          "$t = (10\\,\\mathrm{ms})(0.9943) = 9.94\\,\\mathrm{ms}$."
         ],
         "principle": "Solving an exponential for time is always the same three moves: isolate, take the log, multiply by the time constant.",
         "hints": [
@@ -5240,7 +5240,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(10\\,\\text{ms}) = 3.033$ V and $v(50\\,\\text{ms}) = 0.4104$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(10\\,\\mathrm{ms}) = 3.033$ V and $v(50\\,\\mathrm{ms}) = 0.4104$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -5274,7 +5274,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{3.033}{0.4104} = 7.389$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(7.389) = 2$.",
-          "$\\tau = \\frac{40\\,\\text{ms}}{2} = 20\\,\\text{ms}$."
+          "$\\tau = \\frac{40\\,\\mathrm{ms}}{2} = 20\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5299,7 +5299,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\text{ms}) = 7.788$ V and $v(35\\,\\text{ms}) = 1.738$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\mathrm{ms}) = 7.788$ V and $v(35\\,\\mathrm{ms}) = 1.738$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -5333,7 +5333,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{7.788}{1.738} = 4.482$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(4.482) = 1.5$.",
-          "$\\tau = \\frac{30\\,\\text{ms}}{1.5} = 20\\,\\text{ms}$."
+          "$\\tau = \\frac{30\\,\\mathrm{ms}}{1.5} = 20\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5358,7 +5358,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(10\\,\\text{ms}) = 3.033$ V and $v(30\\,\\text{ms}) = 1.116$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(10\\,\\mathrm{ms}) = 3.033$ V and $v(30\\,\\mathrm{ms}) = 1.116$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -5384,7 +5384,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{3.033}{1.116} = 2.718$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(2.718) = 1$.",
-          "$\\tau = \\frac{20\\,\\text{ms}}{1} = 20\\,\\text{ms}$."
+          "$\\tau = \\frac{20\\,\\mathrm{ms}}{1} = 20\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5409,7 +5409,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(12.5\\,\\text{ms}) = 7.788$ V and $v(62.5\\,\\text{ms}) = 2.865$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(12.5\\,\\mathrm{ms}) = 7.788$ V and $v(62.5\\,\\mathrm{ms}) = 2.865$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -5435,7 +5435,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{7.788}{2.865} = 2.718$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(2.718) = 1$.",
-          "$\\tau = \\frac{50\\,\\text{ms}}{1} = 50\\,\\text{ms}$."
+          "$\\tau = \\frac{50\\,\\mathrm{ms}}{1} = 50\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5460,7 +5460,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\text{ms}) = 11.68$ V and $v(35\\,\\text{ms}) = 2.607$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\mathrm{ms}) = 11.68$ V and $v(35\\,\\mathrm{ms}) = 2.607$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -5494,7 +5494,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{11.68}{2.607} = 4.482$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(4.482) = 1.5$.",
-          "$\\tau = \\frac{30\\,\\text{ms}}{1.5} = 20\\,\\text{ms}$."
+          "$\\tau = \\frac{30\\,\\mathrm{ms}}{1.5} = 20\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5519,7 +5519,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\text{ms}) = 3.033$ V and $v(15\\,\\text{ms}) = 1.116$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\mathrm{ms}) = 3.033$ V and $v(15\\,\\mathrm{ms}) = 1.116$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -5545,7 +5545,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{3.033}{1.116} = 2.718$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(2.718) = 1$.",
-          "$\\tau = \\frac{10\\,\\text{ms}}{1} = 10\\,\\text{ms}$."
+          "$\\tau = \\frac{10\\,\\mathrm{ms}}{1} = 10\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5570,7 +5570,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2\\,\\text{ms}) = 1.839$ V and $v(6\\,\\text{ms}) = 0.2489$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2\\,\\mathrm{ms}) = 1.839$ V and $v(6\\,\\mathrm{ms}) = 0.2489$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -5604,7 +5604,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{1.839}{0.2489} = 7.389$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(7.389) = 2$.",
-          "$\\tau = \\frac{4\\,\\text{ms}}{2} = 2\\,\\text{ms}$."
+          "$\\tau = \\frac{4\\,\\mathrm{ms}}{2} = 2\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5629,7 +5629,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(500\\,\\text{\\mu s}) = 11.68$ V and $v(4.5\\,\\text{ms}) = 1.581$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(500\\,\\mathrm{\\mu s}) = 11.68$ V and $v(4.5\\,\\mathrm{ms}) = 1.581$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -5663,7 +5663,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{11.68}{1.581} = 7.389$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(7.389) = 2$.",
-          "$\\tau = \\frac{4\\,\\text{ms}}{2} = 2\\,\\text{ms}$."
+          "$\\tau = \\frac{4\\,\\mathrm{ms}}{2} = 2\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5688,7 +5688,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(500\\,\\text{\\mu s}) = 15.58$ V and $v(4.5\\,\\text{ms}) = 2.108$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(500\\,\\mathrm{\\mu s}) = 15.58$ V and $v(4.5\\,\\mathrm{ms}) = 2.108$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -5722,7 +5722,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{15.58}{2.108} = 7.389$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(7.389) = 2$.",
-          "$\\tau = \\frac{4\\,\\text{ms}}{2} = 2\\,\\text{ms}$."
+          "$\\tau = \\frac{4\\,\\mathrm{ms}}{2} = 2\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5747,7 +5747,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(10\\,\\text{ms}) = 7.358$ V and $v(30\\,\\text{ms}) = 0.9957$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(10\\,\\mathrm{ms}) = 7.358$ V and $v(30\\,\\mathrm{ms}) = 0.9957$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -5781,7 +5781,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{7.358}{0.9957} = 7.389$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(7.389) = 2$.",
-          "$\\tau = \\frac{20\\,\\text{ms}}{2} = 10\\,\\text{ms}$."
+          "$\\tau = \\frac{20\\,\\mathrm{ms}}{2} = 10\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5806,7 +5806,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\text{ms}) = 7.278$ V and $v(20\\,\\text{ms}) = 1.624$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(5\\,\\mathrm{ms}) = 7.278$ V and $v(20\\,\\mathrm{ms}) = 1.624$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -5840,7 +5840,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{7.278}{1.624} = 4.482$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(4.482) = 1.5$.",
-          "$\\tau = \\frac{15\\,\\text{ms}}{1.5} = 10\\,\\text{ms}$."
+          "$\\tau = \\frac{15\\,\\mathrm{ms}}{1.5} = 10\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5865,7 +5865,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\text{ms}) = 3.033$ V and $v(12.5\\,\\text{ms}) = 0.4104$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\mathrm{ms}) = 3.033$ V and $v(12.5\\,\\mathrm{ms}) = 0.4104$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -5899,7 +5899,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{3.033}{0.4104} = 7.389$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(7.389) = 2$.",
-          "$\\tau = \\frac{10\\,\\text{ms}}{2} = 5\\,\\text{ms}$."
+          "$\\tau = \\frac{10\\,\\mathrm{ms}}{2} = 5\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5924,7 +5924,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\text{ms}) = 7.788$ V and $v(12.5\\,\\text{ms}) = 2.865$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\mathrm{ms}) = 7.788$ V and $v(12.5\\,\\mathrm{ms}) = 2.865$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -5950,7 +5950,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{7.788}{2.865} = 2.718$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(2.718) = 1$.",
-          "$\\tau = \\frac{10\\,\\text{ms}}{1} = 10\\,\\text{ms}$."
+          "$\\tau = \\frac{10\\,\\mathrm{ms}}{1} = 10\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -5975,7 +5975,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\text{ms}) = 7.278$ V and $v(10\\,\\text{ms}) = 1.624$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\mathrm{ms}) = 7.278$ V and $v(10\\,\\mathrm{ms}) = 1.624$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -6009,7 +6009,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{7.278}{1.624} = 4.482$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(4.482) = 1.5$.",
-          "$\\tau = \\frac{7.5\\,\\text{ms}}{1.5} = 5\\,\\text{ms}$."
+          "$\\tau = \\frac{7.5\\,\\mathrm{ms}}{1.5} = 5\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -6034,7 +6034,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(20\\,\\text{ms}) = 1.839$ V and $v(50\\,\\text{ms}) = 0.4104$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(20\\,\\mathrm{ms}) = 1.839$ V and $v(50\\,\\mathrm{ms}) = 0.4104$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -6068,7 +6068,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{1.839}{0.4104} = 4.482$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(4.482) = 1.5$.",
-          "$\\tau = \\frac{30\\,\\text{ms}}{1.5} = 20\\,\\text{ms}$."
+          "$\\tau = \\frac{30\\,\\mathrm{ms}}{1.5} = 20\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [
@@ -6093,7 +6093,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\text{ms}) = 9.098$ V and $v(7.5\\,\\text{ms}) = 3.347$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
+      "stem": "A decaying signal $v(t) = V_0e^{-t/\\tau}$ is measured twice:\n\n$v(2.5\\,\\mathrm{ms}) = 9.098$ V and $v(7.5\\,\\mathrm{ms}) = 3.347$ V.\n\nFind the time constant $\\tau$. (You do not need $V_0$.)",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -6119,7 +6119,7 @@
           "Take the ratio so $V_0$ cancels: $\\frac{v(t_1)}{v(t_2)} = e^{(t_2-t_1)/\\tau}$.",
           "$\\frac{9.098}{3.347} = 2.718$.",
           "Take logs: $\\frac{t_2-t_1}{\\tau} = \\ln(2.718) = 1$.",
-          "$\\tau = \\frac{5\\,\\text{ms}}{1} = 5\\,\\text{ms}$."
+          "$\\tau = \\frac{5\\,\\mathrm{ms}}{1} = 5\\,\\mathrm{ms}$."
         ],
         "principle": "Taking a ratio of two samples cancels the unknown amplitude, leaving the time constant recoverable from the decay alone.",
         "hints": [

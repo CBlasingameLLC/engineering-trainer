@@ -51,9 +51,9 @@ export const opAmpGainDesign: Generator = {
       difficultyB,
       stem:
         `Design an **inverting amplifier** using one ideal op-amp.\n\n` +
-        `- Input source \`V1\` drives node \`in\` at ${volts(vIn)} DC.\n` +
-        `- Closed-loop gain must be **${-gain}** (so \`out\` sits at ${volts(vOut)}).\n` +
-        `- Input resistance seen by the source must be **${ohms(rIn)}**.\n\n` +
+        `- Input source \`V1\` drives node \`in\` at $${volts(vIn)}$ DC.\n` +
+        `- Closed-loop gain must be **${-gain}** (so \`out\` sits at $${volts(vOut)}$).\n` +
+        `- Input resistance seen by the source must be **$${ohms(rIn)}$**.\n\n` +
         `Name the output node \`out\`. Any resistor network that meets both ` +
         `specifications is accepted — there is more than one right answer.`,
       answer: {
@@ -135,10 +135,10 @@ export const rcTimeConstantDesign: Generator = {
       difficultyB,
       stem:
         `Design a **first-order RC step response**.\n\n` +
-        `- Source \`V1\` drives node \`in\` at ${volts(supply)} DC.\n` +
+        `- Source \`V1\` drives node \`in\` at $${volts(supply)}$ DC.\n` +
         `- The capacitor starts fully discharged.\n` +
         `- Node \`out\` must reach **${trimNumber(atTau, 4)} V** (that is $63.2\\%$ of ` +
-        `${volts(supply)}) at $t = ${trimNumber(tau * 1000, 4)}\\,\\text{ms}$.\n\n` +
+        `$${volts(supply)}$) at $t = ${trimNumber(tau * 1000, 4)}\\,\\text{ms}$.\n\n` +
         `Give the capacitor an initial condition of 0. Any $R$ and $C$ with the ` +
         `right product is accepted.`,
       answer: {
@@ -215,8 +215,8 @@ export const dividerDesign: Generator = {
       difficultyB,
       stem:
         `Design a **resistive divider**.\n\n` +
-        `- Source \`V1\` drives node \`in\` at ${volts(supply)} DC.\n` +
-        `- Node \`out\` must sit at **${volts(vOut)}** with no load attached.\n` +
+        `- Source \`V1\` drives node \`in\` at $${volts(supply)}$ DC.\n` +
+        `- Node \`out\` must sit at **$${volts(vOut)}$** with no load attached.\n` +
         `- The divider must draw **${trimNumber(current * 1000, 4)} mA** from the supply, ` +
         `so the total resistance across it is fixed.\n\n` +
         `Either resistor may be built from a combination — only the measured ` +

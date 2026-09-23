@@ -81,7 +81,7 @@ export const deMorganGate: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [threeInput ? 0.7 : -0.7]),
       stem:
         `Push the inversion through using De Morgan's theorem, so that the complement applies only to ` +
-        `individual variables:\\n\\n$$F = ${tex(source)}$$`,
+        `individual variables:\n\n$$F = ${tex(source)}$$`,
       answer: booleanAnswer,
       options: [],
       misconceptionTraps: separatedBooleanTraps(booleanAnswer, [
@@ -179,7 +179,7 @@ export const canonicalForm: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [count > 3 ? 0.5 : -0.5]),
       stem:
-        `A function is defined as $F(A,B,C) = \\sum m(${minterms.join(', ')})$.\\n\\n` +
+        `A function is defined as $F(A,B,C) = \\sum m(${minterms.join(', ')})$.\n\n` +
         `Complete its truth table.`,
       answer: { kind: 'truth-table' as const, inputs: variables, output: 'F', rows },
       options: [],
@@ -225,7 +225,7 @@ export const karnaughMinimisation: Generator = {
       kcRefs: this.kcRefs,
       difficultyB: adjustDifficulty(this.difficultyB, [width === 4 ? 0.8 : -0.6, literals > 3 ? 0.5 : -0.5]),
       stem:
-        `Minimise $F(${variables.join(',')}) = \\sum m(${minterms.join(', ')})$ to a minimal sum of products.\\n\\n` +
+        `Minimise $F(${variables.join(',')}) = \\sum m(${minterms.join(', ')})$ to a minimal sum of products.\n\n` +
         `The minimal form uses ${literals} literal${literals === 1 ? '' : 's'}.`,
       answer: booleanAnswer,
       options: [],
@@ -283,7 +283,7 @@ export const dontCareMinimisation: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [dontCares.length > 2 ? 0.5 : -0.5]),
       stem:
         `Minimise $F(${variables.join(',')}) = \\sum m(${ones.sort((a, b) => a - b).join(', ')}) + ` +
-        `\\sum d(${dontCares.sort((a, b) => a - b).join(', ')})$.\\n\\n` +
+        `\\sum d(${dontCares.sort((a, b) => a - b).join(', ')})$.\n\n` +
         `The minimal form uses ${best.literals} literal${best.literals === 1 ? '' : 's'}. ` +
         `Your answer only has to agree with $F$ on the specified minterms.`,
       answer: booleanAnswer,
@@ -327,7 +327,7 @@ export const universalGates: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [target === 'XOR' ? 1 : target === 'NOT' ? -1 : 0]),
       stem:
         `What is the minimum number of 2-input ${using} gates needed to implement a ${target} function?` +
-        (target === 'NOT' ? '\\n\\n(A gate may have its inputs tied together.)' : ''),
+        (target === 'NOT' ? '\n\n(A gate may have its inputs tied together.)' : ''),
       answer: { kind: 'numeric' as const, value, unit: '', tolerance: { abs: 0.01 } },
       options: [],
       misconceptionTraps: separatedTraps(value, { abs: 0.01 }, [

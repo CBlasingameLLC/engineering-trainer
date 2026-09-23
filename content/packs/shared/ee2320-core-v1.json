@@ -1963,7 +1963,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1000_2$ and $0000_2$ (that is, -8 and 0).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1000_2$ and $0000_2$ (that is, -8 and 0).\n\nDoes signed overflow occur?",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -2013,7 +2013,7 @@
         }
       ],
       "difficultyB": 1.1,
-      "stem": "Add the 4-bit two's complement numbers $1101_2$ and $1100_2$ (that is, -3 and -4).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1101_2$ and $1100_2$ (that is, -3 and -4).\n\nDoes signed overflow occur?",
       "seed": 2,
       "answer": {
         "kind": "choice",
@@ -2063,7 +2063,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1001_2$ and $0100_2$ (that is, -7 and 4).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1001_2$ and $0100_2$ (that is, -7 and 4).\n\nDoes signed overflow occur?",
       "seed": 3,
       "answer": {
         "kind": "choice",
@@ -2113,7 +2113,7 @@
         }
       ],
       "difficultyB": 1.1,
-      "stem": "Add the 4-bit two's complement numbers $1101_2$ and $1011_2$ (that is, -3 and -5).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1101_2$ and $1011_2$ (that is, -3 and -5).\n\nDoes signed overflow occur?",
       "seed": 4,
       "answer": {
         "kind": "choice",
@@ -2163,7 +2163,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $0100_2$ and $1011_2$ (that is, 4 and -5).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $0100_2$ and $1011_2$ (that is, 4 and -5).\n\nDoes signed overflow occur?",
       "seed": 5,
       "answer": {
         "kind": "choice",
@@ -2213,7 +2213,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1000_2$ and $0010_2$ (that is, -8 and 2).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1000_2$ and $0010_2$ (that is, -8 and 2).\n\nDoes signed overflow occur?",
       "seed": 6,
       "answer": {
         "kind": "choice",
@@ -2263,7 +2263,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1010_2$ and $1010_2$ (that is, -6 and -6).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1010_2$ and $1010_2$ (that is, -6 and -6).\n\nDoes signed overflow occur?",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -2313,7 +2313,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1011_2$ and $1010_2$ (that is, -5 and -6).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1011_2$ and $1010_2$ (that is, -5 and -6).\n\nDoes signed overflow occur?",
       "seed": 8,
       "answer": {
         "kind": "choice",
@@ -2363,7 +2363,7 @@
         }
       ],
       "difficultyB": 1.1,
-      "stem": "Add the 4-bit two's complement numbers $0101_2$ and $0011_2$ (that is, 5 and 3).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $0101_2$ and $0011_2$ (that is, 5 and 3).\n\nDoes signed overflow occur?",
       "seed": 9,
       "answer": {
         "kind": "choice",
@@ -2413,7 +2413,7 @@
         }
       ],
       "difficultyB": 1.1,
-      "stem": "Add the 4-bit two's complement numbers $0100_2$ and $1111_2$ (that is, 4 and -1).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $0100_2$ and $1111_2$ (that is, 4 and -1).\n\nDoes signed overflow occur?",
       "seed": 10,
       "answer": {
         "kind": "choice",
@@ -2463,7 +2463,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $0000_2$ and $0001_2$ (that is, 0 and 1).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $0000_2$ and $0001_2$ (that is, 0 and 1).\n\nDoes signed overflow occur?",
       "seed": 11,
       "answer": {
         "kind": "choice",
@@ -2513,7 +2513,7 @@
         }
       ],
       "difficultyB": 1.1,
-      "stem": "Add the 4-bit two's complement numbers $0100_2$ and $0111_2$ (that is, 4 and 7).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $0100_2$ and $0111_2$ (that is, 4 and 7).\n\nDoes signed overflow occur?",
       "seed": 12,
       "answer": {
         "kind": "choice",
@@ -2563,7 +2563,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1101_2$ and $0000_2$ (that is, -3 and 0).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1101_2$ and $0000_2$ (that is, -3 and 0).\n\nDoes signed overflow occur?",
       "seed": 13,
       "answer": {
         "kind": "choice",
@@ -2613,7 +2613,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1000_2$ and $1010_2$ (that is, -8 and -6).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1000_2$ and $1010_2$ (that is, -8 and -6).\n\nDoes signed overflow occur?",
       "seed": 14,
       "answer": {
         "kind": "choice",
@@ -2663,7 +2663,7 @@
         }
       ],
       "difficultyB": 1.1,
-      "stem": "Add the 4-bit two's complement numbers $0010_2$ and $0111_2$ (that is, 2 and 7).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $0010_2$ and $0111_2$ (that is, 2 and 7).\n\nDoes signed overflow occur?",
       "seed": 15,
       "answer": {
         "kind": "choice",
@@ -2713,7 +2713,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1010_2$ and $0100_2$ (that is, -6 and 4).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1010_2$ and $0100_2$ (that is, -6 and 4).\n\nDoes signed overflow occur?",
       "seed": 16,
       "answer": {
         "kind": "choice",
@@ -2763,7 +2763,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "Add the 4-bit two's complement numbers $1011_2$ and $0000_2$ (that is, -5 and 0).\\n\\nDoes signed overflow occur?",
+      "stem": "Add the 4-bit two's complement numbers $1011_2$ and $0000_2$ (that is, -5 and 0).\n\nDoes signed overflow occur?",
       "seed": 17,
       "answer": {
         "kind": "choice",
@@ -4158,7 +4158,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\\n\\n$$F = \\left(A + B + C\\right)'$$",
+      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\n\n$$F = \\left(A + B + C\\right)'$$",
       "seed": 1,
       "answer": {
         "kind": "boolean",
@@ -4212,7 +4212,7 @@
         }
       ],
       "difficultyB": -0.63,
-      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\\n\\n$$F = \\left(A + B\\right)'$$",
+      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\n\n$$F = \\left(A + B\\right)'$$",
       "seed": 5,
       "answer": {
         "kind": "boolean",
@@ -4265,7 +4265,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\\n\\n$$F = \\left(A \\cdot B \\cdot C\\right)'$$",
+      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\n\n$$F = \\left(A \\cdot B \\cdot C\\right)'$$",
       "seed": 7,
       "answer": {
         "kind": "boolean",
@@ -4319,7 +4319,7 @@
         }
       ],
       "difficultyB": -0.63,
-      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\\n\\n$$F = \\left(A \\cdot B\\right)'$$",
+      "stem": "Push the inversion through using De Morgan's theorem, so that the complement applies only to individual variables:\n\n$$F = \\left(A \\cdot B\\right)'$$",
       "seed": 8,
       "answer": {
         "kind": "boolean",
@@ -4430,7 +4430,7 @@
         }
       ],
       "difficultyB": 0.65,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(2, 4, 7)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(2, 4, 7)$.\n\nComplete its truth table.",
       "seed": 2,
       "answer": {
         "kind": "truth-table",
@@ -4541,7 +4541,7 @@
         }
       ],
       "difficultyB": 0.65,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(0, 1, 4, 6)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(0, 1, 4, 6)$.\n\nComplete its truth table.",
       "seed": 5,
       "answer": {
         "kind": "truth-table",
@@ -4644,7 +4644,7 @@
         }
       ],
       "difficultyB": -0.25,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(0, 7)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(0, 7)$.\n\nComplete its truth table.",
       "seed": 7,
       "answer": {
         "kind": "truth-table",
@@ -4697,7 +4697,7 @@
         }
       ],
       "difficultyB": -0.25,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(2, 5)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(2, 5)$.\n\nComplete its truth table.",
       "seed": 8,
       "answer": {
         "kind": "truth-table",
@@ -4750,7 +4750,7 @@
         }
       ],
       "difficultyB": -0.25,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(1, 6)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(1, 6)$.\n\nComplete its truth table.",
       "seed": 9,
       "answer": {
         "kind": "truth-table",
@@ -4803,7 +4803,7 @@
         }
       ],
       "difficultyB": 0.65,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(4, 6)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(4, 6)$.\n\nComplete its truth table.",
       "seed": 11,
       "answer": {
         "kind": "truth-table",
@@ -4914,7 +4914,7 @@
         }
       ],
       "difficultyB": 0.65,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(0, 1, 4)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(0, 1, 4)$.\n\nComplete its truth table.",
       "seed": 17,
       "answer": {
         "kind": "truth-table",
@@ -4967,7 +4967,7 @@
         }
       ],
       "difficultyB": -0.25,
-      "stem": "A function is defined as $F(A,B,C) = \\sum m(1, 4)$.\\n\\nComplete its truth table.",
+      "stem": "A function is defined as $F(A,B,C) = \\sum m(1, 4)$.\n\nComplete its truth table.",
       "seed": 18,
       "answer": {
         "kind": "truth-table",
@@ -5024,7 +5024,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 6, 9, 11, 15)$ to a minimal sum of products.\\n\\nThe minimal form uses 9 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 6, 9, 11, 15)$ to a minimal sum of products.\n\nThe minimal form uses 9 literals.",
       "seed": 1,
       "answer": {
         "kind": "boolean",
@@ -5073,7 +5073,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 5, 7, 12)$ to a minimal sum of products.\\n\\nThe minimal form uses 10 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 5, 7, 12)$ to a minimal sum of products.\n\nThe minimal form uses 10 literals.",
       "seed": 2,
       "answer": {
         "kind": "boolean",
@@ -5122,7 +5122,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(5, 12, 14)$ to a minimal sum of products.\\n\\nThe minimal form uses 7 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(5, 12, 14)$ to a minimal sum of products.\n\nThe minimal form uses 7 literals.",
       "seed": 3,
       "answer": {
         "kind": "boolean",
@@ -5171,7 +5171,7 @@
         }
       ],
       "difficultyB": 0.635,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3)$ to a minimal sum of products.\\n\\nThe minimal form uses 3 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3)$ to a minimal sum of products.\n\nThe minimal form uses 3 literals.",
       "seed": 4,
       "answer": {
         "kind": "boolean",
@@ -5220,7 +5220,7 @@
         }
       ],
       "difficultyB": 0.635,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3, 9, 11)$ to a minimal sum of products.\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3, 9, 11)$ to a minimal sum of products.\n\nThe minimal form uses 2 literals.",
       "seed": 5,
       "answer": {
         "kind": "boolean",
@@ -5269,7 +5269,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 14, 15)$ to a minimal sum of products.\\n\\nThe minimal form uses 6 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 14, 15)$ to a minimal sum of products.\n\nThe minimal form uses 6 literals.",
       "seed": 6,
       "answer": {
         "kind": "boolean",
@@ -5318,7 +5318,7 @@
         }
       ],
       "difficultyB": 0.005,
-      "stem": "Minimise $F(A,B,C) = \\sum m(5, 7)$ to a minimal sum of products.\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(5, 7)$ to a minimal sum of products.\n\nThe minimal form uses 2 literals.",
       "seed": 7,
       "answer": {
         "kind": "boolean",
@@ -5366,7 +5366,7 @@
         }
       ],
       "difficultyB": 0.455,
-      "stem": "Minimise $F(A,B,C) = \\sum m(2, 3, 4, 5)$ to a minimal sum of products.\\n\\nThe minimal form uses 4 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(2, 3, 4, 5)$ to a minimal sum of products.\n\nThe minimal form uses 4 literals.",
       "seed": 8,
       "answer": {
         "kind": "boolean",
@@ -5414,7 +5414,7 @@
         }
       ],
       "difficultyB": 0.455,
-      "stem": "Minimise $F(A,B,C) = \\sum m(1, 2, 5, 6)$ to a minimal sum of products.\\n\\nThe minimal form uses 4 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(1, 2, 5, 6)$ to a minimal sum of products.\n\nThe minimal form uses 4 literals.",
       "seed": 9,
       "answer": {
         "kind": "boolean",
@@ -5462,7 +5462,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(3, 7, 11, 12)$ to a minimal sum of products.\\n\\nThe minimal form uses 10 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(3, 7, 11, 12)$ to a minimal sum of products.\n\nThe minimal form uses 10 literals.",
       "seed": 10,
       "answer": {
         "kind": "boolean",
@@ -5511,7 +5511,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(8, 9, 13)$ to a minimal sum of products.\\n\\nThe minimal form uses 6 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(8, 9, 13)$ to a minimal sum of products.\n\nThe minimal form uses 6 literals.",
       "seed": 11,
       "answer": {
         "kind": "boolean",
@@ -5560,7 +5560,7 @@
         }
       ],
       "difficultyB": 0.455,
-      "stem": "Minimise $F(A,B,C) = \\sum m(0, 4, 5, 7)$ to a minimal sum of products.\\n\\nThe minimal form uses 4 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(0, 4, 5, 7)$ to a minimal sum of products.\n\nThe minimal form uses 4 literals.",
       "seed": 12,
       "answer": {
         "kind": "boolean",
@@ -5608,7 +5608,7 @@
         }
       ],
       "difficultyB": 0.635,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1)$ to a minimal sum of products.\\n\\nThe minimal form uses 3 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1)$ to a minimal sum of products.\n\nThe minimal form uses 3 literals.",
       "seed": 13,
       "answer": {
         "kind": "boolean",
@@ -5657,7 +5657,7 @@
         }
       ],
       "difficultyB": 0.455,
-      "stem": "Minimise $F(A,B,C) = \\sum m(0, 5, 7)$ to a minimal sum of products.\\n\\nThe minimal form uses 5 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(0, 5, 7)$ to a minimal sum of products.\n\nThe minimal form uses 5 literals.",
       "seed": 14,
       "answer": {
         "kind": "boolean",
@@ -5705,7 +5705,7 @@
         }
       ],
       "difficultyB": 0.005,
-      "stem": "Minimise $F(A,B,C) = \\sum m(1, 3)$ to a minimal sum of products.\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(1, 3)$ to a minimal sum of products.\n\nThe minimal form uses 2 literals.",
       "seed": 15,
       "answer": {
         "kind": "boolean",
@@ -5753,7 +5753,7 @@
         }
       ],
       "difficultyB": 1.085,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 8, 15)$ to a minimal sum of products.\\n\\nThe minimal form uses 7 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 8, 15)$ to a minimal sum of products.\n\nThe minimal form uses 7 literals.",
       "seed": 16,
       "answer": {
         "kind": "boolean",
@@ -5802,7 +5802,7 @@
         }
       ],
       "difficultyB": 0.635,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 12)$ to a minimal sum of products.\\n\\nThe minimal form uses 3 literals.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 12)$ to a minimal sum of products.\n\nThe minimal form uses 3 literals.",
       "seed": 17,
       "answer": {
         "kind": "boolean",
@@ -5851,7 +5851,7 @@
         }
       ],
       "difficultyB": 0.455,
-      "stem": "Minimise $F(A,B,C) = \\sum m(1, 4, 6)$ to a minimal sum of products.\\n\\nThe minimal form uses 5 literals.",
+      "stem": "Minimise $F(A,B,C) = \\sum m(1, 4, 6)$ to a minimal sum of products.\n\nThe minimal form uses 5 literals.",
       "seed": 18,
       "answer": {
         "kind": "boolean",
@@ -5895,7 +5895,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 4, 8, 15) + \\sum d(6, 11)$.\\n\\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 4, 8, 15) + \\sum d(6, 11)$.\n\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 1,
       "answer": {
         "kind": "boolean",
@@ -5939,7 +5939,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 5, 8, 10, 14) + \\sum d(1, 12)$.\\n\\nThe minimal form uses 8 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 5, 8, 10, 14) + \\sum d(1, 12)$.\n\nThe minimal form uses 8 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 2,
       "answer": {
         "kind": "boolean",
@@ -5983,7 +5983,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 7, 12) + \\sum d(2, 4, 8)$.\\n\\nThe minimal form uses 11 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 7, 12) + \\sum d(2, 4, 8)$.\n\nThe minimal form uses 11 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 3,
       "answer": {
         "kind": "boolean",
@@ -6027,7 +6027,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3, 5, 8) + \\sum d(9, 11, 12)$.\\n\\nThe minimal form uses 8 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3, 5, 8) + \\sum d(9, 11, 12)$.\n\nThe minimal form uses 8 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 4,
       "answer": {
         "kind": "boolean",
@@ -6071,7 +6071,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3, 9, 12) + \\sum d(7, 14)$.\\n\\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 3, 9, 12) + \\sum d(7, 14)$.\n\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 5,
       "answer": {
         "kind": "boolean",
@@ -6115,7 +6115,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 3, 8, 10) + \\sum d(14, 15)$.\\n\\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 3, 8, 10) + \\sum d(14, 15)$.\n\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 6,
       "answer": {
         "kind": "boolean",
@@ -6159,7 +6159,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 11, 15) + \\sum d(3, 6, 7)$.\\n\\nThe minimal form uses 7 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 11, 15) + \\sum d(3, 6, 7)$.\n\nThe minimal form uses 7 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 7,
       "answer": {
         "kind": "boolean",
@@ -6203,7 +6203,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 10, 11) + \\sum d(3, 7, 13)$.\\n\\nThe minimal form uses 7 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(4, 10, 11) + \\sum d(3, 7, 13)$.\n\nThe minimal form uses 7 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 8,
       "answer": {
         "kind": "boolean",
@@ -6247,7 +6247,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(2, 13) + \\sum d(4, 11, 14)$.\\n\\nThe minimal form uses 8 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(2, 13) + \\sum d(4, 11, 14)$.\n\nThe minimal form uses 8 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 9,
       "answer": {
         "kind": "boolean",
@@ -6291,7 +6291,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(7, 11, 12, 14) + \\sum d(0, 1)$.\\n\\nThe minimal form uses 11 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(7, 11, 12, 14) + \\sum d(0, 1)$.\n\nThe minimal form uses 11 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 10,
       "answer": {
         "kind": "boolean",
@@ -6335,7 +6335,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(8, 9, 13) + \\sum d()$.\\n\\nThe minimal form uses 6 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(8, 9, 13) + \\sum d()$.\n\nThe minimal form uses 6 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 11,
       "answer": {
         "kind": "boolean",
@@ -6379,7 +6379,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 2, 9, 15) + \\sum d(10, 11)$.\\n\\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 2, 9, 15) + \\sum d(10, 11)$.\n\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 12,
       "answer": {
         "kind": "boolean",
@@ -6423,7 +6423,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 5) + \\sum d(8)$.\\n\\nThe minimal form uses 6 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 1, 5) + \\sum d(8)$.\n\nThe minimal form uses 6 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 13,
       "answer": {
         "kind": "boolean",
@@ -6467,7 +6467,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(3, 5, 6, 8) + \\sum d(0, 10, 14)$.\\n\\nThe minimal form uses 16 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(3, 5, 6, 8) + \\sum d(0, 10, 14)$.\n\nThe minimal form uses 16 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 14,
       "answer": {
         "kind": "boolean",
@@ -6511,7 +6511,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(6, 7) + \\sum d(10, 15)$.\\n\\nThe minimal form uses 3 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(6, 7) + \\sum d(10, 15)$.\n\nThe minimal form uses 3 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 15,
       "answer": {
         "kind": "boolean",
@@ -6555,7 +6555,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 2, 5, 6, 12) + \\sum d(3, 7, 8, 14)$.\\n\\nThe minimal form uses 11 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(0, 2, 5, 6, 12) + \\sum d(3, 7, 8, 14)$.\n\nThe minimal form uses 11 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 16,
       "answer": {
         "kind": "boolean",
@@ -6599,7 +6599,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 2, 3, 8, 12) + \\sum d(4)$.\\n\\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(1, 2, 3, 8, 12) + \\sum d(4)$.\n\nThe minimal form uses 9 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 17,
       "answer": {
         "kind": "boolean",
@@ -6643,7 +6643,7 @@
         }
       ],
       "difficultyB": 0.35,
-      "stem": "Minimise $F(A,B,C,D) = \\sum m(3, 8, 9, 12) + \\sum d(2, 11)$.\\n\\nThe minimal form uses 10 literals. Your answer only has to agree with $F$ on the specified minterms.",
+      "stem": "Minimise $F(A,B,C,D) = \\sum m(3, 8, 9, 12) + \\sum d(2, 11)$.\n\nThe minimal form uses 10 literals. Your answer only has to agree with $F$ on the specified minterms.",
       "seed": 18,
       "answer": {
         "kind": "boolean",
@@ -6687,7 +6687,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "What is the minimum number of 2-input NAND gates needed to implement a NOT function?\\n\\n(A gate may have its inputs tied together.)",
+      "stem": "What is the minimum number of 2-input NAND gates needed to implement a NOT function?\n\n(A gate may have its inputs tied together.)",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -6787,7 +6787,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "What is the minimum number of 2-input NOR gates needed to implement a NOT function?\\n\\n(A gate may have its inputs tied together.)",
+      "stem": "What is the minimum number of 2-input NOR gates needed to implement a NOT function?\n\n(A gate may have its inputs tied together.)",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -7037,7 +7037,7 @@
         }
       ],
       "difficultyB": -0.375,
-      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when **exactly one** input is 1.\\n\\nComplete the truth table.",
+      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when **exactly one** input is 1.\n\nComplete the truth table.",
       "seed": 1,
       "answer": {
         "kind": "truth-table",
@@ -7089,7 +7089,7 @@
         }
       ],
       "difficultyB": -0.375,
-      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when the three inputs, read as a binary number with $A$ most significant, are **greater than 4**.\\n\\nComplete the truth table.",
+      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when the three inputs, read as a binary number with $A$ most significant, are **greater than 4**.\n\nComplete the truth table.",
       "seed": 4,
       "answer": {
         "kind": "truth-table",
@@ -7141,7 +7141,7 @@
         }
       ],
       "difficultyB": -0.375,
-      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when **all three** inputs agree.\\n\\nComplete the truth table.",
+      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when **all three** inputs agree.\n\nComplete the truth table.",
       "seed": 6,
       "answer": {
         "kind": "truth-table",
@@ -7193,7 +7193,7 @@
         }
       ],
       "difficultyB": -0.375,
-      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when **strictly more** of the three inputs are 1 than are 0.\\n\\nComplete the truth table.",
+      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when **strictly more** of the three inputs are 1 than are 0.\n\nComplete the truth table.",
       "seed": 7,
       "answer": {
         "kind": "truth-table",
@@ -7245,7 +7245,7 @@
         }
       ],
       "difficultyB": 0.3,
-      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when an **odd number** of the three inputs are 1.\\n\\nComplete the truth table.",
+      "stem": "A combinational circuit has inputs $A$, $B$, $C$ and one output $F$, where the output is 1 when an **odd number** of the three inputs are 1.\n\nComplete the truth table.",
       "seed": 12,
       "answer": {
         "kind": "truth-table",
@@ -7401,7 +7401,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 1, 1, 0, 1, 1, 0 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 111$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 1, 1, 0, 1, 1, 0 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 111$. What is the output?",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -7450,7 +7450,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 1, 1, 1, 0, 0, 1 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 000$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 1, 1, 1, 0, 0, 1 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 000$. What is the output?",
       "seed": 2,
       "answer": {
         "kind": "choice",
@@ -7499,7 +7499,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 0, 1, 0, 0, 0, 0 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 100$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 0, 1, 0, 0, 0, 0 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 100$. What is the output?",
       "seed": 3,
       "answer": {
         "kind": "choice",
@@ -7548,7 +7548,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 0, 0, 1, 0, 1, 1 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 101$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 0, 0, 1, 0, 1, 1 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 101$. What is the output?",
       "seed": 4,
       "answer": {
         "kind": "choice",
@@ -7597,7 +7597,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 1, 0, 1, 0, 1, 1, 0, 1 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 001$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 1, 0, 1, 0, 1, 1, 0, 1 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 001$. What is the output?",
       "seed": 5,
       "answer": {
         "kind": "choice",
@@ -7646,7 +7646,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 0, 1, 0, 0, 1, 1 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 001$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 0, 1, 0, 0, 1, 1 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 001$. What is the output?",
       "seed": 6,
       "answer": {
         "kind": "choice",
@@ -7695,7 +7695,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 1, 1, 1 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 01$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 1, 1, 1 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 01$. What is the output?",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -7744,7 +7744,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 1, 0, 1, 1 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 01$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 1, 0, 1, 1 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 01$. What is the output?",
       "seed": 8,
       "answer": {
         "kind": "choice",
@@ -7793,7 +7793,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 1, 0, 1, 1 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 10$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 1, 0, 1, 1 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 10$. What is the output?",
       "seed": 9,
       "answer": {
         "kind": "choice",
@@ -7842,7 +7842,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 1, 1, 1, 0, 0, 0, 0, 0 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 111$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 1, 1, 1, 0, 0, 0, 0, 0 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 111$. What is the output?",
       "seed": 10,
       "answer": {
         "kind": "choice",
@@ -7891,7 +7891,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 1, 1, 1, 1, 1, 0, 1, 1 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 011$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 1, 1, 1, 1, 1, 0, 1, 1 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 011$. What is the output?",
       "seed": 11,
       "answer": {
         "kind": "choice",
@@ -7940,7 +7940,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 1, 1, 0 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 00$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 1, 1, 0 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 00$. What is the output?",
       "seed": 12,
       "answer": {
         "kind": "choice",
@@ -7989,7 +7989,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 0, 0, 0, 0, 0, 1 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 110$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 0, 0, 0, 0, 0, 0, 1 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 110$. What is the output?",
       "seed": 13,
       "answer": {
         "kind": "choice",
@@ -8038,7 +8038,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 1, 0, 0 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 01$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 1, 0, 0 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 01$. What is the output?",
       "seed": 14,
       "answer": {
         "kind": "choice",
@@ -8087,7 +8087,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 0, 0, 0 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 10$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 0, 0, 0, 0 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 10$. What is the output?",
       "seed": 15,
       "answer": {
         "kind": "choice",
@@ -8136,7 +8136,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 0, 0, 0, 1, 1, 0 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 111$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 0, 0, 0, 1, 1, 0 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 111$. What is the output?",
       "seed": 16,
       "answer": {
         "kind": "choice",
@@ -8185,7 +8185,7 @@
         }
       ],
       "difficultyB": 0.74,
-      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 0, 0, 1, 0, 1, 0 respectively.\\n\\nThe select lines are $S_{2}\\ldots S_0 = 101$. What is the output?",
+      "stem": "A 8-to-1 multiplexer has data inputs $D_0 \\ldots D_{7}$ set to 0, 1, 0, 0, 1, 0, 1, 0 respectively.\n\nThe select lines are $S_{2}\\ldots S_0 = 101$. What is the output?",
       "seed": 17,
       "answer": {
         "kind": "choice",
@@ -8234,7 +8234,7 @@
         }
       ],
       "difficultyB": -0.34,
-      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 1, 1, 0, 1 respectively.\\n\\nThe select lines are $S_{1}\\ldots S_0 = 10$. What is the output?",
+      "stem": "A 4-to-1 multiplexer has data inputs $D_0 \\ldots D_{3}$ set to 1, 1, 0, 1 respectively.\n\nThe select lines are $S_{1}\\ldots S_0 = 10$. What is the output?",
       "seed": 18,
       "answer": {
         "kind": "choice",
@@ -8283,7 +8283,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 100.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 100.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -8341,7 +8341,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 010.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 010.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -8399,7 +8399,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 011.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 011.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -8457,7 +8457,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 001.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 001.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -8515,7 +8515,7 @@
         }
       ],
       "difficultyB": -0.52,
-      "stem": "A 3-to-8 decoder with **active-high** outputs is enabled, and its input is 001.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-high** outputs is enabled, and its input is 001.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -8565,7 +8565,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 101.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 101.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -8623,7 +8623,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 2-to-4 decoder with **active-low** outputs is enabled, and its input is 11.\\n\\nHow many of its 4 outputs are at logic 1?",
+      "stem": "A 2-to-4 decoder with **active-low** outputs is enabled, and its input is 11.\n\nHow many of its 4 outputs are at logic 1?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -8673,7 +8673,7 @@
         }
       ],
       "difficultyB": -0.52,
-      "stem": "A 2-to-4 decoder with **active-high** outputs is enabled, and its input is 01.\\n\\nHow many of its 4 outputs are at logic 1?",
+      "stem": "A 2-to-4 decoder with **active-high** outputs is enabled, and its input is 01.\n\nHow many of its 4 outputs are at logic 1?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -8723,7 +8723,7 @@
         }
       ],
       "difficultyB": -0.52,
-      "stem": "A 2-to-4 decoder with **active-high** outputs is enabled, and its input is 00.\\n\\nHow many of its 4 outputs are at logic 1?",
+      "stem": "A 2-to-4 decoder with **active-high** outputs is enabled, and its input is 00.\n\nHow many of its 4 outputs are at logic 1?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -8781,7 +8781,7 @@
         }
       ],
       "difficultyB": -0.52,
-      "stem": "A 3-to-8 decoder with **active-high** outputs is enabled, and its input is 101.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-high** outputs is enabled, and its input is 101.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -8839,7 +8839,7 @@
         }
       ],
       "difficultyB": -0.52,
-      "stem": "A 3-to-8 decoder with **active-high** outputs is enabled, and its input is 100.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-high** outputs is enabled, and its input is 100.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -8897,7 +8897,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 2-to-4 decoder with **active-low** outputs is enabled, and its input is 10.\\n\\nHow many of its 4 outputs are at logic 1?",
+      "stem": "A 2-to-4 decoder with **active-low** outputs is enabled, and its input is 10.\n\nHow many of its 4 outputs are at logic 1?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -8955,7 +8955,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 000.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 000.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -9013,7 +9013,7 @@
         }
       ],
       "difficultyB": -0.52,
-      "stem": "A 2-to-4 decoder with **active-high** outputs is enabled, and its input is 10.\\n\\nHow many of its 4 outputs are at logic 1?",
+      "stem": "A 2-to-4 decoder with **active-high** outputs is enabled, and its input is 10.\n\nHow many of its 4 outputs are at logic 1?",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -9071,7 +9071,7 @@
         }
       ],
       "difficultyB": 0.92,
-      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 110.\\n\\nHow many of its 8 outputs are at logic 1?",
+      "stem": "A 3-to-8 decoder with **active-low** outputs is enabled, and its input is 110.\n\nHow many of its 8 outputs are at logic 1?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -9226,7 +9226,7 @@
         }
       ],
       "difficultyB": -0.5,
-      "stem": "Complete the next-state table for an active-high SR latch, where $Q$ is the present state and $Q^+$ the next state.\\n\\nIgnore the forbidden combination $S = R = 1$ — enter the value the expression $Q^+ = S + \\overline{R}Q$ gives.",
+      "stem": "Complete the next-state table for an active-high SR latch, where $Q$ is the present state and $Q^+$ the next state.\n\nIgnore the forbidden combination $S = R = 1$ — enter the value the expression $Q^+ = S + \\overline{R}Q$ gives.",
       "seed": 1,
       "answer": {
         "kind": "truth-table",
@@ -9483,7 +9483,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 3 ns, and the setup time is 1.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 3 ns, and the setup time is 1.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -9541,7 +9541,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 4 ns, and the setup time is 1 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 4 ns, and the setup time is 1 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -9599,7 +9599,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 3 ns, and the setup time is 1 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 3 ns, and the setup time is 1 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -9657,7 +9657,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2.5 ns, the worst-case combinational path is 4 ns, and the setup time is 0.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2.5 ns, the worst-case combinational path is 4 ns, and the setup time is 0.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -9715,7 +9715,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 6 ns, and the setup time is 0.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 6 ns, and the setup time is 0.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -9773,7 +9773,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 3 ns, and the setup time is 2 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 3 ns, and the setup time is 2 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -9831,7 +9831,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 6 ns, and the setup time is 1 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 6 ns, and the setup time is 1 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -9889,7 +9889,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 8 ns, and the setup time is 0.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 8 ns, and the setup time is 0.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -9947,7 +9947,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 8 ns, and the setup time is 1.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 8 ns, and the setup time is 1.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -10005,7 +10005,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 5 ns, and the setup time is 1.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 5 ns, and the setup time is 1.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -10063,7 +10063,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 1.5 ns, the worst-case combinational path is 3 ns, and the setup time is 1.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1.5 ns, the worst-case combinational path is 3 ns, and the setup time is 1.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -10121,7 +10121,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 4 ns, and the setup time is 0.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 4 ns, and the setup time is 0.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -10179,7 +10179,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 1.5 ns, the worst-case combinational path is 5 ns, and the setup time is 1.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1.5 ns, the worst-case combinational path is 5 ns, and the setup time is 1.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -10237,7 +10237,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 5 ns, and the setup time is 1 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1 ns, the worst-case combinational path is 5 ns, and the setup time is 1 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -10295,7 +10295,7 @@
         }
       ],
       "difficultyB": 1.17,
-      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 3 ns, and the setup time is 2 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 2 ns, the worst-case combinational path is 3 ns, and the setup time is 2 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -10353,7 +10353,7 @@
         }
       ],
       "difficultyB": 0.63,
-      "stem": "In a synchronous design, clock-to-Q is 1.5 ns, the worst-case combinational path is 6 ns, and the setup time is 1.5 ns.\\n\\nWhat is the maximum clock frequency, in MHz?",
+      "stem": "In a synchronous design, clock-to-Q is 1.5 ns, the worst-case combinational path is 6 ns, and the setup time is 1.5 ns.\n\nWhat is the maximum clock frequency, in MHz?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -11097,7 +11097,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 111 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 111 arrives. Which state is the machine in afterwards?",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -11156,7 +11156,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 011 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 011 arrives. Which state is the machine in afterwards?",
       "seed": 2,
       "answer": {
         "kind": "choice",
@@ -11215,7 +11215,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 001 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 001 arrives. Which state is the machine in afterwards?",
       "seed": 3,
       "answer": {
         "kind": "choice",
@@ -11274,7 +11274,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 000 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 000 arrives. Which state is the machine in afterwards?",
       "seed": 4,
       "answer": {
         "kind": "choice",
@@ -11333,7 +11333,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S2$, the input sequence 010 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S2$, the input sequence 010 arrives. Which state is the machine in afterwards?",
       "seed": 5,
       "answer": {
         "kind": "choice",
@@ -11392,7 +11392,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 101 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 101 arrives. Which state is the machine in afterwards?",
       "seed": 6,
       "answer": {
         "kind": "choice",
@@ -11451,7 +11451,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 111 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 111 arrives. Which state is the machine in afterwards?",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -11510,7 +11510,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S1$, the input sequence 011 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S1$, the input sequence 011 arrives. Which state is the machine in afterwards?",
       "seed": 8,
       "answer": {
         "kind": "choice",
@@ -11569,7 +11569,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S2$, the input sequence 011 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S2$, the input sequence 011 arrives. Which state is the machine in afterwards?",
       "seed": 9,
       "answer": {
         "kind": "choice",
@@ -11628,7 +11628,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S2$, the input sequence 110 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S2$, the input sequence 110 arrives. Which state is the machine in afterwards?",
       "seed": 10,
       "answer": {
         "kind": "choice",
@@ -11687,7 +11687,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S1$, the input sequence 111 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S1$, the input sequence 111 arrives. Which state is the machine in afterwards?",
       "seed": 11,
       "answer": {
         "kind": "choice",
@@ -11746,7 +11746,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 110 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 110 arrives. Which state is the machine in afterwards?",
       "seed": 12,
       "answer": {
         "kind": "choice",
@@ -11805,7 +11805,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S1$, the input sequence 000 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S1$, the input sequence 000 arrives. Which state is the machine in afterwards?",
       "seed": 13,
       "answer": {
         "kind": "choice",
@@ -11864,7 +11864,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S1$, the input sequence 100 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S1$, the input sequence 100 arrives. Which state is the machine in afterwards?",
       "seed": 14,
       "answer": {
         "kind": "choice",
@@ -11923,7 +11923,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S1$, the input sequence 000 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **110** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S1$, the input sequence 000 arrives. Which state is the machine in afterwards?",
       "seed": 15,
       "answer": {
         "kind": "choice",
@@ -11982,7 +11982,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 100 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 100 arrives. Which state is the machine in afterwards?",
       "seed": 16,
       "answer": {
         "kind": "choice",
@@ -12041,7 +12041,7 @@
         }
       ],
       "difficultyB": 0.54,
-      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S0$, the input sequence 100 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **011** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S0$, the input sequence 100 arrives. Which state is the machine in afterwards?",
       "seed": 17,
       "answer": {
         "kind": "choice",
@@ -12100,7 +12100,7 @@
         }
       ],
       "difficultyB": 1.26,
-      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\\n\\nStarting in $S1$, the input sequence 101 arrives. Which state is the machine in afterwards?",
+      "stem": "A Moore machine detects the pattern **101** and has states S0, S1, S2, where $S_k$ means \"the first $k$ bits of the pattern have just been seen\".\n\nStarting in $S1$, the input sequence 101 arrives. Which state is the machine in afterwards?",
       "seed": 18,
       "answer": {
         "kind": "choice",

@@ -44,8 +44,8 @@ export const nodalTwoSource: Generator = {
       kcRefs: this.kcRefs,
       difficultyB,
       stem:
-        `Node $A$ connects to three branches: a ${volts(vs1)} source through $R_1 = ${ohms(r1)}$, ` +
-        `a ${volts(vs2)} source through $R_3 = ${ohms(r3)}$, and $R_2 = ${ohms(r2)}$ to ground. ` +
+        `Node $A$ connects to three branches: a $${volts(vs1)}$ source through $R_1 = ${ohms(r1)}$, ` +
+        `a $${volts(vs2)}$ source through $R_3 = ${ohms(r3)}$, and $R_2 = ${ohms(r2)}$ to ground. ` +
         `Both sources have their negative terminals at ground. Find the node voltage $V_A$.`,
       answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -66,7 +66,7 @@ export const nodalTwoSource: Generator = {
           `Collect the $V_A$ terms on the left and the source terms on the right:`,
           `$V_A\\left(\\dfrac{1}{R_1} + \\dfrac{1}{R_2} + \\dfrac{1}{R_3}\\right) = \\dfrac{${trimNumber(vs1)}}{R_1} + \\dfrac{${trimNumber(vs2)}}{R_3}$.`,
           `$V_A = \\dfrac{${trimNumber(vs1 / r1, 4)} + ${trimNumber(vs2 / r3, 4)}}{${trimNumber(conductance, 4)}} = ${volts(va)}$.`,
-          `Sanity check: $V_A$ must fall between ground and the larger source, ${volts(Math.max(vs1, vs2))} — and it does.`,
+          `Sanity check: $V_A$ must fall between ground and the larger source, $${volts(Math.max(vs1, vs2))}$ — and it does.`,
         ],
         principle:
           'Nodal analysis is one KCL equation per unknown node; the coefficient of the node voltage is always the sum of the conductances touching it.',
@@ -130,7 +130,7 @@ export const meshTwoLoop: Generator = {
       kcRefs: this.kcRefs,
       difficultyB,
       stem:
-        `A ${volts(vs)} source drives mesh 1 through $R_1 = ${ohms(r1)}$. ` +
+        `A $${volts(vs)}$ source drives mesh 1 through $R_1 = ${ohms(r1)}$. ` +
         `$R_3 = ${ohms(r3)}$ is the shared branch between mesh 1 and mesh 2, and ` +
         `$R_2 = ${ohms(r2)}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.`,
       answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
@@ -204,7 +204,7 @@ export const supernode: Generator = {
         mantissaDifficulty(vs),
       ]),
       stem:
-        `A ${amps(is)} current source drives node $A$. A ${volts(vs)} source sits **between** nodes $A$ and $B$ ` +
+        `A $${amps(is)}$ current source drives node $A$. A $${volts(vs)}$ source sits **between** nodes $A$ and $B$ ` +
         `with its **+** terminal at $A$, so neither node is grounded through it. ` +
         `$R_1 = ${ohms(r1)}$ runs from $A$ to ground and $R_2 = ${ohms(r2)}$ from $B$ to ground. Find $V_A$.`,
       answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
@@ -293,8 +293,8 @@ export const supermesh: Generator = {
         mantissaDifficulty(vs),
       ]),
       stem:
-        `Two clockwise meshes share a branch containing a ${amps(is)} current source, oriented so that ` +
-        `$i_2 - i_1 = ${trimNumber(is)}$ A. Mesh 1 also contains a ${volts(vs)} source and $R_1 = ${ohms(r1)}$; ` +
+        `Two clockwise meshes share a branch containing a $${amps(is)}$ current source, oriented so that ` +
+        `$i_2 - i_1 = ${trimNumber(is)}$ A. Mesh 1 also contains a $${volts(vs)}$ source and $R_1 = ${ohms(r1)}$; ` +
         `mesh 2 also contains $R_2 = ${ohms(r2)}$. Find $i_1$.`,
       answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -371,7 +371,7 @@ export const dependentSource: Generator = {
         ratioDifficulty(r1, r2),
       ]),
       stem:
-        `A ${volts(vs)} source drives $R_1 = ${ohms(r1)}$ into node $A$, and $R_2 = ${ohms(r2)}$ returns from ` +
+        `A $${volts(vs)}$ source drives $R_1 = ${ohms(r1)}$ into node $A$, and $R_2 = ${ohms(r2)}$ returns from ` +
         `$A$ to ground. The current $I_x$ flows through $R_1$ toward $A$, and a dependent current source ` +
         `injects $\\beta I_x$ into node $A$ with $\\beta = ${trimNumber(beta)}$. Find $V_A$.`,
       answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
@@ -400,7 +400,7 @@ export const dependentSource: Generator = {
           `Write KCL at $A$. Current arrives from $R_1$ and from the dependent source, and leaves through $R_2$:`,
           `$\\dfrac{V_s - V_A}{R_1} + \\beta\\dfrac{V_s - V_A}{R_1} = \\dfrac{V_A}{R_2}$.`,
           `Collecting: $(1+\\beta)\\dfrac{V_s - V_A}{R_1} = \\dfrac{V_A}{R_2}$, so $V_A = \\dfrac{(1+\\beta) R_2 V_s}{R_1 + (1+\\beta) R_2} = ${volts(va)}$.`,
-          `With $\\beta = 0$ this reduces to the ordinary divider, ${volts(sourceIgnored)} — a useful check that the coupling entered correctly.`,
+          `With $\\beta = 0$ this reduces to the ordinary divider, $${volts(sourceIgnored)}$ — a useful check that the coupling entered correctly.`,
         ],
         principle:
           'A dependent source is not a known quantity: write its controlling variable in terms of the unknowns and solve the coupled equation, never suppress it.',

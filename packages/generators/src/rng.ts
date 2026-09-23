@@ -159,16 +159,35 @@ const SI_PREFIXES: [number, string][] = [
 
 /**
  * Render a quantity in engineering notation with an SI prefix, the way it would
- * be written on a schematic. `4700` becomes `4.7\,\text{k}\Omega`, not `4700 Ω`.
+ * be written on a schematic. `4700` becomes `4.7\,\mathrm{k\Omega}`, not `4700 Ω`.
+ *
+ * The unit is set in `\mathrm`, not `\text`. They look identical for `mA` and
+ * differ completely for the two units that matter most here: `\Omega` and
+ * `\mu` are maths-mode macros, and `\text{k\Omega}` asks KaTeX to typeset a
+ * maths macro in text mode. Every resistance and every microamp in the bank
+ * went through that path.
+ *
+ * The result carries no `$` delimiters, so it composes inside a larger
+ * expression — `$R_1 = ${ohms(r1)}$`. Written into prose it must be wrapped;
+ * `pack verify`'s `latex-delimiters` check is what enforces that, because the
+ * failure is silent everywhere else.
  */
 export function engineering(value: number, unit: string, sigFigs = 3): string {
-  if (value === 0) return `0\\,\\text{${unit}}`;
+  if (value === 0) return `0\\,\\mathrm{${unit}}`;
   const magnitude = Math.abs(value);
   const entry = SI_PREFIXES.find(([factor]) => magnitude >= factor) ?? SI_PREFIXES.at(-1)!;
   const [factor, prefix] = entry;
   const scaled = value / factor;
-  return `${trimNumber(scaled, sigFigs)}\\,\\text{${prefix}${unit}}`;
+  return `${trimNumber(scaled, sigFigs)}\\,\\mathrm{${prefix}${unit}}`;
 }
+
+/**
+ * The same quantity, delimited and ready to drop into prose.
+ *
+ * `A ${qty(volts(vs))} source drives...` is the common case, and the one that
+ * was wrong in 860 items.
+ */
+export const qty = (rendered: string): string => `$${rendered}$`;
 
 /** Drop trailing zeros so 4.70 reads as 4.7 while 4.75 keeps its precision. */
 export function trimNumber(value: number, sigFigs = 4): string {

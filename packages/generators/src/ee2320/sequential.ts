@@ -72,7 +72,7 @@ export const latchBehaviour: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [-1]),
       stem:
         `Complete the next-state table for an active-high SR latch, where $Q$ is the present state and ` +
-        `$Q^+$ the next state.\\n\\n` +
+        `$Q^+$ the next state.\n\n` +
         `Ignore the forbidden combination $S = R = 1$ — enter the value the expression $Q^+ = S + \\overline{R}Q$ gives.`,
       answer: { kind: 'truth-table' as const, inputs: variables, output: 'Q+', rows },
       options: [],
@@ -177,7 +177,7 @@ export const flipFlopTiming: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [logic > 5 ? -0.3 : 0.3]),
       stem:
         `In a synchronous design, clock-to-Q is ${clockToQ} ns, the worst-case combinational path is ` +
-        `${logic} ns, and the setup time is ${setup} ns.\\n\\n` +
+        `${logic} ns, and the setup time is ${setup} ns.\n\n` +
         `What is the maximum clock frequency, in MHz?`,
       answer: { kind: 'numeric' as const, value, unit: 'MHz', tolerance: { rel: 0.02 } },
       options: [],
@@ -313,7 +313,7 @@ export const stateMachineNext: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [startState === 0 ? -0.4 : 0.4]),
       stem:
         `A Moore machine detects the pattern **${target}** and has states ${states.join(', ')}, where ` +
-        `$S_k$ means "the first $k$ bits of the pattern have just been seen".\\n\\n` +
+        `$S_k$ means "the first $k$ bits of the pattern have just been seen".\n\n` +
         `Starting in $${states[startState]}$, the input sequence ${inputBits.join('')} arrives. ` +
         `Which state is the machine in afterwards?`,
       answer: { kind: 'choice' as const, correctId: ['a', 'b', 'c'][value]! },

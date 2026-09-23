@@ -199,6 +199,29 @@ packs by the schema, and never enters a release build. Don't weaken that.
   branch puts the uncoupled shortcut inside answer tolerance). A trap that
   clamps onto the answer — `max(1, value - 1)` when the answer is 1 — needs a
   different trap, not a different draw.
+- **Maths outside `$...$` renders as its own source, and `pack verify` now
+  rejects it.** The renderer typesets delimited spans and passes the rest
+  through as text, so `12\,\text{V}` written into prose reaches the learner as
+  those literal characters. Every other gate passes it: the answer verifies,
+  the explanation agrees, the generator regenerates. 860 of 1213 items shipped
+  that way. `segmentMarkup` in `@et/content-schema` is the single definition of
+  the markup — the renderer and the `latex-delimiters` check both import it, so
+  the gate audits what the learner actually sees rather than a second opinion
+  about it. Three separate causes produced the same symptom, and only the first
+  is obvious: units emitted undelimited by `engineering()`; `$$...$$` display
+  maths that the segmenter read as two empty spans around plain text; and
+  `\\n\\n` in a template literal, which is a literal backslash-n, not a
+  paragraph break.
+- **Units are set in `\mathrm`, not `\text`, and nothing may parse either.**
+  `\Omega` and `\mu` are maths-mode macros, so `\text{k\Omega}` asks KaTeX to
+  typeset a maths macro in text mode — which is every resistance and every
+  microamp in the bank. Changing it broke 40 items and 15 tests, all through
+  the same mistake in three places: `extractNumbers` in `verify.ts` and
+  `quantitiesFrom` in the generator tests both recovered SI prefixes by
+  matching `\text{` against the rendered stem. Reading presentation back as
+  data is fine here — it is what keeps the cross-checks independent of the
+  generator's own arithmetic — but it must not pin one typesetting macro, and a
+  parse that comes up short must throw rather than compare against `NaN`.
 - **Never synthesize a study history to seed FSRS.** A semester of fabricated
   reviews inflates stability to S≈270d, so a year-old prerequisite reports
   R≈0.88 and looks perfectly retained — defeating the entire product. Use

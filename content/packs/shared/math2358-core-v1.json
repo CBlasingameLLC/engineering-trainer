@@ -875,7 +875,7 @@
         }
       ],
       "difficultyB": 0.185,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(\\overline{p} + q\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(\\overline{p} + q\\right)'$$",
       "seed": 1,
       "answer": {
         "kind": "boolean",
@@ -928,7 +928,7 @@
         }
       ],
       "difficultyB": 0.185,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(\\overline{p} + \\overline{q}\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(\\overline{p} + \\overline{q}\\right)'$$",
       "seed": 2,
       "answer": {
         "kind": "boolean",
@@ -981,7 +981,7 @@
         }
       ],
       "difficultyB": 0.185,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(p + \\overline{q}\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(p + \\overline{q}\\right)'$$",
       "seed": 5,
       "answer": {
         "kind": "boolean",
@@ -1034,7 +1034,7 @@
         }
       ],
       "difficultyB": -0.085,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(\\overline{p} \\cdot q\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(\\overline{p} \\cdot q\\right)'$$",
       "seed": 7,
       "answer": {
         "kind": "boolean",
@@ -1087,7 +1087,7 @@
         }
       ],
       "difficultyB": -0.085,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(p \\cdot \\overline{q}\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(p \\cdot \\overline{q}\\right)'$$",
       "seed": 8,
       "answer": {
         "kind": "boolean",
@@ -1140,7 +1140,7 @@
         }
       ],
       "difficultyB": -0.715,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(p + q\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(p + q\\right)'$$",
       "seed": 10,
       "answer": {
         "kind": "boolean",
@@ -1193,7 +1193,7 @@
         }
       ],
       "difficultyB": -0.985,
-      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\\n\\n$$\\left(p \\cdot q\\right)'$$",
+      "stem": "Use De Morgan's law to write an equivalent expression with the negation applied to the individual propositions:\n\n$$\\left(p \\cdot q\\right)'$$",
       "seed": 14,
       "answer": {
         "kind": "boolean",
@@ -1917,7 +1917,7 @@
         }
       ],
       "difficultyB": 0.84,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot q \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot q \\cdot r + p \\cdot q \\cdot r$$\\n\\nThe minimal form uses 6 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot q \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot q \\cdot r + p \\cdot q \\cdot r$$\n\nThe minimal form uses 6 literals.",
       "seed": 1,
       "answer": {
         "kind": "boolean",
@@ -1961,7 +1961,7 @@
         }
       ],
       "difficultyB": 0.84,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot q \\cdot r + \\overline{p} \\cdot q \\cdot \\overline{r} + p \\cdot q \\cdot \\overline{r} + \\overline{p} \\cdot \\overline{q} \\cdot \\overline{r}$$\\n\\nThe minimal form uses 6 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot q \\cdot r + \\overline{p} \\cdot q \\cdot \\overline{r} + p \\cdot q \\cdot \\overline{r} + \\overline{p} \\cdot \\overline{q} \\cdot \\overline{r}$$\n\nThe minimal form uses 6 literals.",
       "seed": 2,
       "answer": {
         "kind": "boolean",
@@ -2005,7 +2005,7 @@
         }
       ],
       "difficultyB": 0.84,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot q \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot q \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot \\overline{r}$$\\n\\nThe minimal form uses 7 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot q \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot q \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot \\overline{r}$$\n\nThe minimal form uses 7 literals.",
       "seed": 3,
       "answer": {
         "kind": "boolean",
@@ -2049,7 +2049,7 @@
         }
       ],
       "difficultyB": 0.48,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot \\overline{r}$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot \\overline{r}$$\n\nThe minimal form uses 2 literals.",
       "seed": 4,
       "answer": {
         "kind": "boolean",
@@ -2093,7 +2093,7 @@
         }
       ],
       "difficultyB": 0.48,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} \\cdot r + p \\cdot \\overline{q} \\cdot \\overline{r} + \\overline{p} \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot r$$\\n\\nThe minimal form uses 1 literal.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} \\cdot r + p \\cdot \\overline{q} \\cdot \\overline{r} + \\overline{p} \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot \\overline{q} \\cdot r$$\n\nThe minimal form uses 1 literal.",
       "seed": 5,
       "answer": {
         "kind": "boolean",
@@ -2137,7 +2137,7 @@
         }
       ],
       "difficultyB": 0.48,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot r$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot \\overline{q} \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot r$$\n\nThe minimal form uses 2 literals.",
       "seed": 6,
       "answer": {
         "kind": "boolean",
@@ -2181,7 +2181,7 @@
         }
       ],
       "difficultyB": -0.24,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot q + p \\cdot \\overline{q}$$\\n\\nThe minimal form uses 1 literal.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot q + p \\cdot \\overline{q}$$\n\nThe minimal form uses 1 literal.",
       "seed": 7,
       "answer": {
         "kind": "boolean",
@@ -2224,7 +2224,7 @@
         }
       ],
       "difficultyB": -0.24,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} + p \\cdot \\overline{q}$$\\n\\nThe minimal form uses 1 literal.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} + p \\cdot \\overline{q}$$\n\nThe minimal form uses 1 literal.",
       "seed": 8,
       "answer": {
         "kind": "boolean",
@@ -2267,7 +2267,7 @@
         }
       ],
       "difficultyB": -0.24,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} + p \\cdot q + p \\cdot \\overline{q}$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} + p \\cdot q + p \\cdot \\overline{q}$$\n\nThe minimal form uses 2 literals.",
       "seed": 9,
       "answer": {
         "kind": "boolean",
@@ -2310,7 +2310,7 @@
         }
       ],
       "difficultyB": 0.84,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot \\overline{q} \\cdot r + p \\cdot q \\cdot \\overline{r} + \\overline{p} \\cdot q \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot r$$\\n\\nThe minimal form uses 7 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot \\overline{q} \\cdot r + p \\cdot q \\cdot \\overline{r} + \\overline{p} \\cdot q \\cdot r + \\overline{p} \\cdot \\overline{q} \\cdot r$$\n\nThe minimal form uses 7 literals.",
       "seed": 10,
       "answer": {
         "kind": "boolean",
@@ -2354,7 +2354,7 @@
         }
       ],
       "difficultyB": 0.48,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot q \\cdot \\overline{r}$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot q \\cdot \\overline{r}$$\n\nThe minimal form uses 2 literals.",
       "seed": 11,
       "answer": {
         "kind": "boolean",
@@ -2398,7 +2398,7 @@
         }
       ],
       "difficultyB": -0.24,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot \\overline{q} + p \\cdot q$$\\n\\nThe minimal form uses 1 literal.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot \\overline{q} + p \\cdot q$$\n\nThe minimal form uses 1 literal.",
       "seed": 12,
       "answer": {
         "kind": "boolean",
@@ -2441,7 +2441,7 @@
         }
       ],
       "difficultyB": 0.48,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} \\cdot \\overline{r} + \\overline{p} \\cdot q \\cdot \\overline{r}$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} \\cdot \\overline{r} + \\overline{p} \\cdot q \\cdot \\overline{r}$$\n\nThe minimal form uses 2 literals.",
       "seed": 13,
       "answer": {
         "kind": "boolean",
@@ -2485,7 +2485,7 @@
         }
       ],
       "difficultyB": -0.24,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} + \\overline{p} \\cdot q$$\\n\\nThe minimal form uses 1 literal.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} + \\overline{p} \\cdot q$$\n\nThe minimal form uses 1 literal.",
       "seed": 14,
       "answer": {
         "kind": "boolean",
@@ -2528,7 +2528,7 @@
         }
       ],
       "difficultyB": 0.84,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$\\overline{p} \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot q \\cdot r + p \\cdot \\overline{q} \\cdot \\overline{r}$$\\n\\nThe minimal form uses 5 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$\\overline{p} \\cdot \\overline{q} \\cdot \\overline{r} + p \\cdot q \\cdot r + p \\cdot \\overline{q} \\cdot \\overline{r}$$\n\nThe minimal form uses 5 literals.",
       "seed": 16,
       "answer": {
         "kind": "boolean",
@@ -2572,7 +2572,7 @@
         }
       ],
       "difficultyB": 0.48,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot q \\cdot \\overline{r} + \\overline{p} \\cdot q \\cdot \\overline{r}$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot q \\cdot \\overline{r} + \\overline{p} \\cdot q \\cdot \\overline{r}$$\n\nThe minimal form uses 2 literals.",
       "seed": 17,
       "answer": {
         "kind": "boolean",
@@ -2616,7 +2616,7 @@
         }
       ],
       "difficultyB": -0.24,
-      "stem": "Simplify to a minimal sum of products:\\n\\n$$p \\cdot \\overline{q} + \\overline{p} \\cdot \\overline{q} + p \\cdot q$$\\n\\nThe minimal form uses 2 literals.",
+      "stem": "Simplify to a minimal sum of products:\n\n$$p \\cdot \\overline{q} + \\overline{p} \\cdot \\overline{q} + p \\cdot q$$\n\nThe minimal form uses 2 literals.",
       "seed": 18,
       "answer": {
         "kind": "boolean",
@@ -3217,7 +3217,7 @@
         }
       ],
       "difficultyB": 1.06,
-      "stem": "Which proof strategy is the natural first choice for:\\n\\n> If $3n + 2$ is odd then $n$ is odd.",
+      "stem": "Which proof strategy is the natural first choice for:\n\n> If $3n + 2$ is odd then $n$ is odd.",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -3278,7 +3278,7 @@
         }
       ],
       "difficultyB": 1.06,
-      "stem": "Which proof strategy is the natural first choice for:\\n\\n> There are infinitely many primes.",
+      "stem": "Which proof strategy is the natural first choice for:\n\n> There are infinitely many primes.",
       "seed": 4,
       "answer": {
         "kind": "choice",
@@ -3339,7 +3339,7 @@
         }
       ],
       "difficultyB": -0.02,
-      "stem": "Which proof strategy is the natural first choice for:\\n\\n> The sum of two even integers is even.",
+      "stem": "Which proof strategy is the natural first choice for:\n\n> The sum of two even integers is even.",
       "seed": 6,
       "answer": {
         "kind": "choice",
@@ -3400,7 +3400,7 @@
         }
       ],
       "difficultyB": 1.06,
-      "stem": "Which proof strategy is the natural first choice for:\\n\\n> If $n^2$ is even then $n$ is even.",
+      "stem": "Which proof strategy is the natural first choice for:\n\n> If $n^2$ is even then $n$ is even.",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -3461,7 +3461,7 @@
         }
       ],
       "difficultyB": 1.06,
-      "stem": "Which proof strategy is the natural first choice for:\\n\\n> $\\sqrt{2}$ is irrational.",
+      "stem": "Which proof strategy is the natural first choice for:\n\n> $\\sqrt{2}$ is irrational.",
       "seed": 12,
       "answer": {
         "kind": "choice",
@@ -3522,7 +3522,7 @@
         }
       ],
       "difficultyB": -0.28,
-      "stem": "In a universe of 23 elements, $|A| = 4$, $|B| = 8$ and $|A \\cap B| = 3$.\\n\\nFind $|\\overline{A \\cup B}|$.",
+      "stem": "In a universe of 23 elements, $|A| = 4$, $|B| = 8$ and $|A \\cap B| = 3$.\n\nFind $|\\overline{A \\cup B}|$.",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -3580,7 +3580,7 @@
         }
       ],
       "difficultyB": -0.28,
-      "stem": "In a universe of 25 elements, $|A| = 6$, $|B| = 6$ and $|A \\cap B| = 3$.\\n\\nFind $|\\overline{A \\cup B}|$.",
+      "stem": "In a universe of 25 elements, $|A| = 6$, $|B| = 6$ and $|A \\cap B| = 3$.\n\nFind $|\\overline{A \\cup B}|$.",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -3638,7 +3638,7 @@
         }
       ],
       "difficultyB": -0.28,
-      "stem": "In a universe of 25 elements, $|A| = 4$, $|B| = 8$ and $|A \\cap B| = 1$.\\n\\nFind $|\\overline{A \\cup B}|$.",
+      "stem": "In a universe of 25 elements, $|A| = 4$, $|B| = 8$ and $|A \\cap B| = 1$.\n\nFind $|\\overline{A \\cup B}|$.",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -3696,7 +3696,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 29 elements, $|A| = 7$, $|B| = 6$ and $|A \\cap B| = 1$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 29 elements, $|A| = 7$, $|B| = 6$ and $|A \\cap B| = 1$.\n\nFind $|A \\cup B|$.",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -3754,7 +3754,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 25 elements, $|A| = 10$, $|B| = 5$ and $|A \\cap B| = 3$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 25 elements, $|A| = 10$, $|B| = 5$ and $|A \\cap B| = 3$.\n\nFind $|A \\cup B|$.",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -3812,7 +3812,7 @@
         }
       ],
       "difficultyB": -0.73,
-      "stem": "In a universe of 21 elements, $|A| = 4$, $|B| = 8$ and $|A \\cap B| = 1$.\\n\\nFind $|A \\oplus B|$.",
+      "stem": "In a universe of 21 elements, $|A| = 4$, $|B| = 8$ and $|A \\cap B| = 1$.\n\nFind $|A \\oplus B|$.",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -3870,7 +3870,7 @@
         }
       ],
       "difficultyB": -0.73,
-      "stem": "In a universe of 12 elements, $|A| = 4$, $|B| = 6$ and $|A \\cap B| = 3$.\\n\\nFind $|A \\oplus B|$.",
+      "stem": "In a universe of 12 elements, $|A| = 4$, $|B| = 6$ and $|A \\cap B| = 3$.\n\nFind $|A \\oplus B|$.",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -3928,7 +3928,7 @@
         }
       ],
       "difficultyB": -0.73,
-      "stem": "In a universe of 14 elements, $|A| = 6$, $|B| = 5$ and $|A \\cap B| = 3$.\\n\\nFind $|A \\oplus B|$.",
+      "stem": "In a universe of 14 elements, $|A| = 6$, $|B| = 5$ and $|A \\cap B| = 3$.\n\nFind $|A \\oplus B|$.",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -3986,7 +3986,7 @@
         }
       ],
       "difficultyB": -0.73,
-      "stem": "In a universe of 15 elements, $|A| = 7$, $|B| = 4$ and $|A \\cap B| = 3$.\\n\\nFind $|A \\oplus B|$.",
+      "stem": "In a universe of 15 elements, $|A| = 7$, $|B| = 4$ and $|A \\cap B| = 3$.\n\nFind $|A \\oplus B|$.",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -4044,7 +4044,7 @@
         }
       ],
       "difficultyB": -0.73,
-      "stem": "In a universe of 21 elements, $|A| = 10$, $|B| = 8$ and $|A \\cap B| = 6$.\\n\\nFind $|A \\setminus B|$.",
+      "stem": "In a universe of 21 elements, $|A| = 10$, $|B| = 8$ and $|A \\cap B| = 6$.\n\nFind $|A \\setminus B|$.",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -4102,7 +4102,7 @@
         }
       ],
       "difficultyB": -0.28,
-      "stem": "In a universe of 21 elements, $|A| = 7$, $|B| = 8$ and $|A \\cap B| = 4$.\\n\\nFind $|\\overline{A \\cup B}|$.",
+      "stem": "In a universe of 21 elements, $|A| = 7$, $|B| = 8$ and $|A \\cap B| = 4$.\n\nFind $|\\overline{A \\cup B}|$.",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -4160,7 +4160,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 17 elements, $|A| = 4$, $|B| = 6$ and $|A \\cap B| = 3$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 17 elements, $|A| = 4$, $|B| = 6$ and $|A \\cap B| = 3$.\n\nFind $|A \\cup B|$.",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -4218,7 +4218,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 22 elements, $|A| = 6$, $|B| = 4$ and $|A \\cap B| = 1$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 22 elements, $|A| = 6$, $|B| = 4$ and $|A \\cap B| = 1$.\n\nFind $|A \\cup B|$.",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -4276,7 +4276,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 20 elements, $|A| = 6$, $|B| = 7$ and $|A \\cap B| = 2$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 20 elements, $|A| = 6$, $|B| = 7$ and $|A \\cap B| = 2$.\n\nFind $|A \\cup B|$.",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -4334,7 +4334,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 16 elements, $|A| = 6$, $|B| = 6$ and $|A \\cap B| = 3$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 16 elements, $|A| = 6$, $|B| = 6$ and $|A \\cap B| = 3$.\n\nFind $|A \\cup B|$.",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -4392,7 +4392,7 @@
         }
       ],
       "difficultyB": -0.73,
-      "stem": "In a universe of 23 elements, $|A| = 5$, $|B| = 10$ and $|A \\cap B| = 2$.\\n\\nFind $|A \\setminus B|$.",
+      "stem": "In a universe of 23 elements, $|A| = 5$, $|B| = 10$ and $|A \\cap B| = 2$.\n\nFind $|A \\setminus B|$.",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -4450,7 +4450,7 @@
         }
       ],
       "difficultyB": -1.9,
-      "stem": "In a universe of 24 elements, $|A| = 5$, $|B| = 8$ and $|A \\cap B| = 1$.\\n\\nFind $|A \\cup B|$.",
+      "stem": "In a universe of 24 elements, $|A| = 5$, $|B| = 8$ and $|A \\cap B| = 1$.\n\nFind $|A \\cup B|$.",
       "seed": 17,
       "answer": {
         "kind": "numeric",
@@ -4508,7 +4508,7 @@
         }
       ],
       "difficultyB": -0.28,
-      "stem": "In a universe of 19 elements, $|A| = 7$, $|B| = 7$ and $|A \\cap B| = 2$.\\n\\nFind $|\\overline{A \\cup B}|$.",
+      "stem": "In a universe of 19 elements, $|A| = 7$, $|B| = 7$ and $|A \\cap B| = 2$.\n\nFind $|\\overline{A \\cup B}|$.",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -4570,7 +4570,7 @@
         }
       ],
       "difficultyB": 0.7,
-      "stem": "Complete the membership table for $A \\cap (B \\cup C)$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $A \\cap (B \\cup C)$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 1,
       "answer": {
         "kind": "truth-table",
@@ -4627,7 +4627,7 @@
         }
       ],
       "difficultyB": 0.7,
-      "stem": "Complete the membership table for $(A \\cup B) \\cap (A \\cup C)$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $(A \\cup B) \\cap (A \\cup C)$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 2,
       "answer": {
         "kind": "truth-table",
@@ -4684,7 +4684,7 @@
         }
       ],
       "difficultyB": 0.7,
-      "stem": "Complete the membership table for $(A \\cup B \\cup C)^c$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $(A \\cup B \\cup C)^c$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 5,
       "answer": {
         "kind": "truth-table",
@@ -4741,7 +4741,7 @@
         }
       ],
       "difficultyB": -1.1,
-      "stem": "Complete the membership table for $(A \\cap B)^c$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $(A \\cap B)^c$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 7,
       "answer": {
         "kind": "truth-table",
@@ -4793,7 +4793,7 @@
         }
       ],
       "difficultyB": -1.1,
-      "stem": "Complete the membership table for $\\overline{A}  \\cup  B$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $\\overline{A}  \\cup  B$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 8,
       "answer": {
         "kind": "truth-table",
@@ -4845,7 +4845,7 @@
         }
       ],
       "difficultyB": -1.1,
-      "stem": "Complete the membership table for $(A \\cup B) \\cap (\\overline{A} \\cup \\overline{B})$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $(A \\cup B) \\cap (\\overline{A} \\cup \\overline{B})$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 9,
       "answer": {
         "kind": "truth-table",
@@ -4897,7 +4897,7 @@
         }
       ],
       "difficultyB": 0.7,
-      "stem": "Complete the membership table for $A \\cap \\overline{B}  \\cup  C$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $A \\cap \\overline{B}  \\cup  C$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 10,
       "answer": {
         "kind": "truth-table",
@@ -4954,7 +4954,7 @@
         }
       ],
       "difficultyB": 0.7,
-      "stem": "Complete the membership table for $\\overline{A}  \\cap  (B \\cup C)$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $\\overline{A}  \\cap  (B \\cup C)$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 11,
       "answer": {
         "kind": "truth-table",
@@ -5011,7 +5011,7 @@
         }
       ],
       "difficultyB": 0.7,
-      "stem": "Complete the membership table for $(A \\cap B)^c  \\cup  C$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $(A \\cap B)^c  \\cup  C$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 13,
       "answer": {
         "kind": "truth-table",
@@ -5068,7 +5068,7 @@
         }
       ],
       "difficultyB": -1.1,
-      "stem": "Complete the membership table for $A \\cap \\overline{B}$.\\n\\nWrite 1 when an element belongs to the set and 0 when it does not.",
+      "stem": "Complete the membership table for $A \\cap \\overline{B}$.\n\nWrite 1 when an element belongs to the set and 0 when it does not.",
       "seed": 14,
       "answer": {
         "kind": "truth-table",
@@ -6031,7 +6031,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (2, 3), (3, 2)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (2, 3), (3, 2)\\}$.\n\nWhich describes $R$?",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -6092,7 +6092,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 2), (2, 1)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 2), (2, 1)\\}$.\n\nWhich describes $R$?",
       "seed": 2,
       "answer": {
         "kind": "choice",
@@ -6153,7 +6153,7 @@
         }
       ],
       "difficultyB": -0.05,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 2)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 2)\\}$.\n\nWhich describes $R$?",
       "seed": 5,
       "answer": {
         "kind": "choice",
@@ -6214,7 +6214,7 @@
         }
       ],
       "difficultyB": -0.05,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 2), (2, 1), (2, 2), (3, 3)\\}$.\n\nWhich describes $R$?",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -6275,7 +6275,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 3), (2, 2), (3, 3)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 3), (2, 2), (3, 3)\\}$.\n\nWhich describes $R$?",
       "seed": 8,
       "answer": {
         "kind": "choice",
@@ -6336,7 +6336,7 @@
         }
       ],
       "difficultyB": -0.05,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 3)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (1, 3)\\}$.\n\nWhich describes $R$?",
       "seed": 10,
       "answer": {
         "kind": "choice",
@@ -6397,7 +6397,7 @@
         }
       ],
       "difficultyB": -0.05,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (3, 2)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (3, 2)\\}$.\n\nWhich describes $R$?",
       "seed": 11,
       "answer": {
         "kind": "choice",
@@ -6458,7 +6458,7 @@
         }
       ],
       "difficultyB": -0.05,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (2, 2), (2, 3), (3, 2), (3, 3)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (2, 2), (2, 3), (3, 2), (3, 3)\\}$.\n\nWhich describes $R$?",
       "seed": 12,
       "answer": {
         "kind": "choice",
@@ -6519,7 +6519,7 @@
         }
       ],
       "difficultyB": 0.85,
-      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (2, 1), (2, 2), (3, 3)\\}$.\\n\\nWhich describes $R$?",
+      "stem": "On the set $\\{1, 2, 3\\}$, let $R = \\{(1, 1), (2, 1), (2, 2), (3, 3)\\}$.\n\nWhich describes $R$?",
       "seed": 18,
       "answer": {
         "kind": "choice",
@@ -6584,7 +6584,7 @@
         }
       ],
       "difficultyB": 0.275,
-      "stem": "On $\\{1, 2, \\ldots, 18\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 18\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -6647,7 +6647,7 @@
         }
       ],
       "difficultyB": 0.275,
-      "stem": "On $\\{1, 2, \\ldots, 24\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 24\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -6710,7 +6710,7 @@
         }
       ],
       "difficultyB": 0.275,
-      "stem": "On $\\{1, 2, \\ldots, 28\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{7}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 28\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{7}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -6773,7 +6773,7 @@
         }
       ],
       "difficultyB": 0.275,
-      "stem": "On $\\{1, 2, \\ldots, 36\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 36\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -6828,7 +6828,7 @@
         }
       ],
       "difficultyB": 1.175,
-      "stem": "On $\\{1, 2, \\ldots, 15\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\\n\\nHow many elements are in each equivalence class?",
+      "stem": "On $\\{1, 2, \\ldots, 15\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\n\nHow many elements are in each equivalence class?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -6891,7 +6891,7 @@
         }
       ],
       "difficultyB": 0.725,
-      "stem": "On $\\{1, 2, \\ldots, 9\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{3}$. This is an equivalence relation.\\n\\nHow many elements are in each equivalence class?",
+      "stem": "On $\\{1, 2, \\ldots, 9\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{3}$. This is an equivalence relation.\n\nHow many elements are in each equivalence class?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -6946,7 +6946,7 @@
         }
       ],
       "difficultyB": -0.175,
-      "stem": "On $\\{1, 2, \\ldots, 15\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{3}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 15\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{3}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -7009,7 +7009,7 @@
         }
       ],
       "difficultyB": -0.175,
-      "stem": "On $\\{1, 2, \\ldots, 18\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{3}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 18\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{3}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -7072,7 +7072,7 @@
         }
       ],
       "difficultyB": 1.175,
-      "stem": "On $\\{1, 2, \\ldots, 30\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\\n\\nHow many elements are in each equivalence class?",
+      "stem": "On $\\{1, 2, \\ldots, 30\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\n\nHow many elements are in each equivalence class?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -7135,7 +7135,7 @@
         }
       ],
       "difficultyB": 1.175,
-      "stem": "On $\\{1, 2, \\ldots, 25\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\\n\\nHow many elements are in each equivalence class?",
+      "stem": "On $\\{1, 2, \\ldots, 25\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\n\nHow many elements are in each equivalence class?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -7190,7 +7190,7 @@
         }
       ],
       "difficultyB": -0.175,
-      "stem": "On $\\{1, 2, \\ldots, 12\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{4}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 12\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{4}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -7253,7 +7253,7 @@
         }
       ],
       "difficultyB": 0.275,
-      "stem": "On $\\{1, 2, \\ldots, 20\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 20\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{5}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -7316,7 +7316,7 @@
         }
       ],
       "difficultyB": -0.175,
-      "stem": "On $\\{1, 2, \\ldots, 16\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{4}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 16\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{4}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -7371,7 +7371,7 @@
         }
       ],
       "difficultyB": 1.175,
-      "stem": "On $\\{1, 2, \\ldots, 18\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\\n\\nHow many elements are in each equivalence class?",
+      "stem": "On $\\{1, 2, \\ldots, 18\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{6}$. This is an equivalence relation.\n\nHow many elements are in each equivalence class?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -7434,7 +7434,7 @@
         }
       ],
       "difficultyB": -0.175,
-      "stem": "On $\\{1, 2, \\ldots, 20\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{4}$. This is an equivalence relation.\\n\\nHow many distinct equivalence classes does it have?",
+      "stem": "On $\\{1, 2, \\ldots, 20\\}$, define $a \\sim b$ when $a \\equiv b \\pmod{4}$. This is an equivalence relation.\n\nHow many distinct equivalence classes does it have?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -7865,7 +7865,7 @@
         }
       ],
       "difficultyB": -0.36,
-      "stem": "A single item is chosen from exactly one of 3 disjoint shelves, of sizes 3, 6, 9.\\n\\nHow many single choices are available in total?",
+      "stem": "A single item is chosen from exactly one of 3 disjoint shelves, of sizes 3, 6, 9.\n\nHow many single choices are available in total?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -7914,7 +7914,7 @@
         }
       ],
       "difficultyB": -0.36,
-      "stem": "One route is taken, and the routes fall into 3 disjoint groups, of sizes 5, 4, 6.\\n\\nHow many single choices are available in total?",
+      "stem": "One route is taken, and the routes fall into 3 disjoint groups, of sizes 5, 4, 6.\n\nHow many single choices are available in total?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -7963,7 +7963,7 @@
         }
       ],
       "difficultyB": -0.36,
-      "stem": "A single item is chosen from exactly one of 3 disjoint shelves, of sizes 3, 6, 3.\\n\\nHow many single choices are available in total?",
+      "stem": "A single item is chosen from exactly one of 3 disjoint shelves, of sizes 3, 6, 3.\n\nHow many single choices are available in total?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -8012,7 +8012,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A meal is one item from each of 3 separate courses, of sizes 5, 4, 3.\\n\\nHow many combinations are possible?",
+      "stem": "A meal is one item from each of 3 separate courses, of sizes 5, 4, 3.\n\nHow many combinations are possible?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -8061,7 +8061,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A meal is one item from each of 3 separate courses, of sizes 8, 4, 7.\\n\\nHow many combinations are possible?",
+      "stem": "A meal is one item from each of 3 separate courses, of sizes 8, 4, 7.\n\nHow many combinations are possible?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -8110,7 +8110,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A password uses one character from each of 3 disjoint pools, of sizes 3, 7, 4.\\n\\nHow many combinations are possible?",
+      "stem": "A password uses one character from each of 3 disjoint pools, of sizes 3, 7, 4.\n\nHow many combinations are possible?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -8159,7 +8159,7 @@
         }
       ],
       "difficultyB": -0.9,
-      "stem": "One route is taken, and the routes fall into 2 disjoint groups, of sizes 3, 9.\\n\\nHow many single choices are available in total?",
+      "stem": "One route is taken, and the routes fall into 2 disjoint groups, of sizes 3, 9.\n\nHow many single choices are available in total?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -8208,7 +8208,7 @@
         }
       ],
       "difficultyB": -0.9,
-      "stem": "One route is taken, and the routes fall into 2 disjoint groups, of sizes 7, 5.\\n\\nHow many single choices are available in total?",
+      "stem": "One route is taken, and the routes fall into 2 disjoint groups, of sizes 7, 5.\n\nHow many single choices are available in total?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -8257,7 +8257,7 @@
         }
       ],
       "difficultyB": -0.9,
-      "stem": "One route is taken, and the routes fall into 2 disjoint groups, of sizes 8, 3.\\n\\nHow many single choices are available in total?",
+      "stem": "One route is taken, and the routes fall into 2 disjoint groups, of sizes 8, 3.\n\nHow many single choices are available in total?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -8306,7 +8306,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A meal is one item from each of 3 separate courses, of sizes 9, 7, 8.\\n\\nHow many combinations are possible?",
+      "stem": "A meal is one item from each of 3 separate courses, of sizes 9, 7, 8.\n\nHow many combinations are possible?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -8355,7 +8355,7 @@
         }
       ],
       "difficultyB": -0.36,
-      "stem": "One route is taken, and the routes fall into 3 disjoint groups, of sizes 6, 7, 7.\\n\\nHow many single choices are available in total?",
+      "stem": "One route is taken, and the routes fall into 3 disjoint groups, of sizes 6, 7, 7.\n\nHow many single choices are available in total?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -8404,7 +8404,7 @@
         }
       ],
       "difficultyB": -0.9,
-      "stem": "A single item is chosen from exactly one of 2 disjoint shelves, of sizes 3, 7.\\n\\nHow many single choices are available in total?",
+      "stem": "A single item is chosen from exactly one of 2 disjoint shelves, of sizes 3, 7.\n\nHow many single choices are available in total?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -8453,7 +8453,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A password uses one character from each of 3 disjoint pools, of sizes 5, 3, 3.\\n\\nHow many combinations are possible?",
+      "stem": "A password uses one character from each of 3 disjoint pools, of sizes 5, 3, 3.\n\nHow many combinations are possible?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -8502,7 +8502,7 @@
         }
       ],
       "difficultyB": -1.35,
-      "stem": "A password uses one character from each of 2 disjoint pools, of sizes 5, 6.\\n\\nHow many combinations are possible?",
+      "stem": "A password uses one character from each of 2 disjoint pools, of sizes 5, 6.\n\nHow many combinations are possible?",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -8551,7 +8551,7 @@
         }
       ],
       "difficultyB": -1.35,
-      "stem": "A password uses one character from each of 2 disjoint pools, of sizes 5, 5.\\n\\nHow many combinations are possible?",
+      "stem": "A password uses one character from each of 2 disjoint pools, of sizes 5, 5.\n\nHow many combinations are possible?",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -8600,7 +8600,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A password uses one character from each of 3 disjoint pools, of sizes 4, 8, 5.\\n\\nHow many combinations are possible?",
+      "stem": "A password uses one character from each of 3 disjoint pools, of sizes 4, 8, 5.\n\nHow many combinations are possible?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -8649,7 +8649,7 @@
         }
       ],
       "difficultyB": -0.81,
-      "stem": "A part number has 3 fields, each chosen independently, of sizes 4, 6, 4.\\n\\nHow many combinations are possible?",
+      "stem": "A part number has 3 fields, each chosen independently, of sizes 4, 6, 4.\n\nHow many combinations are possible?",
       "seed": 17,
       "answer": {
         "kind": "numeric",
@@ -8698,7 +8698,7 @@
         }
       ],
       "difficultyB": -1.35,
-      "stem": "A part number has 2 fields, each chosen independently, of sizes 7, 6.\\n\\nHow many combinations are possible?",
+      "stem": "A part number has 2 fields, each chosen independently, of sizes 7, 6.\n\nHow many combinations are possible?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -9739,7 +9739,7 @@
         }
       ],
       "difficultyB": 0.265,
-      "stem": "Suppose items are sorted into 9 bins.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose items are sorted into 9 bins.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -9797,7 +9797,7 @@
         }
       ],
       "difficultyB": 0.265,
-      "stem": "Suppose socks of 10 colours are drawn from a drawer.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose socks of 10 colours are drawn from a drawer.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -9855,7 +9855,7 @@
         }
       ],
       "difficultyB": 0.265,
-      "stem": "Suppose items are sorted into 10 bins.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose items are sorted into 10 bins.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -9913,7 +9913,7 @@
         }
       ],
       "difficultyB": 0.265,
-      "stem": "Suppose socks of 12 colours are drawn from a drawer.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose socks of 12 colours are drawn from a drawer.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -9971,7 +9971,7 @@
         }
       ],
       "difficultyB": 0.895,
-      "stem": "Suppose socks of 9 colours are drawn from a drawer.\\n\\nWhat is the smallest number that **guarantees** at least 4 fall into the same category?",
+      "stem": "Suppose socks of 9 colours are drawn from a drawer.\n\nWhat is the smallest number that **guarantees** at least 4 fall into the same category?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -10029,7 +10029,7 @@
         }
       ],
       "difficultyB": -0.005,
-      "stem": "Suppose items are sorted into 8 bins.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose items are sorted into 8 bins.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -10087,7 +10087,7 @@
         }
       ],
       "difficultyB": -0.005,
-      "stem": "Suppose people are grouped by which of 3 months they were born in.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose people are grouped by which of 3 months they were born in.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -10145,7 +10145,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose socks of 4 colours are drawn from a drawer.\\n\\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
+      "stem": "Suppose socks of 4 colours are drawn from a drawer.\n\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -10203,7 +10203,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose socks of 4 colours are drawn from a drawer.\\n\\nWhat is the smallest number that **guarantees** at least 4 fall into the same category?",
+      "stem": "Suppose socks of 4 colours are drawn from a drawer.\n\nWhat is the smallest number that **guarantees** at least 4 fall into the same category?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -10261,7 +10261,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose people are grouped by which of 8 months they were born in.\\n\\nWhat is the smallest number that **guarantees** at least 4 fall into the same category?",
+      "stem": "Suppose people are grouped by which of 8 months they were born in.\n\nWhat is the smallest number that **guarantees** at least 4 fall into the same category?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -10319,7 +10319,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose items are sorted into 8 bins.\\n\\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
+      "stem": "Suppose items are sorted into 8 bins.\n\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -10377,7 +10377,7 @@
         }
       ],
       "difficultyB": -0.005,
-      "stem": "Suppose items are sorted into 5 bins.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose items are sorted into 5 bins.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -10435,7 +10435,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose socks of 8 colours are drawn from a drawer.\\n\\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
+      "stem": "Suppose socks of 8 colours are drawn from a drawer.\n\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -10493,7 +10493,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose items are sorted into 7 bins.\\n\\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
+      "stem": "Suppose items are sorted into 7 bins.\n\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -10551,7 +10551,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose items are sorted into 5 bins.\\n\\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
+      "stem": "Suppose items are sorted into 5 bins.\n\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -10609,7 +10609,7 @@
         }
       ],
       "difficultyB": 0.265,
-      "stem": "Suppose people are grouped by which of 9 months they were born in.\\n\\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
+      "stem": "Suppose people are grouped by which of 9 months they were born in.\n\nWhat is the smallest number that **guarantees** at least 2 fall into the same category?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -10667,7 +10667,7 @@
         }
       ],
       "difficultyB": 0.625,
-      "stem": "Suppose items are sorted into 6 bins.\\n\\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
+      "stem": "Suppose items are sorted into 6 bins.\n\nWhat is the smallest number that **guarantees** at least 3 fall into the same category?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -10725,7 +10725,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 90 students, 15 take discrete mathematics, 36 take digital logic, and 13 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 90 students, 15 take discrete mathematics, 36 take digital logic, and 13 take both.\n\nHow many take at least one of the two?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -10783,7 +10783,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 99 students, 29 take discrete mathematics, 27 take digital logic, and 16 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 99 students, 29 take discrete mathematics, 27 take digital logic, and 16 take both.\n\nHow many take at least one of the two?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -10841,7 +10841,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 98 students, 16 take discrete mathematics, 35 take digital logic, and 5 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 98 students, 16 take discrete mathematics, 35 take digital logic, and 5 take both.\n\nHow many take at least one of the two?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -10899,7 +10899,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 114 students, 32 take discrete mathematics, 26 take digital logic, and 6 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 114 students, 32 take discrete mathematics, 26 take digital logic, and 6 take both.\n\nHow many take **neither**?",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -10957,7 +10957,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 95 students, 48 take discrete mathematics, 24 take digital logic, and 16 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 95 students, 48 take discrete mathematics, 24 take digital logic, and 16 take both.\n\nHow many take **neither**?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -11015,7 +11015,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 82 students, 15 take discrete mathematics, 38 take digital logic, and 6 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 82 students, 15 take discrete mathematics, 38 take digital logic, and 6 take both.\n\nHow many take at least one of the two?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -11073,7 +11073,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 40 students, 15 take discrete mathematics, 24 take digital logic, and 11 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 40 students, 15 take discrete mathematics, 24 take digital logic, and 11 take both.\n\nHow many take at least one of the two?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -11131,7 +11131,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 52 students, 25 take discrete mathematics, 20 take digital logic, and 14 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 52 students, 25 take discrete mathematics, 20 take digital logic, and 14 take both.\n\nHow many take at least one of the two?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -11189,7 +11189,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 56 students, 31 take discrete mathematics, 17 take digital logic, and 14 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 56 students, 31 take discrete mathematics, 17 take digital logic, and 14 take both.\n\nHow many take at least one of the two?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -11247,7 +11247,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 80 students, 46 take discrete mathematics, 38 take digital logic, and 30 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 80 students, 46 take discrete mathematics, 38 take digital logic, and 30 take both.\n\nHow many take **neither**?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -11305,7 +11305,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 81 students, 33 take discrete mathematics, 35 take digital logic, and 20 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 81 students, 33 take discrete mathematics, 35 take digital logic, and 20 take both.\n\nHow many take at least one of the two?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -11363,7 +11363,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 63 students, 16 take discrete mathematics, 28 take digital logic, and 14 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 63 students, 16 take discrete mathematics, 28 take digital logic, and 14 take both.\n\nHow many take **neither**?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -11421,7 +11421,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 85 students, 28 take discrete mathematics, 17 take digital logic, and 5 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 85 students, 28 take discrete mathematics, 17 take digital logic, and 5 take both.\n\nHow many take **neither**?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -11479,7 +11479,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 76 students, 28 take discrete mathematics, 30 take digital logic, and 12 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 76 students, 28 take discrete mathematics, 30 take digital logic, and 12 take both.\n\nHow many take **neither**?",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -11537,7 +11537,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 59 students, 23 take discrete mathematics, 23 take digital logic, and 12 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 59 students, 23 take discrete mathematics, 23 take digital logic, and 12 take both.\n\nHow many take **neither**?",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -11595,7 +11595,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 91 students, 20 take discrete mathematics, 45 take digital logic, and 10 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 91 students, 20 take discrete mathematics, 45 take digital logic, and 10 take both.\n\nHow many take **neither**?",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -11653,7 +11653,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "Of 94 students, 23 take discrete mathematics, 37 take digital logic, and 7 take both.\\n\\nHow many take **neither**?",
+      "stem": "Of 94 students, 23 take discrete mathematics, 37 take digital logic, and 7 take both.\n\nHow many take **neither**?",
       "seed": 17,
       "answer": {
         "kind": "numeric",
@@ -11711,7 +11711,7 @@
         }
       ],
       "difficultyB": -0.04,
-      "stem": "Of 72 students, 32 take discrete mathematics, 30 take digital logic, and 9 take both.\\n\\nHow many take at least one of the two?",
+      "stem": "Of 72 students, 32 take discrete mathematics, 30 take digital logic, and 9 take both.\n\nHow many take at least one of the two?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -12617,7 +12617,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 8 vertices, every one of degree 2.\\n\\nHow many edges?",
+      "stem": "A simple graph has 8 vertices, every one of degree 2.\n\nHow many edges?",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -12667,7 +12667,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 10 vertices, every one of degree 3.\\n\\nHow many edges?",
+      "stem": "A simple graph has 10 vertices, every one of degree 3.\n\nHow many edges?",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -12717,7 +12717,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 9 vertices, every one of degree 2.\\n\\nHow many edges?",
+      "stem": "A simple graph has 9 vertices, every one of degree 2.\n\nHow many edges?",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -12767,7 +12767,7 @@
         }
       ],
       "difficultyB": 0.5,
-      "stem": "A simple graph has 10 vertices, every one of degree 5.\\n\\nHow many edges?",
+      "stem": "A simple graph has 10 vertices, every one of degree 5.\n\nHow many edges?",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -12817,7 +12817,7 @@
         }
       ],
       "difficultyB": -1.3,
-      "stem": "A simple graph has 8 vertices, every one of degree 2.\\n\\nHow many does the sum of all degrees come to?",
+      "stem": "A simple graph has 8 vertices, every one of degree 2.\n\nHow many does the sum of all degrees come to?",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -12867,7 +12867,7 @@
         }
       ],
       "difficultyB": -1.3,
-      "stem": "A simple graph has 5 vertices, every one of degree 2.\\n\\nHow many does the sum of all degrees come to?",
+      "stem": "A simple graph has 5 vertices, every one of degree 2.\n\nHow many does the sum of all degrees come to?",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -12917,7 +12917,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 6 vertices, every one of degree 3.\\n\\nHow many edges?",
+      "stem": "A simple graph has 6 vertices, every one of degree 3.\n\nHow many edges?",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -12967,7 +12967,7 @@
         }
       ],
       "difficultyB": 0.5,
-      "stem": "A simple graph has 6 vertices, every one of degree 5.\\n\\nHow many edges?",
+      "stem": "A simple graph has 6 vertices, every one of degree 5.\n\nHow many edges?",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -13017,7 +13017,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 8 vertices, every one of degree 5.\\n\\nHow many does the sum of all degrees come to?",
+      "stem": "A simple graph has 8 vertices, every one of degree 5.\n\nHow many does the sum of all degrees come to?",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -13067,7 +13067,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 8 vertices, every one of degree 4.\\n\\nHow many does the sum of all degrees come to?",
+      "stem": "A simple graph has 8 vertices, every one of degree 4.\n\nHow many does the sum of all degrees come to?",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -13117,7 +13117,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 6 vertices, every one of degree 2.\\n\\nHow many edges?",
+      "stem": "A simple graph has 6 vertices, every one of degree 2.\n\nHow many edges?",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -13167,7 +13167,7 @@
         }
       ],
       "difficultyB": -0.4,
-      "stem": "A simple graph has 8 vertices, every one of degree 3.\\n\\nHow many edges?",
+      "stem": "A simple graph has 8 vertices, every one of degree 3.\n\nHow many edges?",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -13217,7 +13217,7 @@
         }
       ],
       "difficultyB": 0.5,
-      "stem": "A simple graph has 7 vertices, every one of degree 4.\\n\\nHow many edges?",
+      "stem": "A simple graph has 7 vertices, every one of degree 4.\n\nHow many edges?",
       "seed": 18,
       "answer": {
         "kind": "numeric",
@@ -13267,7 +13267,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 3, 4, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 3, 4, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -13328,7 +13328,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "A connected graph has vertex degrees 1, 3, 3, 3, 2, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 1, 3, 3, 3, 2, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 2,
       "answer": {
         "kind": "choice",
@@ -13389,7 +13389,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "A connected graph has vertex degrees 1, 1, 3, 1, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 1, 1, 3, 1, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 3,
       "answer": {
         "kind": "choice",
@@ -13450,7 +13450,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "A connected graph has vertex degrees 1, 1, 1, 3, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 1, 1, 1, 3, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 4,
       "answer": {
         "kind": "choice",
@@ -13511,7 +13511,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "A connected graph has vertex degrees 1, 3, 1, 3, 4, 2, 4, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 1, 3, 1, 3, 4, 2, 4, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 5,
       "answer": {
         "kind": "choice",
@@ -13572,7 +13572,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 1, 4, 2, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 1, 4, 2, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 6,
       "answer": {
         "kind": "choice",
@@ -13633,7 +13633,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 4, 4, 4, 2, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 4, 4, 4, 2, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -13694,7 +13694,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 2, 4, 4, 2, 4, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 2, 4, 4, 2, 4, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 8,
       "answer": {
         "kind": "choice",
@@ -13755,7 +13755,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 2, 4, 4, 4, 2, 4, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 2, 4, 4, 4, 2, 4, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 9,
       "answer": {
         "kind": "choice",
@@ -13816,7 +13816,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 3, 2, 2, 2, 2, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 3, 2, 2, 2, 2, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 10,
       "answer": {
         "kind": "choice",
@@ -13877,7 +13877,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 3, 4, 4, 2, 4, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 3, 4, 4, 2, 4, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 11,
       "answer": {
         "kind": "choice",
@@ -13938,7 +13938,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 4, 4, 2, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 4, 4, 2, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 12,
       "answer": {
         "kind": "choice",
@@ -13999,7 +13999,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 1, 1, 2, 2, 2, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 1, 1, 2, 2, 2, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 13,
       "answer": {
         "kind": "choice",
@@ -14060,7 +14060,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 1, 2, 2, 4, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 1, 2, 2, 4, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 14,
       "answer": {
         "kind": "choice",
@@ -14121,7 +14121,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 2, 2, 2, 4, 4, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 2, 2, 2, 4, 4, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 15,
       "answer": {
         "kind": "choice",
@@ -14182,7 +14182,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 1, 2, 2, 4.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 1, 2, 2, 4.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 16,
       "answer": {
         "kind": "choice",
@@ -14243,7 +14243,7 @@
         }
       ],
       "difficultyB": 1.04,
-      "stem": "A connected graph has vertex degrees 3, 1, 1, 3, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 1, 1, 3, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 17,
       "answer": {
         "kind": "choice",
@@ -14304,7 +14304,7 @@
         }
       ],
       "difficultyB": 0.14,
-      "stem": "A connected graph has vertex degrees 3, 1, 4, 4, 4, 2, 2.\\n\\nWhat can be said about Euler paths and circuits?",
+      "stem": "A connected graph has vertex degrees 3, 1, 4, 4, 4, 2, 2.\n\nWhat can be said about Euler paths and circuits?",
       "seed": 18,
       "answer": {
         "kind": "choice",
@@ -15177,7 +15177,7 @@
         }
       ],
       "difficultyB": -0.2,
-      "stem": "Proving $\\sum_{i=1}^{n} (2i-1) = n^2$ by induction, you have assumed $\\sum_{i=1}^{k} (2i-1) = k^2$.\\n\\nWhat must the inductive step establish?",
+      "stem": "Proving $\\sum_{i=1}^{n} (2i-1) = n^2$ by induction, you have assumed $\\sum_{i=1}^{k} (2i-1) = k^2$.\n\nWhat must the inductive step establish?",
       "seed": 1,
       "answer": {
         "kind": "choice",
@@ -15238,7 +15238,7 @@
         }
       ],
       "difficultyB": 1.6,
-      "stem": "Proving $\\sum_{i=0}^{n} 2^i = 2^{n+1} - 1$ by induction, you have assumed $\\sum_{i=0}^{k} 2^i = 2^{k+1} - 1$.\\n\\nWhat must the inductive step establish?",
+      "stem": "Proving $\\sum_{i=0}^{n} 2^i = 2^{n+1} - 1$ by induction, you have assumed $\\sum_{i=0}^{k} 2^i = 2^{k+1} - 1$.\n\nWhat must the inductive step establish?",
       "seed": 2,
       "answer": {
         "kind": "choice",
@@ -15299,7 +15299,7 @@
         }
       ],
       "difficultyB": -0.2,
-      "stem": "Proving $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ by induction, you have assumed $\\sum_{i=1}^{k} i = \\frac{k(k+1)}{2}$.\\n\\nWhat must the inductive step establish?",
+      "stem": "Proving $\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$ by induction, you have assumed $\\sum_{i=1}^{k} i = \\frac{k(k+1)}{2}$.\n\nWhat must the inductive step establish?",
       "seed": 7,
       "answer": {
         "kind": "choice",
@@ -15360,7 +15360,7 @@
         }
       ],
       "difficultyB": 0.89,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 6$.\\n\\nFind $a_{6}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 6$.\n\nFind $a_{6}$.",
       "seed": 1,
       "answer": {
         "kind": "numeric",
@@ -15418,7 +15418,7 @@
         }
       ],
       "difficultyB": 0.89,
-      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 2$ and $a_1 = 4$.\\n\\nFind $a_{6}$.",
+      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 2$ and $a_1 = 4$.\n\nFind $a_{6}$.",
       "seed": 2,
       "answer": {
         "kind": "numeric",
@@ -15476,7 +15476,7 @@
         }
       ],
       "difficultyB": 0.89,
-      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 2$ and $a_1 = 1$.\\n\\nFind $a_{6}$.",
+      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 2$ and $a_1 = 1$.\n\nFind $a_{6}$.",
       "seed": 3,
       "answer": {
         "kind": "numeric",
@@ -15534,7 +15534,7 @@
         }
       ],
       "difficultyB": 0.44,
-      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 1$ and $a_1 = 1$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 1$ and $a_1 = 1$.\n\nFind $a_{4}$.",
       "seed": 4,
       "answer": {
         "kind": "numeric",
@@ -15592,7 +15592,7 @@
         }
       ],
       "difficultyB": 0.8,
-      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 3a_{k-2}$ with $a_0 = 1$ and $a_1 = 4$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 3a_{k-2}$ with $a_0 = 1$ and $a_1 = 4$.\n\nFind $a_{4}$.",
       "seed": 5,
       "answer": {
         "kind": "numeric",
@@ -15650,7 +15650,7 @@
         }
       ],
       "difficultyB": 0.44,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 2$.\\n\\nFind $a_{5}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 2$.\n\nFind $a_{5}$.",
       "seed": 6,
       "answer": {
         "kind": "numeric",
@@ -15708,7 +15708,7 @@
         }
       ],
       "difficultyB": 0.44,
-      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 1a_{k-2}$ with $a_0 = 4$ and $a_1 = 5$.\\n\\nFind $a_{5}$.",
+      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 1a_{k-2}$ with $a_0 = 4$ and $a_1 = 5$.\n\nFind $a_{5}$.",
       "seed": 7,
       "answer": {
         "kind": "numeric",
@@ -15766,7 +15766,7 @@
         }
       ],
       "difficultyB": 0.8,
-      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 2a_{k-2}$ with $a_0 = 2$ and $a_1 = 5$.\\n\\nFind $a_{5}$.",
+      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 2a_{k-2}$ with $a_0 = 2$ and $a_1 = 5$.\n\nFind $a_{5}$.",
       "seed": 8,
       "answer": {
         "kind": "numeric",
@@ -15824,7 +15824,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 3a_{k-2}$ with $a_0 = 1$ and $a_1 = 5$.\\n\\nFind $a_{6}$.",
+      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 3a_{k-2}$ with $a_0 = 1$ and $a_1 = 5$.\n\nFind $a_{6}$.",
       "seed": 9,
       "answer": {
         "kind": "numeric",
@@ -15882,7 +15882,7 @@
         }
       ],
       "difficultyB": 0.8,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 3a_{k-2}$ with $a_0 = 3$ and $a_1 = 5$.\\n\\nFind $a_{5}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 3a_{k-2}$ with $a_0 = 3$ and $a_1 = 5$.\n\nFind $a_{5}$.",
       "seed": 10,
       "answer": {
         "kind": "numeric",
@@ -15940,7 +15940,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 3$ and $a_1 = 4$.\\n\\nFind $a_{6}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 3$ and $a_1 = 4$.\n\nFind $a_{6}$.",
       "seed": 11,
       "answer": {
         "kind": "numeric",
@@ -15998,7 +15998,7 @@
         }
       ],
       "difficultyB": 0.44,
-      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 6$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 6$.\n\nFind $a_{4}$.",
       "seed": 12,
       "answer": {
         "kind": "numeric",
@@ -16056,7 +16056,7 @@
         }
       ],
       "difficultyB": 0.8,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 1$ and $a_1 = 1$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 1$ and $a_1 = 1$.\n\nFind $a_{4}$.",
       "seed": 13,
       "answer": {
         "kind": "numeric",
@@ -16114,7 +16114,7 @@
         }
       ],
       "difficultyB": 0.8,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 3$ and $a_1 = 3$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 3$ and $a_1 = 3$.\n\nFind $a_{4}$.",
       "seed": 14,
       "answer": {
         "kind": "numeric",
@@ -16172,7 +16172,7 @@
         }
       ],
       "difficultyB": 0.8,
-      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 2a_{k-2}$ with $a_0 = 2$ and $a_1 = 3$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 2a_{k-1} + 2a_{k-2}$ with $a_0 = 2$ and $a_1 = 3$.\n\nFind $a_{4}$.",
       "seed": 15,
       "answer": {
         "kind": "numeric",
@@ -16230,7 +16230,7 @@
         }
       ],
       "difficultyB": 0.44,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 1a_{k-2}$ with $a_0 = 4$ and $a_1 = 3$.\\n\\nFind $a_{5}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 1a_{k-2}$ with $a_0 = 4$ and $a_1 = 3$.\n\nFind $a_{5}$.",
       "seed": 16,
       "answer": {
         "kind": "numeric",
@@ -16288,7 +16288,7 @@
         }
       ],
       "difficultyB": 0.44,
-      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 1$.\\n\\nFind $a_{4}$.",
+      "stem": "A sequence satisfies $a_k = 4a_{k-1} + 1a_{k-2}$ with $a_0 = 3$ and $a_1 = 1$.\n\nFind $a_{4}$.",
       "seed": 17,
       "answer": {
         "kind": "numeric",
@@ -16346,7 +16346,7 @@
         }
       ],
       "difficultyB": 1.25,
-      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 3$ and $a_1 = 2$.\\n\\nFind $a_{6}$.",
+      "stem": "A sequence satisfies $a_k = 3a_{k-1} + 2a_{k-2}$ with $a_0 = 3$ and $a_1 = 2$.\n\nFind $a_{6}$.",
       "seed": 18,
       "answer": {
         "kind": "numeric",

@@ -1,5 +1,5 @@
 import { checkAnswer, toleranceFor, type Response } from '@et/answer-engine';
-import type { Item, Pack } from '@et/content-schema';
+import { findMarkupProblems, type Item, type Pack } from '@et/content-schema';
 import { generatorById, makeRng } from '@et/generators';
 import { gradeCircuit, nodesOf, parseNetlist } from '@et/circuits';
 
@@ -109,7 +109,11 @@ function extractNumbers(text: string): number[] {
     G: 1e9, M: 1e6, k: 1e3, m: 1e-3, n: 1e-9, p: 1e-12, '\\mu': 1e-6, u: 1e-6,
   };
   const out: number[] = [];
-  for (const match of text.matchAll(/(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\text\{(\\mu\s?|[GMkmnpu])?)?/g)) {
+  // Both macros, because the prefix carries the magnitude: reading `20\,\mathrm{ms}`
+  // as a bare 20 makes a correct worked solution disagree with a correct answer
+  // key by a factor of a thousand. Tying this to one typesetting macro is what
+  // made a `\text` -> `\mathrm` change look like 40 wrong answers.
+  for (const match of text.matchAll(/(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])?)?/g)) {
     const value = Number(match[1]);
     if (!Number.isFinite(value)) continue;
     const prefix = match[2]?.trim();
@@ -252,7 +256,41 @@ function checkMisconceptionCoverage(item: Item): VerifyFinding[] {
   return [];
 }
 
-/** Check 7 — KC references resolve against the loaded curriculum. */
+/**
+ * Check 8 — every maths macro is inside a `$...$` span.
+ *
+ * The renderer typesets delimited spans and passes everything else through as
+ * text, so `12\\,\\text{V}` written into prose reaches the learner as those
+ * literal characters. Nothing else here can see it: the answer verifies, the
+ * explanation agrees, the generator regenerates, and the item is still
+ * unreadable. It is an error rather than a warning because an item nobody can
+ * read is not a degraded item, it is a broken one.
+ */
+function checkMarkup(item: Item): VerifyFinding[] {
+  const fields: [string, string | undefined][] = [
+    ['stem', item.stem],
+    ['explanation.principle', item.explanation?.principle],
+    ...(item.explanation?.steps ?? []).map((s, i): [string, string] => [`explanation.steps[${i}]`, s]),
+    ...item.options.map((o, i): [string, string] => [`options[${i}].text`, o.text]),
+    ...item.misconceptionTraps.map((t, i): [string, string] => [`misconceptionTraps[${i}].feedback`, t.feedback]),
+  ];
+
+  return fields.flatMap(([where, text]) =>
+    text === undefined
+      ? []
+      : findMarkupProblems(text).map((problem) =>
+          error(
+            item.id,
+            'latex-delimiters',
+            problem.reason === 'unbalanced-delimiter'
+              ? `${where} has an unclosed $ delimiter: "${problem.excerpt}"`
+              : `${where} contains maths outside $...$, which renders literally: "${problem.excerpt}"`,
+          ),
+        ),
+  );
+}
+
+/** Check 9 — KC references resolve against the loaded curriculum. */
 function checkKcReferences(item: Item, knownKcs: ReadonlySet<string>): VerifyFinding[] {
   if (knownKcs.size === 0) return []; // no curriculum supplied
   return item.kcRefs
@@ -280,6 +318,7 @@ export function verifyPack(pack: Pack, options: VerifyOptions = {}): VerifyRepor
       ...checkCircuitReference(item),
       ...checkSymbolicResidual(item),
       ...checkMisconceptionCoverage(item),
+      ...checkMarkup(item),
       ...checkKcReferences(item, knownKcs),
     ];
     findings.push(...itemFindings);

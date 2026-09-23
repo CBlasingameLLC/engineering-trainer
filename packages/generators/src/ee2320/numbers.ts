@@ -226,7 +226,7 @@ export const binaryOverflow: Generator = {
       difficultyB: adjustDifficulty(this.difficultyB, [carryOut !== overflow ? 1 : -0.6]),
       stem:
         `Add the ${width}-bit two's complement numbers $${patternA}_2$ and $${patternB}_2$ ` +
-        `(that is, ${a} and ${b}).\\n\\nDoes signed overflow occur?`,
+        `(that is, ${a} and ${b}).\n\nDoes signed overflow occur?`,
       answer: { kind: 'choice' as const, correctId: overflow ? 'a' : 'b' },
       options: [
         {

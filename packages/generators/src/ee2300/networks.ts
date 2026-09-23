@@ -118,7 +118,7 @@ export const voltageDivider: Generator = {
       kcRefs: this.kcRefs,
       difficultyB,
       stem:
-        `A ${volts(vs)} source drives $R_1 = ${ohms(r1)}$ in series with $R_2 = ${ohms(r2)}$. ` +
+        `A $${volts(vs)}$ source drives $R_1 = ${ohms(r1)}$ in series with $R_2 = ${ohms(r2)}$. ` +
         `Find the voltage across $R_2$.`,
       answer: { kind: 'numeric' as const, value: vout, unit: 'V', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -177,7 +177,7 @@ export const currentDivider: Generator = {
       kcRefs: this.kcRefs,
       difficultyB,
       stem:
-        `A ${amps(is)} current source feeds $R_1 = ${ohms(r1)}$ in parallel with $R_2 = ${ohms(r2)}$. ` +
+        `A $${amps(is)}$ current source feeds $R_1 = ${ohms(r1)}$ in parallel with $R_2 = ${ohms(r2)}$. ` +
         `Find the current through $R_1$.`,
       answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
       options: [],
@@ -276,7 +276,7 @@ export const deltaWye: Generator = {
           `Identify the two delta legs that meet at node $a$: $R_{ab}$ and $R_{ca}$.`,
           `The wye resistor at a node is the product of its two adjacent legs over the sum of all three:`,
           `$R_1 = \\dfrac{R_{ab} R_{ca}}{R_{ab} + R_{bc} + R_{ca}} = \\dfrac{(${trimNumber(rab)})(${trimNumber(rca)})}{${trimNumber(sum, 5)}} = ${ohms(r1)}$.`,
-          `Sanity check: every wye resistance must come out smaller than either adjacent delta leg, and ${ohms(r1)} is smaller than both.`,
+          `Sanity check: every wye resistance must come out smaller than either adjacent delta leg, and $${ohms(r1)}$ is smaller than both.`,
         ],
         principle:
           'A wye resistor is built from the two delta legs touching its node, divided by the sum of all three.',
