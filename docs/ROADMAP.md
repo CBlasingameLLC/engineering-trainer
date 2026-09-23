@@ -20,13 +20,17 @@ machinery exists.
 | MATH 2471 / 3323 / 3376 | 13 generators, 209 verified items, all 6 cross-course KCs covered |
 | MATH 2358 Discrete Mathematics | 25 KCs, 308 items across all four units |
 | EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
+| EE 3300 Circuits II | 19 KCs, 16 generators, 281 items across all five units |
+| Phasor answers | `complex` answer kind: six notations parsed, magnitude and phase graded separately |
+| Item figures | 198 EE 2300 items and every EE 3300 circuit item carry a schematic, simulated by `pack verify` |
+| Circuit templates | 14 standard Circuits II topologies, loadable into the Lab, each proved solvable |
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
 | Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |
 | Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills |
 | Display | Dark mode (system/light/dark, persisted) and fullscreen |
-| Circuit lab | MNA solver (DC / DC sweep / AC / transient), schematic editor, node equations |
+| Circuit lab | MNA solver (DC / DC sweep / AC / transient), drag-and-drop schematic capture with hotkeys, undo, rubber-band select, wheel zoom |
 | Design grading | `circuit-build` items graded by simulation |
-| Skill tree | Real prerequisite DAG, locked/available/learning/proficient/mastered |
+| Skill tree | Real prerequisite DAG on a pan/zoom canvas, locked/available/learning/proficient/mastered |
 | Progression | Difficulty-weighted XP with retrieval bonus, streaks with freezes, daily quests, challenge exams |
 | Credentials | 17 entries ranked against measured gaps |
 | Windows package | `.msi` and `.exe` built and bundled in CI, published as run artifacts |

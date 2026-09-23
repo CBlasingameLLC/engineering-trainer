@@ -181,6 +181,15 @@ while (answered < 60) {
     const expr = shouldMiss ? `(${item.answer.expression})'` : item.answer.expression;
     await page.locator('#answer').fill(expr);
     await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'complex') {
+    // Polar, because that is the form the item asks for and the one whose
+    // parser has the most ways to be wrong. A miss scales the magnitude rather
+    // than flipping the phase: a conjugate would land in a tagged trap, and a
+    // trap hit is a different assertion from a plain miss.
+    const magnitude = Math.hypot(item.answer.real, item.answer.imag) * (shouldMiss ? 1.9 : 1);
+    const angle = (Math.atan2(item.answer.imag, item.answer.real) * 180) / Math.PI;
+    await page.locator('#answer').fill(`${magnitude}∠${angle}`);
+    await page.getByRole('button', { name: 'Submit' }).click();
   } else if (item?.answer?.kind === 'truth-table') {
     // Inverting one row is enough to be wrong without being unanswerable.
     const rows = shouldMiss

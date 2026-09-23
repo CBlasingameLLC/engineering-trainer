@@ -274,6 +274,19 @@ export function toNetlist(schematic: Schematic): BuiltNetlist {
       continue;
     }
 
+    // A pin alone on its net touches nothing at all. It passes the check above
+    // — it *has* a net — and then the component floats and the matrix comes
+    // back singular with no hint of why. A deliberately open terminal is not
+    // this case: it reaches a wire, so its net has other points on it.
+    for (const [index, node] of nodes.entries()) {
+      if ((nets.byNet.get(node)?.length ?? 0) <= 1) {
+        issues.push({
+          componentId: component.id,
+          message: `${component.id} pin ${index + 1} sits on nothing — no wire, pin or ground reaches it`,
+        });
+      }
+    }
+
     // A component whose terminals land on the same net is shorted out; it would
     // stamp a conductance between a node and itself and vanish from the result.
     if (nodes.length >= 2 && nodes[0] === nodes[1] && component.kind !== 'opamp') {

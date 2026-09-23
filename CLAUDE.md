@@ -243,6 +243,16 @@ packs by the schema, and never enters a release build. Don't weaken that.
   the bottom — rotation 180 in figure coordinates. Getting this backwards
   negates the answer and nothing but a simulation notices, which is the whole
   reason figures are simulated.
+- **A phasor is graded in polar even though it is stored in rectangular.** The
+  error lives in the polar form: magnitude right and phase inverted is a
+  conjugate, usually a reactance sign, and a rectangular comparison reports it
+  as simply wrong. Two tolerances, not interchangeable — relative on magnitude,
+  absolute degrees on angle, because five percent of 2 degrees and of 170
+  degrees are different demands. Two cases fail silently without a test: the
+  wrap point (+179 and -179 are 2 apart, so the angle comparison wraps) and
+  zero magnitude (every angle is the same phasor there, so no angle is
+  demanded). Six notations parse, because rejecting five of them teaches
+  notation rather than circuits.
 - **Never synthesize a study history to seed FSRS.** A semester of fabricated
   reviews inflates stability to S≈270d, so a year-old prerequisite reports
   R≈0.88 and looks perfectly retained — defeating the entire product. Use
@@ -455,10 +465,11 @@ only asserted.
 
 Not built:
 
-- **Curriculum breadth** (Phase 4) — Tier 1 is complete. Tier 2 is not:
-  EE 3300 Circuits II, EE 3370 Signals, EE 3340 Electromagnetics and the rest
-  have no graph yet. EE 3300 is the cheapest of them, because the MNA solver
-  already does ngspice-validated complex-admittance AC.
+- **Curriculum breadth** (Phase 4) — Tier 1 is complete, and EE 3300 Circuits II
+  is now in: 19 KCs across sinusoidal steady state, AC power, frequency
+  response, coupling and three-phase, and the s-domain, with cross-course edges
+  into EE 2300 and MATH 3323. EE 3370 Signals and EE 3340 Electromagnetics have
+  no graph yet.
 - **Nonlinear devices** — diodes and transistors need Newton-Raphson around the
   existing stamping code plus a device-model library. Nothing in Circuits I/II
   requires them.

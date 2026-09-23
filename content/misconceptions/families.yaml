@@ -22,6 +22,17 @@ families:
       marks in circuits, calculus and differential equations identically, and
       it is never a gap in understanding — it is bookkeeping.
 
+  - id: complex-quantity-discipline
+    title: Complex quantity discipline
+    competency: math-execution
+    description: >-
+      Treating a complex quantity as though it were a real one: adding
+      reactances as magnitudes, dropping a conjugate, answering with a
+      magnitude and no angle. Every one of them produces a plausible number,
+      which is why they survive a self-check — the answer looks like an answer.
+      They appear together across impedance, AC power and three-phase, which is
+      what makes them one habit rather than three topics.
+
   - id: ratio-inversion
     title: Inverted ratios
     competency: math-execution
@@ -313,3 +324,22 @@ misconceptions:
   - { id: latch.priority-assumed,                    family: state-and-sequence, title: "One latch input assumed to have priority" }
   - { id: recurrence.index-off-by-one,               family: state-and-sequence, title: "Recurrence index off by one" }
   - { id: recurrence.second-term-dropped,            family: state-and-sequence, title: "Second-order recurrence term dropped" }
+  - { id: phasor.reactance-signs-swapped,            family: complex-quantity-discipline, title: "Inductive and capacitive reactance signs swapped" }
+  - { id: phasor.reactances-added-as-magnitudes,     family: complex-quantity-discipline, title: "Reactances added instead of subtracted" }
+  - { id: phasor.magnitude-without-phase,            family: complex-quantity-discipline, title: "Answered a phasor with its magnitude only" }
+  - { id: phasor.conjugate,                          family: complex-quantity-discipline, title: "Phase inverted (conjugate taken)" }
+  - { id: phasor.reactance-treated-as-resistance,    family: complex-quantity-discipline, title: "Reactance combined as though it were resistance" }
+  - { id: power.conjugate-omitted,                   family: complex-quantity-discipline, title: "Conjugate omitted from S = VI*" }
+  - { id: power.apparent-taken-as-real,              family: complex-quantity-discipline, title: "Apparent power reported as real power" }
+  - { id: power.half-factor-applied-to-rms,          family: complex-quantity-discipline, title: "Amplitude half-factor applied to rms values" }
+  - { id: three-phase.line-phase-confused,           family: formula-substitution, title: "Line and phase quantities confused" }
+  - { id: three-phase.root-three-omitted,            family: formula-substitution, title: "Root-three factor omitted" }
+  - { id: three-phase.power-factor-omitted,          family: formula-substitution, title: "Power factor omitted from real power" }
+  - { id: resonance.omega-reported-as-f,             family: formula-substitution, title: "Angular frequency reported as hertz" }
+  - { id: resonance.square-root-omitted,             family: exponent-bookkeeping, title: "Square root omitted from a resonance formula" }
+  - { id: resonance.q-inverted,                      family: ratio-inversion, title: "Quality factor inverted" }
+  - { id: resonance.bandwidth-multiplied-by-q,       family: ratio-inversion, title: "Bandwidth multiplied by Q instead of divided" }
+  - { id: filter.omega-reported-as-f,                family: formula-substitution, title: "Cutoff reported in rad/s instead of hertz" }
+  - { id: filter.time-constant-inverted,             family: ratio-inversion, title: "Filter time constant inverted" }
+  - { id: transformer.turns-ratio-not-squared,       family: exponent-bookkeeping, title: "Turns ratio not squared for impedance" }
+  - { id: transformer.reflection-direction-reversed, family: ratio-inversion, title: "Impedance reflected the wrong way through a transformer" }

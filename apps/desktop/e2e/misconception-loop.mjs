@@ -133,6 +133,21 @@ while (answered < 60) {
       await page.locator('#answer').fill(item.answer.expression);
     }
     await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'complex') {
+    // Answered in polar form, which is both what the item asks for and the
+    // notation whose parser has the most ways to be wrong — so a trap that
+    // fires here also proves the phasor reader works on generated values.
+    const asPolar = (real, imag) =>
+      `${Math.hypot(real, imag)}∠${(Math.atan2(imag, real) * 180) / Math.PI}`;
+    const traps = (item.misconceptionTraps ?? []).filter((t) => t.complex !== undefined);
+    const trap = traps.find((t) => committed.has(t.misconception)) ?? traps[0];
+    if (trap) {
+      note(trap.misconception);
+      await page.locator('#answer').fill(asPolar(trap.complex.real, trap.complex.imag));
+    } else {
+      await page.locator('#answer').fill(asPolar(item.answer.real, item.answer.imag));
+    }
+    await page.getByRole('button', { name: 'Submit' }).click();
   } else if (item?.answer?.kind === 'choice') {
     const tagged = item.options.find((o) => o.misconception && o.id !== item.answer.correctId);
     const pick = tagged ?? item.options.find((o) => o.id === item.answer.correctId);
@@ -244,7 +259,22 @@ if (drillCount === 0) {
       await page.locator('#answer').fill(String(item.answer.value));
     } else if (item?.answer?.kind === 'symbolic') {
       await page.locator('#answer').fill(item.answer.expression);
-    } else if (item?.answer?.kind === 'choice') {
+    } else if (item?.answer?.kind === 'complex') {
+    // Answered in polar form, which is both what the item asks for and the
+    // notation whose parser has the most ways to be wrong — so a trap that
+    // fires here also proves the phasor reader works on generated values.
+    const asPolar = (real, imag) =>
+      `${Math.hypot(real, imag)}∠${(Math.atan2(imag, real) * 180) / Math.PI}`;
+    const traps = (item.misconceptionTraps ?? []).filter((t) => t.complex !== undefined);
+    const trap = traps.find((t) => committed.has(t.misconception)) ?? traps[0];
+    if (trap) {
+      note(trap.misconception);
+      await page.locator('#answer').fill(asPolar(trap.complex.real, trap.complex.imag));
+    } else {
+      await page.locator('#answer').fill(asPolar(item.answer.real, item.answer.imag));
+    }
+    await page.getByRole('button', { name: 'Submit' }).click();
+  } else if (item?.answer?.kind === 'choice') {
       await page.locator('article button')
         .filter({ hasText: new RegExp(`^${item.answer.correctId.toUpperCase()}`) }).first().click();
     } else if (item?.answer?.kind === 'boolean') {

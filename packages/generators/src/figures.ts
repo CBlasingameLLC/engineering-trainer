@@ -54,6 +54,12 @@ export class FigureBuilder {
   v = (id: string, at: Pt, volts: number, rotation: Rotation = 0): this =>
     this.part(id, 'vsource', at, volts, rotation);
 
+  /** An AC source. The DC value stays 0, so an operating point still solves. */
+  vac(id: string, at: Pt, magnitude: number, phaseDeg = 0, rotation: Rotation = 0): this {
+    this.components.push({ id, kind: 'vsource', at, value: 0, rotation, acMagnitude: magnitude, acPhase: phaseDeg });
+    return this;
+  }
+
   i = (id: string, at: Pt, amps: number, rotation: Rotation = 0): this =>
     this.part(id, 'isource', at, amps, rotation);
 
@@ -95,6 +101,24 @@ export class FigureBuilder {
   expectCurrent(element: string, value: number, rel = 0.005): this {
     this.expects.push({
       probe: `i(${element})`, analysis: 'op', expected: value, unit: 'A', tolerance: { rel, abs: 1e-9 },
+    });
+    return this;
+  }
+
+  /** Magnitude of a node voltage at one frequency. */
+  expectAcMagnitude(node: string, frequencyHz: number, value: number, rel = 0.005): this {
+    this.expects.push({
+      probe: `mag(v(${node}))`, analysis: 'ac', frequencyHz,
+      expected: value, unit: 'V', tolerance: { rel, abs: 1e-9 },
+    });
+    return this;
+  }
+
+  /** Phase of a node voltage at one frequency, in degrees. */
+  expectAcPhase(node: string, frequencyHz: number, degrees: number, abs = 0.5): this {
+    this.expects.push({
+      probe: `phase(v(${node}))`, analysis: 'ac', frequencyHz,
+      expected: degrees, unit: 'deg', tolerance: { abs },
     });
     return this;
   }

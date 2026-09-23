@@ -283,6 +283,35 @@ console.log(`[9] rubber band selected all ${selected} parts`);
 
 await page.screenshot({ path: `${SHOT}/08-circuit-lab-editing.png`, fullPage: true });
 
+// --- template library -------------------------------------------------------
+// Every template is proved solvable by a unit test; this is the other claim —
+// that choosing one puts a complete circuit on the canvas, ready to simulate,
+// rather than a drawing you then have to finish.
+const picker = page.locator('[data-testid="template-picker"]');
+const offered = await picker.locator('option:not([value=""])').count();
+if (offered < 12) fail(`template picker offers only ${offered} circuits`);
+
+await picker.selectOption('sallen-key-lp');
+// Waiting on "more parts than the three we drew" rather than on an exact
+// count, so adding an element to a template is not a driver failure.
+await page.waitForFunction(
+  () => document.querySelectorAll('[data-testid="schematic-canvas"] g[data-component-id]').length > 3,
+  undefined,
+  { timeout: 3000 },
+);
+const loadedParts = await page.locator('[data-testid="schematic-canvas"] g[data-component-id]').count();
+
+// "connected" is the editor's own verdict on whether the drawing builds a
+// netlist with nothing dangling — which is the whole value of a starting point.
+const connected = await page.locator('text=connected').count();
+if (connected === 0) {
+  const issue = await page.locator('text=/issue\\(s\\)/').first().innerText().catch(() => '(no status)');
+  fail(`the loaded template is not a complete circuit: ${issue}`);
+}
+console.log(`[10] ${offered} templates offered; Sallen-Key loaded ${loadedParts} parts, connected`);
+
+await page.screenshot({ path: `${SHOT}/09-circuit-template.png`, fullPage: true });
+
 console.log(errors.length === 0 ? '\nNo console errors.' : `\nConsole errors:\n${errors.join('\n')}`);
 await browser.close();
 if (errors.length > 0) process.exitCode = 1;

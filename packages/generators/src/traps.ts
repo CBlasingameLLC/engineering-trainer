@@ -1,5 +1,7 @@
-import { checkBoolean, checkSymbolic } from '@et/answer-engine';
-import type { BooleanAnswer, MisconceptionTrap, SymbolicAnswer } from '@et/content-schema';
+import { checkBoolean, checkSymbolic, comparePhasors } from '@et/answer-engine';
+import type {
+  BooleanAnswer, ComplexAnswer, MisconceptionTrap, SymbolicAnswer,
+} from '@et/content-schema';
 
 import { makeRng } from './rng.js';
 
@@ -81,5 +83,30 @@ export function separatedBooleanTraps(
   return candidates.filter((trap) => {
     if (trap.expression === undefined) return true;
     return !checkBoolean(trap.expression, { ...answer, maxLiterals: undefined }).correct;
+  });
+}
+
+/**
+ * The same backstop for phasor traps.
+ *
+ * A complex trap collapses onto the answer the same way a numeric one does, and
+ * for the same reason — both are computed from the parameters that produce the
+ * answer. The specific collapses here are worth naming: the conjugate trap
+ * equals the answer whenever the reactance is zero (which is resonance), and
+ * the magnitude-without-phase trap equals it whenever the phase is zero (which
+ * is the same condition). Generators constrain their draws away from resonance
+ * for exactly that reason; this is what catches the one that forgets.
+ */
+export function separatedComplexTraps(
+  answer: ComplexAnswer,
+  candidates: readonly MisconceptionTrap[],
+): MisconceptionTrap[] {
+  return candidates.filter((trap) => {
+    if (!trap.complex) return true;
+    const comparison = comparePhasors(
+      { real: trap.complex.real, imag: trap.complex.imag },
+      answer,
+    );
+    return !(comparison.magnitudeOk && comparison.angleOk);
   });
 }

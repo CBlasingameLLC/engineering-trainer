@@ -23,6 +23,14 @@ import { EE2320_NUMBER_GENERATORS } from './ee2320/numbers.js';
 import { EE2320_LOGIC_GENERATORS } from './ee2320/logic.js';
 import { EE2320_BLOCK_GENERATORS } from './ee2320/blocks.js';
 import { EE2320_SEQUENTIAL_GENERATORS } from './ee2320/sequential.js';
+import { complexPower, rcDividerPhasor, seriesImpedance } from './ee3300/phasors.js';
+import {
+  filterCutoff, reflectedImpedance, seriesResonance, threePhase,
+} from './ee3300/response.js';
+import {
+  acThevenin, bodeAsymptotes, conjugateMatch, mutualInductance, parallelResonance,
+  powerFactorCorrection, rmsValue, sDomainPole, sinusoidToPhasor,
+} from './ee3300/power.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -74,6 +82,24 @@ export const GENERATORS: readonly Generator[] = [
   ...EE2320_LOGIC_GENERATORS,
   ...EE2320_BLOCK_GENERATORS,
   ...EE2320_SEQUENTIAL_GENERATORS,
+
+  // EE 3300 — Circuits II
+  seriesImpedance,
+  rcDividerPhasor,
+  complexPower,
+  seriesResonance,
+  filterCutoff,
+  threePhase,
+  reflectedImpedance,
+  sinusoidToPhasor,
+  rmsValue,
+  powerFactorCorrection,
+  conjugateMatch,
+  parallelResonance,
+  mutualInductance,
+  bodeAsymptotes,
+  sDomainPole,
+  acThevenin,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>

@@ -252,6 +252,7 @@ const PACK_TARGETS: readonly { course: string; packId: string; title: string }[]
   { course: 'MATH3376', packId: 'math3376-core-v1', title: 'Linear algebra prerequisite bank' },
   { course: 'MATH2358', packId: 'math2358-core-v1', title: 'Discrete mathematics bank' },
   { course: 'EE2320', packId: 'ee2320-core-v1', title: 'Digital logic bank' },
+  { course: 'EE3300', packId: 'ee3300-core-v1', title: 'Circuits II bank' },
 ];
 
 function cmdBuild(args: string[]): number {

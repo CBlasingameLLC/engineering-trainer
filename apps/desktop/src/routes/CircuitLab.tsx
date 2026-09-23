@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import {
-  acSweep, bode, emptySchematic, formatNetlist, formatValue, operatingPoint, parseNetlist,
-  suggestedTimeStep, toNetlist, transient,
+  CIRCUIT_TEMPLATES, acSweep, bode, emptySchematic, formatNetlist, formatValue, operatingPoint,
+  parseNetlist, suggestedTimeStep, templateById, toNetlist, transient,
   type Schematic,
 } from '@et/circuits';
 import { SchematicEditor } from '@/features/schematic/SchematicEditor';
@@ -26,6 +26,9 @@ export function CircuitLab(): React.ReactElement {
   const removeCircuit = useApp((s) => s.removeCircuit);
 
   const [schematic, setSchematic] = useState<Schematic>(() => emptySchematic('untitled'));
+  // Keyed on the title the template gave the drawing, so the note disappears
+  // the moment the person loads something else or starts from blank.
+  const templateNote = CIRCUIT_TEMPLATES.find((t) => t.build().title === schematic.title)?.note;
   const [mode, setMode] = useState<Mode>('op');
   const [showNetlist, setShowNetlist] = useState(false);
   const [netlistDraft, setNetlistDraft] = useState('');
@@ -88,7 +91,38 @@ export function CircuitLab(): React.ReactElement {
         equations are the point.
       </p>
 
-      <div className="card mt-6 p-4">
+      {/* Drawing a Sallen-Key section on a grid before you can ask anything
+          about it is not practice at filters. Every template lands complete,
+          with a ground and an `out` node, so it simulates immediately. */}
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <label className="text-xs text-slate-500 dark:text-slate-400" htmlFor="template">
+          Start from
+        </label>
+        <select
+          id="template"
+          data-testid="template-picker"
+          className="rounded border border-slate-300 px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-800"
+          value=""
+          onChange={(e) => {
+            const chosen = templateById(e.target.value);
+            if (chosen) setSchematic(chosen.build());
+          }}
+        >
+          <option value="">a blank canvas…</option>
+          {[...new Set(CIRCUIT_TEMPLATES.map((t) => t.unit))].map((unit) => (
+            <optgroup key={unit} label={unit}>
+              {CIRCUIT_TEMPLATES.filter((t) => t.unit === unit).map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+        {templateNote && (
+          <span className="text-xs text-slate-500 dark:text-slate-400">{templateNote}</span>
+        )}
+      </div>
+
+      <div className="card mt-3 p-4">
         <SchematicEditor value={schematic} onChange={setSchematic} />
       </div>
 
