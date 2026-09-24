@@ -186,11 +186,27 @@ in gitignored `content/coursework/<COURSE>/`. It is *source*, not content: the
 app never reads it, and the route from a PDF to a served question runs through
 a KC graph, generators, and the same gate as everything else.
 `content/coursework/README.md` has the layout and the decision that matters
-most — whether a course is generatable at all. A closed-form course like
-PHYS 2335 is twenty generators with near-total verification; a definitional one
-like EE 4392 cannot be generated and gets hand- or model-authored items with a
-weaker guarantee behind them. Deciding which before starting is what stops the
-second kind being shipped with the confidence of the first.
+most — how much of a course is generatable. A closed-form course like
+PHYS 2335 is twenty generators with near-total verification. Deciding this
+before starting is what stops a hand-authored item shipping with the
+confidence of a computed one.
+
+**The decision is per unit, not per course, and EE 4392 is why.** That course
+was written down here as ungeneratable before anyone read its material, on the
+reasonable-sounding grounds that lithography and deposition are definitional.
+About a third of it turned out to be ordinary engineering algebra: Deal-Grove
+is a quadratic, the yield models are three closed forms, Rayleigh resolution
+and depth of focus are one line each, and the resist contrast chain is four.
+That third is ten generators verified as completely as any in the repository.
+The other two thirds — why a purge gas is inert, which step activates a PAG,
+what the RCA sequence is for — genuinely cannot be generated and are
+hand-authored in `ee4392-concepts-v1`, with `producer: hand` so `regeneration`
+skips them and the weaker guarantee is visible in the data rather than only in
+a comment.
+
+The general lesson is that "definitional course" is a property of a unit's
+content, not of a course's name, and that the way to find out is to read the
+worked examples rather than the topic list.
 
 ## Conventions that will bite you
 

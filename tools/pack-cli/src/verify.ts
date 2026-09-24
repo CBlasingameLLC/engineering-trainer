@@ -128,10 +128,14 @@ function extractNumbers(text: string): number[] {
   // key by a factor of a thousand. Tying this to one typesetting macro is what
   // made a `\text` -> `\mathrm` change look like 40 wrong answers.
   const pattern = new RegExp(
-    // `(?<!\^)` keeps a unit's own exponent out of the list: `\mathrm{m^2}`
-    // would otherwise contribute a bare 2, and a spurious number can only ever
-    // make this check pass when it should have failed.
-    String.raw`(?<!\^)(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])(?:${PREFIXABLE_UNITS})\})?`,
+    // A unit's own exponent is not a number the solution stated, and it takes
+    // three lookbehinds to say so: `\^` for the bare form in `\mathrm{m^2}`,
+    // `\^\{` for the braced form, and `\^\{-` because blocking the minus sign
+    // alone just lets the match restart one character later on the digit.
+    // Without all three `\mathrm{cm^{-2}}` — the unit every defect density in
+    // EE 4392 carries — contributes a bare 2, and a spurious number can only
+    // ever make this check pass when it should have failed.
+    String.raw`(?<!\^)(?<!\^\{)(?<!\^\{-)(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])(?:${PREFIXABLE_UNITS})\})?`,
     'g',
   );
   for (const match of text.matchAll(pattern)) {

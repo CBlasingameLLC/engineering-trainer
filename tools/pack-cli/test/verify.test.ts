@@ -328,3 +328,63 @@ describe('SI prefix recovery', () => {
     });
   }
 });
+
+/**
+ * A unit's exponent is part of the unit, not a result the solution stated.
+ *
+ * The bare form was already excluded. The braced form is how a negative
+ * exponent has to be written, and it was not: `\mathrm{cm^{-2}}` contributed a
+ * bare -2 to the list of numbers the worked solution was claimed to end on.
+ * That can only ever make explanation-agreement pass when it should have
+ * failed, which is the quiet direction for a gate to be wrong in.
+ */
+describe('unit exponents are not results', () => {
+  const notNumbers: [string, number][] = [
+    ['0.5\\,\\mathrm{cm^{-2}}', -2],
+    ['2.5\\,\\mathrm{cm^{2}}', 2],
+    ['1.4\\,\\mathrm{m^2}', 2],
+    ['9\\,\\mathrm{m^3}', 3],
+    ['3\\,\\mathrm{s^{-1}}', -1],
+  ];
+
+  for (const [rendered, exponent] of notNumbers) {
+    it(`does not read ${exponent} out of ${rendered}`, () => {
+      expect(readNumbers(rendered)).not.toContain(exponent);
+    });
+  }
+
+  it('still reads the quantity itself', () => {
+    expect(readNumbers('0.5\\,\\mathrm{cm^{-2}}')).toEqual([0.5]);
+    expect(readNumbers('1.4\\,\\mathrm{m^2}')).toEqual([1.4]);
+  });
+});
+
+/**
+ * Lengths in EE 4392 are stored in the unit the course writes them in, so the
+ * prefix has to stay out of the `\mathrm` group.
+ *
+ * `\mathrm{\mu m}` is a correct prefixed metre and folding it to 4e-7 is the
+ * rule working. It is still wrong for an item whose answer is stored as 0.477
+ * micrometres, because explanation-agreement would then compare 0.477 against
+ * 4.77e-7 and report a worked solution that is in fact right. Writing the
+ * prefix as its own group renders identically and leaves the number bare.
+ */
+describe('course-unit lengths stay unfolded', () => {
+  it('folds a prefixed metre written the schematic way', () => {
+    expect(readNumbers('0.477\\,\\mathrm{\\mu m}')[0]).toBeCloseTo(4.77e-7, 12);
+  });
+
+  it('leaves micrometres bare when the prefix sits outside the group', () => {
+    expect(readNumbers('0.477\\,\\mu\\mathrm{m}')).toContain(0.477);
+  });
+
+  it('leaves nanometres bare when the prefix is braced', () => {
+    expect(readNumbers('310\\,\\mathrm{{n}m}')).toContain(310);
+  });
+
+  it('leaves compound process units alone', () => {
+    expect(readNumbers('0.344\\,\\mu\\mathrm{m^2/hr}')).toContain(0.344);
+    expect(readNumbers('23\\,\\mathrm{mJ/cm^2}')).toContain(23);
+    expect(readNumbers('6\\,\\mathrm{mW/cm^2}')).toContain(6);
+  });
+});

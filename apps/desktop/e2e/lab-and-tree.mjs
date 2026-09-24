@@ -333,10 +333,38 @@ const scheduled = await page
     course: e.getAttribute('data-course'),
     unit: e.getAttribute('data-unit'),
     kcs: (e.getAttribute('data-kcs') ?? '').split(' ').filter(Boolean),
+    disabled: e.hasAttribute('disabled'),
   })));
 if (scheduled.length === 0) fail('the term schedules nothing at all');
 console.log(`[11] term view: ${weekLabel}, ${scheduled.length} unit(s) scheduled`);
 console.log(`    ${scheduled.map((u) => `${u.course} ${u.unit}`).join(' | ')}`);
+
+// The button advertises what it will draw from, so the two must agree. An
+// enabled button with nothing behind it is the defect this assertion exists
+// for: `startKcs` returns silently when the unit's KCs turn up no items, so
+// such a button looks live, does nothing, and explains nothing.
+for (const unit of scheduled) {
+  if (unit.disabled && unit.kcs.length > 0) {
+    fail(`${unit.course} ${unit.unit} is disabled but claims ${unit.kcs.length} servable KC(s)`);
+  }
+  if (!unit.disabled && unit.kcs.length === 0) {
+    fail(`${unit.course} ${unit.unit} offers a live button with no servable KCs behind it`);
+  }
+}
+const unauthored = scheduled.filter((u) => u.disabled);
+if (unauthored.length > 0) {
+  // Disabled is not enough on its own — the row has to say which of the two
+  // empty cases it is, or the learner is told "no" without being told why.
+  for (const unit of unauthored) {
+    const reason = await page
+      .locator(`[data-testid="study-unit"][data-course="${unit.course}"][data-unit="${unit.unit}"]`)
+      .first()
+      .getAttribute('title');
+    if (!reason) fail(`${unit.course} ${unit.unit} is disabled with no reason given`);
+  }
+  console.log(`    ${unauthored.length} scheduled unit(s) not yet authored, each explained: `
+    + unauthored.map((u) => `${u.course} ${u.unit}`).join(', '));
+}
 
 const readinessRows = await page
   .locator('[data-testid="readiness-list"] li[data-kc-id]')
@@ -357,7 +385,12 @@ if (unmapped > 0) {
 
 // "Study this" must actually start a session scoped to that unit, not a
 // whole-course one — the point of the button is the scoping.
-const firstUnit = scheduled[0];
+// Take the first unit that can actually serve something. Taking scheduled[0]
+// blindly would hang the run the moment a not-yet-authored unit sorted first,
+// and would report that as a product failure rather than as a test that picked
+// the wrong row.
+const firstUnit = scheduled.find((u) => !u.disabled);
+if (!firstUnit) fail('no scheduled unit can serve an item');
 await page
   .locator(`[data-testid="study-unit"][data-course="${firstUnit.course}"][data-unit="${firstUnit.unit}"]`)
   .first()

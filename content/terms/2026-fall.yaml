@@ -13,16 +13,23 @@
 # checks it rather than trusting it, because a typo schedules nothing and looks
 # identical to a quiet week.
 #
-# The block boundaries below are a reasonable reading of a 15-week semester and
-# should be replaced with the real syllabus dates as they arrive. Doing that is
-# an edit to this file and nothing else.
+# EE 4392's blocks are the real ones, read off the syllabus: classes begin
+# Wednesday 19 August, so week 1 is the week of Monday 17 August, and the three
+# exam dates pin weeks 6, 11 and 17. That anchor also corrects `startsOn`, which
+# was a week late and therefore reported every week of the term as the one
+# before it.
+#
+# PHYS 2335 and EE 3300 are still an estimate — a plausible reading of a
+# fifteen-week semester, not a syllabus. They are marked as such below, and
+# replacing them is an edit to this file and nothing else.
 
 id: 2026-fall
 title: Fall 2026
-startsOn: 2026-08-24
+startsOn: 2026-08-17
 endsOn: 2026-12-11
 
 courses:
+  # ESTIMATED — no syllabus received for this course yet.
   - course: PHYS2335
     blocks:
       - fromWeek: 1
@@ -40,6 +47,7 @@ courses:
         units: [Thermodynamics]
         note: Final covers the whole course, weighted to thermodynamics
 
+  # ESTIMATED — no syllabus received for this course yet.
   - course: EE3300
     blocks:
       - fromWeek: 1
@@ -58,9 +66,52 @@ courses:
         toWeek: 15
         units: [The s-Domain]
 
-  # Listed deliberately although it has no knowledge map yet. A course on the
-  # term and absent from the graph is a normal state while its material is being
-  # written, and being told "this is on your term and the app knows nothing
-  # about it" is more useful than the term quietly disagreeing with the term.
+  # From the syllabus, not estimated. Lecture numbers are the instructor's.
+  #
+  # The blocks past week 6 name units that exist in the knowledge map and carry
+  # no items yet, because those lectures have not happened. The term view says
+  # so on the row rather than offering a control that does nothing, which is
+  # the honest version of "scheduled, not yet authored".
   - course: EE4392
-    blocks: []
+    blocks:
+      - fromWeek: 1
+        toWeek: 2
+        units: [Silicon Materials]
+        note: Transistor history, silicon basics and the fab overview
+      - fromWeek: 2
+        toWeek: 3
+        units: [Oxidation]
+      - fromWeek: 4
+        toWeek: 4
+        units: [Cleanroom Defects and Yield]
+      - fromWeek: 4
+        toWeek: 5
+        units: [Photolithography]
+      - fromWeek: 6
+        toWeek: 6
+        units: [Oxidation, Cleanroom Defects and Yield, Photolithography]
+        note: Exam 1 on Thursday 24 September — review on the Tuesday
+      - fromWeek: 7
+        toWeek: 7
+        units: [Etch]
+      - fromWeek: 8
+        toWeek: 10
+        units: [Thin Film Deposition]
+        note: Fall break falls in week 8
+      - fromWeek: 10
+        toWeek: 10
+        units: [Interconnect]
+      - fromWeek: 11
+        toWeek: 11
+        units: [Etch, Thin Film Deposition, Interconnect]
+        note: Exam 2 on Thursday 29 October — review on the Tuesday
+      - fromWeek: 12
+        toWeek: 13
+        units: [Diffusion]
+      - fromWeek: 13
+        toWeek: 14
+        units: [Ion Implantation]
+      - fromWeek: 15
+        toWeek: 17
+        units: [Oxidation, Photolithography, Diffusion, Ion Implantation]
+        note: Final on Thursday 10 December, 11:00-13:30 — cumulative

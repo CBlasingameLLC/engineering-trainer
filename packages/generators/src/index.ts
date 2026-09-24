@@ -35,6 +35,9 @@ import { PHYS2335_OSCILLATION_GENERATORS } from './phys2335/oscillations.js';
 import { PHYS2335_WAVE_GENERATORS } from './phys2335/waves.js';
 import { PHYS2335_THERMAL_GENERATORS } from './phys2335/thermal.js';
 import { PHYS2335_THERMODYNAMICS_GENERATORS } from './phys2335/thermodynamics.js';
+import { EE4392_OXIDATION_GENERATORS } from './ee4392/oxidation.js';
+import { EE4392_YIELD_GENERATORS } from './ee4392/yield.js';
+import { EE4392_LITHOGRAPHY_GENERATORS } from './ee4392/lithography.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -113,6 +116,9 @@ export const GENERATORS: readonly Generator[] = [
   ...PHYS2335_WAVE_GENERATORS,
   ...PHYS2335_THERMAL_GENERATORS,
   ...PHYS2335_THERMODYNAMICS_GENERATORS,
+  ...EE4392_OXIDATION_GENERATORS,
+  ...EE4392_YIELD_GENERATORS,
+  ...EE4392_LITHOGRAPHY_GENERATORS,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>

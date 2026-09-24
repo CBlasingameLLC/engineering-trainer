@@ -74,10 +74,28 @@ reasoning, "why does this behave this way" — go through the Claude-authoring
 route in `tools/claude-authoring/` instead, land in `content/inbox/`, and are
 gated by `pnpm content import` before they reach the bank.
 
-**Say which kind a course is before starting it.** Thermodynamics and wave
-mechanics are closed-form and parameterisable, so PHYS 2335 is twenty
-generators and 350 items with near-total verification. Lithography, deposition
-and etch are definitional, so EE 4392 cannot be generated at all and its items
-will be hand- or model-authored with a weaker guarantee behind them. Knowing
-which one you are in decides how much of the work the machine can do, and
-pretending otherwise produces confident items nothing can check.
+**Say which kind each unit is before starting it, and read the worked examples
+to decide.** Thermodynamics and wave mechanics are closed-form and
+parameterisable, so PHYS 2335 is twenty generators and 350 items with
+near-total verification.
+
+EE 4392 is the cautionary case, and this paragraph used to be the caution. It
+was written here as ungeneratable in its entirety, from the topic list, before
+any of its material had been read — lithography, deposition and etch are
+definitional, so the course must be. Reading it showed otherwise. Deal-Grove
+is a quadratic in oxide thickness; the three yield models are closed forms;
+Cp and Cpk are two divisions; Rayleigh resolution, depth of focus, proximity
+printing and the whole resist-contrast chain are one line each. Ten generators
+and 158 items came out of that, verified as completely as anything else in the
+bank, and the exam's two long numerical questions are both squarely inside it.
+
+What remained genuinely ungeneratable is the process knowledge — why the RCA
+clean needs four chemistries, which lithography step activates a photo-acid
+generator, what a purge gas is for. Those are hand-authored, tagged
+`producer: hand` so the regeneration check skips them, and carry the weaker
+guarantee openly.
+
+So the unit of decision is the unit, not the course, and the way to make it is
+to look at what the assessments actually ask. A topic list will tell you what a
+course is called; only its worked examples tell you whether there is a closed
+form underneath.
