@@ -1,0 +1,66 @@
+# Fall 2026 — the term in progress.
+#
+# This is the only document in the repository about *when* something is needed
+# rather than what it is. The mastery model will happily surface the most
+# decayed prerequisite in the whole degree, which is the right answer to its own
+# question and the wrong thing to be shown three days before a thermodynamics
+# exam. The term is what lets the app tell those apart.
+#
+# Weeks are counted from `startsOn`, which is the Monday of week 1, because a
+# syllabus is written in weeks and a term that slips is then one line to fix
+# rather than forty. Unit names must match the `unit` field on the course's
+# knowledge components exactly — that string is the join, and `pack validate`
+# checks it rather than trusting it, because a typo schedules nothing and looks
+# identical to a quiet week.
+#
+# The block boundaries below are a reasonable reading of a 15-week semester and
+# should be replaced with the real syllabus dates as they arrive. Doing that is
+# an edit to this file and nothing else.
+
+id: 2026-fall
+title: Fall 2026
+startsOn: 2026-08-24
+endsOn: 2026-12-11
+
+courses:
+  - course: PHYS2335
+    blocks:
+      - fromWeek: 1
+        toWeek: 3
+        units: [Oscillations]
+      - fromWeek: 4
+        toWeek: 7
+        units: [Mechanical Waves]
+        note: Midterm I covers oscillations and waves
+      - fromWeek: 8
+        toWeek: 11
+        units: [Heat and the Ideal Gas]
+      - fromWeek: 12
+        toWeek: 15
+        units: [Thermodynamics]
+        note: Final covers the whole course, weighted to thermodynamics
+
+  - course: EE3300
+    blocks:
+      - fromWeek: 1
+        toWeek: 3
+        units: [Sinusoidal Steady State]
+      - fromWeek: 4
+        toWeek: 6
+        units: [AC Power]
+      - fromWeek: 7
+        toWeek: 9
+        units: [Frequency Response]
+      - fromWeek: 10
+        toWeek: 12
+        units: [Coupled Circuits, Three-Phase]
+      - fromWeek: 13
+        toWeek: 15
+        units: [The s-Domain]
+
+  # Listed deliberately although it has no knowledge map yet. A course on the
+  # term and absent from the graph is a normal state while its material is being
+  # written, and being told "this is on your term and the app knows nothing
+  # about it" is more useful than the term quietly disagreeing with the term.
+  - course: EE4392
+    blocks: []

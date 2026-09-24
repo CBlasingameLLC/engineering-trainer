@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync, rename
 import { join, resolve, basename } from 'node:path';
 import { KcGraph } from '@et/domain';
 import {
-  loadCurriculum, parseCredentialCatalog, parsePackDocument, toGraphInput,
+  checkTermUnits, loadCurriculum, parseCredentialCatalog, parsePackDocument, parseTerm, toGraphInput,
   type Credential, type Pack,
 } from '@et/content-schema';
 import { parse as parseYaml } from 'yaml';
@@ -25,6 +25,7 @@ const SHARED_PACKS = join(ROOT, 'content/packs/shared');
 const PERSONAL_PACKS = join(ROOT, 'content/packs/personal');
 const INBOX = join(ROOT, 'content/inbox');
 const CREDENTIALS = join(ROOT, 'content/credentials');
+const TERMS = join(ROOT, 'content/terms');
 
 // Built at runtime rather than written as a literal escape, so the source stays
 // free of control characters.
@@ -141,6 +142,45 @@ function cmdValidate(): number {
   if (stale.length > 0) {
     console.log(warn(`    ${stale.length} entr(ies) not verified in over a year:`));
     for (const c of stale) console.log(`      ${c.id} (checked ${c.checkedOn})`);
+  }
+
+  // A term joins to the graph by a plain unit-name string, so a typo binds to
+  // nothing, schedules nothing, and looks exactly like a quiet week. There is
+  // no runtime symptom to notice later, which is why it is checked here.
+  const unitsByCourse = new Map<string, Set<string>>();
+  for (const kc of graph.kcs.values()) {
+    const set = unitsByCourse.get(kc.courseId) ?? new Set<string>();
+    set.add(kc.unit);
+    unitsByCourse.set(kc.courseId, set);
+  }
+
+  const termDocs = readDocuments(TERMS);
+  const termIssues: string[] = [];
+  const termNotes: string[] = [];
+  let termCount = 0;
+  for (const doc of termDocs) {
+    const parsed = parseTerm(parseYaml(doc.text));
+    if (!parsed.term) {
+      termIssues.push(...parsed.issues.map((i) => `${doc.source} ${i.path}: ${i.message}`));
+      continue;
+    }
+    termIssues.push(...parsed.issues.map((i) => `${doc.source} ${i.path}: ${i.message}`));
+    termCount++;
+    for (const issue of checkTermUnits(parsed.term, unitsByCourse)) {
+      // A course with no curriculum yet is a normal state while its material is
+      // being written; a unit name that does not exist is a typo.
+      const target = issue.message.includes('no curriculum document') ? termNotes : termIssues;
+      target.push(`${doc.source} ${issue.path}: ${issue.message}`);
+    }
+  }
+  if (termIssues.length > 0) {
+    console.log(bad(`\n  terms: ${termIssues.length} issue(s)`));
+    for (const issue of termIssues) console.log(`    ${issue}`);
+    return 1;
+  }
+  if (termCount > 0) {
+    console.log(ok(`\n  terms: ${termCount} term(s), schema valid, every unit name resolves`));
+    for (const note of termNotes) console.log(dim(`    ${note}`));
   }
   return 0;
 }

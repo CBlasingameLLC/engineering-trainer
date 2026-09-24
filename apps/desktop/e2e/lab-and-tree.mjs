@@ -312,6 +312,71 @@ console.log(`[10] ${offered} templates offered; Sallen-Key loaded ${loadedParts}
 
 await page.screenshot({ path: `${SHOT}/09-circuit-template.png`, fullPage: true });
 
+// --- The term view ----------------------------------------------------------
+// The claim being tested is the one the term exists to make: that the schedule
+// and the mastery model are joined, so a prerequisite that has slipped is
+// reported against the unit that is about to need it. Asserting the list is
+// non-empty is not enough — a list of everything would also be non-empty — so
+// each row must name a real KC and a real unit from the schedule.
+await page.goto(BASE, { waitUntil: 'networkidle' });
+await page.locator('[data-testid="nav-term"]').click();
+await page.waitForSelector('[data-testid="term-view"]', { timeout: 10000 });
+
+const weekLabel = await page.locator('[data-testid="term-week"]').innerText();
+if (!/Week \d+ of \d+|Not started yet|Term finished/.test(weekLabel)) {
+  fail(`term position unreadable: ${weekLabel}`);
+}
+
+const scheduled = await page
+  .locator('[data-testid="live-units"] [data-testid="study-unit"], [data-testid="upcoming-units"] [data-testid="study-unit"]')
+  .evaluateAll((els) => els.map((e) => ({
+    course: e.getAttribute('data-course'),
+    unit: e.getAttribute('data-unit'),
+    kcs: (e.getAttribute('data-kcs') ?? '').split(' ').filter(Boolean),
+  })));
+if (scheduled.length === 0) fail('the term schedules nothing at all');
+console.log(`[11] term view: ${weekLabel}, ${scheduled.length} unit(s) scheduled`);
+console.log(`    ${scheduled.map((u) => `${u.course} ${u.unit}`).join(' | ')}`);
+
+const readinessRows = await page
+  .locator('[data-testid="readiness-list"] li[data-kc-id]')
+  .evaluateAll((els) => els.map((e) => e.getAttribute('data-kc-id')));
+const clear = await page.locator('[data-testid="readiness-clear"]').count();
+if (readinessRows.length === 0 && clear === 0) {
+  fail('readiness section rendered neither a list nor an explanation of why it is empty');
+}
+console.log(`[12] readiness: ${readinessRows.length > 0 ? readinessRows.join(', ') : 'nothing flagged (explained)'}`);
+
+// A course on the term with no knowledge map must be said out loud rather than
+// quietly omitted, since the alternative is a term view disagreeing with the
+// term. EE4392 is exactly that case in the shipped schedule.
+const unmapped = await page.locator('[data-testid="courses-without-graph"]').count();
+if (unmapped > 0) {
+  console.log(`    ${(await page.locator('[data-testid="courses-without-graph"]').innerText()).trim()}`);
+}
+
+// "Study this" must actually start a session scoped to that unit, not a
+// whole-course one — the point of the button is the scoping.
+const firstUnit = scheduled[0];
+await page
+  .locator(`[data-testid="study-unit"][data-course="${firstUnit.course}"][data-unit="${firstUnit.unit}"]`)
+  .first()
+  .click();
+await page.waitForSelector('[data-item-id]', { timeout: 10000 });
+
+// The scoping is the point of the button, so check that rather than checking
+// that anything at all was served. The expected KCs come off the button itself
+// — the same value the click acts on — rather than from a list maintained
+// beside the schedule, which is the pair that always drifts.
+const servedKc = await page.locator('article[data-item-id]').first().getAttribute('data-kc-id');
+if (!servedKc) fail('a unit session served an item with no KC attribution');
+else if (!firstUnit.kcs.includes(servedKc)) {
+  fail(`unit session for ${firstUnit.course} ${firstUnit.unit} served ${servedKc}, which is not one of its ${firstUnit.kcs.length} KCs`);
+}
+console.log(`[13] "Study this" on ${firstUnit.course} ${firstUnit.unit} served ${servedKc} (1 of ${firstUnit.kcs.length} in the unit)`);
+
+await page.screenshot({ path: `${SHOT}/10-term.png`, fullPage: true });
+
 console.log(errors.length === 0 ? '\nNo console errors.' : `\nConsole errors:\n${errors.join('\n')}`);
 await browser.close();
 if (errors.length > 0) process.exitCode = 1;

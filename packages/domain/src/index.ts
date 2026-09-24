@@ -21,3 +21,4 @@ export * from './cat/propagation.js';
 export * from './cat/session.js';
 
 export * from './credentials/rank.js';
+export * from './session/term.js';

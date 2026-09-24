@@ -8,6 +8,7 @@ import { Credentials } from '@/routes/Credentials';
 import { SkillTree } from '@/routes/SkillTree';
 import { CircuitLab } from '@/routes/CircuitLab';
 import { Misconceptions } from '@/routes/Misconceptions';
+import { Term } from '@/routes/Term';
 import { DisplayControls } from '@/ui/DisplayControls';
 
 function Shell({ children }: { children: React.ReactNode }): React.ReactElement {
@@ -84,6 +85,8 @@ export function App(): React.ReactElement {
         return <CircuitLab />;
       case 'misconceptions':
         return <Misconceptions />;
+      case 'term':
+        return <Term />;
     }
   })();
 

@@ -181,6 +181,17 @@ admits one; reserve model authoring for what generators structurally cannot do.
 lives in gitignored `content/packs/personal/`, is rejected from redistributable
 packs by the schema, and never enters a release build. Don't weaken that.
 
+Raw course material — homework, slides, notes, book chapters, a syllabus — goes
+in gitignored `content/coursework/<COURSE>/`. It is *source*, not content: the
+app never reads it, and the route from a PDF to a served question runs through
+a KC graph, generators, and the same gate as everything else.
+`content/coursework/README.md` has the layout and the decision that matters
+most — whether a course is generatable at all. A closed-form course like
+PHYS 2335 is twenty generators with near-total verification; a definitional one
+like EE 4392 cannot be generated and gets hand- or model-authored items with a
+weaker guarantee behind them. Deciding which before starting is what stops the
+second kind being shipped with the confidence of the first.
+
 ## Conventions that will bite you
 
 - **Touching a generator? Rebuild and commit the bank.** CI runs
@@ -267,6 +278,23 @@ packs by the schema, and never enters a release build. Don't weaken that.
   zero magnitude (every angle is the same phasor there, so no angle is
   demanded). Six notations parse, because rejecting five of them teaches
   notation rather than circuits.
+- **A term is the only document about *when*, and it joins by a bare string.**
+  `content/terms/*.yaml` says which unit of which course is live in which week,
+  and the join to the KC graph is the `unit` field matched by name. A typo binds
+  to nothing, schedules nothing, and is indistinguishable at runtime from a
+  quiet week — there is no later symptom — so `pack validate` checks every unit
+  name against the curriculum and refuses the build. A course listed on a term
+  with no curriculum document yet is the benign case and is reported as a note,
+  because "this is on your term and the app knows nothing about it" is worth
+  saying out loud; a term view that hid it would be disagreeing with the term.
+- **The term's value is `termReadiness`, not the schedule.** What is being
+  covered this week is something the learner already knows. What has quietly
+  decayed underneath the unit that starts in two weeks is not, and it needs both
+  halves — the schedule and the measured decay — which nothing else holds at
+  once. Ranking multiplies shortfall, edge strength and imminence; dropping the
+  last one gives a list that is true and useless. `untested` is included
+  deliberately rather than filtered, or the term view is quietest for the
+  learner who has used the app least.
 - **Never synthesize a study history to seed FSRS.** A semester of fabricated
   reviews inflates stability to S≈270d, so a year-old prerequisite reports
   R≈0.88 and looks perfectly retained — defeating the entire product. Use

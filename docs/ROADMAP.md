@@ -28,6 +28,8 @@ machinery exists.
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
 | Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |
 | Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills; 221 misconceptions in 17 families, all mapped |
+| Current term | Week-by-week unit schedule joined to the graph; readiness list ranking prerequisites by shortfall, dependence and how soon they are needed |
+| Coursework intake | Gitignored drop zone per course for homework, slides, notes and book chapters, with the licence quarantine documented |
 | Display | Dark mode (system/light/dark, persisted) and fullscreen |
 | Circuit lab | MNA solver (DC / DC sweep / AC / transient), drag-and-drop schematic capture with hotkeys, undo, rubber-band select, wheel zoom |
 | Design grading | `circuit-build` items graded by simulation |

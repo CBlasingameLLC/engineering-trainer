@@ -133,8 +133,16 @@ export function Session(): React.ReactElement {
       <main className="mt-8 flex-1">
         {/* The item id is exposed so end-to-end drivers and bug reports can
             identify exactly which variant was on screen. KaTeX rewrites the
-            stem text, so the rendered DOM is not a reliable identifier. */}
-        <article className="card p-6" data-item-id={item.id} data-item-type={item.type}>
+            stem text, so the rendered DOM is not a reliable identifier. The
+            primary KC goes alongside it, because a driver checking that a
+            scoped session served the material it was scoped to has no other
+            way to ask — the item id names a generator, not a concept. */}
+        <article
+          className="card p-6"
+          data-item-id={item.id}
+          data-item-type={item.type}
+          data-kc-id={[...item.kcRefs].sort((a, b) => b.weight - a.weight)[0]?.kc}
+        >
           <MathText className="block text-base leading-relaxed text-slate-800 dark:text-slate-200">{item.stem}</MathText>
 
           {/* Above the answer controls and below the question, which is where a

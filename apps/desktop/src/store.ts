@@ -50,7 +50,7 @@ import {
 
 type Route =
   | 'loading' | 'onboarding' | 'dashboard' | 'session' | 'report'
-  | 'credentials' | 'skillTree' | 'circuitLab' | 'misconceptions';
+  | 'credentials' | 'skillTree' | 'circuitLab' | 'misconceptions' | 'term';
 
 export interface ActiveItem {
   item: Item;
@@ -137,6 +137,10 @@ interface AppState {
   startQuest(): void;
   startChallenge(courseCode: string): void;
   startDrill(misconceptionId: string): void;
+  /** Practise one scheduled unit of one course. */
+  startUnit(courseCode: string, unit: string): void;
+  /** Practise a named set of KCs — what the term view hands back. */
+  startKcs(kcIds: readonly string[]): void;
   submit(response: Response, raw: string): Promise<void>;
   submitCircuit(schematic: Schematic): Promise<void>;
   submitCircuitNetlist(deck: string): Promise<void>;
@@ -284,6 +288,42 @@ export const useApp = create<AppState>((set, get) => ({
     beginSession(set, get, {
       mode: 'practice',
       cat: createCatSession([...kcIds], priors),
+      bank,
+      itemsById,
+    });
+  },
+
+  /**
+   * Practise exactly one unit of one course.
+   *
+   * Scoped by the unit the term says is live rather than by the whole course,
+   * because "study what I am covering this week" is the request, and a session
+   * drawn from the whole of Circuits II would spend most of its items measuring
+   * material the learner has not been taught yet.
+   */
+  startUnit(courseCode, unit) {
+    const { content } = get();
+    if (!content) return;
+    const kcIds = [...content.graph.kcs.values()]
+      .filter((kc) => kc.courseId === courseCode && kc.unit === unit)
+      .map((kc) => kc.id);
+    get().startKcs(kcIds);
+  },
+
+  startKcs(kcIds) {
+    const { content, model } = get();
+    if (!content || !model || kcIds.length === 0) return;
+    const wanted = new Set(kcIds);
+    const items = itemsForKcs(content.items, wanted);
+    if (items.length === 0) return;
+
+    const { bank, itemsById } = buildBank(items);
+    const priors = new Map(
+      [...wanted].map((kc) => [kc, model.pMastery.get(kc) ?? DEFAULT_CAT_CONFIG.bkt.pInit]),
+    );
+    beginSession(set, get, {
+      mode: 'practice',
+      cat: createCatSession([...wanted], priors),
       bank,
       itemsById,
     });

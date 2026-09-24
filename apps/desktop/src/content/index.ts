@@ -1,8 +1,10 @@
 import { KcGraph, type DrillCandidate, type Kc, type KcEdge } from '@et/domain';
 import { parse as parseYaml } from 'yaml';
 import {
-  loadCurriculum, parseCredentialCatalog, parseMisconceptionCatalog, parsePack, toGraphInput,
+  checkTermUnits, loadCurriculum, parseCredentialCatalog, parseMisconceptionCatalog, parsePack,
+  parseTerm, toGraphInput,
   type CourseDefinition, type Credential, type Item, type MisconceptionFamily, type Pack,
+  type Term,
 } from '@et/content-schema';
 
 /**
@@ -42,6 +44,15 @@ const misconceptionFiles = import.meta.glob('../../../../content/misconceptions/
   import: 'default',
 }) as Record<string, string>;
 
+// Terms are content, not preference: the schedule is a fact about the course,
+// the same as the prerequisite graph, and belongs in version control beside it.
+// What the learner *chooses* to study within it stays in the attempt log.
+const termFiles = import.meta.glob('../../../../content/terms/*.yaml', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>;
+
 export interface LoadedContent {
   graph: KcGraph;
   courses: CourseDefinition[];
@@ -51,6 +62,16 @@ export interface LoadedContent {
   /** Misconception -> the habit it belongs to. Empty if no catalog ships. */
   misconceptionFamilies: Map<string, MisconceptionFamily>;
   misconceptionTitles: Map<string, string>;
+  /** Declared terms, newest start first. */
+  terms: Term[];
+  /**
+   * Courses a term lists that the graph has never heard of.
+   *
+   * Reported rather than dropped: "this is on your term and the app knows
+   * nothing about it" is useful, and the alternative is a schedule that
+   * quietly disagrees with the schedule.
+   */
+  termCoursesWithoutGraph: string[];
   /** Problems found while loading. Surfaced rather than swallowed. */
   issues: string[];
 }
@@ -119,11 +140,58 @@ export function loadContent(): LoadedContent {
     }
   }
 
+  const terms: Term[] = [];
+  const termCoursesWithoutGraph = new Set<string>();
+  const unitsByCourse = new Map<string, Set<string>>();
+  for (const kc of graph.kcs.values()) {
+    const set = unitsByCourse.get(kc.courseId) ?? new Set<string>();
+    set.add(kc.unit);
+    unitsByCourse.set(kc.courseId, set);
+  }
+  for (const [path, text] of Object.entries(termFiles)) {
+    const name = path.split('/').pop() ?? path;
+    try {
+      const result = parseTerm(parseYaml(text));
+      if (!result.term) {
+        issues.push(...result.issues.map((i) => `${name} ${i.path}: ${i.message}`));
+        continue;
+      }
+      terms.push(result.term);
+      for (const issue of checkTermUnits(result.term, unitsByCourse)) {
+        // `pack validate` already refuses a bad unit name, so anything reaching
+        // here is the benign case: a course on the term with no graph yet.
+        const course = /^([A-Z]{2,4}\d{4})/.exec(issue.message)?.[1];
+        if (course) termCoursesWithoutGraph.add(course);
+        else issues.push(`${name} ${issue.path}: ${issue.message}`);
+      }
+    } catch (error) {
+      issues.push(`${name}: ${(error as Error).message}`);
+    }
+  }
+  terms.sort((a, b) => b.startsOn.localeCompare(a.startsOn));
+
   cached = {
     graph, courses, packs, items: packs.flatMap((p) => p.items), credentials,
-    misconceptionFamilies, misconceptionTitles, issues,
+    misconceptionFamilies, misconceptionTitles,
+    terms, termCoursesWithoutGraph: [...termCoursesWithoutGraph].sort(),
+    issues,
   };
   return cached;
+}
+
+/**
+ * The term in progress, or the next one to start.
+ *
+ * Falling back to the nearest term rather than to nothing means the view is
+ * useful in the gap between semesters, which is exactly when someone would sit
+ * down to close a prerequisite gap before it costs them.
+ */
+export function currentTerm(content: LoadedContent, now: Date = new Date()): Term | undefined {
+  const today = now.toISOString().slice(0, 10);
+  const running = content.terms.find((t) => t.startsOn <= today && today <= t.endsOn);
+  if (running) return running;
+  const upcoming = [...content.terms].filter((t) => t.startsOn > today).sort((a, b) => a.startsOn.localeCompare(b.startsOn));
+  return upcoming[0] ?? content.terms[0];
 }
 
 /** Items exercising any of the given KCs. */
