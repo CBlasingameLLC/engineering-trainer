@@ -31,6 +31,10 @@ import {
   acThevenin, bodeAsymptotes, conjugateMatch, mutualInductance, parallelResonance,
   powerFactorCorrection, rmsValue, sDomainPole, sinusoidToPhasor,
 } from './ee3300/power.js';
+import { PHYS2335_OSCILLATION_GENERATORS } from './phys2335/oscillations.js';
+import { PHYS2335_WAVE_GENERATORS } from './phys2335/waves.js';
+import { PHYS2335_THERMAL_GENERATORS } from './phys2335/thermal.js';
+import { PHYS2335_THERMODYNAMICS_GENERATORS } from './phys2335/thermodynamics.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -100,6 +104,15 @@ export const GENERATORS: readonly Generator[] = [
   bodeAsymptotes,
   sDomainPole,
   acThevenin,
+
+  // PHYS 2335 — Waves and Heat. The first course in the bank whose subject is
+  // not electrical, which is what makes the competency axis testable: weak
+  // `math-execution` across circuits, maths *and* physics is a different
+  // finding from weak circuits.
+  ...PHYS2335_OSCILLATION_GENERATORS,
+  ...PHYS2335_WAVE_GENERATORS,
+  ...PHYS2335_THERMAL_GENERATORS,
+  ...PHYS2335_THERMODYNAMICS_GENERATORS,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>

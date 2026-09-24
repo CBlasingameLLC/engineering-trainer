@@ -1,0 +1,341 @@
+# PHYS 2335 — Waves and Heat (Texas State University, 2026 catalog)
+#
+# Two courses in one, joined by a habit rather than a subject: both halves are
+# about a quantity that is conserved or transported, and both are graded on
+# whether the right conservation statement was written down before any algebra
+# started. That is why the units share competencies so heavily — the modelling
+# step is the same step.
+#
+# The cross-course edges here are unusually load-bearing, and they run into the
+# maths rather than into the physics:
+#
+# - Simple harmonic motion *is* the undamped second-order ODE. A learner who
+#   cannot solve x'' + omega^2 x = 0 does not have an oscillations problem, and
+#   telling them to reread the oscillations chapter is the wrong remediation.
+#   `math3323.second-order-ode` is therefore a strong parent, not a nominal one.
+# - Work done by a gas is an integral of pressure over volume, and the two
+#   processes students actually get wrong (isothermal and adiabatic) are wrong
+#   because the integral is, not because the thermodynamics is.
+# - Conduction toward ambient and every cooling curve is a first-order ODE with
+#   an exponential solution, which is the same object as the RC transient in
+#   EE 2300 seen in a different course.
+#
+# What cannot be expressed yet: PHYS 2325 Mechanics is not in the graph, so
+# energy, momentum and Newton's second law have no KCs to point at. Several
+# edges below would otherwise run there — the mass-spring system wants F = -kx,
+# and calorimetry wants conservation of energy stated generally. Those edges are
+# missing rather than wrong, and they are the first thing to add when Mechanics
+# lands. Until then a diagnosis in this course can bottom out at the maths but
+# not at the mechanics underneath it.
+
+code: PHYS2335
+title: Waves and Heat
+institution: Texas State University
+catalogYear: 2026
+tier: 4
+credits: 4
+
+kcs:
+  # --- Unit 1: Oscillations -------------------------------------------------
+  - id: phys2335.simple-harmonic-motion
+    title: Simple harmonic motion
+    unit: Oscillations
+    domain: physics
+    competencies: [concept, math-execution]
+    difficultyPrior: -1.0
+    description: >-
+      Amplitude, angular frequency, period and phase; position, velocity and
+      acceleration as functions of time. The defining property is that
+      acceleration is proportional to displacement and opposite in sign, which
+      is what makes every restoring force in the course the same problem.
+    prerequisites:
+      - kc: math3323.second-order-ode
+        strength: 0.7
+      - kc: math2471.derivative-basics
+        strength: 0.4
+
+  - id: phys2335.oscillator-systems
+    title: Mass-spring and pendulum systems
+    unit: Oscillations
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: -0.6
+    description: >-
+      Reading the angular frequency out of a physical system — sqrt(k/m) for a
+      spring, sqrt(g/L) for a simple pendulum — and the energy exchange between
+      kinetic and potential over a cycle. The small-angle approximation is what
+      makes the pendulum an oscillator at all.
+    prerequisites:
+      - kc: phys2335.simple-harmonic-motion
+        strength: 0.9
+
+  - id: phys2335.damped-driven-oscillation
+    title: Damping, driving and resonance
+    unit: Oscillations
+    domain: physics
+    competencies: [concept, modeling]
+    difficultyPrior: 0.4
+    description: >-
+      Underdamped, critically damped and overdamped regimes; the driven
+      amplitude peak near the natural frequency and the quality factor that sets
+      its sharpness. Same three regimes as a second-order RLC circuit, which is
+      the point: it is one piece of mathematics wearing two subjects.
+    prerequisites:
+      - kc: phys2335.simple-harmonic-motion
+        strength: 0.8
+      - kc: math3323.second-order-ode
+        strength: 0.6
+
+  # --- Unit 2: Mechanical waves ---------------------------------------------
+  - id: phys2335.wave-speed
+    title: Wave speed, frequency and wavelength
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -1.2
+    description: >-
+      v = f*lambda, and the medium properties that fix v — sqrt(T/mu) on a
+      string, sqrt(B/rho) in a fluid. The consequence students miss is that the
+      source sets the frequency and the medium sets the speed, so it is the
+      wavelength that changes at a boundary.
+
+  - id: phys2335.travelling-wave-function
+    title: The travelling wave function
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [math-execution, visual]
+    difficultyPrior: -0.4
+    description: >-
+      y(x,t) = A sin(kx - omega*t + phi): extracting amplitude, wave number,
+      angular frequency, phase and direction of travel from the written form,
+      and rebuilding the form from measurements.
+    prerequisites:
+      - kc: phys2335.wave-speed
+        strength: 0.8
+      - kc: phys2335.simple-harmonic-motion
+        strength: 0.4
+
+  - id: phys2335.superposition-interference
+    title: Superposition and interference
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [concept, modeling]
+    difficultyPrior: 0.1
+    description: >-
+      Path difference in wavelengths decides constructive from destructive.
+      Phase difference and path difference are the same statement in different
+      units, and converting between them is where the arithmetic goes wrong.
+    prerequisites:
+      - kc: phys2335.travelling-wave-function
+        strength: 0.7
+
+  - id: phys2335.standing-waves
+    title: Standing waves and harmonics
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [modeling, visual]
+    difficultyPrior: 0.3
+    description: >-
+      Resonant frequencies of a string fixed at both ends, an open pipe and a
+      pipe closed at one end. The closed pipe supports only odd harmonics, which
+      is the single most commonly dropped fact in the unit.
+    prerequisites:
+      - kc: phys2335.superposition-interference
+        strength: 0.7
+      - kc: phys2335.wave-speed
+        strength: 0.6
+
+  - id: phys2335.beats
+    title: Beats
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [concept, numeracy]
+    difficultyPrior: -0.5
+    description: >-
+      Two close frequencies superpose into an amplitude that pulses at their
+      difference. The beat frequency is |f1 - f2|, not half of it — the envelope
+      passes through a maximum twice per cycle of the half-difference term.
+    prerequisites:
+      - kc: phys2335.superposition-interference
+        strength: 0.6
+
+  - id: phys2335.sound-intensity
+    title: Sound intensity and the decibel scale
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [numeracy, math-execution]
+    difficultyPrior: 0.0
+    description: >-
+      Intensity falls as 1/r^2 from a point source, and the decibel is a
+      logarithmic ratio against 1e-12 W/m^2. Doubling the intensity adds about
+      3 dB; doubling the distance subtracts about 6.
+    prerequisites:
+      - kc: math2471.exponential-functions
+        strength: 0.5
+
+  - id: phys2335.doppler-effect
+    title: The Doppler effect
+    unit: Mechanical Waves
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.6
+    description: >-
+      A moving source changes the wavelength; a moving observer changes the rate
+      of arrival. They are different mechanisms with different algebra, and the
+      sign convention that keeps them straight is the whole difficulty.
+    prerequisites:
+      - kc: phys2335.wave-speed
+        strength: 0.7
+
+  # --- Unit 3: Temperature, heat and the ideal gas --------------------------
+  - id: phys2335.thermal-expansion
+    title: Temperature and thermal expansion
+    unit: Heat and the Ideal Gas
+    domain: physics
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -1.1
+    description: >-
+      Absolute and Celsius scales, and linear, area and volume expansion. Area
+      and volume coefficients are 2*alpha and 3*alpha, which follows from the
+      linear case rather than being three separate facts to memorise.
+
+  - id: phys2335.calorimetry
+    title: Heat capacity, latent heat and calorimetry
+    unit: Heat and the Ideal Gas
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: -0.3
+    description: >-
+      Q = m*c*dT for a temperature change and Q = m*L for a phase change, and
+      the energy balance that sets a mixture's final temperature. A problem that
+      crosses a phase boundary needs both terms, and omitting the latent one is
+      the error the unit exists to catch.
+    prerequisites:
+      - kc: phys2335.thermal-expansion
+        strength: 0.3
+
+  - id: phys2335.heat-transfer
+    title: Conduction, convection and radiation
+    unit: Heat and the Ideal Gas
+    domain: physics
+    competencies: [modeling, concept]
+    difficultyPrior: 0.4
+    description: >-
+      Fourier conduction through a slab and through slabs in series, and
+      Stefan-Boltzmann radiation. Slabs in series add thermal resistance exactly
+      as resistors do, and net radiated power goes as T^4 - T_amb^4 in kelvin,
+      never in celsius.
+    prerequisites:
+      - kc: phys2335.calorimetry
+        strength: 0.5
+      - kc: math3323.first-order-ode
+        strength: 0.4
+
+  - id: phys2335.ideal-gas-law
+    title: The ideal gas law
+    unit: Heat and the Ideal Gas
+    domain: physics
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -0.8
+    description: >-
+      PV = nRT, and the combined form relating two states of a fixed sample.
+      Temperature is absolute and pressure is absolute; a gauge reading or a
+      celsius temperature substituted directly is the characteristic failure.
+
+  - id: phys2335.kinetic-theory
+    title: Kinetic theory of gases
+    unit: Heat and the Ideal Gas
+    domain: physics
+    competencies: [concept, modeling]
+    difficultyPrior: 0.5
+    description: >-
+      Average translational kinetic energy is (3/2)kT per molecule regardless of
+      species, so the rms speed goes as sqrt(T/M) — which is why hydrogen
+      escapes an atmosphere and argon does not. Equipartition extends this to
+      the molar heat capacities of monatomic and diatomic gases.
+    prerequisites:
+      - kc: phys2335.ideal-gas-law
+        strength: 0.8
+
+  # --- Unit 4: Laws of thermodynamics ---------------------------------------
+  - id: phys2335.first-law
+    title: The first law of thermodynamics
+    unit: Thermodynamics
+    domain: physics
+    competencies: [concept, modeling]
+    difficultyPrior: 0.2
+    description: >-
+      dU = Q - W with a stated sign convention, and internal energy as a state
+      function while heat and work are not. Most first-law errors are sign
+      errors about which way the energy went, not arithmetic ones.
+    prerequisites:
+      - kc: phys2335.ideal-gas-law
+        strength: 0.6
+      - kc: phys2335.calorimetry
+        strength: 0.4
+
+  - id: phys2335.pv-work
+    title: Work done by a gas
+    unit: Thermodynamics
+    domain: physics
+    competencies: [math-execution, visual]
+    difficultyPrior: 0.7
+    description: >-
+      W = integral of P dV, which is the area under the path on a PV diagram —
+      so the work depends on the path and not only on the endpoints. Isobaric
+      work is a rectangle, isothermal work is n*R*T*ln(V2/V1), and isochoric
+      work is zero.
+    prerequisites:
+      - kc: math2471.integration-basics
+        strength: 0.7
+      - kc: phys2335.first-law
+        strength: 0.6
+
+  - id: phys2335.thermodynamic-processes
+    title: Isothermal, isobaric, isochoric and adiabatic processes
+    unit: Thermodynamics
+    domain: physics
+    competencies: [modeling, strategy]
+    difficultyPrior: 0.9
+    description: >-
+      Each process holds one quantity fixed and that fact alone determines which
+      first-law term vanishes. Adiabatic means Q = 0 and P*V^gamma constant, not
+      constant temperature — conflating the adiabatic and isothermal curves is
+      the error that makes an otherwise correct cycle analysis wrong.
+    prerequisites:
+      - kc: phys2335.pv-work
+        strength: 0.8
+      - kc: phys2335.kinetic-theory
+        strength: 0.4
+
+  - id: phys2335.heat-engines
+    title: Heat engines, refrigerators and Carnot efficiency
+    unit: Thermodynamics
+    domain: physics
+    competencies: [strategy, numeracy]
+    difficultyPrior: 1.0
+    description: >-
+      Thermal efficiency as net work over heat absorbed, the coefficient of
+      performance for a refrigerator, and the Carnot bound 1 - Tc/Th as the
+      ceiling no cycle beats. Claimed efficiencies above it are the sharpest
+      second-law question available.
+    prerequisites:
+      - kc: phys2335.thermodynamic-processes
+        strength: 0.8
+
+  - id: phys2335.entropy
+    title: Entropy and the second law
+    unit: Thermodynamics
+    domain: physics
+    competencies: [concept, math-execution]
+    difficultyPrior: 1.1
+    description: >-
+      dS = integral of dQ/T for a reversible path, entropy as a state function
+      evaluated along any convenient path, and the total entropy of an isolated
+      system never decreasing. A reversible process has zero total entropy
+      change, which is the statement that makes Carnot the bound.
+    prerequisites:
+      - kc: phys2335.heat-engines
+        strength: 0.7
+      - kc: math2471.integration-basics
+        strength: 0.5

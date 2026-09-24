@@ -253,6 +253,7 @@ const PACK_TARGETS: readonly { course: string; packId: string; title: string }[]
   { course: 'MATH2358', packId: 'math2358-core-v1', title: 'Discrete mathematics bank' },
   { course: 'EE2320', packId: 'ee2320-core-v1', title: 'Digital logic bank' },
   { course: 'EE3300', packId: 'ee3300-core-v1', title: 'Circuits II bank' },
+  { course: 'PHYS2335', packId: 'phys2335-core-v1', title: 'Waves and heat bank' },
 ];
 
 function cmdBuild(args: string[]): number {

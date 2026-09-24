@@ -212,6 +212,20 @@ packs by the schema, and never enters a release build. Don't weaken that.
   maths that the segmenter read as two empty spans around plain text; and
   `\\n\\n` in a template literal, which is a literal backslash-n, not a
   paragraph break.
+- **An SI prefix is only a prefix in front of a unit symbol.** `extractNumbers`
+  folds the prefix into the value so `4.7\,\mathrm{k\Omega}` compares against a
+  stored 4700. The rule it applies has to be narrow, because a leading prefix
+  letter is not evidence of a prefix: `mol`, `m/s` and `kg` all start with one
+  and none is scaled, so folding them divides a molar quantity by a thousand
+  and multiplies a mass by a thousand. `PREFIXABLE_UNITS` in `verify.ts` lists
+  what a prefix may attach to, longest first so `VAR` is not read as `VA`, and
+  the group must close straight after — `ms` folds, `mol` does not. A unit's
+  own exponent is excluded too, so `\mathrm{m^2}` contributes no bare 2; a
+  spurious number can only ever make explanation-agreement pass when it should
+  have failed. The consequence for generators: `engineering()` is for units on
+  that list and nothing else. A temperature, a mass, a mole count or any
+  compound unit is written with the plain formatter in `phys2335/common.ts`,
+  which emits no prefix at all.
 - **Units are set in `\mathrm`, not `\text`, and nothing may parse either.**
   `\Omega` and `\mu` are maths-mode macros, so `\text{k\Omega}` asks KaTeX to
   typeset a maths macro in text mode — which is every resistance and every
@@ -428,8 +442,13 @@ produces a plausible-looking feed that points at the wrong work:
   error in a learner's first session as deteriorating is both false and
   indistinguishable from the case that genuinely is.
 
-`content/misconceptions/families.yaml` declares the cross-course families, and
-only that — per-item feedback already names the number the learner actually
+`content/misconceptions/families.yaml` declares the cross-course families and
+which misconception belongs to which, and only that. **A misconception used by
+an item and absent from this file is invisible to the feed** — recorded on the
+attempt, named in the item's own feedback, and missing from the ranking that
+decides what to drill. Eighteen shipped that way with EE 3300 before anyone
+noticed, so a new generator's traps are catalogued in the same change that
+introduces them — per-item feedback already names the number the learner actually
 wrote, and duplicating it centrally would create two descriptions that drift.
 The catalog lives outside `content/curriculum/` because everything in that
 directory is parsed as a course document.
@@ -468,11 +487,15 @@ only asserted.
 
 Not built:
 
-- **Curriculum breadth** (Phase 4) — Tier 1 is complete, and EE 3300 Circuits II
-  is now in: 19 KCs across sinusoidal steady state, AC power, frequency
-  response, coupling and three-phase, and the s-domain, with cross-course edges
-  into EE 2300 and MATH 3323. EE 3370 Signals and EE 3340 Electromagnetics have
-  no graph yet.
+- **Curriculum breadth** (Phase 4) — Tier 1 is complete. EE 3300 Circuits II is
+  in: 19 KCs across sinusoidal steady state, AC power, frequency response,
+  coupling and three-phase, and the s-domain. PHYS 2335 Waves and Heat is in:
+  20 KCs across oscillations, mechanical waves, heat and the ideal gas, and
+  thermodynamics — the first course in the bank whose subject is not
+  electrical, which is what makes the competency axis testable rather than
+  asserted. EE 3370 Signals and EE 3340 Electromagnetics have no graph yet, and
+  neither does PHYS 2325 Mechanics, which is why several honest PHYS 2335 edges
+  (energy, momentum, Newton's second law) are missing rather than wrong.
 - **Nonlinear devices** — diodes and transistors need Newton-Raphson around the
   existing stamping code plus a device-model library. Nothing in Circuits I/II
   requires them.

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { packSchema, parsePack, type Item, type Pack } from '@et/content-schema';
 import { GENERATORS, buildPack, generatorById } from '@et/generators';
-import { verifyPack } from '../src/verify.js';
+import { readNumbers, verifyPack } from '../src/verify.js';
 import { computeStats, uncoveredKcs } from '../src/stats.js';
 
 /**
@@ -287,4 +287,44 @@ describe('symbolic answer keys', () => {
     // A warning does not block on its own, but --strict is what the shared bank builds with.
     expect(verifyPack(pack, { strict: true }).ok).toBe(false);
   });
+});
+
+/**
+ * The SI prefix rule, pinned.
+ *
+ * `extractNumbers` reads presentation back as data, which is what keeps
+ * explanation-agreement independent of the generator's own arithmetic. The
+ * hazard is that a leading prefix letter is not evidence of a prefix: `mol`,
+ * `m/s` and `kg` all start with one. Reading those as prefixed divides a molar
+ * quantity by a thousand and multiplies a mass by a thousand, so a correct
+ * worked solution is reported as disagreeing with its own correct answer key.
+ */
+describe('SI prefix recovery', () => {
+  const cases: [string, number][] = [
+    // Prefixed: the magnitude lives in the prefix and must be folded in.
+    ['4.7\\,\\mathrm{k\\Omega}', 4700],
+    ['20\\,\\mathrm{ms}', 0.02],
+    ['1.5\\,\\mathrm{\\mu F}', 1.5e-6],
+    ['3\\,\\mathrm{mH}', 3e-3],
+    ['2\\,\\mathrm{M\\Omega}', 2e6],
+    ['8\\,\\mathrm{kHz}', 8000],
+    ['5\\,\\mathrm{kVA}', 5000],
+    ['12\\,\\mathrm{kJ}', 12000],
+    // Not prefixed: the leading letter belongs to the unit.
+    ['340\\,\\mathrm{m/s}', 340],
+    ['0.5\\,\\mathrm{mol}', 0.5],
+    ['2.5\\,\\mathrm{kg}', 2.5],
+    ['1500\\,\\mathrm{K}', 1500],
+    ['90\\,\\mathrm{dB}', 90],
+    ['377\\,\\mathrm{rad/s}', 377],
+    ['12\\,\\mathrm{V}', 12],
+    ['60\\,\\mathrm{Hz}', 60],
+    ['250\\,\\mathrm{VAR}', 250],
+  ];
+
+  for (const [rendered, expected] of cases) {
+    it(`reads ${rendered} as ${expected}`, () => {
+      expect(readNumbers(rendered)).toContain(expected);
+    });
+  }
 });

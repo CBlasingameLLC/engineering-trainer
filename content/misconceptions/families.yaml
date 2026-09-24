@@ -142,6 +142,20 @@ families:
       reading an encoded pattern under the wrong convention. Runs under base
       conversion, BCD, minterm indexing and modular reduction alike.
 
+  - id: absolute-scale-discipline
+    title: Absolute scales and reference points
+    competency: numeracy
+    description: >-
+      Substituting a quantity measured from a convenient zero where the physics
+      requires one measured from a true zero. Celsius for kelvin is the common
+      case and gauge pressure for absolute is the same slip; so is reading a
+      decibel level as though it were an intensity. What makes it one habit
+      rather than several is that the learner almost always knows the
+      distinction and still substitutes the wrong number, because the wrong
+      number is the one printed in the question. It survives a units check,
+      which is why it needs naming: kelvin and celsius are both degrees of
+      temperature, and only one of them starts where the physics does.
+
   - id: state-and-sequence
     title: Tracking state through a sequence
     competency: modeling
@@ -343,3 +357,90 @@ misconceptions:
   - { id: filter.time-constant-inverted,             family: ratio-inversion, title: "Filter time constant inverted" }
   - { id: transformer.turns-ratio-not-squared,       family: exponent-bookkeeping, title: "Turns ratio not squared for impedance" }
   - { id: transformer.reflection-direction-reversed, family: ratio-inversion, title: "Impedance reflected the wrong way through a transformer" }
+
+  # --- absolute scales ------------------------------------------------------
+  - { id: scale.celsius-for-absolute,         family: absolute-scale-discipline, title: "Celsius substituted where an absolute temperature is required" }
+  - { id: carnot.temperature-ratio-inverted,  family: absolute-scale-discipline, title: "Carnot bound formed from the inverted temperature ratio" }
+  - { id: decibel.amplitude-factor-used,      family: absolute-scale-discipline, title: "Decibel taken with the amplitude factor instead of the power one" }
+  - { id: gas.temperature-ratio-inverted,     family: absolute-scale-discipline, title: "Gas-law temperature ratio inverted" }
+  - { id: entropy.temperature-difference-used, family: absolute-scale-discipline, title: "Entropy divided by a temperature difference" }
+
+  # --- sign discipline, physics ---------------------------------------------
+  - { id: first-law.work-sign-inverted,       family: sign-convention-discipline, title: "First law summed where its convention subtracts" }
+  - { id: doppler.sign-reversed,              family: sign-convention-discipline, title: "Doppler shift taken in the wrong direction" }
+  - { id: entropy.flow-direction-reversed,    family: sign-convention-discipline, title: "Entropy terms signed against the direction of heat flow" }
+  - { id: pv-work.log-ratio-inverted,         family: sign-convention-discipline, title: "Work logarithm inverted, flipping its sign" }
+
+  # --- inverted ratios, physics ---------------------------------------------
+  - { id: wave.frequency-wavelength-inverted, family: ratio-inversion, title: "Wavelength taken as frequency over speed" }
+  - { id: oscillator.stiffness-inertia-inverted, family: ratio-inversion, title: "Stiffness and inertia the wrong way up in an oscillator" }
+  - { id: carnot.heat-pump-for-refrigerator,  family: ratio-inversion, title: "Heat-pump figure of merit given for a refrigerator" }
+  - { id: gas.volume-multiplied,              family: ratio-inversion, title: "Multiplied by a volume where the gas law divides" }
+
+  # --- substituting into a remembered formula, physics ----------------------
+  - { id: shm.angular-frequency-dropped,      family: formula-substitution, title: "Ordinary frequency used where the angular one belongs" }
+  - { id: wave.two-pi-dropped,                family: formula-substitution, title: "Factor of 2 pi dropped between a wave number and a wavelength" }
+  - { id: phase.degrees-for-radians,          family: formula-substitution, title: "Phase answered in degrees where radians were asked" }
+  - { id: wave.speed-root-dropped,            family: formula-substitution, title: "Wave speed taken without its square root" }
+  - { id: oscillator.root-dropped,            family: formula-substitution, title: "Oscillator frequency taken without its square root" }
+  - { id: kinetic.root-dropped,               family: formula-substitution, title: "Molecular speed taken without its square root" }
+  - { id: wave.speed-frequency-multiplied,    family: formula-substitution, title: "Speed multiplied by frequency where the relation divides" }
+  - { id: damping.critical-factor-dropped,    family: formula-substitution, title: "Critical damping missing its factor of two" }
+  - { id: damping.linear-subtraction,         family: formula-substitution, title: "Damped frequency formed by subtracting rather than in quadrature" }
+  - { id: kinetic.equipartition-coefficient,  family: formula-substitution, title: "Wrong coefficient on the equipartition energy" }
+  - { id: process.wrong-gamma,                family: formula-substitution, title: "Adiabatic index taken from the wrong kind of gas" }
+  - { id: process.exponent-off-by-one,        family: formula-substitution, title: "Adiabatic exponent used on the wrong state variable" }
+  - { id: expansion.volume-coefficient-omitted, family: formula-substitution, title: "Linear coefficient applied to a volume" }
+  - { id: intensity.inverse-square-dropped,   family: formula-substitution, title: "Intensity fallen off as 1/r rather than 1/r squared" }
+  - { id: beats.half-difference-reported,     family: formula-substitution, title: "Beat rate given as half the frequency difference" }
+  - { id: beats.sum-reported,                 family: formula-substitution, title: "Beat rate given as the sum of the two frequencies" }
+  - { id: beats.average-reported,             family: formula-substitution, title: "Beat rate given as the mean of the two frequencies" }
+
+  # --- applying a definition exactly, physics -------------------------------
+  - { id: expansion.total-for-change,         family: definition-precision, title: "Final size reported where the change was asked" }
+  - { id: pv-work.change-not-taken,           family: definition-precision, title: "Work taken over the final volume rather than the change" }
+  - { id: first-law.heat-reported-as-energy,  family: definition-precision, title: "Heat reported as the change in internal energy" }
+  - { id: engine.carnot-bound-used-as-actual, family: definition-precision, title: "Carnot bound used as an engine's actual efficiency" }
+  - { id: engine.rejected-heat-as-input,      family: definition-precision, title: "Efficiency formed against the rejected heat" }
+  - { id: standing.fundamental-for-harmonic,  family: definition-precision, title: "Fundamental reported where a higher harmonic was asked" }
+  - { id: damping.undamped-frequency-reported, family: definition-precision, title: "Undamped natural frequency given for a damped one" }
+
+  # --- shape of a dynamic response, physics ---------------------------------
+  - { id: process.adiabatic-treated-as-isothermal, family: dynamic-response, title: "Adiabatic process analysed as an isothermal one" }
+  - { id: pv-work.path-ignored,               family: dynamic-response, title: "Work computed without regard to the path" }
+  - { id: calorimetry.latent-heat-omitted,    family: dynamic-response, title: "Phase change omitted from a heating calculation" }
+  - { id: calorimetry.single-phase-assumed,   family: dynamic-response, title: "One specific heat used across a phase boundary" }
+  - { id: radiation.difference-before-power,  family: dynamic-response, title: "Temperature difference raised to the fourth power" }
+
+  # --- reading the topology, physics ----------------------------------------
+  - { id: conduction.resistances-not-summed,  family: network-topology, title: "Thermal layers combined by conductivity instead of resistance" }
+  - { id: conduction.layer-ignored,           family: network-topology, title: "One layer left out of a series thermal path" }
+  - { id: standing.boundary-condition-ignored, family: network-topology, title: "Standing wave given the wrong boundary conditions" }
+  - { id: doppler.wrong-mechanism,            family: network-topology, title: "Moving-source formula used for a moving observer, or the reverse" }
+  - { id: shm.speed-acceleration-confused,    family: network-topology, title: "Speed and acceleration extremes interchanged" }
+
+  # --- EE 3300, catalogued late ---------------------------------------------
+  # These shipped with the Circuits II round and were never mapped, so every
+  # one of them was invisible to the habit roll-up: recorded on the attempt,
+  # named in the item's own feedback, and absent from the feed that decides
+  # what to drill. An uncatalogued misconception is not a small omission — it
+  # is the difference between "you missed nine questions" and "you drop
+  # signs", for the whole of one course.
+  - { id: phasor.sine-not-converted,          family: complex-quantity-discipline, title: "Sine phasor taken without converting to cosine" }
+  - { id: power-factor.apparent-used-for-real, family: complex-quantity-discipline, title: "Apparent power used where real power was asked" }
+  - { id: max-power.magnitude-matched,        family: complex-quantity-discipline, title: "Load matched on magnitude instead of by conjugate" }
+  - { id: coupling.dot-sign-reversed,         family: sign-convention-discipline, title: "Mutual inductance signed against the dot convention" }
+  - { id: laplace.pole-sign-dropped,          family: sign-convention-discipline, title: "Pole reported without its sign" }
+  - { id: laplace.time-constant-inverted,     family: ratio-inversion, title: "Time constant taken as the reciprocal of itself" }
+  - { id: rms.peak-reported,                  family: definition-precision, title: "Peak value reported as an rms one" }
+  - { id: rms.average-reported,               family: definition-precision, title: "Mean value reported as an rms one" }
+  - { id: phasor.rms-amplitude-confused,      family: definition-precision, title: "Phasor magnitude given in the wrong amplitude convention" }
+  - { id: max-power.rms-amplitude-confused,   family: definition-precision, title: "Maximum power computed in the wrong amplitude convention" }
+  - { id: power-factor.corrected-to-unity,    family: definition-precision, title: "Correction taken all the way to unity regardless of the target" }
+  - { id: rms.sine-factor-applied-to-every-shape, family: formula-substitution, title: "Sine's rms factor applied to a non-sinusoidal waveform" }
+  - { id: coupling.geometric-mean-replaced-by-arithmetic, family: formula-substitution, title: "Mutual inductance formed from an arithmetic mean" }
+  - { id: coupling.coefficient-squared,       family: formula-substitution, title: "Coupling coefficient squared where it enters linearly" }
+  - { id: bode.slope-per-octave-used,         family: formula-substitution, title: "Bode slope quoted per octave where the axis is per decade" }
+  - { id: coupling.mutual-term-omitted,       family: network-topology, title: "Mutual term left out of a coupled-coil total" }
+  - { id: bode.order-ignored,                 family: dynamic-response, title: "Asymptotic slope taken without regard to the order" }
+  - { id: bode.corner-value-used-as-asymptote, family: dynamic-response, title: "Corner-frequency value read off the asymptote" }

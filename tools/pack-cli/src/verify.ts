@@ -101,6 +101,20 @@ function checkExplanationAgreement(item: Item): VerifyFinding[] {
 }
 
 /**
+ * Unit symbols an SI prefix may attach to.
+ *
+ * The prefix is only folded when what follows it is one of these *and* the
+ * group then closes, because a leading prefix letter is not evidence of a
+ * prefix: `mol`, `m/s` and `kg` all begin with one and none of them is scaled.
+ * Reading them as prefixed divides a molar quantity by a thousand and
+ * multiplies a mass by a thousand, which is a worked solution disagreeing with
+ * its own correct answer key — the exact failure this check exists to report.
+ *
+ * Longest first, so `VAR` is not read as `VA`, `Hz` not as `H`, `Wb` not as `W`.
+ */
+const PREFIXABLE_UNITS = String.raw`\\Omega|VAR|rad/s|Hz|VA|Wb|eV|dB|Pa|[VAFHsJWNmT]`;
+
+/**
  * Pull numeric literals out of rendered text, folding SI prefixes so an answer
  * written as "4.7 kohm" compares against a stored value of 4700.
  */
@@ -113,7 +127,14 @@ function extractNumbers(text: string): number[] {
   // as a bare 20 makes a correct worked solution disagree with a correct answer
   // key by a factor of a thousand. Tying this to one typesetting macro is what
   // made a `\text` -> `\mathrm` change look like 40 wrong answers.
-  for (const match of text.matchAll(/(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])?)?/g)) {
+  const pattern = new RegExp(
+    // `(?<!\^)` keeps a unit's own exponent out of the list: `\mathrm{m^2}`
+    // would otherwise contribute a bare 2, and a spurious number can only ever
+    // make this check pass when it should have failed.
+    String.raw`(?<!\^)(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])(?:${PREFIXABLE_UNITS})\})?`,
+    'g',
+  );
+  for (const match of text.matchAll(pattern)) {
     const value = Number(match[1]);
     if (!Number.isFinite(value)) continue;
     const prefix = match[2]?.trim();
@@ -121,6 +142,9 @@ function extractNumbers(text: string): number[] {
   }
   return out;
 }
+
+/** Exposed so the prefix rule can be pinned by test rather than by inspection. */
+export const readNumbers = (text: string): number[] => extractNumbers(text);
 
 /**
  * Check 3 — regenerate from seed.
