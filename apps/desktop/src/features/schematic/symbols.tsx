@@ -96,9 +96,13 @@ export function ComponentSymbol({ kind, grid }: SymbolProps): React.ReactElement
           <path d={`M ${-3 * u} ${-2 * u} L ${-1.6 * u} ${-2 * u}`} />
           <path d={`M ${-3 * u} ${2 * u} L ${-1.6 * u} ${2 * u}`} />
           <path d={`M ${1.9 * u} 0 L ${3 * u} 0`} />
-          <path d={`M ${-1.35 * u} ${-2.2 * u} L ${-0.75 * u} ${-2.2 * u}`} />
-          <path d={`M ${-1.05 * u} ${-2.5 * u} L ${-1.05 * u} ${-1.9 * u}`} />
-          <path d={`M ${-1.35 * u} ${2 * u} L ${-0.75 * u} ${2 * u}`} />
+          {/* The input marks sit inside the body, not beside the pins. The
+              triangle's sloping edges close in fast: at the pin height the
+              top edge passes straight through where a `+` drawn level with
+              the pin would be, so the glyph rendered half outside the part. */}
+          <path d={`M ${-1.35 * u} ${-1.5 * u} L ${-0.75 * u} ${-1.5 * u}`} />
+          <path d={`M ${-1.05 * u} ${-1.8 * u} L ${-1.05 * u} ${-1.2 * u}`} />
+          <path d={`M ${-1.35 * u} ${1.5 * u} L ${-0.75 * u} ${1.5 * u}`} />
         </g>
       );
 

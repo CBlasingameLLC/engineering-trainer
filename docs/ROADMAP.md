@@ -22,7 +22,7 @@ machinery exists.
 | EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
 | EE 3300 Circuits II | 19 KCs, 16 generators, 281 items across all five units |
 | Phasor answers | `complex` answer kind: six notations parsed, magnitude and phase graded separately |
-| Item figures | 198 EE 2300 items and every EE 3300 circuit item carry a schematic, simulated by `pack verify` |
+| Item figures | 252 EE 2300 items (op-amps included) and every EE 3300 circuit item carry a schematic, simulated by `pack verify` |
 | Circuit templates | 14 standard Circuits II topologies, loadable into the Lab, each proved solvable |
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
 | Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |

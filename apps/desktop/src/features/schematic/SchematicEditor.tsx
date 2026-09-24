@@ -618,7 +618,8 @@ export function SchematicEditor({
                   />
                   <ComponentSymbol kind={component.kind} grid={GRID} />
                   <text
-                    x={GRID * 1.3} y={-GRID * 0.4}
+                    x={component.kind === 'opamp' ? -GRID * 1.6 : GRID * 1.3}
+                    y={component.kind === 'opamp' ? -GRID * 2.9 : -GRID * 0.4}
                     className="select-none" fontSize={10}
                     fill={isSelected ? '#0284c7' : '#475569'} stroke="none"
                     transform={`rotate(${-component.rotation})`}

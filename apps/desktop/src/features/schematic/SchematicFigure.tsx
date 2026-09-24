@@ -97,9 +97,14 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
             data-component-id={component.id}
           >
             <ComponentSymbol kind={component.kind} grid={GRID} />
-            {/* Counter-rotated so a sideways part still reads left to right. */}
+            {/* Counter-rotated so a sideways part still reads left to right.
+                A two-terminal body is narrow, so its designator sits to the
+                right of it; the op-amp triangle reaches that far and the text
+                landed on its edge, so that one goes above the part instead. */}
             <text
-              x={GRID * 1.2} y={-GRID * 0.35} fontSize={10} stroke="none"
+              x={component.kind === 'opamp' ? -GRID * 1.6 : GRID * 1.2}
+              y={component.kind === 'opamp' ? -GRID * 2.9 : -GRID * 0.35}
+              fontSize={10} stroke="none"
               className="fill-slate-700 dark:fill-slate-300"
               transform={`rotate(${-component.rotation})`}
             >

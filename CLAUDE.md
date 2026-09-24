@@ -329,7 +329,10 @@ packs by the schema, and never enters a release build. Don't weaken that.
   grabbable only along the strokes themselves. Note that a part's *bounding
   box* is not its body — the designator and value labels extend it to the
   right, so its centre is usually empty canvas. Drive gestures at grid
-  coordinates, not at bounding boxes.
+  coordinates, not at bounding boxes. The same asymmetry runs the other way
+  for drawing: a designator placed to the right of a *two-terminal* body lands
+  inside an op-amp triangle, which reaches 1.9 grid units right of its centre
+  and 2.4 up, so that one is labelled above the part instead.
 - **Never `setPointerCapture` on an element whose children must stay
   clickable.** Capture retargets the subsequent `click` to the capture element,
   so a canvas that captures on pointerdown to start a pan makes every node
