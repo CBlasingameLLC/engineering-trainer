@@ -19,6 +19,8 @@ content/coursework/
     textbook/       book chapters you own     -> personal-only, see below
   EE4392/
     ...
+  EE3300/
+    ...                a syllabus with no topic schedule; the lectures are the plan
 ```
 
 The course code is the folder name and matches `content/curriculum/<code>.yaml`
@@ -94,6 +96,22 @@ clean needs four chemistries, which lithography step activates a photo-acid
 generator, what a purge gas is for. Those are hand-authored, tagged
 `producer: hand` so the regeneration check skips them, and carry the weaker
 guarantee openly.
+
+EE 3300 is the other kind of gap, and it is about the *schedule* rather than
+the content. Its syllabus is six pages and contains no week-by-week plan at
+all — three exam dates, a grading table, and university policy. So there was
+nothing to read the term blocks off, and the term had carried a fifteen-week
+guess. The eleven lecture decks turned out to be the schedule: each names its
+own chapter, they run at two a week, and the pre-exam deck states its own
+scope. Everything up to the first exam is now read off those files; everything
+after it is inferred and says so, because a block marked PROJECTED can be
+corrected by one line when the next lecture lands, and a block that quietly
+claims to be a syllabus reading cannot.
+
+The lesson for intake: a syllabus is the *preferred* source for a term, not the
+only one. When it has no schedule, lecture files in teaching order are the next
+best primary document, and the boundary between what was read and what was
+inferred belongs in the file.
 
 So the unit of decision is the unit, not the course, and the way to make it is
 to look at what the assessments actually ask. A topic list will tell you what a

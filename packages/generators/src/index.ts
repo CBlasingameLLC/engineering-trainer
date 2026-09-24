@@ -31,6 +31,9 @@ import {
   acThevenin, bodeAsymptotes, conjugateMatch, mutualInductance, parallelResonance,
   powerFactorCorrection, rmsValue, sDomainPole, sinusoidToPhasor,
 } from './ee3300/power.js';
+import { EE3300_SECONDORDER_GENERATORS } from './ee3300/secondorder.js';
+import { EE3300_LAPLACE_GENERATORS } from './ee3300/laplace.js';
+import { EE3300_STEADYSTATE_GENERATORS } from './ee3300/steadystate.js';
 import { PHYS2335_FLUID_GENERATORS } from './phys2335/fluids.js';
 import { PHYS2335_OPTICS_GENERATORS } from './phys2335/optics.js';
 import { PHYS2335_OSCILLATION_GENERATORS } from './phys2335/oscillations.js';
@@ -110,6 +113,9 @@ export const GENERATORS: readonly Generator[] = [
   mutualInductance,
   bodeAsymptotes,
   sDomainPole,
+  ...EE3300_SECONDORDER_GENERATORS,
+  ...EE3300_LAPLACE_GENERATORS,
+  ...EE3300_STEADYSTATE_GENERATORS,
   acThevenin,
 
   // PHYS 2335 — Waves and Heat. The first course in the bank whose subject is

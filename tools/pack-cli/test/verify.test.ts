@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { packSchema, parsePack, type Item, type Pack } from '@et/content-schema';
-import { GENERATORS, buildPack, generatorById } from '@et/generators';
+import { GENERATORS, buildPack, generatorById, sci } from '@et/generators';
 import { readNumbers, verifyPack } from '../src/verify.js';
 import { computeStats, uncoveredKcs } from '../src/stats.js';
 
@@ -423,6 +423,36 @@ describe('scientific notation folds to one value', () => {
       expect(readNumbers(rendered)).toContain(expected);
     });
   }
+
+  it('round-trips everything sci() emits, on both sides of its boundary', () => {
+    // `sci` is what stops JavaScript's own formatter putting `1.25e-8` into
+    // the middle of a LaTeX expression. Read back, that string is the two
+    // numbers 1.25 and -8, so a correct worked solution disagrees with a
+    // correct answer key — which is how three EE 3300 items failed the gate.
+    // Three significant figures is the contract, so every value here carries
+    // at most three; rounding is pinned separately below.
+    for (const value of [1.25e-8, 5e20, 2.5e-4, 0.0472, 137, 1e4, -3.3e-12]) {
+      const read = readNumbers(sci(value));
+      expect(read).toHaveLength(1);
+      expect(read[0]!).toBeCloseTo(value, Math.abs(value) < 1 ? 20 : 0);
+    }
+  });
+
+  it('keeps readable magnitudes in plain decimal and pushes the rest to powers of ten', () => {
+    // The boundary is where a person would switch notation, not where the
+    // language does.
+    expect(sci(0.0472)).toBe('0.0472');
+    expect(sci(137)).toBe('137');
+    expect(sci(1e4)).toBe('1 \\times 10^{4}');
+    expect(sci(0.00099)).toContain('\\times 10^{-4}');
+    expect(sci(0)).toBe('0');
+    expect(sci(2.5e-4, 'cm^{-3}')).toContain('\\mathrm{cm^{-3}}');
+    // The branch is chosen on the value, the digits are cut afterwards, so a
+    // number just under the boundary rounds up through it and still prints as
+    // a decimal. Harmless at three significant figures, and worth pinning so a
+    // future reader does not take it for a bug.
+    expect(sci(9999)).toBe('10000');
+  });
 
   it('leaves neither the mantissa nor the exponent loose', () => {
     // Both halves would be spurious, and a spurious number can only ever make

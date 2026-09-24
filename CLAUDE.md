@@ -251,6 +251,20 @@ worked examples rather than the topic list.
   maths that the segmenter read as two empty spans around plain text; and
   `\\n\\n` in a template literal, which is a literal backslash-n, not a
   paragraph break.
+- **A knowledge component is only as honest as the generators under it, and
+  item count cannot tell you.** `ee3300.laplace-circuit-analysis` carried 18
+  items across two difficulty bands and looked, on every coverage report the
+  repository produces, like a well-served KC. All 18 came from one generator
+  that asks for the time constant of a first-order RL pole — a chapter 7
+  question wearing an s-domain label. Nothing in the bank touched a transform
+  pair, a partial fraction or a value theorem, so a learner could answer every
+  item in the unit and be reported proficient in the s-domain for it. That is
+  worse than an empty KC: an empty one is visible in `pack stats` and gets
+  filled, whereas this one was invisible precisely because it was full.
+  `stats` counts items per KC and per band and cannot count *what they ask*, so
+  when a KC covers a chapter, check that its generators span the chapter's own
+  sections rather than that its cells are non-zero. It is now nine KCs.
+
 - **A course that states quantities in a prefixed unit needs `unfoldedUnit`.**
   `engineering()` folds the prefix back into the value, which is right when the
   stored answer is in the base unit — 4700 ohms written as 4.7 k. It is wrong
@@ -262,6 +276,17 @@ worked examples rather than the topic list.
   bare. There is one spelling of that, `unfoldedUnit` in `rng.ts`, because
   there were briefly two: EE 4392 solved it one way, PHYS 2335 independently
   hit the same wall and shipped the bug the other file had already fixed.
+
+  `sci` in the same file is the second instance of that story and settles the
+  pattern. `trimNumber` hands off to JavaScript's own formatter outside a
+  narrow range, so a small value reaches the learner as the literal characters
+  `1.25e-8`, and `extractNumbers` reads them as the two numbers 1.25 and -8 —
+  a correct worked solution disagreeing with a correct answer key. EE 4392 hit
+  it with doping concentrations and wrote a private fix; EE 3300 hit it with
+  transform values and three items failed the gate. Both now call the one in
+  `rng.ts`. The rule this repository keeps relearning: when a second course
+  hits a formatting problem a first course already solved, the fix belongs in
+  `rng.ts` in the same change, not beside the caller.
 - **An SI prefix is only a prefix in front of a unit symbol.** `extractNumbers`
   folds the prefix into the value so `4.7\,\mathrm{k\Omega}` compares against a
   stored 4700. The rule it applies has to be narrow, because a leading prefix
@@ -573,9 +598,24 @@ Not built:
   other direction produced the EE 4392 claim below. A syllabus is the only
   document that says what a course actually contains, and a topic list is not
   one.
+
+  EE 3300 then made the same mistake wearing a better disguise. Its graph was
+  written from the *catalog description* — "transient analysis, application of
+  Laplace transforms, Bode plots, and network principles" — which sounds like a
+  syllabus and is not one. It omits second-order circuits and all of chapter
+  12, which between them are half of the first exam, while "network principles"
+  read as three-phase and coupling, which by the eleventh lecture had not been
+  mentioned once. A catalog description says what a course is *about*. Only the
+  lecture sequence says what it *covers*, and when a syllabus carries no topic
+  schedule — EE 3300's carries three exam dates and nothing else — the lecture
+  files are the primary document, and what is inferred past them gets marked
+  PROJECTED in the term rather than written as fact.
 - **Curriculum breadth** (Phase 4) — Tier 1 is complete. EE 3300 Circuits II is
-  in: 19 KCs across sinusoidal steady state, AC power, frequency response,
-  coupling and three-phase, and the s-domain. PHYS 2335 Waves and Heat is in:
+  in: 32 KCs across sinusoidal steady state, AC power, second-order circuits,
+  frequency response, coupling and three-phase, and the s-domain. The last two
+  of those units are the ones the lectures have not reached yet; the second-order
+  and s-domain units were added once the lecture decks arrived and showed that
+  chapters 8 and 12 are half of the first exam and were missing entirely. PHYS 2335 Waves and Heat is in:
   20 KCs across oscillations, mechanical waves, heat and the ideal gas, and
   thermodynamics — the first course in the bank whose subject is not
   electrical, which is what makes the competency axis testable rather than

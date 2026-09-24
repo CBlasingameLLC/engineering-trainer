@@ -27,9 +27,20 @@
 # week n, which is a coincidence of the two courses starting together and not
 # something to rely on for the next one.
 #
-# EE 3300 is still an estimate — a plausible reading of a fifteen-week
-# semester, not a syllabus. It is marked as such below, and replacing it is an
-# edit to this file and nothing else.
+# EE 3300 is no longer an estimate, but it is not a syllabus reading either,
+# because that syllabus contains no topic schedule at all — only three exam
+# dates. Weeks 1 to 7 below are read off the eleven lecture decks themselves:
+# the chapter each one covers, at the two-lectures-a-week pace that puts eleven
+# of them in six weeks, with the Exam 1 review deck naming its own scope.
+# Everything from week 8 on is marked PROJECTED, because it is inferred from
+# what the course has left to cover and the objectives the syllabus does state,
+# and no document in this repository says it.
+#
+# The estimate it replaces had the emphasis badly wrong, and in an instructive
+# direction: it was written from the catalog description, which lists
+# "transient analysis, application of Laplace transforms, Bode plots, and
+# network principles" and mentions neither second-order circuits nor the
+# chapter 12 machinery, both of which are half of the first exam.
 
 id: 2026-fall
 title: Fall 2026
@@ -92,24 +103,76 @@ courses:
         units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
         note: Final on Monday 7 December, 11:00-13:30 — comprehensive
 
-  # ESTIMATED — no syllabus received for this course yet.
-  - course: EE3300
+  # Circuits II spends its first three lectures re-teaching Circuits I, so that
+  # material is genuinely live again rather than merely assumed. Chapter 7 in
+  # particular is not revision: the Exam 1 review deck names "first and second
+  # order circuits" in the same breath, so the first-order response is examined
+  # on Monday alongside chapter 8, and it lives in EE 2300's graph.
+  - course: EE2300
     blocks:
       - fromWeek: 1
+        toWeek: 2
+        units: [Fundamentals, Circuit Laws, Network Theorems]
+        note: Lectures 2 and 3 revisit Nilsson chapters 3 and 4
+      - fromWeek: 3
+        toWeek: 3
+        units: [Energy Storage and Transients]
+        note: Lecture 4 re-teaches the first-order RL and RC response, chapter 7
+      - fromWeek: 6
+        toWeek: 7
+        units: [Energy Storage and Transients]
+        note: First-order response is named on the Exam 1 review deck
+
+  # Weeks 1-7 are read off the lecture decks; week 8 onward is PROJECTED.
+  # Note the teaching order: the Laplace transform arrives in lecture 7, before
+  # chapter 8 rather than after it, so second-order circuits are taught with the
+  # s-domain already available. The chapter numbers are not the running order.
+  - course: EE3300
+    blocks:
+      - fromWeek: 3
         toWeek: 3
         units: [Sinusoidal Steady State]
+        note: Lecture 5 — chapter 9, the phasor transform
       - fromWeek: 4
+        toWeek: 4
+        units: [AC Power, The s-Domain]
+        note: Lecture 6 is chapter 10; lecture 7 opens the Laplace transform
+      - fromWeek: 5
+        toWeek: 5
+        units: [Second-Order Circuits]
+        note: Lectures 8 and 9 — chapter 8, natural and step responses of RLC circuits
+      - fromWeek: 6
         toWeek: 6
-        units: [AC Power]
+        units: [The s-Domain, Second-Order Circuits, Sinusoidal Steady State, AC Power]
+        note: Lecture 10 is chapter 13; lecture 11 is the Exam 1 review
       - fromWeek: 7
+        toWeek: 7
+        units: [Second-Order Circuits, Sinusoidal Steady State, AC Power, The s-Domain]
+        note: Exam 1 moved to Monday 28 September — chapters 8, 9, 10 and 12
+      - fromWeek: 8
         toWeek: 9
-        units: [Frequency Response]
-      - fromWeek: 10
-        toWeek: 12
-        units: [Coupled Circuits, Three-Phase]
-      - fromWeek: 13
-        toWeek: 15
         units: [The s-Domain]
+        note: PROJECTED — chapter 13 continues after the exam
+      - fromWeek: 10
+        toWeek: 11
+        units: [Frequency Response]
+        note: PROJECTED — the syllabus names straight-line Bode approximation as an objective
+      - fromWeek: 12
+        toWeek: 12
+        units: [The s-Domain, Frequency Response]
+        note: Exam 2 on Thursday 5 November
+      - fromWeek: 13
+        toWeek: 14
+        units: [Coupled Circuits]
+        note: PROJECTED — not yet lectured
+      - fromWeek: 15
+        toWeek: 16
+        units: [Three-Phase]
+        note: PROJECTED — not yet lectured
+      - fromWeek: 17
+        toWeek: 17
+        units: [Sinusoidal Steady State, AC Power, Second-Order Circuits, The s-Domain, Frequency Response, Coupled Circuits, Three-Phase]
+        note: Final on Tuesday 8 December, 08:00-10:30 — comprehensive
 
   # From the syllabus, not estimated. Lecture numbers are the instructor's.
   #

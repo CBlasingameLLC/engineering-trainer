@@ -218,6 +218,31 @@ export function unfoldedUnit(value: number, prefix: string, base: string, sigFig
 }
 
 /** Ohms with the LaTeX omega symbol. */
+/**
+ * A number in the notation a person would actually write it in.
+ *
+ * `trimNumber` defers to JavaScript's own formatter, which switches to
+ * exponential notation on its own terms and emits `1.25e-8` — literal
+ * characters that reach the learner as `1.25e-8` and that `extractNumbers`
+ * reads as the two numbers 1.25 and -8, so a correct worked solution disagrees
+ * with a correct answer key. Ordinary decimals stay decimal here; everything
+ * outside a readable range becomes LaTeX scientific notation.
+ *
+ * This is the single spelling of that, for the same reason `unfoldedUnit` is:
+ * EE 4392 wrote one privately, and EE 3300 then shipped the bug it had already
+ * fixed. `tools/pack-cli/test/verify.test.ts` pins the boundary.
+ */
+export function sci(value: number, symbol?: string, sigFigs = 3): string {
+  const units = symbol ? `\\,\\mathrm{${symbol}}` : '';
+  if (value === 0) return `0${units}`;
+  const magnitude = Math.abs(value);
+  // Inside this range ordinary decimal notation is what anyone would write.
+  if (magnitude >= 1e-3 && magnitude < 1e4) return `${trimNumber(value, sigFigs)}${units}`;
+  const exponent = Math.floor(Math.log10(magnitude));
+  const mantissa = value / 10 ** exponent;
+  return `${trimNumber(mantissa, sigFigs)} \\times 10^{${exponent}}${units}`;
+}
+
 export const ohms = (value: number): string => engineering(value, '\\Omega');
 export const volts = (value: number): string => engineering(value, 'V');
 export const amps = (value: number): string => engineering(value, 'A');
