@@ -379,9 +379,136 @@ export const rateConstantArrhenius: Generator = {
   },
 };
 
+
+
+/**
+ * The masked two-step growth, which is the shape Exam 1 actually used.
+ *
+ * A field oxide is grown, a window is etched to bare silicon, and a second
+ * oxidation runs over the whole wafer. The two regions then differ, and the
+ * question asks about the region the learner did *not* just compute — which is
+ * the entire difficulty. The bare window is an ordinary bare-silicon problem;
+ * the field region has to be re-entered through its own tau, and the naive
+ * move is to add the new growth to the old oxide.
+ *
+ * It is a separate generator from `oxideRegrowth` because the parameter it
+ * varies is which region is asked about, and because the wrong answer here is
+ * usually the right answer to the other half of the same question. That is a
+ * trap worth having by construction rather than by luck.
+ */
+export const maskedTwoStepOxidation: Generator = {
+  id: 'ee4392.oxidation.masked-two-step',
+  title: 'Masked two-step oxidation',
+  kcRefs: [
+    { kc: 'ee4392.oxide-growth-calculation', weight: 0.7 },
+    { kc: 'ee4392.oxide-volume-expansion', weight: 0.3 },
+  ],
+  difficultyB: 1.0,
+  generate(rng: Rng) {
+    const temperature = pick(rng, [900, 1000, 1100]);
+    const rc = WET_111[temperature]!;
+
+    const fieldOxide = tidy(pick(rng, [0.3, 0.4, 0.5, 0.6]), 0.01);
+    const windowTarget = tidy(pick(rng, [0.1, 0.15, 0.2, 0.25]), 0.01);
+
+    // The second oxidation is defined by what it grows in the bare window, so
+    // the time comes from there and the field region inherits it.
+    const t = oxideTime(windowTarget, rc, 0);
+    const fieldFinal = oxideThickness(t, rc, fieldOxide);
+    const fieldTau = tauFor(fieldOxide, rc);
+
+    const askField = rng() < 0.6;
+    const value = askField ? fieldFinal : windowTarget * SI_CONSUMED_FRACTION;
+
+    // Adding the window's growth to the field oxide, which is the move tau
+    // exists to rule out.
+    const additive = fieldOxide + windowTarget;
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [
+        askField ? 0.6 : -0.7,
+        ratioDifficulty(fieldOxide, windowTarget),
+      ]),
+      stem:
+        `A uniform field oxide $${um(fieldOxide)}$ thick is grown on a silicon wafer. A nitride mask is ` +
+        `patterned, the oxide is etched to bare silicon in the window, and the nitride is stripped. ` +
+        `A second oxidation in steam at $${celsius(temperature)}$ then grows $${um(windowTarget)}$ of ` +
+        `oxide on the bare silicon, with $B = ${unit(rc.b, '\\mu m^2/hr')}$ and ` +
+        `$B/A = ${unit(rc.ba, '\\mu m/hr')}$. ` +
+        (askField
+          ? `What is the final thickness of the oxide in the **field** region?`
+          : `How much silicon is consumed in the **window** region during the second oxidation?`),
+      answer: { kind: 'numeric' as const, value, unit: 'um', tolerance: { rel: 0.02 } },
+      options: [],
+      misconceptionTraps: separatedTraps(value, { rel: 0.02 }, [
+        ...(askField
+          ? [
+            {
+              misconception: 'oxidation.growth-added-to-initial',
+              value: additive,
+              tolerance: { rel: 0.015 },
+              feedback:
+                `You added the window's $${um(windowTarget)}$ to the field oxide. Growth is not additive: ` +
+                `under the thicker field oxide the oxidant has further to diffuse, so the same ` +
+                `$${unit(t, 'hr')}$ grows only $${um(fieldFinal - fieldOxide)}$ there.`,
+            },
+            {
+              misconception: 'oxidation.initial-oxide-ignored',
+              value: windowTarget,
+              tolerance: { rel: 0.015 },
+              feedback:
+                `That is the window thickness. The field region started at $${um(fieldOxide)}$ and ` +
+                `re-enters the growth curve at $\\tau = ${unit(fieldTau, 'hr')}$, not at zero.`,
+            },
+          ]
+          : [
+            {
+              misconception: 'oxidation.consumption-fractions-swapped',
+              value: windowTarget * OXIDE_ABOVE_FRACTION,
+              tolerance: { rel: 0.015 },
+              feedback:
+                `That is the oxide standing above the original surface. The silicon consumed below it ` +
+                `is $0.44$ of the grown thickness, not $0.56$.`,
+            },
+            {
+              misconception: 'oxidation.initial-oxide-ignored',
+              value: fieldFinal * SI_CONSUMED_FRACTION,
+              tolerance: { rel: 0.015 },
+              feedback:
+                `That is the silicon the *field* region has consumed in total. The question asks about ` +
+                `the window, where only $${um(windowTarget)}$ of oxide was grown.`,
+            },
+          ]),
+      ]),
+      explanation: {
+        steps: [
+          `The second oxidation runs for one time over the whole wafer, and that time is set by the bare window: ` +
+            `$t = \\dfrac{${plain(windowTarget)}^2}{${plain(rc.b)}} + \\dfrac{${plain(windowTarget)}}{${plain(rc.ba)}} = ${unit(t, 'hr')}$.`,
+          `The field region is not bare, so it enters the same growth curve at its own offset: ` +
+            `$\\tau = \\dfrac{${plain(fieldOxide)}^2}{${plain(rc.b)}} + \\dfrac{${plain(fieldOxide)}}{${plain(rc.ba)}} = ${unit(fieldTau, 'hr')}$.`,
+          `Reading the curve at $t + \\tau = ${unit(t + fieldTau, 'hr')}$ with $A = ${um(aFrom(rc))}$ gives a field oxide of $${um(fieldFinal)}$ — ` +
+            `only $${um(fieldFinal - fieldOxide)}$ of new growth, against $${um(windowTarget)}$ in the window.`,
+          askField
+            ? `So the field region finishes at $${um(value)}$, and the step between the two regions is $${um(fieldFinal - windowTarget)}$.`
+            : `In the window $${um(windowTarget)}$ was grown, so the silicon consumed there is $0.44 \\times ${plain(windowTarget)} = ${um(value)}$.`,
+        ],
+        principle:
+          'One oxidation, two histories. The time is shared and the starting thickness is not, which is exactly what tau is for and why the thicker region grows less.',
+        hints: [
+          'What fixes the duration of the second oxidation?',
+          'Does the field region start from zero?',
+        ],
+      },
+    };
+  },
+};
+
 export const EE4392_OXIDATION_GENERATORS: readonly Generator[] = [
   oxideGrowthTime,
   oxideRegrowth,
   siliconConsumed,
   rateConstantArrhenius,
+  maskedTwoStepOxidation,
 ];

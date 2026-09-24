@@ -631,3 +631,76 @@ misconceptions:
   - { id: litho.na-cost-blamed-on-dose,                       family: mechanism-attribution, title: "Cost of higher NA credited to exposure dose" }
   - { id: litho.na-cost-blamed-on-field,                      family: mechanism-attribution, title: "Cost of higher NA credited to field size" }
   - { id: litho.na-assumed-free,                              family: mechanism-attribution, title: "Higher NA assumed to cost nothing" }
+
+  # --- EE 4392, second pass: the conceptual bank deepened -------------------
+  # Unit 1 had no items at all and several process components had one or two,
+  # which is too thin for adaptive selection to have anything to choose
+  # between. These came with that round.
+
+  # --- place-value-discipline ------------------------------------------------
+  - { id: silicon.atomic-density-off-by-orders,         family: place-value-discipline, title: "Silicon atomic density out by orders of magnitude" }
+  - { id: silicon.atomic-density-from-avogadro,         family: place-value-discipline, title: "Atomic density taken as Avogadro's number per cell" }
+  - { id: silicon.atomic-density-confused-with-doping,  family: place-value-discipline, title: "Atomic density confused with a doping level" }
+  - { id: doping.fraction-overestimated,                family: place-value-discipline, title: "Doping fraction overestimated by orders of magnitude" }
+  - { id: doping.fraction-overestimated-mildly,         family: place-value-discipline, title: "Doping fraction overestimated by three orders" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: doping.donor-acceptor-swapped,                family: definition-precision, title: "Donor and acceptor interchanged" }
+  - { id: doping.carrier-type-mismatched,               family: definition-precision, title: "Carrier donated mismatched against the resulting type" }
+  - { id: doping.dopant-assumed-neutral,                family: definition-precision, title: "Substitutional dopant assumed electrically neutral" }
+  - { id: doping.fraction-confused-with-carrier-ratio,  family: definition-precision, title: "Doping fraction confused with the intrinsic-carrier ratio" }
+  - { id: immersion.cost-blamed-on-dof,                 family: definition-precision, title: "Immersion claimed to reduce depth of focus" }
+
+  # --- state-and-sequence ----------------------------------------------------
+  - { id: litho.steps-prime-after-coat,                 family: state-and-sequence, title: "Adhesion prime placed after the coat it prepares for" }
+  - { id: litho.steps-bake-after-expose,                family: state-and-sequence, title: "Soft bake placed after exposure" }
+  - { id: litho.steps-peb-after-develop,                family: state-and-sequence, title: "Post-exposure bake placed after develop" }
+
+  # --- mechanism-attribution -------------------------------------------------
+  - { id: cleanroom.laminar-blamed-on-energy,           family: mechanism-attribution, title: "Laminar airflow credited to fan energy" }
+  - { id: cleanroom.laminar-blamed-on-heating,          family: mechanism-attribution, title: "Laminar airflow credited to room heating" }
+  - { id: cleanroom.laminar-blamed-on-pressure,         family: mechanism-attribution, title: "Laminar airflow credited to room pressure" }
+  - { id: cleanroom.iso-blamed-on-jurisdiction,         family: mechanism-attribution, title: "ISO cleanroom classes credited to which body issued them" }
+  - { id: cleanroom.iso-blamed-on-units,                family: mechanism-attribution, title: "ISO cleanroom classes credited to metric units" }
+  - { id: cleanroom.iso-blamed-on-coarse-classes,       family: mechanism-attribution, title: "ISO cleanroom classes credited to resolution at the dirty end" }
+  - { id: colour.blamed-on-absorption,                  family: mechanism-attribution, title: "Oxide colour credited to absorption bands" }
+  - { id: colour.blamed-on-scattering,                  family: mechanism-attribution, title: "Oxide colour credited to surface scattering" }
+  - { id: colour.blamed-on-fluorescence,                family: mechanism-attribution, title: "Oxide colour credited to fluorescence" }
+  - { id: colour.risk-blamed-on-ambient,                family: mechanism-attribution, title: "Colour-chart ambiguity credited to the oxidation ambient" }
+  - { id: colour.risk-blamed-on-doping,                 family: mechanism-attribution, title: "Colour-chart ambiguity credited to substrate doping" }
+  - { id: colour.risk-blamed-on-range,                  family: mechanism-attribution, title: "Colour-chart ambiguity credited to a thickness floor" }
+  - { id: defects.patterns-denied,                      family: mechanism-attribution, title: "Spatial defect patterns denied as measurement artefact" }
+  - { id: defects.patterns-blamed-on-low-count,         family: mechanism-attribution, title: "Defect patterns credited to too few defects to look random" }
+  - { id: defects.patterns-blamed-on-inspection,        family: mechanism-attribution, title: "Defect patterns credited to inspection misalignment" }
+  - { id: di.blamed-on-volume,                          family: mechanism-attribution, title: "On-site DI water credited to transport volume" }
+  - { id: di.blamed-on-regulation,                      family: mechanism-attribution, title: "On-site DI water credited to transport regulation" }
+  - { id: di.blamed-on-source-purity,                   family: mechanism-attribution, title: "On-site DI water credited to municipal water already being pure" }
+  - { id: dpm.blamed-on-die-size,                       family: mechanism-attribution, title: "Automotive defect targets credited to die size" }
+  - { id: dpm.blamed-on-temperature,                    family: mechanism-attribution, title: "Automotive defect targets credited to operating temperature" }
+  - { id: dpm.blamed-on-test-coverage,                  family: mechanism-attribution, title: "Automotive defect targets credited to test coverage" }
+  - { id: gettering.metal-blamed-on-chemistry,          family: mechanism-attribution, title: "Metal-specific gettering credited to chemical inertness" }
+  - { id: gettering.metal-blamed-on-concentration,      family: mechanism-attribution, title: "Metal-specific gettering credited to concentration" }
+  - { id: gettering.metal-blamed-on-mass,               family: mechanism-attribution, title: "Metal-specific gettering credited to atomic mass" }
+  - { id: immersion.cost-blamed-on-resist,              family: mechanism-attribution, title: "Immersion's cost credited to resist incompatibility" }
+  - { id: immersion.cost-blamed-on-source,              family: mechanism-attribution, title: "Immersion's cost credited to the exposure source" }
+  - { id: industry.idm-blamed-on-ownership,             family: mechanism-attribution, title: "IDM distinguished by owning rather than leasing fabs" }
+  - { id: industry.idm-blamed-on-product-type,          family: mechanism-attribution, title: "IDM distinguished by making memory rather than logic" }
+  - { id: industry.idm-blamed-on-node,                  family: mechanism-attribution, title: "IDM distinguished by process node" }
+  - { id: litho.next-step-blamed-on-second-mask,        family: mechanism-attribution, title: "Step after lithography given as another lithography" }
+  - { id: litho.next-step-blamed-on-oxidation,          family: mechanism-attribution, title: "Step after lithography given as oxidation, which resist cannot survive" }
+  - { id: litho.next-step-blamed-on-metrology,          family: mechanism-attribution, title: "Step after lithography given as inspection alone" }
+  - { id: mask.blamed-on-chemical-exclusion,            family: mechanism-attribution, title: "Oxide masking credited to chemical exclusion rather than a rate difference" }
+  - { id: mask.blamed-on-thickness-alone,               family: mechanism-attribution, title: "Oxide masking credited to thickness against junction depth" }
+  - { id: mask.blamed-on-diffusion-mechanism,           family: mechanism-attribution, title: "Oxide masking credited to interstitial against substitutional diffusion" }
+  - { id: node.name-assumed-physical,                   family: mechanism-attribution, title: "Node name assumed to be a physical gate length" }
+  - { id: node.name-blamed-on-oxide,                    family: mechanism-attribution, title: "Node name credited to gate oxide thickness" }
+  - { id: node.name-blamed-on-metal-pitch,              family: mechanism-attribution, title: "Node name credited to metal pitch" }
+  - { id: oai.blamed-on-intensity,                      family: mechanism-attribution, title: "Off-axis illumination credited to delivered intensity" }
+  - { id: oai.blamed-on-wavelength,                     family: mechanism-attribution, title: "Off-axis illumination credited to effective wavelength" }
+  - { id: oai.blamed-on-zeroth-removal,                 family: mechanism-attribution, title: "Off-axis illumination credited to removing the zeroth order" }
+  - { id: pressure.blamed-on-diffusivity-only,          family: mechanism-attribution, title: "Oxidation pressure credited to diffusivity alone" }
+  - { id: pressure.blamed-on-reaction-only,             family: mechanism-attribution, title: "Oxidation pressure credited to the interface reaction alone" }
+  - { id: pressure.blamed-on-tau,                       family: mechanism-attribution, title: "Oxidation pressure credited to the time offset" }
+  - { id: rca.organics-blamed-on-hf,                    family: mechanism-attribution, title: "Organic removal credited to the HF step" }
+  - { id: rca.organics-blamed-on-sc2,                   family: mechanism-attribution, title: "Organic removal credited to the SC-2 step" }
+  - { id: rca.organics-blamed-on-rinse,                 family: mechanism-attribution, title: "Organic removal credited to ultrasonic rinsing" }

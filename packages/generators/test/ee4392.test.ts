@@ -359,3 +359,48 @@ describe('EE 4392 lithography bounds', () => {
     expect(verdicts.has('no')).toBe(true);
   });
 });
+
+/**
+ * The masked two-step growth, checked against the exam it is modelled on.
+ *
+ * Exam 1 asked for a 0.2 um wet oxidation at 1000 C over a 0.4 um field oxide
+ * and wanted three numbers out of it. Two of them are pinned here against the
+ * instructor's published key, which is the only external check this generator
+ * has — the rest of the file can only say the answer is plausible.
+ */
+describe('masked two-step oxidation matches the exam it models', () => {
+  const wet1000 = WET_111[1000]!;
+
+  it('the window takes 0.263 hr and consumes 0.088 um of silicon', () => {
+    const t = oxideTime(0.2, wet1000, 0);
+    expect(t).toBeCloseTo(0.263, 3);
+    expect(0.44 * 0.2).toBeCloseTo(0.088, 4);
+  });
+
+  it('the field region grows less than the window in the same time', () => {
+    const t = oxideTime(0.2, wet1000, 0);
+    const fieldFinal = oxideThickness(t, wet1000, 0.4);
+    expect(fieldFinal - 0.4).toBeLessThan(0.2);
+    expect(fieldFinal).toBeCloseTo(0.480, 3);
+  });
+
+  it('never reports the field region as thinner than it started', () => {
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.oxidation.masked-two-step', seed);
+      if (!stem.includes('**field**')) continue;
+      const field = Number(/field oxide \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      expect(field, `unparsed field oxide in: ${stem}`).toBeGreaterThan(0);
+      const answer = answerOf('ee4392.oxidation.masked-two-step', seed);
+      expect(answer).toBeGreaterThan(field);
+      // and never as thick as naively adding the window's growth
+      const window = Number(/grows \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      expect(answer).toBeLessThan(field + window);
+    }
+  });
+
+  it('asks about both regions across the seed set', () => {
+    const asks = SEEDS.map((s) => stemOf('ee4392.oxidation.masked-two-step', s).includes('**field**'));
+    expect(asks.some(Boolean)).toBe(true);
+    expect(asks.some((a) => !a)).toBe(true);
+  });
+});

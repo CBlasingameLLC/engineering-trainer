@@ -1914,6 +1914,1126 @@
         "sourceRef": "ee4392-concepts",
         "licenseTier": "redistributable"
       }
+    },
+    {
+      "id": "ee4392.concept.035",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.silicon-crystal",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -1.2,
+      "stem": "Crystalline silicon has a diamond cubic structure with a lattice parameter of 5.43 Å and eight atoms per unit cell. Roughly how many silicon atoms occupy a cubic centimetre?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "About $5 \\times 10^{22}$"
+        },
+        {
+          "id": "b",
+          "text": "About $5 \\times 10^{19}$",
+          "misconception": "silicon.atomic-density-off-by-orders"
+        },
+        {
+          "id": "c",
+          "text": "About $8 \\times 10^{23}$, one Avogadro number per cell",
+          "misconception": "silicon.atomic-density-from-avogadro"
+        },
+        {
+          "id": "d",
+          "text": "About $1 \\times 10^{15}$, the typical doping level",
+          "misconception": "silicon.atomic-density-confused-with-doping"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The unit cell is a cube of side $a = 5.43\\ \\mathrm{\\AA} = 5.43 \\times 10^{-8}\\ \\mathrm{cm}$.",
+          "Its volume is $a^3 = 1.6 \\times 10^{-22}\\ \\mathrm{cm^3}$, and it contains eight atoms.",
+          "Dividing gives $8 / (1.6 \\times 10^{-22}) \\approx 5 \\times 10^{22}$ atoms per cubic centimetre.",
+          "This number is worth deriving once and then knowing: it is the denominator whenever a dose or a consumed thickness has to be turned into an atom count."
+        ],
+        "principle": "A lattice parameter and an atoms-per-cell count determine the density completely. Everything else in doping is measured against it.",
+        "hints": [
+          "What is the volume of the unit cell in cubic centimetres?",
+          "How many atoms does each cell hold?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.036",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.silicon-crystal",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "A wafer doped at $10^{16}\\ \\mathrm{cm^{-3}}$ is often called heavily doped in casual conversation. Compared with the silicon itself, what fraction of lattice sites is that?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "About two in ten million — doping is a tiny perturbation of an almost pure crystal"
+        },
+        {
+          "id": "b",
+          "text": "About one in a hundred",
+          "misconception": "doping.fraction-overestimated"
+        },
+        {
+          "id": "c",
+          "text": "About one in a thousand",
+          "misconception": "doping.fraction-overestimated-mildly"
+        },
+        {
+          "id": "d",
+          "text": "Roughly half, since the dopant must outnumber intrinsic carriers",
+          "misconception": "doping.fraction-confused-with-carrier-ratio"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Silicon has about $5 \\times 10^{22}$ atoms per cubic centimetre.",
+          "A doping level of $10^{16}\\ \\mathrm{cm^{-3}}$ is therefore $10^{16}/(5 \\times 10^{22}) = 2 \\times 10^{-7}$ of the atoms present.",
+          "That is two parts in ten million, and even a degenerate $10^{20}\\ \\mathrm{cm^{-3}}$ implant is only two parts in a thousand.",
+          "This is why contamination targets are so severe: an unintended impurity at a level that would be invisible in most materials is comparable to the deliberate doping here."
+        ],
+        "principle": "Doping changes the electrical behaviour of silicon completely while barely changing its composition. That sensitivity is exactly why the cleanroom exists.",
+        "hints": [
+          "How many silicon atoms are there to compare against?",
+          "What does that ratio imply about tolerable contamination?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.037",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.wafer-and-fab",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.9,
+      "stem": "What distinguishes an integrated device manufacturer from a pure-play foundry?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "An IDM designs and manufactures its own products; a pure-play foundry manufactures to other companies' designs and sells no chips of its own"
+        },
+        {
+          "id": "b",
+          "text": "An IDM owns its fabs while a foundry leases capacity from others",
+          "misconception": "industry.idm-blamed-on-ownership"
+        },
+        {
+          "id": "c",
+          "text": "An IDM makes memory and a foundry makes logic",
+          "misconception": "industry.idm-blamed-on-product-type"
+        },
+        {
+          "id": "d",
+          "text": "An IDM operates at leading-edge nodes and a foundry at trailing ones",
+          "misconception": "industry.idm-blamed-on-node"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The distinction is about which parts of the value chain a company occupies, not about the equipment it owns.",
+          "An integrated device manufacturer does both design and manufacturing in house, and sells the resulting parts.",
+          "A pure-play foundry manufactures only, to designs its customers supply, and competes by not competing with those customers.",
+          "A fabless company is the complement: it designs and sells but owns no manufacturing at all."
+        ],
+        "principle": "The business model determines what a company can be trusted with, which is why the pure-play model exists at all.",
+        "hints": [
+          "Who owns the design in each case?",
+          "Does the company sell chips under its own name?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.038",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.wafer-and-fab",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.2,
+      "stem": "Modern process node names such as \"3 nm\" or \"18 A\" do not correspond to any physical dimension on the chip. What do they track?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Generational density improvements in the spirit of Moore's law, achieved largely through three-dimensional structures rather than shrinking gate length"
+        },
+        {
+          "id": "b",
+          "text": "The thinnest gate oxide in the process",
+          "misconception": "node.name-blamed-on-oxide"
+        },
+        {
+          "id": "c",
+          "text": "The minimum metal pitch of the lowest interconnect layer",
+          "misconception": "node.name-blamed-on-metal-pitch"
+        },
+        {
+          "id": "d",
+          "text": "The physical gate length, which is still measured directly",
+          "misconception": "node.name-assumed-physical"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Under Dennard scaling the node name really was the gate length, and each generation shrank it by about $0.7\\times$.",
+          "That correspondence broke once planar scaling ran out and density came instead from FinFET and gate-all-around structures.",
+          "The names continued as commercial labels for equivalent density gains, so a \"3 nm\" process contains nothing that measures 3 nm.",
+          "This is why comparing nodes between foundries by name alone is meaningless — the useful comparisons are transistor density and performance per watt."
+        ],
+        "principle": "A name that once measured something and now markets something is a common pattern in this industry, and knowing which is which is part of reading a roadmap.",
+        "hints": [
+          "Did the name ever correspond to a real dimension?",
+          "What replaced planar shrinking as the source of density?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.039",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.doping-basics",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -1,
+      "stem": "Phosphorus is introduced into silicon. What does it contribute, and what type of material results?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "It donates a conduction electron, producing n-type silicon"
+        },
+        {
+          "id": "b",
+          "text": "It accepts an electron, leaving a hole and producing p-type silicon",
+          "misconception": "doping.donor-acceptor-swapped"
+        },
+        {
+          "id": "c",
+          "text": "It donates a hole, producing n-type silicon",
+          "misconception": "doping.carrier-type-mismatched"
+        },
+        {
+          "id": "d",
+          "text": "It is electrically neutral and only strains the lattice",
+          "misconception": "doping.dopant-assumed-neutral"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Silicon sits in group IV and forms four covalent bonds with its neighbours.",
+          "Phosphorus is group V, so when it substitutes for a silicon atom it has one valence electron left over after bonding.",
+          "That electron is only weakly bound and enters the conduction band at room temperature, making the material n-type.",
+          "The group III elements — boron most commonly — are the mirror image: one bond short, leaving a hole and making the material p-type."
+        ],
+        "principle": "The group number relative to silicon's four is the whole rule. Group V donates, group III accepts.",
+        "hints": [
+          "How many valence electrons does phosphorus have?",
+          "How many bonds does it need to make?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.040",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.doping-basics",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.1,
+      "stem": "Silicon dioxide is used as a mask against dopant diffusion. What has to be true for that to work for a particular dopant?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "The dopant must diffuse much more slowly in the oxide than in silicon, so the oxide is thick enough to stop it within the process time"
+        },
+        {
+          "id": "b",
+          "text": "The dopant must be chemically unable to enter the oxide at all",
+          "misconception": "mask.blamed-on-chemical-exclusion"
+        },
+        {
+          "id": "c",
+          "text": "The oxide must be thicker than the intended junction depth",
+          "misconception": "mask.blamed-on-thickness-alone"
+        },
+        {
+          "id": "d",
+          "text": "The dopant must be an interstitial rather than a substitutional diffuser",
+          "misconception": "mask.blamed-on-diffusion-mechanism"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Masking is a race, not a wall: the question is whether the dopant crosses the oxide before the process ends.",
+          "Boron, phosphorus, arsenic and antimony all diffuse far more slowly in $\\mathrm{SiO_2}$ than in silicon, so a modest oxide thickness stops them.",
+          "Gallium and indium do not follow that pattern and pass through oxide much more readily, which is why oxide is not a general-purpose dopant mask.",
+          "The required thickness therefore depends on the dopant, the temperature and the duration together, not on the junction depth."
+        ],
+        "principle": "A diffusion mask works on a rate comparison over a fixed time. Whether it works at all is a property of the dopant, not of the mask.",
+        "hints": [
+          "Is the dopant stopped, or merely slowed?",
+          "Does the same oxide mask every dopant equally well?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.041",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.contamination-control",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.6,
+      "stem": "Why is airflow in a cleanroom directed downward in a laminar pattern rather than simply circulated?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Unidirectional downward flow carries particles away from wafers and out through the floor before they can settle"
+        },
+        {
+          "id": "b",
+          "text": "Laminar flow reduces the energy needed to move the same volume of air",
+          "misconception": "cleanroom.laminar-blamed-on-energy"
+        },
+        {
+          "id": "c",
+          "text": "Turbulent flow would heat the room beyond process tolerance",
+          "misconception": "cleanroom.laminar-blamed-on-heating"
+        },
+        {
+          "id": "d",
+          "text": "Downward flow keeps the room at positive pressure",
+          "misconception": "cleanroom.laminar-blamed-on-pressure"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Filtration removes particles from the supply air, but people and tools generate particles continuously inside the room.",
+          "Turbulent circulation would keep those particles suspended and give them many chances to land on a wafer.",
+          "Unidirectional downward flow gives each particle one short, predictable path: from where it was generated, straight down, and out.",
+          "That is also why wafers are handled below the airflow rather than above it, and why an operator leaning over an open cassette is a defect mechanism."
+        ],
+        "principle": "Filtration controls what enters the room; airflow direction controls what happens to whatever is generated inside it.",
+        "hints": [
+          "Where do particles inside a cleanroom come from?",
+          "What would turbulence do to a particle's path?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.042",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.contamination-control",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0,
+      "stem": "Why was the FS209 cleanroom classification replaced by the ISO 14644 scheme?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "FS209 counted particles at a single 0.5 µm threshold, which cannot express control of the much smaller particles modern nodes care about"
+        },
+        {
+          "id": "b",
+          "text": "FS209 was a United States standard and ISO is international, with no technical difference",
+          "misconception": "cleanroom.iso-blamed-on-jurisdiction"
+        },
+        {
+          "id": "c",
+          "text": "FS209 measured particles per cubic foot and the industry moved to metric units",
+          "misconception": "cleanroom.iso-blamed-on-units"
+        },
+        {
+          "id": "d",
+          "text": "FS209 classes were too coarse at the dirty end of the range",
+          "misconception": "cleanroom.iso-blamed-on-coarse-classes"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "An FS209 class number was the count of particles of 0.5 µm and larger per cubic foot of air.",
+          "As critical defect sizes fell well below that, two rooms with identical FS209 classes could differ enormously in the particles that actually mattered.",
+          "ISO 14644 specifies cumulative concentration limits across a range of particle sizes, so a class constrains the small end as well.",
+          "The change of units is real but incidental; the substantive change is that the classification now says something about the sizes that kill modern die."
+        ],
+        "principle": "A specification is only useful while it constrains the quantity that matters. When the critical size moved, the old metric stopped discriminating.",
+        "hints": [
+          "What single size did FS209 measure?",
+          "Is that the size that kills a modern die?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.043",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.wafer-cleaning",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.3,
+      "stem": "Which RCA step removes organic residues and photoresist, and what makes it work?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "The sulphuric acid and hydrogen peroxide mixture, because peroxide is a strong enough oxidiser to break organic molecules apart"
+        },
+        {
+          "id": "b",
+          "text": "The dilute HF step, because HF dissolves carbon-containing films",
+          "misconception": "rca.organics-blamed-on-hf"
+        },
+        {
+          "id": "c",
+          "text": "The SC-2 hydrochloric step, because acid hydrolyses the polymer",
+          "misconception": "rca.organics-blamed-on-sc2"
+        },
+        {
+          "id": "d",
+          "text": "The DI water rinse with ultrasonic agitation, which dislodges them mechanically",
+          "misconception": "rca.organics-blamed-on-rinse"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Organic contamination — resist residue, skin oils, packaging films — is held together by carbon-carbon and carbon-hydrogen bonds.",
+          "Breaking those requires oxidation, and the sulphuric-peroxide mixture is an aggressive oxidiser at 120 to 150 °C.",
+          "HF strips oxide and leaves organics untouched; SC-2 targets alkali ions and metals.",
+          "This is the general shape of the RCA sequence: each bath is chosen for one contaminant class, and running them in the wrong order wastes the chemistry."
+        ],
+        "principle": "Each step in the clean is matched to a bond type. Knowing what holds a contaminant on tells you what will take it off.",
+        "hints": [
+          "What kind of bonds hold an organic film together?",
+          "Which bath is the strong oxidiser?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.044",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.wafer-cleaning",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.2,
+      "stem": "Why is deionised water manufactured on site at a fab rather than delivered?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Water picks up ions from any container or pipe it sits in, so purity degrades in storage and transport and must be produced where it is used"
+        },
+        {
+          "id": "b",
+          "text": "The volumes involved make transport uneconomic",
+          "misconception": "di.blamed-on-volume"
+        },
+        {
+          "id": "c",
+          "text": "Deionised water is classified as hazardous in transport",
+          "misconception": "di.blamed-on-regulation"
+        },
+        {
+          "id": "d",
+          "text": "Municipal water is already pure enough and only needs filtering at the point of use",
+          "misconception": "di.blamed-on-source-purity"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Ultrapure water is an aggressive solvent precisely because it has nothing dissolved in it.",
+          "It leaches ions from pipework, tanks and the air, so resistivity falls continuously once production stops.",
+          "Fabs therefore run continuous polishing loops that recirculate water through ion exchange and keep it at specification right up to the point of use.",
+          "Volume is genuinely large as well, but the controlling reason is that purity cannot be preserved in storage."
+        ],
+        "principle": "Some specifications cannot be met by a product and then kept; they have to be maintained continuously. Ultrapure water is the clearest example in the fab.",
+        "hints": [
+          "What happens to pure water sitting in a tank?",
+          "Why is pure water such an effective solvent?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.045",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.killer-defects",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.1,
+      "stem": "A fab observes that defects on its wafers are not randomly scattered but appear in recognisable spatial patterns. What does that usually indicate?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "A specific tool or handling step is responsible, and the pattern is a signature that points at it"
+        },
+        {
+          "id": "b",
+          "text": "The wafers were measured incorrectly, since real defects are random by definition",
+          "misconception": "defects.patterns-denied"
+        },
+        {
+          "id": "c",
+          "text": "The defect density is too low for randomness to be visible",
+          "misconception": "defects.patterns-blamed-on-low-count"
+        },
+        {
+          "id": "d",
+          "text": "The wafer was misaligned during inspection",
+          "misconception": "defects.patterns-blamed-on-inspection"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Random scatter is what a defect distribution looks like when many independent small sources contribute.",
+          "A pattern means one source dominates, and its geometry usually identifies it: edge rings from handling or edge-bead removal, radial streaks from spin coating, clusters from a chuck, repeating shapes from a reticle field.",
+          "This is why defect maps are read visually as well as counted — the count says how bad, the pattern says what.",
+          "It is also the physical basis for clustering in the yield models: real defect sources are localised, which is what the negative binomial's clustering factor encodes."
+        ],
+        "principle": "The spatial arrangement of defects carries information the total count destroys. That is also why Poisson, which assumes it away, is the pessimistic model.",
+        "hints": [
+          "What would produce a ring at the wafer edge?",
+          "How does this connect to the clustering factor?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.046",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.killer-defects",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.5,
+      "stem": "Automotive-grade silicon is specified at under one defective part per million, while a novelty toy may tolerate more than ten thousand. What drives the difference?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "The cost and consequence of a field failure, which ranges from replacing a cheap item to a safety recall"
+        },
+        {
+          "id": "b",
+          "text": "Automotive parts are physically larger and so need tighter defect control",
+          "misconception": "dpm.blamed-on-die-size"
+        },
+        {
+          "id": "c",
+          "text": "Automotive parts run at higher temperatures, which exposes more defects",
+          "misconception": "dpm.blamed-on-temperature"
+        },
+        {
+          "id": "d",
+          "text": "Consumer parts are tested less thoroughly, so their true rate is unknown",
+          "misconception": "dpm.blamed-on-test-coverage"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Defects per million is a specification on parts that escape to the customer, not on manufacturing yield.",
+          "What sets the acceptable level is what a single escape costs: a toy is replaced for a few dollars, an airbag controller or braking sensor can mean a recall and a safety investigation.",
+          "That economic asymmetry is why automotive-qualified lines run tighter process control, more burn-in and more screening than consumer lines on the same equipment.",
+          "It is also why the same die can be sold into two markets at different grades after different amounts of test."
+        ],
+        "principle": "Quality targets are set by the cost of failure, not by what the process can manage. The process is then built to reach the target.",
+        "hints": [
+          "What does a single escaped defect cost in each case?",
+          "Is this a statement about yield or about escapes?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.047",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.deal-grove-model",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.4,
+      "stem": "Raising the oxidation pressure increases the growth rate. Which part of the Deal-Grove model does that act on?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "The equilibrium oxidant concentration $C^{*}$, which by Henry's law rises with partial pressure and raises both $B$ and $B/A$"
+        },
+        {
+          "id": "b",
+          "text": "The diffusivity $D$ alone, so only the parabolic constant changes",
+          "misconception": "pressure.blamed-on-diffusivity-only"
+        },
+        {
+          "id": "c",
+          "text": "The reaction rate $k_s$ alone, so only the linear constant changes",
+          "misconception": "pressure.blamed-on-reaction-only"
+        },
+        {
+          "id": "d",
+          "text": "The fictitious time offset $\\tau$, which shrinks with pressure",
+          "misconception": "pressure.blamed-on-tau"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Henry's law makes the dissolved oxidant concentration proportional to its partial pressure above the film.",
+          "$C^{*}$ appears in both rate constants: $B = 2DC^{*}/N_1$ and $B/A = k_sC^{*}/N_1$.",
+          "So raising pressure scales both, and the growth rate rises in every regime rather than only in one.",
+          "The practical value is thermal budget: about an extra atmosphere buys roughly 30 °C of temperature reduction at the same rate, which means less unwanted dopant diffusion elsewhere on the wafer."
+        ],
+        "principle": "A parameter that appears in both rate constants changes the whole curve. Knowing where a variable enters the model tells you which regime it affects.",
+        "hints": [
+          "Where does $C^*$ appear in the two rate constants?",
+          "What is the practical reason to trade pressure for temperature?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.048",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.gettering",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.2,
+      "stem": "Why is gettering effectiveness strongly metal-dependent, working well for copper and poorly for titanium?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "The mechanism relies on the contaminant diffusing to a trap site, and diffusivities differ by orders of magnitude between metals"
+        },
+        {
+          "id": "b",
+          "text": "Titanium is chemically inert and forms no bond with trap sites",
+          "misconception": "gettering.metal-blamed-on-chemistry"
+        },
+        {
+          "id": "c",
+          "text": "Copper is present at lower concentrations, so its traps never saturate",
+          "misconception": "gettering.metal-blamed-on-concentration"
+        },
+        {
+          "id": "d",
+          "text": "Titanium is a lighter atom and is not held by lattice strain",
+          "misconception": "gettering.metal-blamed-on-mass"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Gettering has three steps, and the middle one is ordinary diffusion toward a sink.",
+          "Copper and interstitial gold are extremely fast diffusers in silicon and reach trap sites easily within a normal thermal step.",
+          "Titanium diffuses slowly, so within the same time and temperature much of it never arrives.",
+          "The remedy is not a better trap but a different contamination strategy — for slow diffusers, keeping the metal out is the only approach that works."
+        ],
+        "principle": "When a mechanism depends on transport, its effectiveness inherits the spread in transport rates. That spread is enormous for metals in silicon.",
+        "hints": [
+          "Which of the three gettering steps depends on the specific metal?",
+          "What should be done instead for a slow diffuser?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.049",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.oxide-metrology",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.4,
+      "stem": "A thermally oxidised wafer shows a distinct colour under white light that changes with oxide thickness. What produces it?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Thin-film interference between light reflected from the oxide surface and from the oxide-silicon interface, which cancels some wavelengths"
+        },
+        {
+          "id": "b",
+          "text": "Absorption bands in $\\mathrm{SiO_2}$ that shift with thickness",
+          "misconception": "colour.blamed-on-absorption"
+        },
+        {
+          "id": "c",
+          "text": "Scattering from the roughness of the oxide surface",
+          "misconception": "colour.blamed-on-scattering"
+        },
+        {
+          "id": "d",
+          "text": "Fluorescence of the oxide under ambient illumination",
+          "misconception": "colour.blamed-on-fluorescence"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Light reaching the wafer partly reflects at the top of the oxide and partly travels through it and reflects at the silicon beneath.",
+          "The two reflections recombine with a path difference set by the oxide thickness and its refractive index.",
+          "Wavelengths that meet the destructive condition are removed from the reflected light, and what remains is the colour seen.",
+          "That is also why the colour repeats through several orders as the film thickens, and why a colour chart is only useful when the approximate thickness is already known."
+        ],
+        "principle": "The colour is a measurement, not a property of the material. It encodes an optical path length, which is thickness times index.",
+        "hints": [
+          "How many reflections does the eye receive?",
+          "Why does the same colour recur at several thicknesses?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.050",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.oxide-metrology",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.3,
+      "stem": "A wafer is measured by colour chart and reported as 100 nm of oxide. What is the main risk in that measurement?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Interference colours repeat in higher orders, so a much thicker film can show the same colour"
+        },
+        {
+          "id": "b",
+          "text": "Colour charts are only calibrated for wet oxides",
+          "misconception": "colour.risk-blamed-on-ambient"
+        },
+        {
+          "id": "c",
+          "text": "The colour depends on the doping of the substrate underneath",
+          "misconception": "colour.risk-blamed-on-doping"
+        },
+        {
+          "id": "d",
+          "text": "Colour charts cannot resolve films thinner than a micrometre",
+          "misconception": "colour.risk-blamed-on-range"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The destructive condition is met whenever the optical path difference is an odd number of half wavelengths, which happens repeatedly as thickness grows.",
+          "So a given colour corresponds to a family of thicknesses, not to one.",
+          "A colour reading is therefore only unambiguous when the order is already known from the process, which it usually is.",
+          "Reflectometry and ellipsometry resolve the ambiguity properly by fitting across a range of wavelengths rather than judging one perceived colour."
+        ],
+        "principle": "An ambiguous measurement is safe only while something else pins down which branch you are on. Saying what that something is, is part of quoting the result.",
+        "hints": [
+          "Does one colour correspond to exactly one thickness?",
+          "What extra information resolves it?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.051",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.resist-chemistry",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.2,
+      "stem": "What are the eight steps of a photolithography module, in order?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Vapour prime, spin coat, soft bake, align and expose, post-exposure bake, develop, hard bake, develop inspect"
+        },
+        {
+          "id": "b",
+          "text": "Spin coat, vapour prime, soft bake, align and expose, develop, post-exposure bake, hard bake, inspect",
+          "misconception": "litho.steps-prime-after-coat"
+        },
+        {
+          "id": "c",
+          "text": "Vapour prime, spin coat, align and expose, soft bake, post-exposure bake, develop, inspect, hard bake",
+          "misconception": "litho.steps-bake-after-expose"
+        },
+        {
+          "id": "d",
+          "text": "Vapour prime, spin coat, soft bake, align and expose, develop, post-exposure bake, hard bake, inspect",
+          "misconception": "litho.steps-peb-after-develop"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "The prime comes first because it changes the surface chemistry so resist will adhere; applying it afterwards would do nothing.",
+          "The soft bake drives off solvent so the film is stable enough to expose; it has to precede exposure.",
+          "The post-exposure bake sits between exposure and develop, which is what makes chemical amplification possible — the acid generated at exposure needs heat before the pattern is developed away.",
+          "The hard bake follows develop and toughens the remaining resist for whatever etch or implant it will mask, and the inspection closes the loop before the wafer moves on."
+        ],
+        "principle": "The order is forced by what each step needs from the one before it. A step in the wrong place is not merely inefficient; it usually does nothing at all.",
+        "hints": [
+          "Why must the prime precede the coat?",
+          "Where must the post-exposure bake sit for amplification to work?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.052",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.resist-chemistry",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.4,
+      "stem": "What usually happens to a wafer immediately after the lithography module completes?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Etch or ion implantation, using the patterned resist as the mask that the whole module existed to create"
+        },
+        {
+          "id": "b",
+          "text": "Another lithography step to add the complementary pattern",
+          "misconception": "litho.next-step-blamed-on-second-mask"
+        },
+        {
+          "id": "c",
+          "text": "Thermal oxidation, which the resist survives",
+          "misconception": "litho.next-step-blamed-on-oxidation"
+        },
+        {
+          "id": "d",
+          "text": "Metrology alone, since resist patterns are inspected and then stripped",
+          "misconception": "litho.next-step-blamed-on-metrology"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Lithography does not modify the wafer in any lasting way; it produces a patterned polymer film.",
+          "The value of that film is entirely in what it blocks: etchant from the regions to be preserved, or ions from the regions not to be doped.",
+          "So the step after develop inspect is the one the mask was made for, and the resist is stripped once it has done its job.",
+          "It cannot be oxidation: an organic resist would simply burn off at the several hundred degrees oxidation requires."
+        ],
+        "principle": "Lithography is never the point. It is the step that makes a subsequent selective step possible, which is why the mask exists.",
+        "hints": [
+          "What does the patterned resist physically do?",
+          "Would resist survive a furnace?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.053",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.resolution-enhancement",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.35,
+      "stem": "How does annular or off-axis illumination improve resolution?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "It illuminates the mask at an angle so both the zeroth and first diffraction orders fall inside the lens aperture, which lowers the achievable $k_1$"
+        },
+        {
+          "id": "b",
+          "text": "It concentrates more energy into the same area, shortening exposure",
+          "misconception": "oai.blamed-on-intensity"
+        },
+        {
+          "id": "c",
+          "text": "It reduces the effective wavelength of the illumination",
+          "misconception": "oai.blamed-on-wavelength"
+        },
+        {
+          "id": "d",
+          "text": "It removes the zeroth order entirely, leaving a sharper image",
+          "misconception": "oai.blamed-on-zeroth-removal"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Forming an image of a periodic pattern needs at least two diffraction orders to interfere at the wafer.",
+          "With on-axis illumination the first order can fall outside the aperture for a fine pitch, leaving only the zeroth order and no image at all.",
+          "Tilting the illumination shifts the whole diffraction pattern so the zeroth and one first order both fit inside the aperture.",
+          "Nothing about the lens or the wavelength has changed; what has changed is which orders are collected, and that shows up as a smaller usable $k_1$."
+        ],
+        "principle": "Resolution enhancement techniques mostly work by changing what the existing optics collect, rather than by improving the optics.",
+        "hints": [
+          "How many diffraction orders are needed to form an image?",
+          "What does tilting the illumination do to where those orders land?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
+    },
+    {
+      "id": "ee4392.concept.054",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "ee4392.resolution-enhancement",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.5,
+      "stem": "What is the main disadvantage of immersion lithography?",
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "The water introduces a new defect mechanism — bubbles, watermarks and particles carried in the fluid — and constrains scan speed"
+        },
+        {
+          "id": "b",
+          "text": "It cannot be used with chemically amplified resists",
+          "misconception": "immersion.cost-blamed-on-resist"
+        },
+        {
+          "id": "c",
+          "text": "It requires a shorter wavelength source than dry lithography",
+          "misconception": "immersion.cost-blamed-on-source"
+        },
+        {
+          "id": "d",
+          "text": "It reduces depth of focus compared with a dry system at the same NA",
+          "misconception": "immersion.cost-blamed-on-dof"
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Immersion buys a higher practical numerical aperture and, for a given feature, better depth of focus than a dry tool would give.",
+          "What it costs is a liquid in contact with the resist during exposure, moving at scan speed.",
+          "Bubbles scatter light, watermarks leave residue, and any particle in the fluid is delivered directly to the wafer, so water purity and flow control become yield-critical.",
+          "The resist also has to tolerate contact with water without leaching its photo-acid generator, which drove the development of topcoat layers."
+        ],
+        "principle": "A technique that improves one axis usually introduces a new failure mode rather than none. Knowing the cost is what makes the trade real.",
+        "hints": [
+          "What is now physically touching the resist during exposure?",
+          "Does immersion help or hurt depth of focus?"
+        ]
+      },
+      "provenance": {
+        "producer": "hand",
+        "sourceRef": "ee4392-concepts",
+        "licenseTier": "redistributable"
+      }
     }
   ]
 }
