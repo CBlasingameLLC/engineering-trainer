@@ -179,7 +179,19 @@ admits one; reserve model authoring for what generators structurally cannot do.
 
 `licenseTier` is load-bearing for the commercial path. `personal-only` content
 lives in gitignored `content/packs/personal/`, is rejected from redistributable
-packs by the schema, and never enters a release build. Don't weaken that.
+packs by the schema, and is bundled only when a build sets
+`VITE_ET_INCLUDE_PERSONAL=1` — default off, so an artifact built without
+thinking about it is safe to hand to someone else, and CI never sets it. A
+build that did include it says so in the app with the item count, because three
+enforcement points that are invisible from inside the running binary cannot be
+checked by whoever is holding it. Don't weaken any of the four.
+
+The flag exists because the rule was previously "never bundled anywhere",
+which sounds stricter and was useless: owned material could not sharpen its
+owner's training either, so the rule had all of the cost and none of the
+benefit. The distinction that matters is redistributable against personal, not
+development against production — a learner's own installer is a production
+build.
 
 Raw course material — homework, slides, notes, book chapters, a syllabus — goes
 in gitignored `content/coursework/<COURSE>/`. It is *source*, not content: the

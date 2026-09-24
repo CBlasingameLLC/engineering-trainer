@@ -33,7 +33,31 @@ page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
 
 const fail = (message) => { console.error(`FAIL: ${message}`); process.exitCode = 1; };
 
+/**
+ * Wait for the app to finish booting before asking it anything.
+ *
+ * `networkidle` says the network went quiet, which happens long before
+ * `boot()` has parsed the content bank and replayed the attempt log — around
+ * 800 ms on this machine and growing with the bank. Probing the DOM at that
+ * point is a race, and this driver lost it silently: the onboarding branch was
+ * skipped because the prompt had not rendered yet, and the run then failed on
+ * the *next* wait with a message about the dashboard, which is the wrong
+ * place to look entirely.
+ *
+ * The other two drivers already waited rather than counted. This one counted.
+ */
+async function waitForBoot() {
+  // `.or()` rather than a comma: the `text=` engine has no alternation, so a
+  // comma-separated pair is read as one literal string and waits forever.
+  await page
+    .locator('text=What have you already taken?')
+    .or(page.locator('text=Engineering Trainer'))
+    .first()
+    .waitFor({ state: 'visible', timeout: 20000 });
+}
+
 await page.goto(BASE, { waitUntil: 'networkidle' });
+await waitForBoot();
 
 // --- Onboarding (fresh profile) --------------------------------------------
 if (await page.locator('text=What have you already taken?').count() > 0) {
@@ -319,6 +343,7 @@ await page.screenshot({ path: `${SHOT}/09-circuit-template.png`, fullPage: true 
 // non-empty is not enough — a list of everything would also be non-empty — so
 // each row must name a real KC and a real unit from the schedule.
 await page.goto(BASE, { waitUntil: 'networkidle' });
+await waitForBoot();
 await page.locator('[data-testid="nav-term"]').click();
 await page.waitForSelector('[data-testid="term-view"]', { timeout: 10000 });
 
