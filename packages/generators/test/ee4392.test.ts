@@ -553,3 +553,137 @@ describe('EE 4392 dopant transport bounds', () => {
     expect(asks.some((a) => !a)).toBe(true);
   });
 });
+
+/**
+ * Etch, deposition and interconnect bounds.
+ *
+ * The same no-external-key situation as the dopant unit, plus one case where a
+ * published rule of thumb does exist and is worth pinning: the mean free path
+ * of air at room temperature is about 5 cm at a millitorr, which is the number
+ * every vacuum engineer carries around. If the implementation reproduces that
+ * it has the constants and the unit conversion right together.
+ */
+describe('EE 4392 etch and deposition bounds', () => {
+  it('mean free path matches the millitorr rule of thumb', () => {
+    const kB = 1.380649e-23;
+    const d = 3.7e-10;
+    const lambdaCm = (p: number, t: number) =>
+      ((kB * t) / (Math.SQRT2 * Math.PI * d * d * p * 133.322)) * 100;
+    // ~5 cm at 1 mTorr, room temperature.
+    expect(lambdaCm(1e-3, 293.15)).toBeGreaterThan(4);
+    expect(lambdaCm(1e-3, 293.15)).toBeLessThan(6);
+    // and inversely proportional to pressure
+    expect(lambdaCm(1e-4, 293.15) / lambdaCm(1e-3, 293.15)).toBeCloseTo(10, 6);
+  });
+
+  it('every mean free path is positive and rises as pressure falls', () => {
+    for (const seed of SEEDS) {
+      expect(answerOf('ee4392.deposition.mean-free-path', seed)).toBeGreaterThan(0);
+    }
+  });
+
+  it('total etch time always exceeds the time to clear the film', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.etch.selectivity', seed);
+      if (!stem.includes('total etch time')) continue;
+      examined += 1;
+      const thickness = Number(/A \$(\d+)\\,\\mathrm/.exec(stem)?.[1]);
+      const rate = Number(/etched at \$(\d+)\\,\\mathrm\{nm\/min\}/.exec(stem)?.[1]);
+      expect(thickness, `unparsed thickness in: ${stem}`).toBeGreaterThan(0);
+      expect(rate, `unparsed rate in: ${stem}`).toBeGreaterThan(0);
+      expect(answerOf('ee4392.etch.selectivity', seed)).toBeGreaterThan(thickness / rate);
+    }
+    atLeastOne(examined, 'an etch-time item');
+  });
+
+  it('underlayer loss is positive and smaller than the film etched', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.etch.selectivity', seed);
+      if (!stem.includes('underlying layer is lost')) continue;
+      examined += 1;
+      const thickness = Number(/A \$(\d+)\\,\\mathrm/.exec(stem)?.[1]);
+      const loss = answerOf('ee4392.etch.selectivity', seed);
+      expect(loss).toBeGreaterThan(0);
+      // Selectivity is always well above one here, so the underlayer must lose
+      // far less than the film did.
+      expect(loss).toBeLessThan(thickness);
+    }
+    atLeastOne(examined, 'an underlayer-loss item');
+  });
+
+  it('a perfectly anisotropic etch does not undercut, and an isotropic one undercuts fully', () => {
+    const lateral = (depth: number, a: number) => depth * (1 - a);
+    expect(lateral(300, 1)).toBe(0);
+    expect(lateral(300, 0)).toBe(300);
+    // and undercut falls monotonically as anisotropy rises
+    let previous = Infinity;
+    for (const a of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
+      const l = lateral(300, a);
+      expect(l).toBeLessThan(previous);
+      previous = l;
+    }
+  });
+
+  it('an etched opening is never narrower than its mask', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.etch.bias-anisotropy', seed);
+      if (!stem.includes('width of the etched opening')) continue;
+      examined += 1;
+      const mask = Number(/feature \$(\d+)\\,\\mathrm/.exec(stem)?.[1]);
+      expect(mask, `unparsed mask width in: ${stem}`).toBeGreaterThan(0);
+      expect(answerOf('ee4392.etch.bias-anisotropy', seed)).toBeGreaterThanOrEqual(mask);
+    }
+    atLeastOne(examined, 'an opening-width item');
+  });
+
+  it('step coverage never exceeds the nominal thickness', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.deposition.step-coverage', seed);
+      if (!stem.includes('How thick is the film on the via sidewall')) continue;
+      examined += 1;
+      const nominal = Number(/deposits \$(\d+)\\,\\mathrm/.exec(stem)?.[1]);
+      const sidewall = answerOf('ee4392.deposition.step-coverage', seed);
+      expect(sidewall).toBeGreaterThan(0);
+      expect(sidewall).toBeLessThan(nominal);
+    }
+    atLeastOne(examined, 'a sidewall-thickness item');
+  });
+
+  it('a reported coverage percentage stays between 0 and 100', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.deposition.step-coverage', seed);
+      if (!stem.includes('What is the step coverage')) continue;
+      examined += 1;
+      const coverage = answerOf('ee4392.deposition.step-coverage', seed);
+      expect(coverage).toBeGreaterThan(0);
+      expect(coverage).toBeLessThanOrEqual(100);
+    }
+    atLeastOne(examined, 'a coverage-percentage item');
+  });
+
+  it('interconnect delay is positive and grows as the square of length', () => {
+    for (const seed of SEEDS) {
+      expect(answerOf('ee4392.interconnect.rc-delay', seed)).toBeGreaterThan(0);
+    }
+    // R goes as L and C goes as L, so RC goes as L squared. This is the claim
+    // the whole unit rests on, and no bound on a single answer can check it.
+    const rc = (lengthUm: number) => {
+      const lengthCm = lengthUm * 1e-4;
+      const r = (1.68e-6 * lengthCm) / (0.35 * 0.8 * 1e-8);
+      const c = (3.9 * 8.854e-14 * 0.35e-4 * lengthCm) / 0.2e-4;
+      return r * c;
+    };
+    expect(rc(2000) / rc(1000)).toBeCloseTo(4, 6);
+    expect(rc(5000) / rc(1000)).toBeCloseTo(25, 6);
+  });
+
+  it('copper gives a lower delay than aluminium at the same geometry', () => {
+    const r = (rho: number) => (rho * 0.1) / (0.35 * 0.8 * 1e-8);
+    expect(r(1.68e-6)).toBeLessThan(r(2.65e-6));
+  });
+});

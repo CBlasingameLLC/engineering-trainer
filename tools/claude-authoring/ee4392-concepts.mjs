@@ -949,6 +949,160 @@ const items = [
     ],
     'A technique that improves one axis usually introduces a new failure mode rather than none. Knowing the cost is what makes the trade real.',
     ['What is now physically touching the resist during exposure?', 'Does immersion help or hurt depth of focus?']),
+
+  // ---- Etch, deposition and interconnect: the conceptual half ----------
+  item('ee4392.plasma-etch', 0.2,
+    'Plasma etching is strongly anisotropic while wet etching is essentially isotropic. What produces the directionality?',
+    [
+      o('a', 'Ions are accelerated across the sheath and arrive nearly perpendicular to the wafer, so the bottom of a feature is bombarded and its sidewalls are not'),
+      o('b', 'The plasma chemistry reacts only with horizontal crystal planes', 'plasma.anisotropy-blamed-on-crystal-planes'),
+      o('c', 'The low pressure prevents the etchant from reaching sidewalls at all', 'plasma.anisotropy-blamed-on-pressure'),
+      o('d', 'Sidewalls cool faster, and the reaction is thermally activated', 'plasma.anisotropy-blamed-on-temperature'),
+    ], 'a',
+    [
+      'A wet etchant is a liquid in contact with every exposed surface, so it removes material at the same rate in every direction and undercuts the mask by as much as it etches down.',
+      'In a plasma the wafer sits at a negative potential relative to the bulk plasma, and ions crossing that sheath are accelerated along the field — normal to the surface.',
+      'Those ions strike horizontal surfaces at full energy and strike vertical sidewalls at glancing incidence or not at all.',
+      'Where the etch depends on that bombardment, the vertical rate greatly exceeds the lateral one, which is what the degree of anisotropy measures.',
+    ],
+    'Directionality comes from how the etchant arrives, not from what it is. That is why it requires a field and therefore a plasma.',
+    ['How does an etchant arrive at the surface in each case?', 'What does the sheath field do to an ion?']),
+
+  item('ee4392.plasma-etch', 0.45,
+    'Plasma etching generally has worse selectivity than wet etching. Why does the mechanism that buys anisotropy cost selectivity?',
+    [
+      o('a', 'Ion bombardment removes material physically as well as chemically, and sputtering discriminates far less between materials than a chemical reaction does'),
+      o('b', 'The plasma heats the wafer, which speeds every reaction equally', 'plasma.selectivity-blamed-on-heating'),
+      o('c', 'Plasma etchants are less pure than wet chemistries', 'plasma.selectivity-blamed-on-purity'),
+      o('d', 'The low pressure prevents the etchant from being selective', 'plasma.selectivity-blamed-on-pressure'),
+    ], 'a',
+    [
+      'A purely chemical etch is selective because the reaction is specific: the etchant attacks one material and largely ignores others.',
+      'Anisotropy in a plasma comes from energetic ion bombardment, which removes atoms by momentum transfer.',
+      'Momentum transfer cares about bond energy and mass, not about chemistry, so it attacks the mask and the underlayer nearly as readily as the target.',
+      'Real processes therefore sit between the two, tuning the balance of chemical and physical etching against how much anisotropy and how much selectivity a given step needs.',
+    ],
+    'Anisotropy and selectivity come from opposite mechanisms, so a recipe buys one at the expense of the other. That tension is what makes etch process development hard.',
+    ['What removes material in a purely physical etch?', 'Does sputtering distinguish between materials?']),
+
+  item('ee4392.etch-fundamentals', -0.3,
+    'Why can a purely isotropic etch not pattern features much smaller than the film is thick?',
+    [
+      o('a', 'It undercuts the mask by as much as it etches down, so the lost width approaches the film thickness on each side'),
+      o('b', 'Isotropic etchants have a minimum feature size set by molecular diameter', 'isotropy.limit-blamed-on-molecule-size'),
+      o('c', 'Surface tension prevents the etchant entering narrow openings', 'isotropy.limit-blamed-on-surface-tension'),
+      o('d', 'The etch rate falls once the opening is narrow', 'isotropy.limit-blamed-on-rate'),
+    ], 'a',
+    [
+      'Isotropic means the lateral and vertical rates are equal, so by the time the etch has cut through a film of thickness $t$ it has also cut $t$ sideways under each mask edge.',
+      'The opening therefore ends up about $2t$ wider than the mask drew it.',
+      'When the intended feature is comparable to $t$, that bias is the same size as the feature, and the pattern is destroyed rather than merely degraded.',
+      'This is why wet etching survives for blanket strips and thick-film work and was displaced by plasma etching everywhere the pattern matters.',
+    ],
+    'Etch bias scales with film thickness for an isotropic process, so the smallest usable feature does too. Breaking that link is what directionality is worth.',
+    ['How far sideways has an isotropic etch gone when it reaches the bottom?', 'How does that compare with the feature you were trying to print?']),
+
+  item('ee4392.physical-vapour-deposition', 0.1,
+    'Sputtering and evaporation both deposit by line-of-sight transport, and both cover steps poorly. Why is sputtering nevertheless the better of the two for step coverage?',
+    [
+      o('a', 'Sputtered atoms leave the target over a wide angular range and scatter on the way, so they arrive from more directions than evaporated atoms do'),
+      o('b', 'Sputtering deposits at higher temperature, so the film reflows', 'pvd.sputter-blamed-on-reflow'),
+      o('c', 'Sputtered atoms are charged and follow field lines into the via', 'pvd.sputter-blamed-on-charge'),
+      o('d', 'Sputtering deposits more slowly, giving atoms time to diffuse', 'pvd.sputter-blamed-on-rate'),
+    ], 'a',
+    [
+      'An evaporation source is close to a point at a long distance, so atoms arrive at the wafer along nearly parallel paths and a sidewall sees almost none of them.',
+      'A sputter target is a large area close to the wafer, and atoms leave it over a broad distribution of angles.',
+      'They also undergo some gas-phase scattering at typical sputtering pressures, which randomises their direction further.',
+      'Both effects widen the arrival angle at a feature, so more flux reaches the sidewall — better, though still far from the conformality a surface-reaction-limited CVD gives.',
+    ],
+    'Step coverage is decided by the distribution of arrival angles at the surface. Anything that widens it helps, which is why source geometry and chamber pressure are step-coverage parameters.',
+    ['What is the angular spread of arriving atoms in each case?', 'What does gas-phase scattering do to direction?']),
+
+  item('ee4392.chemical-vapour-deposition', 0.4,
+    'A CVD process can be surface-reaction-limited or mass-transport-limited. Which regime gives better across-wafer uniformity, and why?',
+    [
+      o('a', 'Surface-reaction-limited, because the rate is then set by temperature, which is far easier to hold uniform than gas flow'),
+      o('b', 'Mass-transport-limited, because gas flow can be controlled more precisely than wafer temperature', 'cvd.regime-inverted'),
+      o('c', 'Neither — uniformity depends only on chamber geometry', 'cvd.uniformity-blamed-on-geometry'),
+      o('d', 'Surface-reaction-limited, because the reaction consumes precursor evenly', 'cvd.regime-right-wrong-reason'),
+    ], 'a',
+    [
+      'The two regimes are the same argument as the linear and parabolic limits of Deal-Grove, in a different process: either the surface reaction is the slow step or the supply of reactant to it is.',
+      'In the mass-transport-limited regime the rate follows the local gas flow, and flow fields in a real reactor are never uniform to better than a few percent.',
+      'In the surface-reaction-limited regime the rate follows an Arrhenius factor in wafer temperature, and a furnace can hold temperature to a fraction of a degree across a boat.',
+      'That is why low-pressure CVD runs deliberately in the reaction-limited regime: low pressure raises the diffusivity so transport is never the bottleneck, and uniformity then comes from thermal control.',
+    ],
+    'Choosing which step is rate-limiting is a design decision, because it decides which physical quantity the film thickness inherits its uniformity from.',
+    ['Which quantity can a furnace hold more uniform — temperature or gas flow?', 'What does lowering the pressure do to transport?']),
+
+  item('ee4392.chemical-vapour-deposition', 0.15,
+    'Why does CVD give better step coverage than PVD?',
+    [
+      o('a', 'The precursor arrives by diffusion rather than by flight and reacts where it adsorbs, so it reaches surfaces that no straight line from the source would touch'),
+      o('b', 'CVD films are deposited thicker, which hides the step', 'cvd.coverage-blamed-on-thickness'),
+      o('c', 'CVD runs at higher pressure, which compresses the film into the via', 'cvd.coverage-blamed-on-pressure'),
+      o('d', 'CVD precursors are charged and are steered into the feature', 'cvd.coverage-blamed-on-charge'),
+    ], 'a',
+    [
+      'A PVD atom travels in a straight line from the source and sticks where it lands, so a surface with no line of sight to the source receives almost nothing.',
+      'A CVD precursor is a gas that fills the chamber and diffuses into every opening, colliding many times on the way.',
+      'It adsorbs on whatever surface it meets and reacts there, so deposition happens on sidewalls and floors as readily as on the field.',
+      'Conformality is best when the surface reaction is the slow step, since the precursor then has time to distribute itself before it is consumed.',
+    ],
+    'The difference is transport, not chemistry: flight against diffusion. Every conformality argument in deposition comes back to which of the two delivered the material.',
+    ['Can a PVD atom reach a surface it has no line of sight to?', 'What lets a gas reach the bottom of a narrow via?']),
+
+  item('ee4392.vacuum-systems', 0.25,
+    'Why is the base pressure of a deposition chamber a contamination specification as much as a vacuum one?',
+    [
+      o('a', 'Residual gas continues to strike the growing film, and at high enough pressure it is incorporated at a rate comparable to the deposition itself'),
+      o('b', 'A poor vacuum lets the pump oil backstream, which is the only contamination mechanism', 'vacuum.base-blamed-on-backstreaming-only'),
+      o('c', 'Base pressure determines the plasma density and therefore the film purity', 'vacuum.base-blamed-on-plasma'),
+      o('d', 'The pressure gauge is calibrated against a contamination standard', 'vacuum.base-blamed-on-metrology'),
+    ], 'a',
+    [
+      'Kinetic theory gives the flux of molecules striking a surface directly from the pressure, and at $10^{-6}\\ \\mathrm{Torr}$ that flux is enough to cover a clean surface in roughly a second.',
+      'During a deposition, residual water and oxygen arriving at the growing surface are buried by the film rather than pumped away.',
+      'So the impurity level in the film is set by the ratio of the residual-gas arrival rate to the deposition rate.',
+      'That is why base pressure and deposition rate are quoted together, and why a slow deposition demands a better vacuum than a fast one at the same purity.',
+    ],
+    'A vacuum specification is really a statement about arrival rates. What matters is that rate compared with the rate the process itself runs at.',
+    ['What does pressure tell you about how often molecules strike a surface?', 'Why does deposition rate enter the argument at all?']),
+
+  item('ee4392.interconnect', 0.3,
+    'Copper replaced aluminium for interconnect, but copper cannot be plasma etched the way aluminium was. How are copper lines patterned instead?',
+    [
+      o('a', 'By damascene: trenches are etched into the dielectric, copper is deposited over everything, and the excess is polished back so metal remains only in the trenches'),
+      o('b', 'By a wet etch, which copper tolerates better than a plasma etch', 'damascene.blamed-on-wet-etch'),
+      o('c', 'By evaporating copper through a shadow mask', 'damascene.blamed-on-shadow-mask'),
+      o('d', 'By implanting copper into the dielectric where the lines are wanted', 'damascene.blamed-on-implantation'),
+    ], 'a',
+    [
+      'Aluminium etching works because its plasma reaction products are volatile and leave the chamber; copper halides are not volatile at practical temperatures, so the etch products redeposit.',
+      'Damascene inverts the sequence: the pattern is etched into the dielectric first, which etches perfectly well.',
+      'Copper then fills the trenches — a barrier layer, a seed layer, then electroplating — and covers the field as well.',
+      'Chemical-mechanical polishing removes everything above the dielectric surface, leaving copper only where the trenches were. Dual damascene forms the via and the trench in one fill.',
+    ],
+    'When a material cannot be subtracted, pattern the space it will occupy and fill it. The process was restructured around a property of the metal.',
+    ['What has to be true of an etch product for a plasma etch to work?', 'What removes the copper that is not in a trench?']),
+
+  item('ee4392.interconnect', 0.45,
+    'Low-k dielectrics are used between interconnect lines while high-k dielectrics are used in the gate stack. Why do the two go in opposite directions?',
+    [
+      o('a', 'The two capacitances are wanted for opposite reasons — gate capacitance controls the channel and should be large, while interconnect capacitance only adds delay and should be small'),
+      o('b', 'Low-k materials cannot withstand the gate field, so they are used where the field is lower', 'dielectric.k-blamed-on-breakdown'),
+      o('c', 'High-k materials are too expensive to use across the whole interconnect stack', 'dielectric.k-blamed-on-cost'),
+      o('d', 'Interconnect dielectrics must be thermally stable and gate dielectrics need not be', 'dielectric.k-blamed-on-thermal'),
+    ], 'a',
+    [
+      'A transistor works by capacitively coupling the gate to the channel, so more capacitance per unit area means better control at a given voltage — which drove gate dielectrics toward high permittivity.',
+      'Capacitance between interconnect lines does nothing useful. It stores charge that has to be moved on every transition, which costs both delay and switching power.',
+      'Since $RC$ delay is proportional to the dielectric constant, lowering it is a direct speed and power win with no compensating benefit lost.',
+      'The same physical quantity is therefore maximised in one place and minimised in another, a few micrometres apart on the same die.',
+    ],
+    'Whether a capacitance is wanted depends entirely on what it is between. The material choice follows the function, not the physics of the material alone.',
+    ['What is the gate capacitance for?', 'What does interconnect capacitance do besides add delay?']),
 ];
 
 const pack = {

@@ -39,6 +39,7 @@ import { EE4392_OXIDATION_GENERATORS } from './ee4392/oxidation.js';
 import { EE4392_YIELD_GENERATORS } from './ee4392/yield.js';
 import { EE4392_LITHOGRAPHY_GENERATORS } from './ee4392/lithography.js';
 import { EE4392_DOPING_GENERATORS } from './ee4392/doping.js';
+import { EE4392_PROCESS_GENERATORS } from './ee4392/process.js';
 
 export * from './rng.js';
 export * from './types.js';
@@ -121,6 +122,7 @@ export const GENERATORS: readonly Generator[] = [
   ...EE4392_YIELD_GENERATORS,
   ...EE4392_LITHOGRAPHY_GENERATORS,
   ...EE4392_DOPING_GENERATORS,
+  ...EE4392_PROCESS_GENERATORS,
 ];
 
 export const generatorById = (id: string): Generator | undefined =>

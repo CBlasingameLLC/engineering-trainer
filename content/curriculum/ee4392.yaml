@@ -351,13 +351,18 @@ kcs:
   # titles come from the schedule and the decomposition will be redone against
   # the slides when they land.
   #
-  # Diffusion and Ion Implantation are the exception: their physics is
-  # standard and closed-form, so they carry generators and items already. What
-  # is provisional there is the *notation*, not the content — this file uses
-  # the near-universal symbols (Q for dose, N_s and N_0 for surface
-  # concentrations, x_j, R_p, Delta R_p) and the course may write something
-  # else. Where it does, the items should follow the course, because being
-  # marked wrong for notation teaches notation rather than process.
+  # They carry items anyway. Etch bias and selectivity, mean free path, step
+  # coverage, interconnect RC delay and the whole of dopant transport are
+  # standard closed-form process engineering, and the final is cumulative, so
+  # waiting for the lectures would leave the second half of the course
+  # unusable until the week before it is examined.
+  #
+  # What is provisional is the *notation*, not the content. This file uses the
+  # near-universal symbols — Q for dose, N_s and N_0 for surface
+  # concentrations, x_j, R_p, Delta R_p, A for degree of anisotropy — and the
+  # course may write something else. Where it does, the items should follow
+  # the course, because being marked wrong for notation teaches notation
+  # rather than process.
 
   - id: ee4392.etch-fundamentals
     title: Etch rate, selectivity and anisotropy

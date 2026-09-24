@@ -736,3 +736,68 @@ misconceptions:
   # --- unit-conversion-discipline --------------------------------------------
   - { id: implant.straggle-units-unconverted,  family: unit-conversion-discipline, title: "Straggle left in nanometres beside a dose per square centimetre" }
   - { id: implant.microamp-unconverted,        family: unit-conversion-discipline, title: "Beam current left in microamps" }
+
+  # --- EE 4392 etch, deposition and interconnect ----------------------------
+  # Like the dopant unit and unlike the process-knowledge one, these are
+  # numerate errors rather than attributions, because these particular
+  # questions are arithmetic on measured rates. The conceptual half of the same
+  # units — why plasma etching is directional, why PVD covers steps badly — is
+  # hand-authored and its errors sit under mechanism-attribution instead.
+
+  # --- ratio-inversion -------------------------------------------------------
+  - { id: etch.selectivity-inverted,                        family: ratio-inversion, title: "Selectivity read as a speed-up rather than a slow-down" }
+  - { id: etch.anisotropy-inverted,                         family: ratio-inversion, title: "Anisotropy used directly where it enters as one minus itself" }
+  - { id: deposition.step-coverage-inverted,                family: ratio-inversion, title: "Step coverage taken as nominal over sidewall" }
+
+  # --- initial-conditions ----------------------------------------------------
+  - { id: etch.underlayer-etched-throughout,                family: initial-conditions, title: "Underlayer charged for the whole etch rather than the overetch" }
+  - { id: etch.overetch-omitted,                            family: initial-conditions, title: "Etch stopped at the moment the film clears" }
+
+  # --- formula-substitution --------------------------------------------------
+  - { id: deposition.percentage-not-applied,                family: formula-substitution, title: "Coverage percentage subtracted instead of multiplied" }
+  - { id: vacuum.root-two-omitted,                          family: formula-substitution, title: "Mean free path taken without the root-two collision term" }
+  - { id: interconnect.permittivity-of-free-space-omitted,  family: formula-substitution, title: "Relative permittivity used in place of the absolute one" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: etch.overetch-taken-as-total,                     family: definition-precision, title: "Overetch time reported as the total etch time" }
+  - { id: etch.undercut-counted-once,                       family: definition-precision, title: "Undercut counted on one mask edge instead of both" }
+  - { id: interconnect.thickness-used-in-capacitance,       family: definition-precision, title: "Line thickness used as the capacitor plate dimension" }
+  - { id: interconnect.length-cancelled,                    family: definition-precision, title: "Length assumed to cancel out of the RC product" }
+
+  # --- unit-conversion-discipline --------------------------------------------
+  - { id: vacuum.pressure-units-unconverted,                family: unit-conversion-discipline, title: "Pressure left in torr inside an SI expression" }
+
+  # --- EE 4392 exam-2 units, the conceptual half ----------------------------
+  # All mechanism-attribution, which is the pattern now: wherever a unit has
+  # both a numerate and a definitional half, the numerate half's errors scatter
+  # across the families the maths banks use and the definitional half's land
+  # here almost without exception.
+
+  # --- the right effect credited to the wrong cause --------------------------
+  - { id: cvd.coverage-blamed-on-charge,               family: mechanism-attribution, title: "CVD step coverage credited to charged precursors" }
+  - { id: cvd.coverage-blamed-on-pressure,             family: mechanism-attribution, title: "CVD step coverage credited to pressure forcing film into the via" }
+  - { id: cvd.coverage-blamed-on-thickness,            family: mechanism-attribution, title: "CVD step coverage credited to depositing more thickly" }
+  - { id: cvd.regime-inverted,                         family: mechanism-attribution, title: "Uniformity credited to the mass-transport-limited regime" }
+  - { id: cvd.regime-right-wrong-reason,               family: mechanism-attribution, title: "Reaction-limited uniformity credited to even precursor consumption" }
+  - { id: cvd.uniformity-blamed-on-geometry,           family: mechanism-attribution, title: "CVD uniformity credited to chamber geometry alone" }
+  - { id: damascene.blamed-on-implantation,            family: mechanism-attribution, title: "Copper patterning credited to implantation" }
+  - { id: damascene.blamed-on-shadow-mask,             family: mechanism-attribution, title: "Copper patterning credited to shadow-mask evaporation" }
+  - { id: damascene.blamed-on-wet-etch,                family: mechanism-attribution, title: "Copper patterning credited to a wet etch" }
+  - { id: dielectric.k-blamed-on-breakdown,            family: mechanism-attribution, title: "Low-k choice credited to breakdown strength" }
+  - { id: dielectric.k-blamed-on-cost,                 family: mechanism-attribution, title: "Low-k choice credited to cost" }
+  - { id: dielectric.k-blamed-on-thermal,              family: mechanism-attribution, title: "Low-k choice credited to thermal stability" }
+  - { id: isotropy.limit-blamed-on-molecule-size,      family: mechanism-attribution, title: "Isotropic feature limit credited to molecular size" }
+  - { id: isotropy.limit-blamed-on-rate,               family: mechanism-attribution, title: "Isotropic feature limit credited to a falling etch rate" }
+  - { id: isotropy.limit-blamed-on-surface-tension,    family: mechanism-attribution, title: "Isotropic feature limit credited to surface tension" }
+  - { id: plasma.anisotropy-blamed-on-crystal-planes,  family: mechanism-attribution, title: "Plasma anisotropy credited to crystal planes" }
+  - { id: plasma.anisotropy-blamed-on-pressure,        family: mechanism-attribution, title: "Plasma anisotropy credited to chamber pressure" }
+  - { id: plasma.anisotropy-blamed-on-temperature,     family: mechanism-attribution, title: "Plasma anisotropy credited to sidewall temperature" }
+  - { id: plasma.selectivity-blamed-on-heating,        family: mechanism-attribution, title: "Plasma selectivity loss credited to wafer heating" }
+  - { id: plasma.selectivity-blamed-on-pressure,       family: mechanism-attribution, title: "Plasma selectivity loss credited to low pressure" }
+  - { id: plasma.selectivity-blamed-on-purity,         family: mechanism-attribution, title: "Plasma selectivity loss credited to etchant purity" }
+  - { id: pvd.sputter-blamed-on-charge,                family: mechanism-attribution, title: "Sputter step coverage credited to charged atoms following fields" }
+  - { id: pvd.sputter-blamed-on-rate,                  family: mechanism-attribution, title: "Sputter step coverage credited to a slower deposition rate" }
+  - { id: pvd.sputter-blamed-on-reflow,                family: mechanism-attribution, title: "Sputter step coverage credited to film reflow" }
+  - { id: vacuum.base-blamed-on-backstreaming-only,    family: mechanism-attribution, title: "Base pressure credited to pump backstreaming alone" }
+  - { id: vacuum.base-blamed-on-metrology,             family: mechanism-attribution, title: "Base pressure credited to gauge calibration" }
+  - { id: vacuum.base-blamed-on-plasma,                family: mechanism-attribution, title: "Base pressure credited to its effect on plasma density" }
