@@ -156,6 +156,34 @@ families:
       which is why it needs naming: kelvin and celsius are both degrees of
       temperature, and only one of them starts where the physics does.
 
+  - id: mechanism-attribution
+    title: Attributing an effect to the right cause
+    competency: concept
+    description: >-
+      Knowing that something happens and being wrong about why. This is the
+      characteristic error of a process course, and it is invisible to every
+      other kind of question: a learner who knows wet oxidation is faster, that
+      EUV uses mirrors and that a purge gas is inert can answer a great deal
+      correctly while holding the wrong mechanism for all three. It only
+      surfaces when the question asks for the cause, and it matters because the
+      mechanism is what transfers — a wrong one predicts nothing about the next
+      process, and the plausible wrong causes are usually effects that are real
+      but not responsible.
+
+  - id: unit-conversion-discipline
+    title: Combining quantities in unlike units
+    competency: numeracy
+    description: >-
+      Putting two quantities into one expression without first putting them on
+      the same scale: a gap in micrometres beside a wavelength in nanometres, a
+      die area in square millimetres beside a density per square centimetre,
+      a rate constant tabulated per hour and read as though it were per minute.
+      Distinct from absolute-scale errors, where the zero is wrong rather than
+      the magnitude, and distinct from a misremembered formula — the formula is
+      right and the numbers put into it are not commensurate. It leaves a clean
+      power-of-ten signature in the answer, which is what makes it worth
+      naming separately.
+
   - id: state-and-sequence
     title: Tracking state through a sequence
     competency: modeling
@@ -444,3 +472,332 @@ misconceptions:
   - { id: coupling.mutual-term-omitted,       family: network-topology, title: "Mutual term left out of a coupled-coil total" }
   - { id: bode.order-ignored,                 family: dynamic-response, title: "Asymptotic slope taken without regard to the order" }
   - { id: bode.corner-value-used-as-asymptote, family: dynamic-response, title: "Corner-frequency value read off the asymptote" }
+
+  # --- EE 4392, catalogued with the round that introduced them --------------
+  # The Circuits II round shipped eighteen misconceptions with no family entry,
+  # which made every one of them invisible to the habit roll-up. These are
+  # mapped in the same change as the items that use them, which is the only
+  # version of this that does not depend on someone remembering.
+  #
+  # The distribution is itself informative: most of a process course's errors
+  # are attributions rather than slips, because most of its questions ask why
+  # rather than how much. That is a different competency from the one the
+  # circuits and maths banks exercise, and it is the reason this course is
+  # worth having in the graph at all.
+
+  # --- tau is an initial condition, and these are the three ways to lose it ---
+  - { id: oxidation.initial-oxide-ignored,                    family: initial-conditions, title: "Existing oxide treated as a bare wafer" }
+  - { id: oxidation.tau-omitted,                              family: initial-conditions, title: "Dry-oxidation time offset left out" }
+  - { id: oxidation.growth-added-to-initial,                  family: initial-conditions, title: "Fresh growth added to the oxide already present" }
+
+  # --- inverted ratios and reversed comparisons ------------------------------
+  - { id: resist.contrast-not-reciprocated,                   family: ratio-inversion, title: "Resist contrast left as the logarithm rather than its reciprocal" }
+  - { id: resist.contrast-inverted,                           family: ratio-inversion, title: "High contrast read as a wide dose range" }
+  - { id: resist.dose-limits-inverted,                        family: ratio-inversion, title: "Dose ratio taken with the limits the wrong way up" }
+  - { id: resist.cmtf-sum-difference-swapped,                 family: ratio-inversion, title: "CMTF taken as sum over difference" }
+  - { id: litho.mtf-sum-difference-swapped,                   family: ratio-inversion, title: "Optical MTF taken as sum over difference" }
+  - { id: litho.na-inverted,                                  family: ratio-inversion, title: "Numerical aperture multiplied where it divides" }
+  - { id: litho.mtf-cmtf-swapped,                             family: ratio-inversion, title: "Resolution criterion applied in the wrong direction" }
+  - { id: litho.resolution-criterion-inverted,                family: ratio-inversion, title: "Feature judged to resolve on the wrong side of the comparison" }
+  - { id: deal-grove.regimes-inverted,                        family: ratio-inversion, title: "Linear and parabolic growth regimes interchanged" }
+  - { id: shadow.tradeoff-inverted,                           family: ratio-inversion, title: "Proximity printing claimed to resolve better than contact" }
+  - { id: rca.metal-removal-inverted,                         family: ratio-inversion, title: "Metal reduced rather than oxidised to remove it" }
+  - { id: yield.clustering-exponent-sign,                     family: ratio-inversion, title: "Clustering exponent applied with the wrong sign" }
+
+  # --- a remembered formula, substituted imperfectly -------------------------
+  - { id: oxidation.linear-term-dropped,                      family: formula-substitution, title: "Deal-Grove reduced to its parabolic term alone" }
+  - { id: oxidation.orientation-correction-missed,            family: formula-substitution, title: "Tabulated (111) rate constant used for a (100) wafer" }
+  - { id: oxidation.expansion-ratio-applied-directly,         family: formula-substitution, title: "Volume expansion ratio applied to a thickness" }
+  - { id: litho.proximity-k-dropped,                          family: formula-substitution, title: "Proximity k factor omitted from the root" }
+  - { id: litho.proximity-root-omitted,                       family: formula-substitution, title: "Proximity feature size taken without the square root" }
+  - { id: litho.na-exponent-confused,                         family: formula-substitution, title: "Resolution and depth of focus given the same NA exponent" }
+  - { id: resist.contrast-natural-log,                        family: formula-substitution, title: "Resist contrast computed with the natural logarithm" }
+  - { id: resist.cmtf-from-contrast-misapplied,               family: formula-substitution, title: "CMTF formed from gamma rather than its reciprocal" }
+  - { id: resist.dose-intensity-multiplied,                   family: formula-substitution, title: "Exposure time formed by multiplying dose and intensity" }
+  - { id: capability.wrong-sigma-multiple,                    family: formula-substitution, title: "Capability index divided by the wrong multiple of sigma" }
+
+  # --- two named things treated as one ---------------------------------------
+  - { id: capability.cp-cpk-confused,                         family: definition-precision, title: "Cp and Cpk interchanged" }
+  - { id: capability.wrong-specification-limit,               family: definition-precision, title: "Cpk taken from the further specification limit" }
+  - { id: oxidation.consumption-fractions-swapped,            family: definition-precision, title: "The 44% and 56% oxide fractions interchanged" }
+  - { id: resist.contrast-confused-with-sensitivity,          family: definition-precision, title: "Resist contrast read as sensitivity" }
+  - { id: resist.contrast-confused-with-index,                family: definition-precision, title: "Resist contrast read as an optical constant" }
+  - { id: resist.exposure-uses-threshold-dose,                family: definition-precision, title: "Resist cleared at the threshold dose rather than the completion dose" }
+  - { id: litho.mtf-ratio-of-intensities,                     family: definition-precision, title: "Modulation reported as a plain intensity ratio" }
+  - { id: litho.mtf-cmtf-both-optical,                        family: definition-precision, title: "Both modulation figures treated as optical" }
+  - { id: litho.mtf-cmtf-both-resist,                         family: definition-precision, title: "Both modulation figures treated as resist properties" }
+  - { id: yield.poisson-substituted,                          family: definition-precision, title: "Poisson yield given where another model was named" }
+  - { id: yield.seeds-substituted,                            family: definition-precision, title: "Seeds yield given where another model was named" }
+  - { id: yield.poisson-limit-at-zero,                        family: definition-precision, title: "Poisson taken as the zero-clustering limit of the negative binomial" }
+  - { id: yield.large-c-limit-unity,                          family: definition-precision, title: "Yield assumed to approach unity at large clustering factor" }
+  - { id: yield.large-c-limit-seeds,                          family: definition-precision, title: "Large clustering factor confused with the Seeds case" }
+  - { id: defects.parametric-called-functional,               family: definition-precision, title: "Out-of-specification part classed as a functional failure" }
+  - { id: defects.parametric-called-killer,                   family: definition-precision, title: "Parametric failure attributed to a killer defect" }
+  - { id: defects.parametric-called-unmodelled,               family: definition-precision, title: "Parametric loss treated as outside every yield model" }
+
+  # --- quantities combined in unlike units -----------------------------------
+  - { id: oxidation.hour-minute-confusion,                    family: unit-conversion-discipline, title: "Oxidation rate constants read per minute instead of per hour" }
+  - { id: litho.gap-units-unconverted,                        family: unit-conversion-discipline, title: "Proximity gap left in micrometres beside a wavelength in nanometres" }
+  - { id: yield.area-units-unconverted,                       family: unit-conversion-discipline, title: "Die area left in square millimetres beside a per-square-centimetre density" }
+
+  # --- a scale that does not start where the physics does --------------------
+  - { id: oxidation.celsius-used-as-kelvin,                   family: absolute-scale-discipline, title: "Celsius substituted into an Arrhenius exponent" }
+
+  # --- the right effect credited to the wrong cause --------------------------
+  - { id: oxidation.wet-rate-blamed-on-reaction,              family: mechanism-attribution, title: "Wet growth rate credited to the interface reaction" }
+  - { id: oxidation.wet-rate-blamed-on-hydrogen,              family: mechanism-attribution, title: "Wet growth rate credited to hydrogen opening the oxide" }
+  - { id: oxidation.wet-rate-blamed-on-pressure,              family: mechanism-attribution, title: "Wet growth rate credited to furnace pressure" }
+  - { id: oxidation.dry-chosen-for-uniformity,                family: mechanism-attribution, title: "Dry gate oxide credited to across-wafer uniformity" }
+  - { id: oxidation.dry-chosen-for-thickness-limit,           family: mechanism-attribution, title: "Dry gate oxide credited to a wet thickness limit" }
+  - { id: oxidation.dry-chosen-for-consumption,               family: mechanism-attribution, title: "Dry gate oxide credited to silicon consumption" }
+  - { id: oxidation.expansion-assumed-lateral,                family: mechanism-attribution, title: "Oxide volume expansion assumed to go sideways" }
+  - { id: oxidation.expansion-assumed-suppressed,             family: mechanism-attribution, title: "Oxide volume expansion assumed to be suppressed" }
+  - { id: oxidation.expansion-assumed-downward,               family: mechanism-attribution, title: "Oxide volume expansion assumed to thicken the wafer" }
+  - { id: oxidation.doping-blamed-on-diffusivity,             family: mechanism-attribution, title: "Doping effect on oxidation credited to oxidant diffusivity" }
+  - { id: oxidation.doping-blamed-on-melting,                 family: mechanism-attribution, title: "Doping effect on oxidation credited to a lower melting point" }
+  - { id: oxidation.doping-blamed-on-dopant-oxide,            family: mechanism-attribution, title: "Doping effect on oxidation credited to dopant oxides" }
+  - { id: oxidation.hcl-blamed-on-rate,                       family: mechanism-attribution, title: "Chlorine in the oxidation ambient credited to growth rate" }
+  - { id: oxidation.hcl-blamed-on-etch,                       family: mechanism-attribution, title: "Chlorine in the oxidation ambient credited to etch-back" }
+  - { id: oxidation.hcl-blamed-on-passivation,                family: mechanism-attribution, title: "Chlorine in the oxidation ambient credited to passivation" }
+  - { id: deal-grove.f1-dropped-as-slow,                      family: mechanism-attribution, title: "Gas-phase flux discarded as the slow step" }
+  - { id: deal-grove.f1-folded-into-b,                        family: mechanism-attribution, title: "Gas-phase flux assumed absorbed into the parabolic constant" }
+  - { id: deal-grove.f1-dropped-as-vacuum,                    family: mechanism-attribution, title: "Gas-phase flux discarded by assuming a vacuum" }
+  - { id: deal-grove.b-orientation-dependence-assumed,        family: mechanism-attribution, title: "Parabolic constant assumed to vary with orientation" }
+  - { id: deal-grove.thin-oxide-assumed-crystalline,          family: mechanism-attribution, title: "Thin oxide assumed to inherit the substrate lattice" }
+  - { id: deal-grove.orientation-changes-density,             family: mechanism-attribution, title: "Orientation effect credited to oxide density" }
+  - { id: deal-grove.thick-limit-gas-phase,                   family: mechanism-attribution, title: "Thick-oxide growth credited to gas-phase supply" }
+  - { id: deal-grove.thick-limit-consumption,                 family: mechanism-attribution, title: "Thick-oxide growth credited to silicon consumption" }
+  - { id: locos.beak-blamed-on-nitride-shrink,                family: mechanism-attribution, title: "Bird's beak credited to nitride shrinkage" }
+  - { id: locos.beak-blamed-on-resist,                        family: mechanism-attribution, title: "Bird's beak credited to resist edge profile" }
+  - { id: locos.beak-blamed-on-si-diffusion,                  family: mechanism-attribution, title: "Bird's beak credited to silicon out-diffusion" }
+  - { id: furnace.purge-blamed-on-cooling,                    family: mechanism-attribution, title: "Furnace purge credited to wafer cooling" }
+  - { id: furnace.purge-blamed-on-particles,                  family: mechanism-attribution, title: "Furnace purge credited to particle removal" }
+  - { id: furnace.purge-blamed-on-pressure,                   family: mechanism-attribution, title: "Furnace purge credited to pressure control" }
+  - { id: highk.blamed-on-uniformity,                         family: mechanism-attribution, title: "High-k adoption credited to film uniformity" }
+  - { id: highk.blamed-on-permittivity-change,                family: mechanism-attribution, title: "High-k adoption credited to a falling oxide permittivity" }
+  - { id: highk.blamed-on-dopant-diffusion,                   family: mechanism-attribution, title: "High-k adoption credited to dopant penetration" }
+  - { id: metrology.ellipsometry-blamed-on-opacity,           family: mechanism-attribution, title: "Ellipsometry's advantage credited to working on opaque films" }
+  - { id: metrology.ellipsometry-blamed-on-contact,           family: mechanism-attribution, title: "Ellipsometry's advantage credited to being non-contact" }
+  - { id: metrology.ellipsometry-blamed-on-resolution,        family: mechanism-attribution, title: "Ellipsometry's advantage credited to lateral resolution" }
+  - { id: cleanroom.band-blamed-on-charge,                    family: mechanism-attribution, title: "Hard-to-filter particle band credited to electrical charge" }
+  - { id: cleanroom.band-blamed-on-filter-design,             family: mechanism-attribution, title: "Hard-to-filter particle band credited to filter design" }
+  - { id: cleanroom.band-blamed-on-source,                    family: mechanism-attribution, title: "Hard-to-filter particle band credited to where particles originate" }
+  - { id: rca.sequence-blamed-on-etch-depth,                  family: mechanism-attribution, title: "RCA sequence credited to limiting etch depth" }
+  - { id: rca.sequence-blamed-on-safety,                      family: mechanism-attribution, title: "RCA sequence credited to chemical safety" }
+  - { id: rca.sequence-blamed-on-temperature,                 family: mechanism-attribution, title: "RCA sequence credited to bath temperature" }
+  - { id: rca.metal-removal-blamed-on-diffusion,              family: mechanism-attribution, title: "Metal removal credited to diffusion into the bulk" }
+  - { id: rca.metal-removal-blamed-on-liftoff,                family: mechanism-attribution, title: "Metal removal credited to oxide lift-off" }
+  - { id: gettering.free-blamed-on-trap-creation,             family: mechanism-attribution, title: "Gettering's first step credited to creating trap sites" }
+  - { id: gettering.free-blamed-on-oxidation,                 family: mechanism-attribution, title: "Gettering's first step credited to oxidising the metal" }
+  - { id: gettering.free-blamed-on-concentration,             family: mechanism-attribution, title: "Gettering's first step credited to lowering concentration" }
+  - { id: gettering.saturation-blamed-on-diffusivity,         family: mechanism-attribution, title: "Gettering failure credited to reduced diffusivity" }
+  - { id: gettering.saturation-blamed-on-getter-destruction,  family: mechanism-attribution, title: "Gettering failure credited to destroying the getter" }
+  - { id: gettering.saturation-blamed-on-denuded-zone,        family: mechanism-attribution, title: "Gettering failure credited to a collapsing denuded zone" }
+  - { id: gettering.intrinsic-blamed-on-timing,               family: mechanism-attribution, title: "Intrinsic gettering distinguished by when it happens" }
+  - { id: gettering.intrinsic-blamed-on-species,              family: mechanism-attribution, title: "Intrinsic gettering distinguished by which species it traps" }
+  - { id: gettering.intrinsic-blamed-on-reversibility,        family: mechanism-attribution, title: "Intrinsic gettering distinguished by reversibility" }
+  - { id: defects.killer-blamed-on-film-thickness,            family: mechanism-attribution, title: "Killer-defect scaling credited to thinner films" }
+  - { id: defects.killer-blamed-on-thermal-budget,            family: mechanism-attribution, title: "Killer-defect scaling credited to thermal budget" }
+  - { id: defects.killer-blamed-on-composition,               family: mechanism-attribution, title: "Killer-defect scaling credited to particle composition" }
+  - { id: yield.poisson-blamed-on-killer-assumption,          family: mechanism-attribution, title: "Poisson bias credited to assuming every defect kills" }
+  - { id: yield.poisson-blamed-on-parametric,                 family: mechanism-attribution, title: "Poisson bias credited to ignoring parametric failures" }
+  - { id: yield.poisson-blamed-on-density,                    family: mechanism-attribution, title: "Poisson bias credited to area-independent defect density" }
+  - { id: capability.gap-blamed-on-distribution,              family: mechanism-attribution, title: "Cp-Cpk gap credited to a non-Gaussian distribution" }
+  - { id: capability.gap-blamed-on-spread,                    family: mechanism-attribution, title: "Cp-Cpk gap credited to excessive variation" }
+  - { id: capability.gap-blamed-on-metrology,                 family: mechanism-attribution, title: "Cp-Cpk gap credited to measurement error" }
+  - { id: resist.polarity-blamed-on-application,              family: mechanism-attribution, title: "Resist polarity distinguished by what it masks" }
+  - { id: resist.polarity-blamed-on-peb,                      family: mechanism-attribution, title: "Resist polarity distinguished by needing a post-exposure bake" }
+  - { id: resist.polarity-blamed-on-wavelength,               family: mechanism-attribution, title: "Resist polarity distinguished by exposure wavelength" }
+  - { id: resist.pag-activated-at-exposure,                   family: mechanism-attribution, title: "Catalytic amplification placed at the exposure step" }
+  - { id: resist.pag-activated-at-develop,                    family: mechanism-attribution, title: "Catalytic amplification placed at the develop step" }
+  - { id: resist.pag-activated-at-softbake,                   family: mechanism-attribution, title: "Catalytic amplification placed at the soft bake" }
+  - { id: resist.thickness-blamed-on-volume,                  family: mechanism-attribution, title: "Spun resist thickness credited to dispense volume" }
+  - { id: resist.thickness-blamed-on-bake,                    family: mechanism-attribution, title: "Spun resist thickness credited to bake temperature" }
+  - { id: resist.thickness-blamed-on-dispense-time,           family: mechanism-attribution, title: "Spun resist thickness credited to dispense duration" }
+  - { id: resist.contrast-blamed-on-photon-energy,            family: mechanism-attribution, title: "Higher DUV resist contrast credited to photon energy" }
+  - { id: resist.contrast-blamed-on-penetration,              family: mechanism-attribution, title: "Higher DUV resist contrast credited to light penetration" }
+  - { id: resist.contrast-blamed-on-source-stability,         family: mechanism-attribution, title: "Higher DUV resist contrast credited to source stability" }
+  - { id: euv.mirrors-blamed-on-size,                         family: mechanism-attribution, title: "EUV reflective optics credited to mirror size" }
+  - { id: euv.mirrors-blamed-on-chromatic,                    family: mechanism-attribution, title: "EUV reflective optics credited to chromatic aberration" }
+  - { id: euv.mirrors-blamed-on-heat,                         family: mechanism-attribution, title: "EUV reflective optics credited to heat load" }
+  - { id: immersion.blamed-on-wavelength-alone,               family: mechanism-attribution, title: "Immersion lithography credited to wavelength shortening alone" }
+  - { id: immersion.blamed-on-cooling,                        family: mechanism-attribution, title: "Immersion lithography credited to cooling the resist" }
+  - { id: immersion.blamed-on-intensity,                      family: mechanism-attribution, title: "Immersion lithography credited to transmitted intensity" }
+  - { id: psm.blamed-on-zeroth-order-block,                   family: mechanism-attribution, title: "Phase-shift mask credited to blocking the zeroth order" }
+  - { id: psm.blamed-on-focus,                                family: mechanism-attribution, title: "Phase-shift mask credited to focus compensation" }
+  - { id: psm.blamed-on-polarisation,                         family: mechanism-attribution, title: "Phase-shift mask credited to polarisation" }
+  - { id: shadow.tradeoff-blamed-on-throughput,               family: mechanism-attribution, title: "Contact-proximity trade credited to throughput" }
+  - { id: shadow.tradeoff-blamed-on-resist,                   family: mechanism-attribution, title: "Contact-proximity trade credited to resist polarity" }
+  - { id: litho.na-cost-blamed-on-dose,                       family: mechanism-attribution, title: "Cost of higher NA credited to exposure dose" }
+  - { id: litho.na-cost-blamed-on-field,                      family: mechanism-attribution, title: "Cost of higher NA credited to field size" }
+  - { id: litho.na-assumed-free,                              family: mechanism-attribution, title: "Higher NA assumed to cost nothing" }
+
+  # --- EE 4392, second pass: the conceptual bank deepened -------------------
+  # Unit 1 had no items at all and several process components had one or two,
+  # which is too thin for adaptive selection to have anything to choose
+  # between. These came with that round.
+
+  # --- place-value-discipline ------------------------------------------------
+  - { id: silicon.atomic-density-off-by-orders,         family: place-value-discipline, title: "Silicon atomic density out by orders of magnitude" }
+  - { id: silicon.atomic-density-from-avogadro,         family: place-value-discipline, title: "Atomic density taken as Avogadro's number per cell" }
+  - { id: silicon.atomic-density-confused-with-doping,  family: place-value-discipline, title: "Atomic density confused with a doping level" }
+  - { id: doping.fraction-overestimated,                family: place-value-discipline, title: "Doping fraction overestimated by orders of magnitude" }
+  - { id: doping.fraction-overestimated-mildly,         family: place-value-discipline, title: "Doping fraction overestimated by three orders" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: doping.donor-acceptor-swapped,                family: definition-precision, title: "Donor and acceptor interchanged" }
+  - { id: doping.carrier-type-mismatched,               family: definition-precision, title: "Carrier donated mismatched against the resulting type" }
+  - { id: doping.dopant-assumed-neutral,                family: definition-precision, title: "Substitutional dopant assumed electrically neutral" }
+  - { id: doping.fraction-confused-with-carrier-ratio,  family: definition-precision, title: "Doping fraction confused with the intrinsic-carrier ratio" }
+  - { id: immersion.cost-blamed-on-dof,                 family: definition-precision, title: "Immersion claimed to reduce depth of focus" }
+
+  # --- state-and-sequence ----------------------------------------------------
+  - { id: litho.steps-prime-after-coat,                 family: state-and-sequence, title: "Adhesion prime placed after the coat it prepares for" }
+  - { id: litho.steps-bake-after-expose,                family: state-and-sequence, title: "Soft bake placed after exposure" }
+  - { id: litho.steps-peb-after-develop,                family: state-and-sequence, title: "Post-exposure bake placed after develop" }
+
+  # --- mechanism-attribution -------------------------------------------------
+  - { id: cleanroom.laminar-blamed-on-energy,           family: mechanism-attribution, title: "Laminar airflow credited to fan energy" }
+  - { id: cleanroom.laminar-blamed-on-heating,          family: mechanism-attribution, title: "Laminar airflow credited to room heating" }
+  - { id: cleanroom.laminar-blamed-on-pressure,         family: mechanism-attribution, title: "Laminar airflow credited to room pressure" }
+  - { id: cleanroom.iso-blamed-on-jurisdiction,         family: mechanism-attribution, title: "ISO cleanroom classes credited to which body issued them" }
+  - { id: cleanroom.iso-blamed-on-units,                family: mechanism-attribution, title: "ISO cleanroom classes credited to metric units" }
+  - { id: cleanroom.iso-blamed-on-coarse-classes,       family: mechanism-attribution, title: "ISO cleanroom classes credited to resolution at the dirty end" }
+  - { id: colour.blamed-on-absorption,                  family: mechanism-attribution, title: "Oxide colour credited to absorption bands" }
+  - { id: colour.blamed-on-scattering,                  family: mechanism-attribution, title: "Oxide colour credited to surface scattering" }
+  - { id: colour.blamed-on-fluorescence,                family: mechanism-attribution, title: "Oxide colour credited to fluorescence" }
+  - { id: colour.risk-blamed-on-ambient,                family: mechanism-attribution, title: "Colour-chart ambiguity credited to the oxidation ambient" }
+  - { id: colour.risk-blamed-on-doping,                 family: mechanism-attribution, title: "Colour-chart ambiguity credited to substrate doping" }
+  - { id: colour.risk-blamed-on-range,                  family: mechanism-attribution, title: "Colour-chart ambiguity credited to a thickness floor" }
+  - { id: defects.patterns-denied,                      family: mechanism-attribution, title: "Spatial defect patterns denied as measurement artefact" }
+  - { id: defects.patterns-blamed-on-low-count,         family: mechanism-attribution, title: "Defect patterns credited to too few defects to look random" }
+  - { id: defects.patterns-blamed-on-inspection,        family: mechanism-attribution, title: "Defect patterns credited to inspection misalignment" }
+  - { id: di.blamed-on-volume,                          family: mechanism-attribution, title: "On-site DI water credited to transport volume" }
+  - { id: di.blamed-on-regulation,                      family: mechanism-attribution, title: "On-site DI water credited to transport regulation" }
+  - { id: di.blamed-on-source-purity,                   family: mechanism-attribution, title: "On-site DI water credited to municipal water already being pure" }
+  - { id: dpm.blamed-on-die-size,                       family: mechanism-attribution, title: "Automotive defect targets credited to die size" }
+  - { id: dpm.blamed-on-temperature,                    family: mechanism-attribution, title: "Automotive defect targets credited to operating temperature" }
+  - { id: dpm.blamed-on-test-coverage,                  family: mechanism-attribution, title: "Automotive defect targets credited to test coverage" }
+  - { id: gettering.metal-blamed-on-chemistry,          family: mechanism-attribution, title: "Metal-specific gettering credited to chemical inertness" }
+  - { id: gettering.metal-blamed-on-concentration,      family: mechanism-attribution, title: "Metal-specific gettering credited to concentration" }
+  - { id: gettering.metal-blamed-on-mass,               family: mechanism-attribution, title: "Metal-specific gettering credited to atomic mass" }
+  - { id: immersion.cost-blamed-on-resist,              family: mechanism-attribution, title: "Immersion's cost credited to resist incompatibility" }
+  - { id: immersion.cost-blamed-on-source,              family: mechanism-attribution, title: "Immersion's cost credited to the exposure source" }
+  - { id: industry.idm-blamed-on-ownership,             family: mechanism-attribution, title: "IDM distinguished by owning rather than leasing fabs" }
+  - { id: industry.idm-blamed-on-product-type,          family: mechanism-attribution, title: "IDM distinguished by making memory rather than logic" }
+  - { id: industry.idm-blamed-on-node,                  family: mechanism-attribution, title: "IDM distinguished by process node" }
+  - { id: litho.next-step-blamed-on-second-mask,        family: mechanism-attribution, title: "Step after lithography given as another lithography" }
+  - { id: litho.next-step-blamed-on-oxidation,          family: mechanism-attribution, title: "Step after lithography given as oxidation, which resist cannot survive" }
+  - { id: litho.next-step-blamed-on-metrology,          family: mechanism-attribution, title: "Step after lithography given as inspection alone" }
+  - { id: mask.blamed-on-chemical-exclusion,            family: mechanism-attribution, title: "Oxide masking credited to chemical exclusion rather than a rate difference" }
+  - { id: mask.blamed-on-thickness-alone,               family: mechanism-attribution, title: "Oxide masking credited to thickness against junction depth" }
+  - { id: mask.blamed-on-diffusion-mechanism,           family: mechanism-attribution, title: "Oxide masking credited to interstitial against substitutional diffusion" }
+  - { id: node.name-assumed-physical,                   family: mechanism-attribution, title: "Node name assumed to be a physical gate length" }
+  - { id: node.name-blamed-on-oxide,                    family: mechanism-attribution, title: "Node name credited to gate oxide thickness" }
+  - { id: node.name-blamed-on-metal-pitch,              family: mechanism-attribution, title: "Node name credited to metal pitch" }
+  - { id: oai.blamed-on-intensity,                      family: mechanism-attribution, title: "Off-axis illumination credited to delivered intensity" }
+  - { id: oai.blamed-on-wavelength,                     family: mechanism-attribution, title: "Off-axis illumination credited to effective wavelength" }
+  - { id: oai.blamed-on-zeroth-removal,                 family: mechanism-attribution, title: "Off-axis illumination credited to removing the zeroth order" }
+  - { id: pressure.blamed-on-diffusivity-only,          family: mechanism-attribution, title: "Oxidation pressure credited to diffusivity alone" }
+  - { id: pressure.blamed-on-reaction-only,             family: mechanism-attribution, title: "Oxidation pressure credited to the interface reaction alone" }
+  - { id: pressure.blamed-on-tau,                       family: mechanism-attribution, title: "Oxidation pressure credited to the time offset" }
+  - { id: rca.organics-blamed-on-hf,                    family: mechanism-attribution, title: "Organic removal credited to the HF step" }
+  - { id: rca.organics-blamed-on-sc2,                   family: mechanism-attribution, title: "Organic removal credited to the SC-2 step" }
+  - { id: rca.organics-blamed-on-rinse,                 family: mechanism-attribution, title: "Organic removal credited to ultrasonic rinsing" }
+
+  # --- EE 4392 diffusion and implantation -----------------------------------
+  # Almost none of these are mechanism-attribution, which is worth noticing:
+  # this unit is the closed-form part of the course, so its errors are the
+  # ordinary numerate ones — a dropped constant, a factor of two, a unit left
+  # unconverted — and they belong in the families the maths banks already use.
+  # The same learner can be reliable here and unreliable on process mechanism,
+  # which is exactly the split the competency axis exists to show.
+
+  # --- absolute-scale-discipline ---------------------------------------------
+  - { id: diffusion.celsius-used-as-kelvin,    family: absolute-scale-discipline, title: "Celsius substituted into a diffusivity exponent" }
+
+  # --- sign-convention-discipline --------------------------------------------
+  - { id: diffusion.activation-energy-sign,    family: sign-convention-discipline, title: "Activation energy entered with the wrong sign" }
+
+  # --- formula-substitution --------------------------------------------------
+  - { id: diffusion.logarithm-omitted,         family: formula-substitution, title: "Junction depth taken as the diffusion length alone" }
+  - { id: diffusion.factor-two-dropped,        family: formula-substitution, title: "Factor of two dropped from the junction-depth expression" }
+  - { id: diffusion.dose-factor-omitted,       family: formula-substitution, title: "Predeposition dose missing its factor of two" }
+  - { id: diffusion.dose-pi-omitted,           family: formula-substitution, title: "Predeposition dose missing the pi under the root" }
+  - { id: diffusion.erfc-argument-factor-two,  family: formula-substitution, title: "Complementary error function given x over the diffusion length undoubled" }
+  - { id: implant.normalisation-omitted,       family: formula-substitution, title: "Gaussian implant peak taken without its normalisation" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: diffusion.erf-used-for-erfc,         family: definition-precision, title: "Error function used where the complementary one is required" }
+  - { id: implant.range-used-as-straggle,      family: definition-precision, title: "Projected range used as the width of the distribution" }
+  - { id: implant.charge-state-ignored,        family: definition-precision, title: "Beam current converted to ions without the charge state" }
+  - { id: implant.area-omitted,                family: definition-precision, title: "Total ion count reported as a dose" }
+
+  # --- unit-conversion-discipline --------------------------------------------
+  - { id: implant.straggle-units-unconverted,  family: unit-conversion-discipline, title: "Straggle left in nanometres beside a dose per square centimetre" }
+  - { id: implant.microamp-unconverted,        family: unit-conversion-discipline, title: "Beam current left in microamps" }
+
+  # --- EE 4392 etch, deposition and interconnect ----------------------------
+  # Like the dopant unit and unlike the process-knowledge one, these are
+  # numerate errors rather than attributions, because these particular
+  # questions are arithmetic on measured rates. The conceptual half of the same
+  # units — why plasma etching is directional, why PVD covers steps badly — is
+  # hand-authored and its errors sit under mechanism-attribution instead.
+
+  # --- ratio-inversion -------------------------------------------------------
+  - { id: etch.selectivity-inverted,                        family: ratio-inversion, title: "Selectivity read as a speed-up rather than a slow-down" }
+  - { id: etch.anisotropy-inverted,                         family: ratio-inversion, title: "Anisotropy used directly where it enters as one minus itself" }
+  - { id: deposition.step-coverage-inverted,                family: ratio-inversion, title: "Step coverage taken as nominal over sidewall" }
+
+  # --- initial-conditions ----------------------------------------------------
+  - { id: etch.underlayer-etched-throughout,                family: initial-conditions, title: "Underlayer charged for the whole etch rather than the overetch" }
+  - { id: etch.overetch-omitted,                            family: initial-conditions, title: "Etch stopped at the moment the film clears" }
+
+  # --- formula-substitution --------------------------------------------------
+  - { id: deposition.percentage-not-applied,                family: formula-substitution, title: "Coverage percentage subtracted instead of multiplied" }
+  - { id: vacuum.root-two-omitted,                          family: formula-substitution, title: "Mean free path taken without the root-two collision term" }
+  - { id: interconnect.permittivity-of-free-space-omitted,  family: formula-substitution, title: "Relative permittivity used in place of the absolute one" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: etch.overetch-taken-as-total,                     family: definition-precision, title: "Overetch time reported as the total etch time" }
+  - { id: etch.undercut-counted-once,                       family: definition-precision, title: "Undercut counted on one mask edge instead of both" }
+  - { id: interconnect.thickness-used-in-capacitance,       family: definition-precision, title: "Line thickness used as the capacitor plate dimension" }
+  - { id: interconnect.length-cancelled,                    family: definition-precision, title: "Length assumed to cancel out of the RC product" }
+
+  # --- unit-conversion-discipline --------------------------------------------
+  - { id: vacuum.pressure-units-unconverted,                family: unit-conversion-discipline, title: "Pressure left in torr inside an SI expression" }
+
+  # --- EE 4392 exam-2 units, the conceptual half ----------------------------
+  # All mechanism-attribution, which is the pattern now: wherever a unit has
+  # both a numerate and a definitional half, the numerate half's errors scatter
+  # across the families the maths banks use and the definitional half's land
+  # here almost without exception.
+
+  # --- the right effect credited to the wrong cause --------------------------
+  - { id: cvd.coverage-blamed-on-charge,               family: mechanism-attribution, title: "CVD step coverage credited to charged precursors" }
+  - { id: cvd.coverage-blamed-on-pressure,             family: mechanism-attribution, title: "CVD step coverage credited to pressure forcing film into the via" }
+  - { id: cvd.coverage-blamed-on-thickness,            family: mechanism-attribution, title: "CVD step coverage credited to depositing more thickly" }
+  - { id: cvd.regime-inverted,                         family: mechanism-attribution, title: "Uniformity credited to the mass-transport-limited regime" }
+  - { id: cvd.regime-right-wrong-reason,               family: mechanism-attribution, title: "Reaction-limited uniformity credited to even precursor consumption" }
+  - { id: cvd.uniformity-blamed-on-geometry,           family: mechanism-attribution, title: "CVD uniformity credited to chamber geometry alone" }
+  - { id: damascene.blamed-on-implantation,            family: mechanism-attribution, title: "Copper patterning credited to implantation" }
+  - { id: damascene.blamed-on-shadow-mask,             family: mechanism-attribution, title: "Copper patterning credited to shadow-mask evaporation" }
+  - { id: damascene.blamed-on-wet-etch,                family: mechanism-attribution, title: "Copper patterning credited to a wet etch" }
+  - { id: dielectric.k-blamed-on-breakdown,            family: mechanism-attribution, title: "Low-k choice credited to breakdown strength" }
+  - { id: dielectric.k-blamed-on-cost,                 family: mechanism-attribution, title: "Low-k choice credited to cost" }
+  - { id: dielectric.k-blamed-on-thermal,              family: mechanism-attribution, title: "Low-k choice credited to thermal stability" }
+  - { id: isotropy.limit-blamed-on-molecule-size,      family: mechanism-attribution, title: "Isotropic feature limit credited to molecular size" }
+  - { id: isotropy.limit-blamed-on-rate,               family: mechanism-attribution, title: "Isotropic feature limit credited to a falling etch rate" }
+  - { id: isotropy.limit-blamed-on-surface-tension,    family: mechanism-attribution, title: "Isotropic feature limit credited to surface tension" }
+  - { id: plasma.anisotropy-blamed-on-crystal-planes,  family: mechanism-attribution, title: "Plasma anisotropy credited to crystal planes" }
+  - { id: plasma.anisotropy-blamed-on-pressure,        family: mechanism-attribution, title: "Plasma anisotropy credited to chamber pressure" }
+  - { id: plasma.anisotropy-blamed-on-temperature,     family: mechanism-attribution, title: "Plasma anisotropy credited to sidewall temperature" }
+  - { id: plasma.selectivity-blamed-on-heating,        family: mechanism-attribution, title: "Plasma selectivity loss credited to wafer heating" }
+  - { id: plasma.selectivity-blamed-on-pressure,       family: mechanism-attribution, title: "Plasma selectivity loss credited to low pressure" }
+  - { id: plasma.selectivity-blamed-on-purity,         family: mechanism-attribution, title: "Plasma selectivity loss credited to etchant purity" }
+  - { id: pvd.sputter-blamed-on-charge,                family: mechanism-attribution, title: "Sputter step coverage credited to charged atoms following fields" }
+  - { id: pvd.sputter-blamed-on-rate,                  family: mechanism-attribution, title: "Sputter step coverage credited to a slower deposition rate" }
+  - { id: pvd.sputter-blamed-on-reflow,                family: mechanism-attribution, title: "Sputter step coverage credited to film reflow" }
+  - { id: vacuum.base-blamed-on-backstreaming-only,    family: mechanism-attribution, title: "Base pressure credited to pump backstreaming alone" }
+  - { id: vacuum.base-blamed-on-metrology,             family: mechanism-attribution, title: "Base pressure credited to gauge calibration" }
+  - { id: vacuum.base-blamed-on-plasma,                family: mechanism-attribution, title: "Base pressure credited to its effect on plasma density" }

@@ -179,18 +179,46 @@ admits one; reserve model authoring for what generators structurally cannot do.
 
 `licenseTier` is load-bearing for the commercial path. `personal-only` content
 lives in gitignored `content/packs/personal/`, is rejected from redistributable
-packs by the schema, and never enters a release build. Don't weaken that.
+packs by the schema, and is bundled only when a build sets
+`VITE_ET_INCLUDE_PERSONAL=1` — default off, so an artifact built without
+thinking about it is safe to hand to someone else, and CI never sets it. A
+build that did include it says so in the app with the item count, because three
+enforcement points that are invisible from inside the running binary cannot be
+checked by whoever is holding it. Don't weaken any of the four.
+
+The flag exists because the rule was previously "never bundled anywhere",
+which sounds stricter and was useless: owned material could not sharpen its
+owner's training either, so the rule had all of the cost and none of the
+benefit. The distinction that matters is redistributable against personal, not
+development against production — a learner's own installer is a production
+build.
 
 Raw course material — homework, slides, notes, book chapters, a syllabus — goes
 in gitignored `content/coursework/<COURSE>/`. It is *source*, not content: the
 app never reads it, and the route from a PDF to a served question runs through
 a KC graph, generators, and the same gate as everything else.
 `content/coursework/README.md` has the layout and the decision that matters
-most — whether a course is generatable at all. A closed-form course like
-PHYS 2335 is twenty generators with near-total verification; a definitional one
-like EE 4392 cannot be generated and gets hand- or model-authored items with a
-weaker guarantee behind them. Deciding which before starting is what stops the
-second kind being shipped with the confidence of the first.
+most — how much of a course is generatable. A closed-form course like
+PHYS 2335 is twenty generators with near-total verification. Deciding this
+before starting is what stops a hand-authored item shipping with the
+confidence of a computed one.
+
+**The decision is per unit, not per course, and EE 4392 is why.** That course
+was written down here as ungeneratable before anyone read its material, on the
+reasonable-sounding grounds that lithography and deposition are definitional.
+About a third of it turned out to be ordinary engineering algebra: Deal-Grove
+is a quadratic, the yield models are three closed forms, Rayleigh resolution
+and depth of focus are one line each, and the resist contrast chain is four.
+That third is ten generators verified as completely as any in the repository.
+The other two thirds — why a purge gas is inert, which step activates a PAG,
+what the RCA sequence is for — genuinely cannot be generated and are
+hand-authored in `ee4392-concepts-v1`, with `producer: hand` so `regeneration`
+skips them and the weaker guarantee is visible in the data rather than only in
+a comment.
+
+The general lesson is that "definitional course" is a property of a unit's
+content, not of a course's name, and that the way to find out is to read the
+worked examples rather than the topic list.
 
 ## Conventions that will bite you
 

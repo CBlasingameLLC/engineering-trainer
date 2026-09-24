@@ -60,3 +60,22 @@ why a parameterized generator is worth writing whenever a topic admits one. Use
 model authoring for what generators cannot do — qualitative reasoning, "why does
 this circuit behave this way", derivation ordering — rather than for arithmetic
 a solver could have produced correctly by construction.
+
+## Hand-authored batches
+
+`ee4392-concepts.mjs` is the other shape this directory supports: a script that
+emits one pack into `content/inbox/`, run with `node`. It exists because
+EE 4392's process knowledge is definitional — there is no closed form to
+generate from and no solver to check against — so the items are written rather
+than computed, and `regeneration` skips them because `producer` is `hand`
+rather than `generator`.
+
+That makes the guarantee behind them weaker than the generated bank's, and the
+script is committed so the weaker guarantee is at least reviewable: the source
+of every such item is in version control next to the pack it produced.
+
+Note what these items deliberately do not contain. The EE 4392 syllabus
+prohibits redistributing the instructor's lecture material, so no slide
+phrasing, checklist question or exam item is reproduced. The subject matter is
+standard semiconductor processing and is not the instructor's to license; the
+wording is independent.

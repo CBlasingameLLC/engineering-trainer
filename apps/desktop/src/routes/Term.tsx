@@ -25,9 +25,36 @@ function whenLabel(startsInWeeks: number): string {
   return `starts in ${startsInWeeks} weeks`;
 }
 
+/**
+ * A scheduled unit has three states, not two, and the third one used to be
+ * invisible.
+ *
+ * A unit may map to no knowledge components at all — the course is on the term
+ * and has no graph yet. It may map to components that carry no items — the
+ * graph is written and the bank is not. Or it may be servable.
+ *
+ * `startKcs` returns silently when the chosen components turn up no items, so
+ * the middle case produced a button that looked enabled, did nothing when
+ * pressed, and gave no reason. The two empty cases need different sentences
+ * because they are different pieces of news: one says the app does not know
+ * about this topic, the other says it knows about it and cannot ask about it
+ * yet.
+ */
 function UnitRow(
-  { unit, kcs, onStudy }: { unit: ScheduledUnit; kcs: readonly string[]; onStudy: () => void },
+  { unit, kcs, mappedKcs, onStudy }: {
+    unit: ScheduledUnit;
+    /** Components that can actually serve an item. This is what the button draws from. */
+    kcs: readonly string[];
+    /** Every component in the unit, servable or not. The two differ while a graph is ahead of its bank. */
+    mappedKcs: readonly string[];
+    onStudy: () => void;
+  },
 ): React.ReactElement {
+  const reason = kcs.length > 0
+    ? undefined
+    : mappedKcs.length > 0
+      ? 'This unit is in the knowledge map but has no questions in the bank yet'
+      : 'No knowledge components map to this unit yet';
   return (
     <li className="flex flex-wrap items-center gap-2 border-t border-slate-100 py-2 first:border-t-0 dark:border-slate-800">
       <span className="font-mono text-xs text-slate-500 dark:text-slate-400">{unit.course}</span>
@@ -48,12 +75,15 @@ function UnitRow(
         // that a unit session served material from that unit rather than from
         // the whole course — the scoping is the entire point of the control.
         data-kcs={kcs.join(' ')}
-        disabled={kcs.length === 0}
-        title={kcs.length === 0 ? 'No knowledge components map to this unit yet' : undefined}
+        disabled={reason !== undefined}
+        title={reason}
         onClick={onStudy}
       >
         Study this
       </button>
+      {reason && (
+        <span className="w-full text-xs text-slate-400 dark:text-slate-500">{reason}</span>
+      )}
     </li>
   );
 }
@@ -72,16 +102,31 @@ export function Term(): React.ReactElement {
     [content, term],
   );
 
-  const kcsForUnit = useMemo(() => {
-    const map = new Map<string, string[]>();
-    if (!content) return map;
+  // Two maps, because a unit whose components carry no items is a different
+  // state from a unit with no components, and the row says so. The servable
+  // map is what the button advertises and draws from, so `data-kcs` cannot
+  // promise material the session will not find.
+  const { kcsForUnit, mappedKcsForUnit } = useMemo(() => {
+    const servable = new Map<string, string[]>();
+    const mapped = new Map<string, string[]>();
+    if (!content) return { kcsForUnit: servable, mappedKcsForUnit: mapped };
+
+    const withItems = new Set<string>();
+    for (const item of content.items) {
+      for (const ref of item.kcRefs) withItems.add(ref.kc);
+    }
+
     for (const kc of content.graph.kcs.values()) {
       const key = `${kc.courseId}\u0000${kc.unit}`;
-      const list = map.get(key);
-      if (list) list.push(kc.id);
-      else map.set(key, [kc.id]);
+      const into = (map: Map<string, string[]>) => {
+        const list = map.get(key);
+        if (list) list.push(kc.id);
+        else map.set(key, [kc.id]);
+      };
+      into(mapped);
+      if (withItems.has(kc.id)) into(servable);
     }
-    return map;
+    return { kcsForUnit: servable, mappedKcsForUnit: mapped };
   }, [content]);
 
   const readiness = useMemo(
@@ -180,6 +225,7 @@ export function Term(): React.ReactElement {
                 key={`${unit.course}-${unit.unit}`}
                 unit={unit}
                 kcs={kcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
+                mappedKcs={mappedKcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
                 onStudy={() => startUnit(unit.course, unit.unit)}
               />
             ))}
@@ -198,6 +244,7 @@ export function Term(): React.ReactElement {
                 key={`${unit.course}-${unit.unit}`}
                 unit={unit}
                 kcs={kcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
+                mappedKcs={mappedKcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
                 onStudy={() => startUnit(unit.course, unit.unit)}
               />
             ))}

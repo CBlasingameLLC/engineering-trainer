@@ -1,0 +1,507 @@
+# EE 4392 — Microelectronics Manufacturing I (Texas State University, 2026 catalog)
+#
+# The first course in this repository that is not mostly closed-form, and the
+# reason the distinction had to be written down. Roughly a third of it is
+# ordinary engineering algebra — Deal-Grove, the yield models, Rayleigh
+# resolution, the resist-contrast chain — and generators verify that third
+# nearly completely. The rest is process knowledge: what a purge gas is for,
+# why the RCA clean needs four different chemistries, which step activates a
+# PAG. No solver can check those, and pretending otherwise would ship
+# definitional claims with the confidence of a computed one.
+#
+# So the unit list below is split deliberately. A unit whose KCs carry
+# `math-execution` has a generator behind it; a unit that is `concept` only is
+# hand-authored and carries the weaker guarantee. Both are real knowledge; only
+# one of them is machine-checkable, and the competency tag is where that shows.
+#
+# Notation follows the lectures rather than the textbook wherever they differ,
+# because the exams follow the lectures:
+#
+# - x0 for oxide thickness, xi for the initial oxide, tau for the fictitious
+#   time offset, B the parabolic and B/A the linear rate constant.
+# - Thicknesses in micrometres for oxidation, nanometres for lithography. That
+#   is not arbitrary tidiness — it is what the instructor writes, and an item
+#   that demands the other one is teaching notation instead of process.
+# - Q0 and Qf for the resist dose limits, gamma for resist contrast.
+#
+# Cross-course edges are thin here on purpose. This course's prerequisite is
+# CHEM 1335, which is not in the graph and will not be; what it genuinely leans
+# on from the maths is narrow and specific — a quadratic in x0, an Arrhenius
+# exponential, a base-10 logarithm — and those edges are drawn where they are
+# real. Edges that would run to a semiconductor-physics course are missing
+# rather than wrong: EE 3355 Solid State Devices has no graph yet, so a
+# diagnosis here bottoms out at the process step and not at the device physics
+# underneath it.
+#
+# Units past Lithography are on the syllabus and have not been lectured yet, so
+# they are declared here at low resolution and carry no items. That is a
+# deliberate reversal of the obvious choice, and the reason is the term view:
+# truncating the course at the last unit with a bank would make the schedule
+# silently wrong about this course from week 7 onward, which is exactly the
+# failure the term document exists to prevent. A unit that is on the syllabus
+# and not yet authored is a real state, and the term view now says so in those
+# words rather than offering a control that does nothing.
+#
+# Their decomposition is deliberately coarse. What the instructor treats as one
+# concept is what this file should call one concept, and until the lectures
+# land that is not known — so these are named from the syllabus topics and will
+# be split properly when there is material to split them against.
+#
+# Diffusion and implantation are authored ahead of their lectures anyway,
+# because dopant transport is standard closed-form physics and the final is
+# cumulative. That is a bet on the content and not on the notation; see the
+# note above those units.
+
+code: EE4392
+title: Microelectronics Manufacturing I
+institution: Texas State University
+catalogYear: 2026
+tier: 3
+credits: 3
+
+kcs:
+  # --- Unit 1: Silicon Materials and Fab Overview ---------------------------
+  - id: ee4392.silicon-crystal
+    title: Silicon crystal structure and atomic density
+    unit: Silicon Materials
+    domain: devices
+    competencies: [concept, numeracy]
+    difficultyPrior: -1.4
+    description: >-
+      Diamond cubic structure, a = 5.43 angstrom, eight atoms per cell, and the
+      5e22 atoms/cm^3 that follows from them. The number is worth deriving once
+      and then knowing cold: it is the denominator of every dose and
+      consumption calculation later in the course.
+
+  - id: ee4392.wafer-and-fab
+    title: Wafer preparation and the fab process flow
+    unit: Silicon Materials
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -1.2
+    description: >-
+      Czochralski growth, boule to wafer, and the order a CMOS flow runs in.
+      Also the industry structure the course keeps returning to — IDM versus
+      pure-play foundry versus fabless — and why node names stopped describing
+      a physical gate length.
+
+  - id: ee4392.doping-basics
+    title: Dopants, donors and acceptors
+    unit: Silicon Materials
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -1.2
+    description: >-
+      Which elements donate and which accept, and what each produces. Shallow
+      here because the diffusion and implantation units carry the quantitative
+      half, which is not taught until November.
+
+  # --- Unit 2: Thermal Oxidation --------------------------------------------
+  - id: ee4392.oxidation-mechanism
+    title: Thermal oxidation mechanism and oxide uses
+    unit: Oxidation
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -0.8
+    description: >-
+      Dry and wet reactions, why the oxidant must diffuse through oxide already
+      grown, why wet grows faster and dry grows better, and the seven uses of
+      oxide the instructor asks for by name. The native oxide and why it stops
+      at one to two nanometres.
+    prerequisites:
+      - kc: ee4392.silicon-crystal
+        strength: 0.4
+
+  - id: ee4392.oxide-volume-expansion
+    title: Volume expansion and silicon consumption
+    unit: Oxidation
+    domain: devices
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.6
+    description: >-
+      Converting silicon to its oxide expands the volume 2.2 times, so 44% of a
+      grown oxide sits below the original surface and 56% above it. Every
+      LOCOS, recess and cross-section question in the course is this one ratio
+      applied carefully.
+    prerequisites:
+      - kc: ee4392.oxidation-mechanism
+        strength: 0.7
+
+  - id: ee4392.deal-grove-model
+    title: The Deal-Grove model
+    unit: Oxidation
+    domain: devices
+    competencies: [modeling, concept]
+    difficultyPrior: 0.1
+    description: >-
+      Three fluxes assumed equal at steady state, the assumption that lets F1
+      be ignored, and the linear and parabolic limits that fall out. B/A depends
+      on crystal orientation because the interface reaction does; B does not,
+      because diffusion through an amorphous oxide cannot see the lattice.
+    prerequisites:
+      - kc: ee4392.oxidation-mechanism
+        strength: 0.8
+
+  - id: ee4392.oxide-growth-calculation
+    title: Oxide thickness and growth time
+    unit: Oxidation
+    domain: devices
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.5
+    description: >-
+      Solving x0^2/B + x0/(B/A) = t + tau in both directions, and getting tau
+      from an oxide already on the wafer. The multi-step growth that follows —
+      grow, mask, grow again — is the exam's favourite shape because it needs
+      the initial thickness handled correctly rather than assumed to be zero.
+    prerequisites:
+      - kc: ee4392.deal-grove-model
+        strength: 0.9
+      - kc: math2471.exponential-functions
+        strength: 0.3
+
+  - id: ee4392.oxidation-rate-constants
+    title: Rate constants, temperature and orientation
+    unit: Oxidation
+    domain: devices
+    competencies: [math-execution, numeracy]
+    difficultyPrior: 0.4
+    description: >-
+      B and B/A from Arrhenius expressions, the (111) to (100) correction of
+      1.68 that applies to B/A and never to B, and the minutes-to-hours
+      conversion the slides call out as the most common mistake in the unit.
+    prerequisites:
+      - kc: ee4392.deal-grove-model
+        strength: 0.8
+      - kc: math2471.exponential-functions
+        strength: 0.5
+
+  - id: ee4392.oxide-metrology
+    title: Measuring oxide thickness
+    unit: Oxidation
+    domain: devices
+    competencies: [concept, visual]
+    difficultyPrior: -0.2
+    description: >-
+      Colour charts from thin-film interference, and what ellipsometry gives
+      that reflectometry does not. The destructive-interference wavelengths are
+      a closed form; which technique to reach for is not.
+    prerequisites:
+      - kc: ee4392.oxidation-mechanism
+        strength: 0.3
+
+  # --- Unit 3: Cleanroom, Defects and Yield ---------------------------------
+  - id: ee4392.contamination-control
+    title: The three-tier contamination framework
+    unit: Cleanroom Defects and Yield
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -0.5
+    description: >-
+      Clean factories, wafer cleaning, then gettering — keep particles out,
+      remove what got in, trap what is left somewhere harmless. Cleanroom
+      classification, laminar flow, and why the 10 nm to 10 um band is the hard
+      one to filter out of room air.
+
+  - id: ee4392.wafer-cleaning
+    title: The RCA clean and its chemistry
+    unit: Cleanroom Defects and Yield
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -0.2
+    description: >-
+      Piranha, oxide strip, SC-1 and SC-2, what each step targets, and the
+      oxidation-reduction argument for why a metal has to be ionised before it
+      can be rinsed away. No single chemistry removes organics, oxide, transition
+      metals and alkali ions, which is the whole reason the sequence is a
+      sequence.
+    prerequisites:
+      - kc: ee4392.contamination-control
+        strength: 0.6
+
+  - id: ee4392.gettering
+    title: Gettering metallic contamination
+    unit: Cleanroom Defects and Yield
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.0
+    description: >-
+      Free, diffuse, trap — and why the first step has to come first. Extrinsic
+      versus intrinsic gettering, the denuded zone, and why the mechanism fails
+      outright when contamination is heavy enough to saturate the traps.
+    prerequisites:
+      - kc: ee4392.contamination-control
+        strength: 0.6
+
+  - id: ee4392.killer-defects
+    title: Killer defects and critical size
+    unit: Cleanroom Defects and Yield
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -0.3
+    description: >-
+      A particle is a killer only relative to the feature size it lands near,
+      so shrinking the node reclassifies particles that were previously
+      harmless. This is why particle-count targets keep falling even though
+      particles have not changed.
+
+  - id: ee4392.yield-models
+    title: Poisson, negative binomial and Seeds yield
+    unit: Cleanroom Defects and Yield
+    domain: devices
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.3
+    description: >-
+      Yield against die area and defect density under each model, and what the
+      clustering factor is doing. Poisson assumes defects are uncorrelated and
+      so underpredicts yield for large die; the negative binomial is the general
+      case and Poisson is its C to infinity limit.
+    prerequisites:
+      - kc: ee4392.killer-defects
+        strength: 0.5
+      - kc: math2471.exponential-functions
+        strength: 0.4
+
+  - id: ee4392.process-capability
+    title: Process capability, Cp and Cpk
+    unit: Cleanroom Defects and Yield
+    domain: devices
+    competencies: [math-execution, numeracy]
+    difficultyPrior: 0.2
+    description: >-
+      Cp from the specification width over six sigma, Cpk from whichever
+      specification limit the mean sits closer to. Cp measures spread alone, so
+      the gap between the two is a statement about centring and nothing else —
+      which is the interpretation the course actually asks for.
+
+  # --- Unit 4: Photolithography ---------------------------------------------
+  - id: ee4392.litho-systems
+    title: Lithography systems and exposure sources
+    unit: Photolithography
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -0.4
+    description: >-
+      Contact, proximity and projection printing and what each trades away;
+      g-, h- and i-line, KrF, ArF and EUV with their wavelengths, and why EUV
+      is built from mirrors rather than lenses.
+
+  - id: ee4392.optical-resolution
+    title: Rayleigh resolution and depth of focus
+    unit: Photolithography
+    domain: devices
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.4
+    description: >-
+      R = k1 lambda / NA against DOF = k2 lambda / NA^2, and the tension between
+      them: raising NA buys resolution linearly and costs depth of focus
+      quadratically. Proximity printing has its own square-root law instead.
+    prerequisites:
+      - kc: ee4392.litho-systems
+        strength: 0.7
+
+  - id: ee4392.resist-chemistry
+    title: Photoresist chemistry and process steps
+    unit: Photolithography
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: -0.1
+    description: >-
+      Positive against negative resist, the three generations, and the eight
+      steps of the lithography module. The exam question that keeps recurring is
+      when the photoactive compound acts: a PAC reacts at exposure, a PAG needs
+      the post-exposure bake to run its catalytic cascade.
+    prerequisites:
+      - kc: ee4392.litho-systems
+        strength: 0.4
+
+  - id: ee4392.resist-contrast
+    title: Resist contrast, CMTF and image modulation
+    unit: Photolithography
+    domain: devices
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.6
+    description: >-
+      Contrast from the two dose limits, the resist CMTF that follows from it,
+      the optical MTF of the aerial image, and the single comparison that
+      decides whether a feature resolves at all. Dose is intensity times time,
+      which is what turns an intensity profile into an imaged width.
+    prerequisites:
+      - kc: ee4392.resist-chemistry
+        strength: 0.7
+      - kc: math2471.exponential-functions
+        strength: 0.3
+
+  - id: ee4392.resolution-enhancement
+    title: Resolution enhancement techniques
+    unit: Photolithography
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.3
+    description: >-
+      Off-axis and Koehler illumination, immersion, and phase-shift masks.
+      Immersion is the one worth being precise about: water does not improve
+      resolution by itself, it removes the refractive-index limit that capped
+      practical NA in air.
+    prerequisites:
+      - kc: ee4392.optical-resolution
+        strength: 0.6
+
+  # --- Units not yet lectured ------------------------------------------------
+  # Everything below is on the syllabus and has not been taught yet, so the
+  # titles come from the schedule and the decomposition will be redone against
+  # the slides when they land.
+  #
+  # They carry items anyway. Etch bias and selectivity, mean free path, step
+  # coverage, interconnect RC delay and the whole of dopant transport are
+  # standard closed-form process engineering, and the final is cumulative, so
+  # waiting for the lectures would leave the second half of the course
+  # unusable until the week before it is examined.
+  #
+  # What is provisional is the *notation*, not the content. This file uses the
+  # near-universal symbols — Q for dose, N_s and N_0 for surface
+  # concentrations, x_j, R_p, Delta R_p, A for degree of anisotropy — and the
+  # course may write something else. Where it does, the items should follow
+  # the course, because being marked wrong for notation teaches notation
+  # rather than process.
+
+  - id: ee4392.etch-fundamentals
+    title: Etch rate, selectivity and anisotropy
+    unit: Etch
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.0
+    description: >-
+      The three numbers that describe any etch: how fast it removes the target,
+      how much faster it removes the target than the mask or the layer beneath,
+      and how much more it removes downward than sideways. Wet etches are
+      essentially isotropic, which sets the feature size they can support.
+    prerequisites:
+      - kc: ee4392.resist-chemistry
+        strength: 0.4
+
+  - id: ee4392.plasma-etch
+    title: Plasma and reactive ion etch
+    unit: Etch
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.3
+    description: >-
+      Where anisotropy comes from once the etch is driven by directional ions
+      rather than by a liquid, and what that costs in selectivity.
+    prerequisites:
+      - kc: ee4392.etch-fundamentals
+        strength: 0.8
+
+  - id: ee4392.physical-vapour-deposition
+    title: Evaporation and sputtering
+    unit: Thin Film Deposition
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.1
+    description: >-
+      Line-of-sight deposition and the step coverage problem that follows from
+      it, which is the property that decides where PVD can and cannot be used.
+
+  - id: ee4392.chemical-vapour-deposition
+    title: Chemical vapour deposition
+    unit: Thin Film Deposition
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.25
+    description: >-
+      Surface-reaction-limited against mass-transport-limited growth, and why
+      that distinction decides both the uniformity and the temperature of a
+      deposition. The same two-regime argument as Deal-Grove, in a different
+      process.
+    prerequisites:
+      - kc: ee4392.deal-grove-model
+        strength: 0.4
+
+  - id: ee4392.vacuum-systems
+    title: Vacuum and gas handling
+    unit: Thin Film Deposition
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.0
+    description: >-
+      Pressure regimes, mean free path, and why a deposition tool's base
+      pressure is a contamination specification as much as a vacuum one.
+    prerequisites:
+      - kc: ee4392.contamination-control
+        strength: 0.3
+
+  - id: ee4392.interconnect
+    title: Interconnect and damascene
+    unit: Interconnect
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.3
+    description: >-
+      Wiring the devices together: RC delay, why copper displaced aluminium,
+      why low-k dielectrics sit between the lines, and why copper is patterned
+      by damascene rather than by etching it.
+    prerequisites:
+      - kc: ee4392.oxidation-mechanism
+        strength: 0.3
+
+  - id: ee4392.diffusion-model
+    title: Fick's laws and the diffusion coefficient
+    unit: Diffusion
+    domain: devices
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.5
+    description: >-
+      Dopant redistribution as a diffusion problem, with an Arrhenius
+      diffusivity. The same activated-transport argument that sets the
+      oxidation rate constants, applied to a different species.
+    prerequisites:
+      - kc: ee4392.doping-basics
+        strength: 0.6
+      - kc: math3323.first-order-ode
+        strength: 0.4
+
+  - id: ee4392.diffusion-profiles
+    title: Constant-source and limited-source profiles
+    unit: Diffusion
+    domain: devices
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.7
+    description: >-
+      The complementary error function and Gaussian solutions, junction depth,
+      and sheet resistance. Which solution applies is a statement about whether
+      the dopant supply is exhausted, which is a process question before it is
+      a mathematical one.
+    prerequisites:
+      - kc: ee4392.diffusion-model
+        strength: 0.9
+
+  - id: ee4392.ion-implantation
+    title: Ion implantation range and straggle
+    unit: Ion Implantation
+    domain: devices
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.5
+    description: >-
+      Dose and energy as the two independent knobs, projected range and
+      straggle as the profile they produce, and channelling as the thing that
+      spoils it. Implantation exists because it separates how much from how
+      deep, which diffusion cannot do.
+    prerequisites:
+      - kc: ee4392.doping-basics
+        strength: 0.6
+
+  - id: ee4392.implant-anneal
+    title: Damage, annealing and activation
+    unit: Ion Implantation
+    domain: devices
+    competencies: [concept]
+    difficultyPrior: 0.4
+    description: >-
+      An implant leaves the lattice damaged and the dopant electrically
+      inactive. Annealing repairs both and moves the profile while it does so,
+      which is the thermal-budget trade at the heart of shallow junctions.
+    prerequisites:
+      - kc: ee4392.ion-implantation
+        strength: 0.8
+      - kc: ee4392.diffusion-model
+        strength: 0.5

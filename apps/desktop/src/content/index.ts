@@ -29,6 +29,34 @@ const packFiles = import.meta.glob('../../../../content/packs/shared/*.json', {
   import: 'default',
 }) as Record<string, unknown>;
 
+/**
+ * Personal-only packs, which are bundled only when a build asks for them.
+ *
+ * The quarantine had a hole in it, and it was the useless direction: packs
+ * under `content/packs/personal/` are gitignored and excluded from a release,
+ * but nothing loaded them *ever*, so owned material could not sharpen the
+ * owner's own training either. That is a rule with all of the cost and none
+ * of the benefit.
+ *
+ * The distinction that matters is not development against production — the
+ * learner's own installer is a production build — but redistributable against
+ * personal. So it is an explicit opt-in at build time:
+ *
+ *     VITE_ET_INCLUDE_PERSONAL=1 pnpm tauri build
+ *
+ * Default off, so every artifact built without thinking about it is safe to
+ * hand to someone else, and CI never sets it. The glob itself is unconditional
+ * because `import.meta.glob` is resolved statically; the flag decides whether
+ * the results are used, and an unused eager glob over an empty directory costs
+ * nothing.
+ */
+const personalPackFiles = import.meta.glob('../../../../content/packs/personal/*.json', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>;
+
+const includePersonal = import.meta.env.VITE_ET_INCLUDE_PERSONAL === '1';
+
 const credentialFiles = import.meta.glob('../../../../content/credentials/*.yaml', {
   eager: true,
   query: '?raw',
@@ -72,6 +100,15 @@ export interface LoadedContent {
    * quietly disagrees with the schedule.
    */
   termCoursesWithoutGraph: string[];
+  /**
+   * How many loaded items are personal-only.
+   *
+   * Reported so the number is visible rather than inferred: a build that
+   * contains owned material should say so, both to keep the learner honest
+   * about where a question came from and to make an accidental inclusion
+   * obvious instead of silent.
+   */
+  personalItemCount: number;
   /** Problems found while loading. Surfaced rather than swallowed. */
   issues: string[];
 }
@@ -105,6 +142,19 @@ export function loadContent(): LoadedContent {
     const result = parsePack(raw);
     if (result.pack) packs.push(result.pack);
     else issues.push(...result.issues.map((i) => `${path.split('/').pop()} ${i.path}: ${i.message}`));
+  }
+
+  let personalItems = 0;
+  if (includePersonal) {
+    for (const [path, raw] of Object.entries(personalPackFiles)) {
+      const result = parsePack(raw);
+      if (result.pack) {
+        packs.push(result.pack);
+        personalItems += result.pack.items.length;
+      } else {
+        issues.push(...result.issues.map((i) => `${path.split('/').pop()} ${i.path}: ${i.message}`));
+      }
+    }
   }
 
   const credentials: Credential[] = [];
@@ -174,6 +224,7 @@ export function loadContent(): LoadedContent {
     graph, courses, packs, items: packs.flatMap((p) => p.items), credentials,
     misconceptionFamilies, misconceptionTitles,
     terms, termCoursesWithoutGraph: [...termCoursesWithoutGraph].sort(),
+    personalItemCount: personalItems,
     issues,
   };
   return cached;

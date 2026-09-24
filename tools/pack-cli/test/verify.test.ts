@@ -328,3 +328,120 @@ describe('SI prefix recovery', () => {
     });
   }
 });
+
+/**
+ * A unit's exponent is part of the unit, not a result the solution stated.
+ *
+ * The bare form was already excluded. The braced form is how a negative
+ * exponent has to be written, and it was not: `\mathrm{cm^{-2}}` contributed a
+ * bare -2 to the list of numbers the worked solution was claimed to end on.
+ * That can only ever make explanation-agreement pass when it should have
+ * failed, which is the quiet direction for a gate to be wrong in.
+ */
+describe('unit exponents are not results', () => {
+  const notNumbers: [string, number][] = [
+    ['0.5\\,\\mathrm{cm^{-2}}', -2],
+    ['2.5\\,\\mathrm{cm^{2}}', 2],
+    ['1.4\\,\\mathrm{m^2}', 2],
+    ['9\\,\\mathrm{m^3}', 3],
+    ['3\\,\\mathrm{s^{-1}}', -1],
+  ];
+
+  for (const [rendered, exponent] of notNumbers) {
+    it(`does not read ${exponent} out of ${rendered}`, () => {
+      expect(readNumbers(rendered)).not.toContain(exponent);
+    });
+  }
+
+  it('still reads the quantity itself', () => {
+    expect(readNumbers('0.5\\,\\mathrm{cm^{-2}}')).toEqual([0.5]);
+    expect(readNumbers('1.4\\,\\mathrm{m^2}')).toEqual([1.4]);
+  });
+});
+
+/**
+ * Lengths in EE 4392 are stored in the unit the course writes them in, so the
+ * prefix has to stay out of the `\mathrm` group.
+ *
+ * `\mathrm{\mu m}` is a correct prefixed metre and folding it to 4e-7 is the
+ * rule working. It is still wrong for an item whose answer is stored as 0.477
+ * micrometres, because explanation-agreement would then compare 0.477 against
+ * 4.77e-7 and report a worked solution that is in fact right. Writing the
+ * prefix as its own group renders identically and leaves the number bare.
+ */
+describe('course-unit lengths stay unfolded', () => {
+  it('folds a prefixed metre written the schematic way', () => {
+    expect(readNumbers('0.477\\,\\mathrm{\\mu m}')[0]).toBeCloseTo(4.77e-7, 12);
+  });
+
+  it('leaves micrometres bare when the prefix sits outside the group', () => {
+    expect(readNumbers('0.477\\,\\mu\\mathrm{m}')).toContain(0.477);
+  });
+
+  it('leaves nanometres bare when the prefix is braced', () => {
+    expect(readNumbers('310\\,\\mathrm{{n}m}')).toContain(310);
+  });
+
+  it('leaves compound process units alone', () => {
+    expect(readNumbers('0.344\\,\\mu\\mathrm{m^2/hr}')).toContain(0.344);
+    expect(readNumbers('23\\,\\mathrm{mJ/cm^2}')).toContain(23);
+    expect(readNumbers('6\\,\\mathrm{mW/cm^2}')).toContain(6);
+  });
+});
+
+/**
+ * Scientific notation, which is the one place an exponent *is* the number.
+ *
+ * A doping concentration is written `5 \times 10^{20}` and neither half of
+ * that is the stated result, so a worked solution ending on 5e20 used to agree
+ * with nothing at all. EE 4392's diffusion and implantation items are written
+ * entirely in these quantities.
+ */
+describe('scientific notation folds to one value', () => {
+  const cases: [string, number][] = [
+    ['5 \\times 10^{20}\\,\\mathrm{cm^{-3}}', 5e20],
+    ['1.4\\times 10^{-4}\\,\\mathrm{cm^2/s}', 1.4e-4],
+    ['$N_0 = 2.5 \\times 10^{18}$', 2.5e18],
+    ['3 \\cdot 10^{15}', 3e15],
+    ['-2 \\times 10^{3}', -2000],
+    ['8.617 \\times 10^{-5}\\,\\mathrm{eV/K}', 8.617e-5],
+  ];
+
+  for (const [rendered, expected] of cases) {
+    it(`reads ${rendered} as ${expected}`, () => {
+      expect(readNumbers(rendered)).toContain(expected);
+    });
+  }
+
+  it('leaves neither the mantissa nor the exponent loose', () => {
+    // Both halves would be spurious, and a spurious number can only ever make
+    // explanation-agreement pass when it should have failed.
+    expect(readNumbers('5 \\times 10^{20}')).toEqual([5e20]);
+  });
+});
+
+/**
+ * Exponents and subscripts of any length, which is what finally settled this.
+ *
+ * Three successive lookbehinds each fixed the case in front of them and missed
+ * the next: `(?<!\^)` misses `^{2}`, adding `(?<!\^\{)` lets `^{-2}` restart on
+ * the digit, and adding `(?<!\^\{-)` still misses `^{18}`. No fixed number of
+ * them covers an arbitrary exponent, so the spans are stripped instead.
+ */
+describe('exponents and subscripts of any length are not results', () => {
+  const cases: [string, number[]][] = [
+    ['1.4\\,\\mathrm{m^2}', [1.4]],
+    ['0.5\\,\\mathrm{cm^{-2}}', [0.5]],
+    ['7\\,\\mathrm{cm^{-12}}', [7]],
+    ['4\\,\\mathrm{s^{-1}}', [4]],
+    ['$N_0 = 9$', [9]],
+    ['$R_{p} = 120\\,\\mathrm{{n}m}$', [120]],
+    ['$x_{j}^{2} = 6$', [6]],
+  ];
+
+  for (const [rendered, expected] of cases) {
+    it(`reads ${rendered} as exactly ${JSON.stringify(expected)}`, () => {
+      expect(readNumbers(rendered)).toEqual(expected);
+    });
+  }
+});

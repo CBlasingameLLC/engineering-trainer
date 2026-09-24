@@ -11,9 +11,33 @@ import { Misconceptions } from '@/routes/Misconceptions';
 import { Term } from '@/routes/Term';
 import { DisplayControls } from '@/ui/DisplayControls';
 
+/**
+ * A build carrying personal-only material says so, permanently and visibly.
+ *
+ * The licence rule is enforced in three places already — gitignore, the pack
+ * schema, and the build flag that decides whether these packs load at all —
+ * but all three are invisible from inside the running app. Someone holding a
+ * copy of this binary cannot otherwise tell whether the questions in it are
+ * redistributable, and neither can the person who built it six months ago.
+ */
+function PersonalBadge(): React.ReactElement | null {
+  const content = useApp((s) => s.content);
+  if (!content || content.personalItemCount === 0) return null;
+  return (
+    <div
+      data-testid="personal-content-badge"
+      className="border-b border-amber-300 bg-amber-50 px-4 py-1 text-center text-xs text-amber-900 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-200"
+    >
+      This build includes {content.personalItemCount} personal-only item
+      {content.personalItemCount === 1 ? '' : 's'} derived from owned material. Do not redistribute it.
+    </div>
+  );
+}
+
 function Shell({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
     <>
+      <PersonalBadge />
       <DisplayControls />
       {children}
     </>

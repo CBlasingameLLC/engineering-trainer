@@ -123,23 +123,51 @@ function extractNumbers(text: string): number[] {
     G: 1e9, M: 1e6, k: 1e3, m: 1e-3, n: 1e-9, p: 1e-12, '\\mu': 1e-6, u: 1e-6,
   };
   const out: number[] = [];
-  // Both macros, because the prefix carries the magnitude: reading `20\,\mathrm{ms}`
-  // as a bare 20 makes a correct worked solution disagree with a correct answer
-  // key by a factor of a thousand. Tying this to one typesetting macro is what
-  // made a `\text` -> `\mathrm` change look like 40 wrong answers.
+
+  // Pass 1 — scientific notation, which has to run on the raw text because it
+  // is the one case where the exponent *is* part of the number. A doping
+  // concentration is written `5 \times 10^{20}` and neither half of that is
+  // the stated result.
+  const scientific = /(-?\d+(?:\.\d+)?)\s*(?:\\times|\\cdot)\s*10\^\{?(-?\d+)\}?/g;
+  for (const match of text.matchAll(scientific)) {
+    const mantissa = Number(match[1]);
+    const exponent = Number(match[2]);
+    if (Number.isFinite(mantissa) && Number.isFinite(exponent)) {
+      out.push(mantissa * 10 ** exponent);
+    }
+  }
+
+  // Then remove everything that is positionally a number but semantically not
+  // a result: the scientific-notation spans just captured, every exponent, and
+  // every subscript. Stripping beats a lookbehind here, which is the lesson of
+  // getting this wrong twice — `(?<!\^)` misses `^{2}`, adding `(?<!\^\{)`
+  // still lets `^{-2}` restart the match on the digit, and adding a third
+  // still misses `^{18}`. There is no fixed number of lookbehinds that covers
+  // an arbitrary exponent, and a spurious number can only ever make
+  // explanation-agreement pass when it should have failed.
+  const stripped = text
+    .replace(scientific, ' ')
+    .replace(/[\^_]\{[^}]*\}/g, '')
+    .replace(/[\^_]-?\d+/g, '');
+
+  // Pass 2 — plain quantities, with any SI prefix folded in.
+  //
+  // Both `\text` and `\mathrm`, because the prefix carries the magnitude:
+  // reading `20\,\mathrm{ms}` as a bare 20 makes a correct worked solution
+  // disagree with a correct answer key by a factor of a thousand. Tying this
+  // to one typesetting macro is what made a `\text` -> `\mathrm` change look
+  // like 40 wrong answers.
   const pattern = new RegExp(
-    // `(?<!\^)` keeps a unit's own exponent out of the list: `\mathrm{m^2}`
-    // would otherwise contribute a bare 2, and a spurious number can only ever
-    // make this check pass when it should have failed.
-    String.raw`(?<!\^)(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])(?:${PREFIXABLE_UNITS})\})?`,
+    String.raw`(-?\d+(?:\.\d+)?)(?:\s*\\,)?(?:\\(?:text|mathrm)\{(\\mu\s?|[GMkmnpu])(?:${PREFIXABLE_UNITS})\})?`,
     'g',
   );
-  for (const match of text.matchAll(pattern)) {
+  for (const match of stripped.matchAll(pattern)) {
     const value = Number(match[1]);
     if (!Number.isFinite(value)) continue;
     const prefix = match[2]?.trim();
     out.push(prefix ? value * (prefixes[prefix] ?? 1) : value);
   }
+
   return out;
 }
 
