@@ -1,5 +1,15 @@
 # PHYS 2335 — Waves and Heat (Texas State University, 2026 catalog)
 #
+# The name undersells it. The syllabus covers fluids, thermodynamics,
+# oscillations, waves *and* optics, and the two ends of that list were missing
+# from this file for a while because it was written from the course title
+# rather than from the syllabus. Fluid statics is on Exam 1 and optics is most
+# of Exams 2 and 3; neither is a wave and neither is heat.
+#
+# Two knowledge components carry a note saying they are off this syllabus.
+# They are real physics from the same textbook and the term deliberately does
+# not schedule them — see the Sound note below.
+#
 # Two courses in one, joined by a habit rather than a subject: both halves are
 # about a quantity that is conserved or transported, and both are graded on
 # whether the right conservation statement was written down before any algebra
@@ -36,7 +46,82 @@ tier: 4
 credits: 4
 
 kcs:
-  # --- Unit 1: Oscillations -------------------------------------------------
+  # --- Unit 1: Fluid Statics (OpenStax Vol I Ch 14, weeks 2-3) ---------------
+  # First unit of the course and on Exam 1. Entirely closed-form: every result
+  # below is one equation, and the errors are about which pressure and which
+  # volume rather than about the algebra.
+  - id: phys2335.fluid-pressure-depth
+    title: Pressure, depth and density
+    unit: Fluid Statics
+    domain: physics
+    competencies: [math-execution, concept]
+    difficultyPrior: -1.2
+    description: >-
+      Pressure in a static fluid rises with depth as rho g h, and does not
+      depend on the shape or the width of the container. The distinction that
+      costs marks is gauge against absolute: the first is the rho g h term on
+      its own and the second adds the atmosphere on top.
+
+  - id: phys2335.manometer
+    title: Manometers and immiscible columns
+    unit: Fluid Statics
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: -0.4
+    description: >-
+      Two fluids that do not mix, balanced across a U-tube. The whole method is
+      one sentence — pressure is equal at any two points at the same height in
+      the same connected fluid — and every manometer problem is choosing that
+      height well.
+    prerequisites:
+      - kc: phys2335.fluid-pressure-depth
+        strength: 0.9
+
+  - id: phys2335.pascal-principle
+    title: Pascal's principle and hydraulics
+    unit: Fluid Statics
+    domain: physics
+    competencies: [concept, math-execution]
+    difficultyPrior: -0.8
+    description: >-
+      Pressure applied to an enclosed fluid is transmitted undiminished, so a
+      small force on a small piston balances a large force on a large one. The
+      force ratio goes as the *area* ratio, which is the square of the radius
+      ratio — and that squaring is where the factor of four goes missing.
+    prerequisites:
+      - kc: phys2335.fluid-pressure-depth
+        strength: 0.5
+
+  - id: phys2335.buoyancy
+    title: Archimedes' principle and buoyant force
+    unit: Fluid Statics
+    domain: physics
+    competencies: [concept, math-execution]
+    difficultyPrior: -0.6
+    description: >-
+      The buoyant force equals the weight of the fluid displaced, which depends
+      on the fluid's density and the submerged volume and never on what the
+      object is made of. Apparent weight is the true weight less that force.
+    prerequisites:
+      - kc: phys2335.fluid-pressure-depth
+        strength: 0.6
+
+  - id: phys2335.floating-equilibrium
+    title: Floating, draft and average density
+    unit: Fluid Statics
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: -0.2
+    description: >-
+      A floating body displaces its own weight, so the submerged fraction is
+      the ratio of the two densities and nothing else. Draft, waterline and the
+      lift of a balloon are all that one statement applied to a different
+      shape.
+    prerequisites:
+      - kc: phys2335.buoyancy
+        strength: 0.9
+
+  # --- Unit 2: Oscillations -------------------------------------------------
   - id: phys2335.simple-harmonic-motion
     title: Simple harmonic motion
     unit: Oscillations
@@ -147,11 +232,19 @@ kcs:
 
   - id: phys2335.beats
     title: Beats
-    unit: Mechanical Waves
+    unit: Sound
     domain: physics
     competencies: [concept, numeracy]
     difficultyPrior: -0.5
     description: >-
+      NOT ON THE FALL 2026 SYLLABUS. This is OpenStax Vol I Ch 17, and the
+      syllabus stops at Ch 16. It sits in its own `Sound` unit precisely so
+      that it can be left off the term: the term joins the graph by unit name,
+      so a note alone would have changed nothing and this one would have been
+      false. The component and its items stay because the physics is real and
+      a later course may want it; the term simply never schedules the unit, so
+      the term view and the daily quest spend no study time on it.
+
       Two close frequencies superpose into an amplitude that pulses at their
       difference. The beat frequency is |f1 - f2|, not half of it — the envelope
       passes through a maximum twice per cycle of the half-difference term.
@@ -161,11 +254,19 @@ kcs:
 
   - id: phys2335.sound-intensity
     title: Sound intensity and the decibel scale
-    unit: Mechanical Waves
+    unit: Sound
     domain: physics
     competencies: [numeracy, math-execution]
     difficultyPrior: 0.0
     description: >-
+      NOT ON THE FALL 2026 SYLLABUS. This is OpenStax Vol I Ch 17, and the
+      syllabus stops at Ch 16. It sits in its own `Sound` unit precisely so
+      that it can be left off the term: the term joins the graph by unit name,
+      so a note alone would have changed nothing and this one would have been
+      false. The component and its items stay because the physics is real and
+      a later course may want it; the term simply never schedules the unit, so
+      the term view and the daily quest spend no study time on it.
+
       Intensity falls as 1/r^2 from a point source, and the decibel is a
       logarithmic ratio against 1e-12 W/m^2. Doubling the intensity adds about
       3 dB; doubling the distance subtracts about 6.
@@ -175,11 +276,19 @@ kcs:
 
   - id: phys2335.doppler-effect
     title: The Doppler effect
-    unit: Mechanical Waves
+    unit: Sound
     domain: physics
     competencies: [modeling, math-execution]
     difficultyPrior: 0.6
     description: >-
+      NOT ON THE FALL 2026 SYLLABUS. This is OpenStax Vol I Ch 17, and the
+      syllabus stops at Ch 16. It sits in its own `Sound` unit precisely so
+      that it can be left off the term: the term joins the graph by unit name,
+      so a note alone would have changed nothing and this one would have been
+      false. The component and its items stay because the physics is real and
+      a later course may want it; the term simply never schedules the unit, so
+      the term view and the daily quest spend no study time on it.
+
       A moving source changes the wavelength; a moving observer changes the rate
       of arrival. They are different mechanisms with different algebra, and the
       sign convention that keeps them straight is the whole difficulty.
@@ -339,3 +448,89 @@ kcs:
         strength: 0.7
       - kc: math2471.integration-basics
         strength: 0.5
+
+  # --- Unit 5: Wave Optics (OpenStax Vol III Ch 3-4, weeks 11-13) -----------
+  # Physically continuous with the interference already covered under waves —
+  # the superposition is the same superposition — but the course treats it as
+  # its own block and examines it separately, so it is its own unit here.
+  #
+  # The trap that defines this unit is that the two headline equations look
+  # identical and mean opposite things: d sin(theta) = m lambda locates the
+  # *maxima* of a two-slit pattern, and a sin(theta) = m lambda locates the
+  # *minima* of a single-slit one. A learner who has memorised one formula
+  # answers the other question confidently and wrongly.
+  - id: phys2335.two-slit-interference
+    title: Two-slit interference
+    unit: Wave Optics
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.1
+    description: >-
+      Path difference between two coherent sources, and the angles at which it
+      is a whole number of wavelengths. Constructive where the difference is
+      m lambda, destructive at the half-integers, and fringe spacing on a
+      distant screen follows from the small-angle form.
+    prerequisites:
+      - kc: phys2335.superposition-interference
+        strength: 0.8
+      - kc: phys2335.travelling-wave-function
+        strength: 0.3
+
+  - id: phys2335.multiple-slit-grating
+    title: Multiple slits and diffraction gratings
+    unit: Wave Optics
+    domain: physics
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.35
+    description: >-
+      The same condition as two slits, applied to many. More slits do not move
+      the maxima; they sharpen them, which is what makes a grating a
+      measurement instrument rather than a demonstration. Slit spacing is
+      usually quoted as lines per millimetre and has to be inverted first.
+    prerequisites:
+      - kc: phys2335.two-slit-interference
+        strength: 0.9
+
+  - id: phys2335.single-slit-diffraction
+    title: Single-slit diffraction
+    unit: Wave Optics
+    domain: physics
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.4
+    description: >-
+      One slit of finite width, where a sin(theta) = m lambda gives the
+      *minima* rather than the maxima, and m = 0 is excluded because it is the
+      central bright fringe. Getting this backwards is the characteristic error
+      of the unit and produces an answer that is dimensionally perfect.
+    prerequisites:
+      - kc: phys2335.two-slit-interference
+        strength: 0.6
+
+  # --- Unit 6: Geometric Optics (OpenStax Vol III Ch 2, weeks 14-15) --------
+  - id: phys2335.reflection-refraction
+    title: Reflection, refraction and Snell's law
+    unit: Geometric Optics
+    domain: physics
+    competencies: [concept, math-execution]
+    difficultyPrior: -0.3
+    description: >-
+      Light bends toward the normal entering a denser medium and away leaving
+      it, by n1 sin(theta1) = n2 sin(theta2). Angles are measured from the
+      normal and not from the surface, which is the first thing to check when
+      an answer looks like its own complement.
+
+  - id: phys2335.total-internal-reflection
+    title: Total internal reflection and the critical angle
+    unit: Geometric Optics
+    domain: physics
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.15
+    description: >-
+      Beyond the critical angle no light is transmitted at all. It exists only
+      going from the denser medium to the less dense one, which is half the
+      content of the idea: sin(theta_c) = n2/n1 has no solution the other way
+      round, and an arcsine of something greater than one is the physics saying
+      so rather than a calculator error.
+    prerequisites:
+      - kc: phys2335.reflection-refraction
+        strength: 0.9

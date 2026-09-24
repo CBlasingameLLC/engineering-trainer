@@ -1,4 +1,4 @@
-import { trimNumber } from '../rng.js';
+import { trimNumber, unfoldedUnit } from '../rng.js';
 
 /**
  * Units for a process course, written the way the lectures write them.
@@ -21,15 +21,18 @@ import { trimNumber } from '../rng.js';
  * number bare for the gate to read. `tools/pack-cli/test/verify.test.ts` pins
  * both halves of that, so this is a decision with a test behind it rather than
  * a convention someone has to remember.
+ *
+ * These delegate to `unfoldedUnit` in `rng.ts`. They used to spell the same
+ * trick differently from the physics helpers, which is how PHYS 2335 shipped
+ * the bug this file had already fixed — `\mathrm{mm}` folding a 353 mm fringe
+ * to 0.3534. One spelling, in one place, is the actual fix.
  */
 
 /** Micrometres — oxide thickness, proximity gaps, die edge. */
-export const um = (value: number, sigFigs = 4): string =>
-  `${trimNumber(value, sigFigs)}\\,\\mu\\mathrm{m}`;
+export const um = (value: number, sigFigs = 4): string => unfoldedUnit(value, '\\mu', 'm', sigFigs);
 
 /** Nanometres — exposure wavelengths, resolution, depth of focus. */
-export const nm = (value: number, sigFigs = 4): string =>
-  `${trimNumber(value, sigFigs)}\\,\\mathrm{{n}m}`;
+export const nm = (value: number, sigFigs = 4): string => unfoldedUnit(value, 'n', 'm', sigFigs);
 
 /** Any unit that takes no prefix at all: hours, mJ/cm^2, cm^-2, dimensionless. */
 export const unit = (value: number, symbol: string, sigFigs = 4): string =>

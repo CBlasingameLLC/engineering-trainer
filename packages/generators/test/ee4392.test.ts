@@ -134,7 +134,7 @@ describe('EE 4392 process bounds', () => {
       dry += 1;
       // Anything past about 0.2 um dry is a two-day furnace run. The arithmetic
       // would be right and the process would be fiction.
-      const target = Number(/grow \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      const target = Number(/grow \$([\d.]+)\\,\\mathrm\{\{\\mu\}m\}/.exec(stem)?.[1]);
       expect(target, `unparsed dry target in: ${stem}`).toBeGreaterThan(0);
       expect(target).toBeLessThanOrEqual(0.2);
     }
@@ -144,7 +144,7 @@ describe('EE 4392 process bounds', () => {
   it('regrowth always ends thicker than it started', () => {
     for (const seed of SEEDS) {
       const stem = stemOf('ee4392.oxidation.regrowth', seed);
-      const initial = Number(/carries \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      const initial = Number(/carries \$([\d.]+)\\,\\mathrm\{\{\\mu\}m\}/.exec(stem)?.[1]);
       expect(initial, `unparsed initial oxide in: ${stem}`).toBeGreaterThan(0);
       expect(answerOf('ee4392.oxidation.regrowth', seed)).toBeGreaterThan(initial);
     }
@@ -156,7 +156,7 @@ describe('EE 4392 process bounds', () => {
       const stem = stemOf('ee4392.oxidation.silicon-consumed', seed);
       if (!stem.includes('How much silicon is consumed')) continue;
       consumption += 1;
-      const grown = Number(/grows \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      const grown = Number(/grows \$([\d.]+)\\,\\mathrm\{\{\\mu\}m\}/.exec(stem)?.[1]);
       const answer = answerOf('ee4392.oxidation.silicon-consumed', seed);
       expect(answer).toBeLessThan(grown);
       expect(answer / grown).toBeCloseTo(0.44, 6);
@@ -170,7 +170,7 @@ describe('EE 4392 process bounds', () => {
       const stem = stemOf('ee4392.oxidation.silicon-consumed', seed);
       if (!stem.includes('LOCOS')) continue;
       locos += 1;
-      const recess = Number(/sitting \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      const recess = Number(/sitting \$([\d.]+)\\,\\mathrm\{\{\\mu\}m\}/.exec(stem)?.[1]);
       expect(answerOf('ee4392.oxidation.silicon-consumed', seed)).toBeGreaterThan(recess);
     }
     atLeastOne(locos, 'a LOCOS item');
@@ -389,12 +389,12 @@ describe('masked two-step oxidation matches the exam it models', () => {
     for (const seed of SEEDS) {
       const stem = stemOf('ee4392.oxidation.masked-two-step', seed);
       if (!stem.includes('**field**')) continue;
-      const field = Number(/field oxide \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      const field = Number(/field oxide \$([\d.]+)\\,\\mathrm\{\{\\mu\}m\}/.exec(stem)?.[1]);
       expect(field, `unparsed field oxide in: ${stem}`).toBeGreaterThan(0);
       const answer = answerOf('ee4392.oxidation.masked-two-step', seed);
       expect(answer).toBeGreaterThan(field);
       // and never as thick as naively adding the window's growth
-      const window = Number(/grows \$([\d.]+)\\,\\mu/.exec(stem)?.[1]);
+      const window = Number(/grows \$([\d.]+)\\,\\mathrm\{\{\\mu\}m\}/.exec(stem)?.[1]);
       expect(answer).toBeLessThan(field + window);
     }
   });

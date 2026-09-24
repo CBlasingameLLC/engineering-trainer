@@ -251,6 +251,17 @@ worked examples rather than the topic list.
   maths that the segmenter read as two empty spans around plain text; and
   `\\n\\n` in a template literal, which is a literal backslash-n, not a
   paragraph break.
+- **A course that states quantities in a prefixed unit needs `unfoldedUnit`.**
+  `engineering()` folds the prefix back into the value, which is right when the
+  stored answer is in the base unit — 4700 ohms written as 4.7 k. It is wrong
+  when the course writes, and the answer is stored in, the prefixed unit: a
+  wavelength of 633 nm, an oxide 0.4 um thick, a fringe 353 mm across.
+  `\mathrm{nm}` folds 633 to 6.33e-7, so a correct worked solution disagrees
+  with a correct answer key and the gate reports the item as broken. Bracing
+  the prefix — `\mathrm{{n}m}` — renders identically and leaves the number
+  bare. There is one spelling of that, `unfoldedUnit` in `rng.ts`, because
+  there were briefly two: EE 4392 solved it one way, PHYS 2335 independently
+  hit the same wall and shipped the bug the other file had already fixed.
 - **An SI prefix is only a prefix in front of a unit symbol.** `extractNumbers`
   folds the prefix into the value so `4.7\,\mathrm{k\Omega}` compares against a
   stored 4700. The rule it applies has to be narrow, because a leading prefix
@@ -342,6 +353,17 @@ worked examples rather than the topic list.
 - **Symbolic answers are checked by random-point sampling, not CAS `simplify`.**
   `Vs*R2/(R1+R2)` and `Vs/(1+R1/R2)` simplify to different trees; a structural
   comparison marks a correct answer wrong.
+- **An e2e driver must wait for `boot()`, not for the network.**
+  `waitUntil: 'networkidle'` says the network went quiet, which happens several
+  hundred milliseconds before the content bank is parsed and the attempt log
+  replayed — and that gap grows every time content is added. A driver that
+  *counts* the onboarding prompt at that moment instead of *waiting* for it
+  silently skips onboarding and then fails on the next wait, with a message
+  about the dashboard that points at the wrong place entirely. Two drivers did
+  this and each surfaced one content round apart, which is the tell: a race
+  that only loses once the app gets slower is a race that will find you later.
+  Wait for onboarding *or* the dashboard, with `.or()` — the `text=` engine has
+  no alternation, so a comma-separated pair waits forever on a literal string.
 - **E2E: match on `data-item-id` / `data-kc-id`, never rendered text.** KaTeX
   rewrites stems, so text scraping is unstable. More importantly: **never
   maintain a hand-written list of expected outcomes beside the list that drives
@@ -543,6 +565,14 @@ only asserted.
 
 Not built:
 
+- **Write the graph from the syllabus, never from the course title.** PHYS 2335
+  is called Waves and Heat and its first three weeks are fluid statics; its
+  last third is optics. Neither was in the graph until the syllabus arrived,
+  because the graph had been written from the name, and the term schedule that
+  followed had the course almost exactly backwards. The same mistake in the
+  other direction produced the EE 4392 claim below. A syllabus is the only
+  document that says what a course actually contains, and a topic list is not
+  one.
 - **Curriculum breadth** (Phase 4) — Tier 1 is complete. EE 3300 Circuits II is
   in: 19 KCs across sinusoidal steady state, AC power, frequency response,
   coupling and three-phase, and the s-domain. PHYS 2335 Waves and Heat is in:

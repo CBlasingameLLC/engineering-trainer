@@ -19,9 +19,17 @@
 # was a week late and therefore reported every week of the term as the one
 # before it.
 #
-# PHYS 2335 and EE 3300 are still an estimate — a plausible reading of a
-# fifteen-week semester, not a syllabus. They are marked as such below, and
-# replacing them is an edit to this file and nothing else.
+# PHYS 2335's blocks are now the real ones too, and they were worth getting:
+# the estimate had the course almost exactly backwards. It actually opens with
+# three weeks of fluid statics, runs thermodynamics to Exam 1, and spends its
+# last third on optics — none of which the guess contained, because the guess
+# was made from the course title. Class week n in that syllabus lands on term
+# week n, which is a coincidence of the two courses starting together and not
+# something to rely on for the next one.
+#
+# EE 3300 is still an estimate — a plausible reading of a fifteen-week
+# semester, not a syllabus. It is marked as such below, and replacing it is an
+# edit to this file and nothing else.
 
 id: 2026-fall
 title: Fall 2026
@@ -29,23 +37,60 @@ startsOn: 2026-08-17
 endsOn: 2026-12-11
 
 courses:
-  # ESTIMATED — no syllabus received for this course yet.
+  # From the syllabus, not estimated. Class weeks CW1-CW16 map onto term weeks
+  # 1-16, and all three exams are cumulative.
+  #
+  # The `Sound` unit is deliberately absent: beats, the Doppler effect and
+  # sound intensity are OpenStax Vol I Ch 17 and this syllabus stops at Ch 16.
+  # Their knowledge components still exist and still carry items, so they are
+  # reachable from the skill tree — they are simply never scheduled, which is
+  # what keeps them out of the daily quest and the readiness list.
   - course: PHYS2335
     blocks:
-      - fromWeek: 1
+      - fromWeek: 2
         toWeek: 3
-        units: [Oscillations]
-      - fromWeek: 4
-        toWeek: 7
-        units: [Mechanical Waves]
-        note: Midterm I covers oscillations and waves
-      - fromWeek: 8
-        toWeek: 11
+        units: [Fluid Statics]
+        note: Pressure vs depth, then Archimedes' principle
+      - fromWeek: 3
+        toWeek: 5
         units: [Heat and the Ideal Gas]
-      - fromWeek: 12
-        toWeek: 15
+        note: Calorimetry, then the ideal gas law and rms speed
+      - fromWeek: 6
+        toWeek: 7
         units: [Thermodynamics]
-        note: Final covers the whole course, weighted to thermodynamics
+        note: First law, heat engines, refrigerators and heat pumps
+      - fromWeek: 7
+        toWeek: 7
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics]
+        note: Exam 1 on Wednesday 30 September — cumulative
+      - fromWeek: 8
+        toWeek: 9
+        units: [Oscillations]
+        note: Fall break falls in week 8
+      - fromWeek: 9
+        toWeek: 11
+        units: [Mechanical Waves]
+        note: Waves on strings, superposition, standing waves
+      - fromWeek: 11
+        toWeek: 13
+        units: [Wave Optics]
+        note: Two-slit, then multiple-slit, then single-slit diffraction
+      - fromWeek: 12
+        toWeek: 12
+        units: [Oscillations, Mechanical Waves, Wave Optics]
+        note: Exam 2 on Wednesday 4 November — cumulative
+      - fromWeek: 14
+        toWeek: 15
+        units: [Geometric Optics]
+        note: Reflection, refraction and total internal reflection
+      - fromWeek: 16
+        toWeek: 16
+        units: [Wave Optics, Geometric Optics]
+        note: Exam 3 on Monday 30 November — cumulative
+      - fromWeek: 17
+        toWeek: 17
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
+        note: Final on Monday 7 December, 11:00-13:30 — comprehensive
 
   # ESTIMATED — no syllabus received for this course yet.
   - course: EE3300

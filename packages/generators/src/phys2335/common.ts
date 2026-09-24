@@ -1,4 +1,4 @@
-import { trimNumber } from '../rng.js';
+import { trimNumber, unfoldedUnit } from '../rng.js';
 
 /**
  * Physics quantities are written the way a physics text writes them.
@@ -56,3 +56,14 @@ export const WATER = { c: 4186, cIce: 2090, cSteam: 2010, lFusion: 334000, lVapo
  */
 export const tidy = (value: number, step: number): number =>
   Number((Math.round(value / step) * step).toPrecision(12));
+
+/**
+ * Lengths stated in a prefixed unit, written so the verifier does not fold the
+ * prefix away. See `unfoldedUnit` for why this is not `q(value, 'nm')`.
+ *
+ * Optics needs all three: wavelengths in nanometres, slit geometry in
+ * micrometres, fringe spacing on a screen in millimetres.
+ */
+export const nanometres = (value: number, sigFigs = 4): string => unfoldedUnit(value, 'n', 'm', sigFigs);
+export const micrometres = (value: number, sigFigs = 4): string => unfoldedUnit(value, '\\mu', 'm', sigFigs);
+export const millimetres = (value: number, sigFigs = 4): string => unfoldedUnit(value, 'm', 'm', sigFigs);
