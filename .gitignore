@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+apps/desktop/src-tauri/target/
+
+# Test / coverage
+coverage/
+.vitest/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local env
+.env
+.env.local
+
+# ---------------------------------------------------------------------------
+# CONTENT QUARANTINE — do not remove.
+#
+# Third-party, book-derived, and in-flight generated content must never enter
+# version control or a shippable build. Packs under content/packs/personal/
+# carry licenseTier "personal-only"; the pack builder excludes that tier from
+# release artifacts. content/inbox/ is the unverified drop zone for Claude
+# Routine / LLM output before `pack verify` gates it.
+# ---------------------------------------------------------------------------
+content/packs/personal/**
+!content/packs/personal/.gitkeep
+!content/packs/personal/README.md
+content/inbox/**
+!content/inbox/.gitkeep
+!content/inbox/README.md
+
+# Local user database
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+.scratch/
+
+# Build output for distribution
+release/

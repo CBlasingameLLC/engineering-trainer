@@ -1,0 +1,3049 @@
+{
+  "schemaVersion": "1.0.0",
+  "packId": "math3376-core-v1",
+  "version": 1,
+  "course": "MATH3376",
+  "title": "Linear algebra prerequisite bank",
+  "provenance": {
+    "producer": "generator",
+    "sourceRef": "@et/generators",
+    "licenseTier": "redistributable",
+    "createdAt": "1970-01-01T00:00:00.000Z"
+  },
+  "items": [
+    {
+      "id": "math3376.linear.solve-2x2.s1",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  x + 5y &= -18 \\\\   5x - 2y &= 18\\end{aligned}$$",
+      "seed": 1,
+      "answer": {
+        "kind": "numeric",
+        "value": -4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.25,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}1 & 5\\\\ 5 & -2\\end{bmatrix}$.",
+          "$\\det A = (1)(-2) - (5)(5) = -27$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = 108$.",
+          "$y = \\frac{108}{-27} = -4$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s2",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned} - 2x + y &= -9 \\\\   4x + 2y &= 14\\end{aligned}$$",
+      "seed": 2,
+      "answer": {
+        "kind": "numeric",
+        "value": 4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.25,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-2 & 1\\\\ 4 & 2\\end{bmatrix}$.",
+          "$\\det A = (-2)(2) - (1)(4) = -8$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = -32$.",
+          "$x = \\frac{-32}{-8} = 4$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s3",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  3x + 4y &= -7 \\\\  - x + 2y &= -11\\end{aligned}$$",
+      "seed": 3,
+      "answer": {
+        "kind": "numeric",
+        "value": 3,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.3333333333333333,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}3 & 4\\\\ -1 & 2\\end{bmatrix}$.",
+          "$\\det A = (3)(2) - (4)(-1) = 10$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = 30$.",
+          "$x = \\frac{30}{10} = 3$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s4",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned} - 2x - 4y &= -8 \\\\  - 2x + y &= -13\\end{aligned}$$",
+      "seed": 4,
+      "answer": {
+        "kind": "numeric",
+        "value": 6,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.16666666666666666,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-2 & -4\\\\ -2 & 1\\end{bmatrix}$.",
+          "$\\det A = (-2)(1) - (-4)(-2) = -10$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = -60$.",
+          "$x = \\frac{-60}{-10} = 6$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s5",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned} - 2x + 2y &= 2 \\\\  - 4x + y &= -8\\end{aligned}$$",
+      "seed": 5,
+      "answer": {
+        "kind": "numeric",
+        "value": 4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.25,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-2 & 2\\\\ -4 & 1\\end{bmatrix}$.",
+          "$\\det A = (-2)(1) - (2)(-4) = 6$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = 24$.",
+          "$y = \\frac{24}{6} = 4$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s6",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  2x - 2y &= 10 \\\\   x - 4y &= 17\\end{aligned}$$",
+      "seed": 6,
+      "answer": {
+        "kind": "numeric",
+        "value": 1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}2 & -2\\\\ 1 & -4\\end{bmatrix}$.",
+          "$\\det A = (2)(-4) - (-2)(1) = -6$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = -6$.",
+          "$x = \\frac{-6}{-6} = 1$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s7",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -1.125,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned} - 2x + y &= 14 \\\\   3x - 2y &= -24\\end{aligned}$$",
+      "seed": 7,
+      "answer": {
+        "kind": "numeric",
+        "value": -4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 6,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.25,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-2 & 1\\\\ 3 & -2\\end{bmatrix}$.",
+          "$\\det A = (-2)(-2) - (1)(3) = 1$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = -4$.",
+          "$x = \\frac{-4}{1} = -4$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s8",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  4x - 2y &= -16 \\\\   x - 4y &= -11\\end{aligned}$$",
+      "seed": 8,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}4 & -2\\\\ 1 & -4\\end{bmatrix}$.",
+          "$\\det A = (4)(-4) - (-2)(1) = -14$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = -28$.",
+          "$y = \\frac{-28}{-14} = 2$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s9",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned} - 3x + 4y &= 26 \\\\   3x + 2y &= 4\\end{aligned}$$",
+      "seed": 9,
+      "answer": {
+        "kind": "numeric",
+        "value": -2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 5,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-3 & 4\\\\ 3 & 2\\end{bmatrix}$.",
+          "$\\det A = (-3)(2) - (4)(3) = -18$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = 36$.",
+          "$x = \\frac{36}{-18} = -2$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s10",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned} - 2x - 4y &= -26 \\\\  - 4x + 5y &= 26\\end{aligned}$$",
+      "seed": 10,
+      "answer": {
+        "kind": "numeric",
+        "value": 6,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.16666666666666666,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-2 & -4\\\\ -4 & 5\\end{bmatrix}$.",
+          "$\\det A = (-2)(5) - (-4)(-4) = -26$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = -156$.",
+          "$y = \\frac{-156}{-26} = 6$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s11",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  x + 4y &= 9 \\\\   x - 4y &= -7\\end{aligned}$$",
+      "seed": 11,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}1 & 4\\\\ 1 & -4\\end{bmatrix}$.",
+          "$\\det A = (1)(-4) - (4)(1) = -8$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = -16$.",
+          "$y = \\frac{-16}{-8} = 2$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s12",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  x + 5y &= -21 \\\\  - 3x - 4y &= 19\\end{aligned}$$",
+      "seed": 12,
+      "answer": {
+        "kind": "numeric",
+        "value": -4,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.25,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}1 & 5\\\\ -3 & -4\\end{bmatrix}$.",
+          "$\\det A = (1)(-4) - (5)(-3) = 11$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = -44$.",
+          "$y = \\frac{-44}{11} = -4$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s13",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned} - 4x - y &= -7 \\\\   x + 4y &= -2\\end{aligned}$$",
+      "seed": 13,
+      "answer": {
+        "kind": "numeric",
+        "value": -1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-4 & -1\\\\ 1 & 4\\end{bmatrix}$.",
+          "$\\det A = (-4)(4) - (-1)(1) = -15$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = 15$.",
+          "$y = \\frac{15}{-15} = -1$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s14",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned} - x - 3y &= -3 \\\\   2y &= 2\\end{aligned}$$",
+      "seed": 14,
+      "answer": {
+        "kind": "numeric",
+        "value": 0,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}-1 & -3\\\\ 0 & 2\\end{bmatrix}$.",
+          "$\\det A = (-1)(2) - (-3)(0) = -2$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = 0$.",
+          "$x = \\frac{0}{-2} = 0$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s15",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  5x - y &= -10 \\\\  - 4x - y &= 8\\end{aligned}$$",
+      "seed": 15,
+      "answer": {
+        "kind": "numeric",
+        "value": -2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 0,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}5 & -1\\\\ -4 & -1\\end{bmatrix}$.",
+          "$\\det A = (5)(-1) - (-1)(-4) = -9$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = 18$.",
+          "$x = \\frac{18}{-9} = -2$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s16",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  3x - y &= 9 \\\\  - x - 4y &= 10\\end{aligned}$$",
+      "seed": 16,
+      "answer": {
+        "kind": "numeric",
+        "value": -3,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.3333333333333333,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}3 & -1\\\\ -1 & -4\\end{bmatrix}$.",
+          "$\\det A = (3)(-4) - (-1)(-1) = -13$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = 39$.",
+          "$y = \\frac{39}{-13} = -3$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s17",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  x - 3y &= 9 \\\\  - 4x + 3y &= -18\\end{aligned}$$",
+      "seed": 17,
+      "answer": {
+        "kind": "numeric",
+        "value": 3,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $y$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.3333333333333333,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $x = \\frac{\\det A_{x}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}1 & -3\\\\ -4 & 3\\end{bmatrix}$.",
+          "$\\det A = (1)(3) - (-3)(-4) = -9$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{x} = -27$.",
+          "$x = \\frac{-27}{-9} = 3$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-2x2.s18",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.45,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  x - 3y &= -6 \\\\   4x + y &= 2\\end{aligned}$$",
+      "seed": 18,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 0,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is the other unknown. You solved the system correctly and then reported $x$ — worth noticing, because in nodal analysis this is how a correct solution becomes a wrong node voltage."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Your ratio is upside down. Cramer's rule is $y = \\frac{\\det A_{y}}{\\det A}$ — the determinant of the *modified* matrix goes on top."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "In matrix form $A\\mathbf{x} = \\mathbf{b}$ with $A = \\begin{bmatrix}1 & -3\\\\ 4 & 1\\end{bmatrix}$.",
+          "$\\det A = (1)(1) - (-3)(4) = 13$, which is non-zero, so the solution is unique.",
+          "By Cramer's rule, $\\det A_{y} = 26$.",
+          "$y = \\frac{26}{13} = 2$."
+        ],
+        "principle": "A non-zero determinant guarantees exactly one solution; elimination and Cramer's rule are two routes to the same number.",
+        "hints": [
+          "Eliminate one variable, or compute the determinants.",
+          "Check the determinant before solving."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-2x2",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s1",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  4x + 3y - 2z &= -3 \\\\   x + 3y - z &= -8 \\\\   3x + 2z &= 8\\end{aligned}$$",
+      "seed": 1,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $x = \\frac{\\det A_{x}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 27$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 54$.",
+          "$x = \\frac{54}{27} = 2$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s2",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.49,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  2x - y + 2z &= 2 \\\\  - 3x + 4y - 2z &= 9 \\\\  - x + 2y + 3z &= 13\\end{aligned}$$",
+      "seed": 2,
+      "answer": {
+        "kind": "numeric",
+        "value": 1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 17$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 17$.",
+          "$x = \\frac{17}{17} = 1$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s3",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $z$:\n\n$$\\begin{aligned}  x + 2y &= -3 \\\\   y - 2z &= -5 \\\\  - 2y + z &= 7\\end{aligned}$$",
+      "seed": 3,
+      "answer": {
+        "kind": "numeric",
+        "value": 1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $x$, not $z$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = -3$ — non-zero, so there is a unique solution.",
+          "Replace the $z$ column of $A$ with the right-hand side to form $A_{z}$.",
+          "$\\det A_{z} = -3$.",
+          "$z = \\frac{-3}{-3} = 1$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s4",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $z$:\n\n$$\\begin{aligned}  x - 2y &= 7 \\\\  - 3x + 4y + z &= -21 \\\\   x + 2y + 2z &= -1\\end{aligned}$$",
+      "seed": 4,
+      "answer": {
+        "kind": "numeric",
+        "value": -2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 5,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $x$, not $z$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $z = \\frac{\\det A_{z}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = -8$ — non-zero, so there is a unique solution.",
+          "Replace the $z$ column of $A$ with the right-hand side to form $A_{z}$.",
+          "$\\det A_{z} = 16$.",
+          "$z = \\frac{16}{-8} = -2$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s5",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $z$:\n\n$$\\begin{aligned}  x + 2y + 2z &= 15 \\\\   x + y &= 4 \\\\  - x + 3y + 2z &= 10\\end{aligned}$$",
+      "seed": 5,
+      "answer": {
+        "kind": "numeric",
+        "value": 5,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $x$, not $z$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.2,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $z = \\frac{\\det A_{z}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 6$ — non-zero, so there is a unique solution.",
+          "Replace the $z$ column of $A$ with the right-hand side to form $A_{z}$.",
+          "$\\det A_{z} = 30$.",
+          "$z = \\frac{30}{6} = 5$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s6",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  x - 3z &= -5 \\\\  - 3x + 4y + 3z &= -9 \\\\  - 2x + 3y + 2z &= -7\\end{aligned}$$",
+      "seed": 6,
+      "answer": {
+        "kind": "numeric",
+        "value": 1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 2$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 2$.",
+          "$x = \\frac{2}{2} = 1$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s7",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  2x - 2y &= 4 \\\\   2x + 2y - 2z &= 8 \\\\   2x + z &= 6\\end{aligned}$$",
+      "seed": 7,
+      "answer": {
+        "kind": "numeric",
+        "value": 1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 0,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $z$, not $y$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 16$ — non-zero, so there is a unique solution.",
+          "Replace the $y$ column of $A$ with the right-hand side to form $A_{y}$.",
+          "$\\det A_{y} = 16$.",
+          "$y = \\frac{16}{16} = 1$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s8",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.67,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  2x + 2y + 2z &= -2 \\\\  - 3x + 2y - z &= 11 \\\\  - y + 3z &= -5\\end{aligned}$$",
+      "seed": 8,
+      "answer": {
+        "kind": "numeric",
+        "value": -2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": -0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $x = \\frac{\\det A_{x}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 34$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = -68$.",
+          "$x = \\frac{-68}{34} = -2$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s9",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  3x + y + z &= 0 \\\\  - 2x + 4y - z &= 24 \\\\   2x + y + 2z &= -1\\end{aligned}$$",
+      "seed": 9,
+      "answer": {
+        "kind": "numeric",
+        "value": 5,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $z$, not $y$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.2,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $y = \\frac{\\det A_{y}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 19$ — non-zero, so there is a unique solution.",
+          "Replace the $y$ column of $A$ with the right-hand side to form $A_{y}$.",
+          "$\\det A_{y} = 95$.",
+          "$y = \\frac{95}{19} = 5$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s10",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.67,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  4x &= 4 \\\\  - 2x + y - 3z &= -6 \\\\   3x + 3y + z &= 21\\end{aligned}$$",
+      "seed": 10,
+      "answer": {
+        "kind": "numeric",
+        "value": 5,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $z$, not $y$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.2,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $y = \\frac{\\det A_{y}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 40$ — non-zero, so there is a unique solution.",
+          "Replace the $y$ column of $A$ with the right-hand side to form $A_{y}$.",
+          "$\\det A_{y} = 200$.",
+          "$y = \\frac{200}{40} = 5$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s11",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  x + z &= 3 \\\\   2y + 2z &= 10 \\\\  - x + y + 3z &= 5\\end{aligned}$$",
+      "seed": 11,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 4,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $x = \\frac{\\det A_{x}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 6$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 12$.",
+          "$x = \\frac{12}{6} = 2$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s12",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $z$:\n\n$$\\begin{aligned}  2x + 2z &= 2 \\\\   x + 3y + 2z &= -6 \\\\   3x - 2y + 2z &= 7\\end{aligned}$$",
+      "seed": 12,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -1,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $x$, not $z$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $z = \\frac{\\det A_{z}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = -2$ — non-zero, so there is a unique solution.",
+          "Replace the $z$ column of $A$ with the right-hand side to form $A_{z}$.",
+          "$\\det A_{z} = -4$.",
+          "$z = \\frac{-4}{-2} = 2$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s13",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  2x - 2y &= 4 \\\\  - x + 3y + z &= -5 \\\\  - 3x + y + 2z &= -12\\end{aligned}$$",
+      "seed": 13,
+      "answer": {
+        "kind": "numeric",
+        "value": 0,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $z$, not $y$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 12$ — non-zero, so there is a unique solution.",
+          "Replace the $y$ column of $A$ with the right-hand side to form $A_{y}$.",
+          "$\\det A_{y} = 0$.",
+          "$y = \\frac{0}{12} = 0$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s14",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.49,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  4x - y - 3z &= 0 \\\\   2x + y - 2z &= -7 \\\\  - x - y + 4z &= 20\\end{aligned}$$",
+      "seed": 14,
+      "answer": {
+        "kind": "numeric",
+        "value": 3,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -3,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.3333333333333333,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $x = \\frac{\\det A_{x}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 17$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 51$.",
+          "$x = \\frac{51}{17} = 3$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s15",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.67,
+      "stem": "Solve for $y$:\n\n$$\\begin{aligned}  2x - 3y + 3z &= 11 \\\\   3x + 4y - z &= -3 \\\\  - 3x + z &= -1\\end{aligned}$$",
+      "seed": 15,
+      "answer": {
+        "kind": "numeric",
+        "value": -1,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $z$, not $y$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 44$ — non-zero, so there is a unique solution.",
+          "Replace the $y$ column of $A$ with the right-hand side to form $A_{y}$.",
+          "$\\det A_{y} = -44$.",
+          "$y = \\frac{-44}{44} = -1$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s16",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.67,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  2x - y - 3z &= -3 \\\\   3x + 3y - 2z &= -6 \\\\   3x + z &= 9\\end{aligned}$$",
+      "seed": 16,
+      "answer": {
+        "kind": "numeric",
+        "value": 2,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.5,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $x = \\frac{\\det A_{x}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = 42$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 84$.",
+          "$x = \\frac{84}{42} = 2$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s17",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  x - 3y + 2z &= 11 \\\\  - 2x + 3y - 2z &= -14 \\\\   x + 2y + 2z &= 1\\end{aligned}$$",
+      "seed": 17,
+      "answer": {
+        "kind": "numeric",
+        "value": 3,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": -2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        },
+        {
+          "misconception": "linear-algebra.cramer-ratio-inverted",
+          "value": 0.3333333333333333,
+          "tolerance": {
+            "rel": 0.01
+          },
+          "feedback": "Inverted ratio. Cramer's rule divides the modified determinant **by** $\\det A$: $x = \\frac{\\det A_{x}}{\\det A}$."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = -10$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = -30$.",
+          "$x = \\frac{-30}{-10} = 3$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.solve-3x3.s18",
+      "type": "numeric",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.04,
+      "stem": "Solve for $x$:\n\n$$\\begin{aligned}  x + 2y &= 4 \\\\   2x + y - 3z &= -1 \\\\  - y + 3z &= 1\\end{aligned}$$",
+      "seed": 18,
+      "answer": {
+        "kind": "numeric",
+        "value": 0,
+        "unit": "",
+        "tolerance": {
+          "abs": 0.02
+        }
+      },
+      "options": [],
+      "misconceptionTraps": [
+        {
+          "misconception": "linear-algebra.wrong-variable-reported",
+          "value": 2,
+          "tolerance": {
+            "abs": 0.02
+          },
+          "feedback": "That is $y$, not $x$. Back-substitution produces the unknowns in reverse order, which is exactly where they get swapped."
+        }
+      ],
+      "explanation": {
+        "steps": [
+          "Write the coefficient matrix $A$ and compute $\\det A = -12$ — non-zero, so there is a unique solution.",
+          "Replace the $x$ column of $A$ with the right-hand side to form $A_{x}$.",
+          "$\\det A_{x} = 0$.",
+          "$x = \\frac{0}{-12} = 0$."
+        ],
+        "principle": "A 3x3 system is the size nodal analysis produces, and it yields to elimination or determinants equally well.",
+        "hints": [
+          "Eliminate one unknown from two equations to reduce it to a 2x2.",
+          "Or compute two determinants and divide."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.solve-3x3",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s1",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 3y &= 12 \\\\   4x + 12y &= 50\\end{aligned}$$",
+      "seed": 1,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 3)$ and $(4, 12)$.",
+          "The second row is 4 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 4 times $12$ is $48$, not $50$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s2",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  2x + 2y &= 11 \\\\   6x + 6y &= 33\\end{aligned}$$",
+      "seed": 2,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The right-hand side scales by the same factor as the left, so the equations agree rather than contradict."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "rationale": "The second equation is exactly 3 times the first, so it adds no information."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(2, 2)$ and $(6, 6)$.",
+          "The second row is 3 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "The right-hand side scales identically ($3 \\times 11 = 33$), so the second equation is redundant and the solutions form a line."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s3",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 3y &= 10 \\\\   2x + 6y &= 20\\end{aligned}$$",
+      "seed": 3,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The right-hand side scales by the same factor as the left, so the equations agree rather than contradict."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "rationale": "The second equation is exactly 2 times the first, so it adds no information."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 3)$ and $(2, 6)$.",
+          "The second row is 2 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "The right-hand side scales identically ($2 \\times 10 = 20$), so the second equation is redundant and the solutions form a line."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s4",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  2x + 2y &= 4 \\\\   4x + 4y &= 8\\end{aligned}$$",
+      "seed": 4,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The right-hand side scales by the same factor as the left, so the equations agree rather than contradict."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "rationale": "The second equation is exactly 2 times the first, so it adds no information."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(2, 2)$ and $(4, 4)$.",
+          "The second row is 2 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "The right-hand side scales identically ($2 \\times 4 = 8$), so the second equation is redundant and the solutions form a line."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s5",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  4x + 2y &= 2 \\\\   12x + 6y &= 6\\end{aligned}$$",
+      "seed": 5,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The right-hand side scales by the same factor as the left, so the equations agree rather than contradict."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "rationale": "The second equation is exactly 3 times the first, so it adds no information."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(4, 2)$ and $(12, 6)$.",
+          "The second row is 3 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "The right-hand side scales identically ($3 \\times 2 = 6$), so the second equation is redundant and the solutions form a line."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s6",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 4y &= 7 \\\\   2x + 8y &= 15\\end{aligned}$$",
+      "seed": 6,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 4)$ and $(2, 8)$.",
+          "The second row is 2 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 2 times $7$ is $14$, not $15$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s7",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.52,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 5y &= 7 \\\\   5x + 5y &= 7\\end{aligned}$$",
+      "seed": 7,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "rationale": "$\\det A = -20 \\neq 0$, so the two lines cross at one point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The determinant is non-zero, so the lines are not parallel and must intersect."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "Two independent equations in two unknowns pin down exactly one point."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 5)$ and $(5, 5)$.",
+          "$\\det A = (1)(5) - (5)(5) = -20 \\neq 0$, so the system is non-singular.",
+          "A non-singular 2x2 system has exactly one solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s8",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.52,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  3x + 2y &= 8 \\\\   2x + 7y &= 7\\end{aligned}$$",
+      "seed": 8,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "rationale": "$\\det A = 17 \\neq 0$, so the two lines cross at one point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The determinant is non-zero, so the lines are not parallel and must intersect."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "Two independent equations in two unknowns pin down exactly one point."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(3, 2)$ and $(2, 7)$.",
+          "$\\det A = (3)(7) - (2)(2) = 17 \\neq 0$, so the system is non-singular.",
+          "A non-singular 2x2 system has exactly one solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s9",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.52,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  4x + y &= 9 \\\\   x + 8y &= 10\\end{aligned}$$",
+      "seed": 9,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "rationale": "$\\det A = 31 \\neq 0$, so the two lines cross at one point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The determinant is non-zero, so the lines are not parallel and must intersect."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "Two independent equations in two unknowns pin down exactly one point."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(4, 1)$ and $(1, 8)$.",
+          "$\\det A = (4)(8) - (1)(1) = 31 \\neq 0$, so the system is non-singular.",
+          "A non-singular 2x2 system has exactly one solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s10",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  4x + 4y &= 7 \\\\   16x + 16y &= 30\\end{aligned}$$",
+      "seed": 10,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(4, 4)$ and $(16, 16)$.",
+          "The second row is 4 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 4 times $7$ is $28$, not $30$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s11",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  3x + 4y &= 11 \\\\   9x + 12y &= 36\\end{aligned}$$",
+      "seed": 11,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(3, 4)$ and $(9, 12)$.",
+          "The second row is 3 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 3 times $11$ is $33$, not $36$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s12",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.52,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 3y &= 3 \\\\   3x + 5y &= 2\\end{aligned}$$",
+      "seed": 12,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "rationale": "$\\det A = -4 \\neq 0$, so the two lines cross at one point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The determinant is non-zero, so the lines are not parallel and must intersect."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "Two independent equations in two unknowns pin down exactly one point."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 3)$ and $(3, 5)$.",
+          "$\\det A = (1)(5) - (3)(3) = -4 \\neq 0$, so the system is non-singular.",
+          "A non-singular 2x2 system has exactly one solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s13",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  2x + y &= 2 \\\\   4x + 2y &= 5\\end{aligned}$$",
+      "seed": 13,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(2, 1)$ and $(4, 2)$.",
+          "The second row is 2 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 2 times $2$ is $4$, not $5$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s14",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  2x + 3y &= 4 \\\\   6x + 9y &= 14\\end{aligned}$$",
+      "seed": 14,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(2, 3)$ and $(6, 9)$.",
+          "The second row is 3 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 3 times $4$ is $12$, not $14$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s15",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": -0.52,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  2x + 3y &= 4 \\\\   3x + 5y &= 10\\end{aligned}$$",
+      "seed": 15,
+      "answer": {
+        "kind": "choice",
+        "correctId": "a"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "rationale": "$\\det A = 1 \\neq 0$, so the two lines cross at one point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The determinant is non-zero, so the lines are not parallel and must intersect."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "Two independent equations in two unknowns pin down exactly one point."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(2, 3)$ and $(3, 5)$.",
+          "$\\det A = (2)(5) - (3)(3) = 1 \\neq 0$, so the system is non-singular.",
+          "A non-singular 2x2 system has exactly one solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s16",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 4y &= 5 \\\\   3x + 12y &= 16\\end{aligned}$$",
+      "seed": 16,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 4)$ and $(3, 12)$.",
+          "The second row is 3 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 3 times $5$ is $15$, not $16$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s17",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  x + 3y &= 2 \\\\   2x + 6y &= 4\\end{aligned}$$",
+      "seed": 17,
+      "answer": {
+        "kind": "choice",
+        "correctId": "c"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The right-hand side scales by the same factor as the left, so the equations agree rather than contradict."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "rationale": "The second equation is exactly 2 times the first, so it adds no information."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(1, 3)$ and $(2, 6)$.",
+          "The second row is 2 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "The right-hand side scales identically ($2 \\times 2 = 4$), so the second equation is redundant and the solutions form a line."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    },
+    {
+      "id": "math3376.linear.consistency.s18",
+      "type": "multiple-choice",
+      "kcRefs": [
+        {
+          "kc": "math3376.linear-systems",
+          "weight": 1
+        }
+      ],
+      "difficultyB": 0.74,
+      "stem": "How many solutions does this system have?\n\n$$\\begin{aligned}  3x + 3y &= 10 \\\\   6x + 6y &= 23\\end{aligned}$$",
+      "seed": 18,
+      "answer": {
+        "kind": "choice",
+        "correctId": "b"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": "Exactly one",
+          "misconception": "linear-algebra.singular-system-unnoticed",
+          "rationale": "The determinant is $0$ — the two equations describe parallel lines, so they cannot meet at a single point."
+        },
+        {
+          "id": "b",
+          "text": "None — the equations contradict each other",
+          "rationale": "The left sides are proportional but the right sides are not, so the lines are parallel and distinct."
+        },
+        {
+          "id": "c",
+          "text": "Infinitely many — the equations describe the same line",
+          "misconception": "linear-algebra.consistency-misjudged",
+          "rationale": "The left sides are proportional but the right sides are not, so the equations conflict instead of coinciding."
+        }
+      ],
+      "misconceptionTraps": [],
+      "explanation": {
+        "steps": [
+          "Compare the two left-hand sides: $(3, 3)$ and $(6, 6)$.",
+          "The second row is 2 times the first, so $\\det A = 0$ and the rows carry the same information.",
+          "But the right-hand side does not scale the same way: 2 times $10$ is $20$, not $23$. The equations contradict, so there is no solution."
+        ],
+        "principle": "A zero determinant means the equations are dependent; whether that gives no solutions or infinitely many is decided by the right-hand side.",
+        "hints": [
+          "Is one equation a multiple of the other?",
+          "If the left sides are proportional, check whether the right sides are too."
+        ]
+      },
+      "provenance": {
+        "producer": "generator",
+        "sourceRef": "math3376.linear.consistency",
+        "licenseTier": "redistributable",
+        "createdAt": "1970-01-01T00:00:00.000Z"
+      }
+    }
+  ]
+}

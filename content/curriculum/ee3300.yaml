@@ -1,0 +1,296 @@
+# EE 3300 — Circuits II (Texas State University, 2026 catalog)
+#
+# The junior course Circuits I exists to prepare for, which makes it the first
+# place in this curriculum where the graph is doing forward work rather than
+# looking backwards: every gap here has a named parent in EE 2300 or in the
+# calculus sequence, and a weakness in phasor analysis that is really a weakness
+# in complex arithmetic or in nodal analysis is exactly the diagnosis the
+# cross-course edges exist to make.
+#
+# Two dependencies are worth stating explicitly because they are the ones
+# students are surprised by. Impedance is not a new idea, it is the capacitor
+# and inductor i-v relations written for one frequency — so the edge runs from
+# `ee2300.capacitor-iv`, and a learner who never really believed i = C dv/dt
+# will fail impedance for that reason rather than for an AC one. And resonance
+# is the second-order RLC response seen in the frequency domain instead of the
+# time domain, which is why `ee2300.second-order-rlc` is its parent: the damping
+# regimes and the quality factor are the same fact twice.
+
+code: EE3300
+title: Circuits II
+institution: Texas State University
+catalogYear: 2026
+tier: 2
+credits: 3
+
+kcs:
+  # --- Unit 1: Sinusoidal steady state --------------------------------------
+  - id: ee3300.sinusoids-phasors
+    title: Sinusoids and the phasor transform
+    unit: Sinusoidal Steady State
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: -0.8
+    description: >-
+      Amplitude, frequency and phase; converting a cosine to a phasor and back.
+      The transform is only valid at one frequency, which is the constraint that
+      every later misuse of it violates.
+    prerequisites:
+      - kc: math2471.exponential-functions
+        strength: 0.5
+
+  - id: ee3300.impedance-admittance
+    title: Impedance and admittance
+    unit: Sinusoidal Steady State
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: -0.4
+    description: >-
+      Z for R, L and C, and combining them in series and parallel. Not a new
+      idea: it is the capacitor and inductor i-v relations evaluated at one
+      frequency.
+    prerequisites:
+      - ee3300.sinusoids-phasors
+      - kc: ee2300.capacitor-iv
+        strength: 0.6
+      - kc: ee2300.inductor-iv
+        strength: 0.6
+      - kc: ee2300.series-parallel
+        strength: 0.5
+
+  - id: ee3300.phasor-circuit-analysis
+    title: Nodal and mesh analysis in the phasor domain
+    unit: Sinusoidal Steady State
+    domain: circuits
+    competencies: [math-execution, strategy]
+    difficultyPrior: 0.3
+    description: >-
+      The same KCL and KVL, over complex numbers. Nothing about the method
+      changes, which is why a failure here is almost always arithmetic rather
+      than circuits.
+    prerequisites:
+      - ee3300.impedance-admittance
+      - kc: ee2300.nodal-analysis
+        strength: 0.7
+      - kc: ee2300.mesh-analysis
+        strength: 0.6
+
+  - id: ee3300.ac-thevenin
+    title: Thevenin and Norton equivalents with complex impedance
+    unit: Sinusoidal Steady State
+    domain: circuits
+    competencies: [strategy, math-execution]
+    difficultyPrior: 0.5
+    description: >-
+      Source suppression and the equivalent seen at a port, with Z in place of
+      R. The procedure is unchanged; the reactive part is what makes the
+      resulting equivalent frequency-dependent.
+    prerequisites:
+      - ee3300.phasor-circuit-analysis
+      - kc: ee2300.thevenin
+        strength: 0.7
+
+  # --- Unit 2: AC power -----------------------------------------------------
+  - id: ee3300.rms-values
+    title: RMS values of periodic waveforms
+    unit: AC Power
+    domain: circuits
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.3
+    description: >-
+      The value of a DC source delivering the same average power. It is an
+      integral, and the factor of root two for a sinusoid is a consequence
+      rather than a definition.
+    prerequisites:
+      - ee3300.sinusoids-phasors
+      - kc: math2471.integration-basics
+        strength: 0.5
+
+  - id: ee3300.complex-power
+    title: Complex power, real power and reactive power
+    unit: AC Power
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.4
+    description: >-
+      S = P + jQ, the power triangle, and the conjugate in S = V I*. The
+      conjugate is the single most-dropped operator in the unit.
+    prerequisites:
+      - ee3300.rms-values
+      - ee3300.impedance-admittance
+
+  - id: ee3300.power-factor-correction
+    title: Power factor and its correction
+    unit: AC Power
+    domain: circuits
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.6
+    description: >-
+      Leading and lagging, and sizing the capacitor that moves a load's power
+      factor without changing the real power it draws.
+    prerequisites:
+      - ee3300.complex-power
+
+  - id: ee3300.max-power-transfer-ac
+    title: Maximum power transfer and the conjugate match
+    unit: AC Power
+    domain: circuits
+    competencies: [concept, strategy]
+    difficultyPrior: 0.5
+    description: >-
+      The load that extracts the most power is the conjugate of the source
+      impedance, not a copy of it — the reactances must cancel.
+    prerequisites:
+      - ee3300.ac-thevenin
+      - ee3300.complex-power
+      - kc: ee2300.max-power-transfer
+        strength: 0.6
+
+  # --- Unit 3: Frequency response -------------------------------------------
+  - id: ee3300.transfer-functions
+    title: Transfer functions and frequency response
+    unit: Frequency Response
+    domain: circuits
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.4
+    description: >-
+      H(jw) as a ratio of phasors, and its magnitude and phase as functions of
+      frequency.
+    prerequisites:
+      - ee3300.impedance-admittance
+
+  - id: ee3300.passive-filters
+    title: First-order passive filters and cutoff frequency
+    unit: Frequency Response
+    domain: circuits
+    competencies: [modeling, concept]
+    difficultyPrior: 0.2
+    description: >-
+      RC and RL low-pass and high-pass sections, the half-power point, and which
+      element the output is taken across.
+    prerequisites:
+      - ee3300.transfer-functions
+      - kc: ee2300.first-order-step
+        strength: 0.4
+
+  - id: ee3300.bode-plots
+    title: Bode magnitude and phase plots
+    unit: Frequency Response
+    domain: circuits
+    competencies: [visual, concept]
+    difficultyPrior: 0.6
+    description: >-
+      Asymptotic slopes in decades, corner frequencies, and the decibel scale.
+    prerequisites:
+      - ee3300.transfer-functions
+
+  - id: ee3300.series-resonance
+    title: Series resonance
+    unit: Frequency Response
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.5
+    description: >-
+      The frequency at which the reactances cancel, where a series RLC looks
+      purely resistive and the current peaks.
+    prerequisites:
+      - ee3300.impedance-admittance
+      - kc: ee2300.second-order-rlc
+        strength: 0.6
+
+  - id: ee3300.parallel-resonance
+    title: Parallel resonance
+    unit: Frequency Response
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.7
+    description: >-
+      The dual: impedance peaks rather than current, and the quality factor
+      inverts relative to the series case.
+    prerequisites:
+      - ee3300.series-resonance
+
+  - id: ee3300.quality-factor-bandwidth
+    title: Quality factor, bandwidth and selectivity
+    unit: Frequency Response
+    domain: circuits
+    competencies: [concept, math-execution]
+    difficultyPrior: 0.7
+    description: >-
+      Q as the ratio of resonant frequency to bandwidth, and as a ratio of
+      stored to dissipated energy. The two definitions agree, and seeing why is
+      the point.
+    prerequisites:
+      - ee3300.series-resonance
+
+  # --- Unit 4: Coupled circuits and three-phase -----------------------------
+  - id: ee3300.mutual-inductance
+    title: Mutual inductance and the dot convention
+    unit: Coupled Circuits
+    domain: circuits
+    competencies: [concept, visual]
+    difficultyPrior: 0.6
+    description: >-
+      Coupling coefficient, induced voltage in the second coil, and the sign the
+      dots decide. The dots are the whole content of the topic.
+    prerequisites:
+      - ee3300.phasor-circuit-analysis
+      - kc: ee2300.inductor-iv
+        strength: 0.5
+
+  - id: ee3300.ideal-transformer
+    title: Ideal transformers and impedance reflection
+    unit: Coupled Circuits
+    domain: circuits
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.5
+    description: >-
+      Turns ratio on voltage and current, and the square of it on impedance
+      seen through the transformer.
+    prerequisites:
+      - ee3300.mutual-inductance
+
+  - id: ee3300.three-phase-wye-delta
+    title: Balanced three-phase wye and delta systems
+    unit: Three-Phase
+    domain: circuits
+    competencies: [modeling, math-execution]
+    difficultyPrior: 0.6
+    description: >-
+      Line and phase quantities and the root-three relations between them, in
+      both connections.
+    prerequisites:
+      - ee3300.phasor-circuit-analysis
+      - kc: ee2300.delta-wye
+        strength: 0.5
+
+  - id: ee3300.three-phase-power
+    title: Power in balanced three-phase systems
+    unit: Three-Phase
+    domain: circuits
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.7
+    description: >-
+      Total real power as root-three times line voltage times line current times
+      the power factor, and why the angle in it is the phase angle rather than
+      the line one.
+    prerequisites:
+      - ee3300.three-phase-wye-delta
+      - ee3300.complex-power
+
+  # --- Unit 5: The s-domain -------------------------------------------------
+  - id: ee3300.laplace-circuit-analysis
+    title: Circuit analysis in the s-domain
+    unit: The s-Domain
+    domain: circuits
+    competencies: [math-execution, strategy]
+    difficultyPrior: 0.8
+    description: >-
+      Impedances in s, initial conditions as sources, and solving a transient by
+      algebra instead of by differential equation.
+    prerequisites:
+      - ee3300.impedance-admittance
+      - kc: math3323.second-order-ode
+        strength: 0.7
+      - kc: math3323.first-order-ode
+        strength: 0.5

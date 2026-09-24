@@ -1,0 +1,486 @@
+import type { Generator } from '../types.js';
+import { DEFAULT_TOLERANCE } from '../types.js';
+import {
+  adjustDifficulty, amps, mantissaDifficulty, ohms, pick, ratioDifficulty, resampleUntil, resistor,
+  supplyVoltage, trimNumber, volts, type Rng,
+} from '../rng.js';
+import { figure } from '../figures.js';
+import { separatedTraps } from '../traps.js';
+
+/**
+ * Single-unknown nodal analysis with two independent sources.
+ *
+ * One node keeps the linear algebra tractable while still requiring the student
+ * to assemble KCL correctly — which is where the actual skill lives. The
+ * dominant error is a sign flip on a source branch, so that is the trap.
+ */
+export const nodalTwoSource: Generator = {
+  id: 'ee2300.nodal-analysis.two-source',
+  title: 'Nodal analysis with two sources',
+  kcRefs: [
+    { kc: 'ee2300.nodal-analysis', weight: 0.8 },
+    { kc: 'ee2300.kcl', weight: 0.2 },
+  ],
+  difficultyB: 0.15,
+  generate(rng: Rng) {
+    const vs1 = supplyVoltage(rng);
+    const vs2 = supplyVoltage(rng);
+    const r1 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    const r2 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    const r3 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+
+    const conductance = 1 / r1 + 1 / r2 + 1 / r3;
+    const va = (vs1 / r1 + vs2 / r3) / conductance;
+    // Subtracting instead of adding the second source term.
+    const signFlipped = (vs1 / r1 - vs2 / r3) / conductance;
+    // Similar branch conductances make the arithmetic less forgiving, and an
+    // awkward supply value removes the chance of recognising the result.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      ratioDifficulty(r1, r3),
+      mantissaDifficulty(vs1),
+    ]);
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB,
+      stem:
+        `Node $A$ connects to three branches: a $${volts(vs1)}$ source through $R_1 = ${ohms(r1)}$, ` +
+        `a $${volts(vs2)}$ source through $R_3 = ${ohms(r3)}$, and $R_2 = ${ohms(r2)}$ to ground. ` +
+        `Both sources have their negative terminals at ground. Find the node voltage $V_A$.`,
+      answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Node A driven by two sources')
+        .v('V1', { x: 4, y: 12 }, vs1)
+        .r('R1', { x: 10, y: 6 }, r1, 90)
+        .r('R2', { x: 18, y: 10 }, r2)
+        .r('R3', { x: 26, y: 6 }, r3, 90)
+        .v('V2', { x: 32, y: 12 }, vs2)
+        .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 8, y: 6 })
+        .wire({ x: 12, y: 6 }, { x: 24, y: 6 })
+        .wire({ x: 28, y: 6 }, { x: 32, y: 6 }, { x: 32, y: 10 })
+        .wire({ x: 18, y: 8 }, { x: 18, y: 6 })
+        .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 32, y: 18 }, { x: 32, y: 14 })
+        .wire({ x: 18, y: 12 }, { x: 18, y: 18 })
+        .ground({ x: 18, y: 18 })
+        .label({ x: 18, y: 6 }, 'a')
+        .note({ x: 18, y: 4 }, 'A')
+        .expectVoltage('a', va)
+        .build(),
+      options: [],
+      misconceptionTraps: separatedTraps(va, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'nodal.source-sign-error',
+          value: signFlipped,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You subtracted the second source term. Both sources sit above ground and push current **into** ` +
+            `node $A$, so both appear with the same sign on the right-hand side.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `Write KCL at node $A$, taking every branch current as leaving the node:`,
+          `$\\dfrac{V_A - ${trimNumber(vs1)}}{R_1} + \\dfrac{V_A}{R_2} + \\dfrac{V_A - ${trimNumber(vs2)}}{R_3} = 0$.`,
+          `Collect the $V_A$ terms on the left and the source terms on the right:`,
+          `$V_A\\left(\\dfrac{1}{R_1} + \\dfrac{1}{R_2} + \\dfrac{1}{R_3}\\right) = \\dfrac{${trimNumber(vs1)}}{R_1} + \\dfrac{${trimNumber(vs2)}}{R_3}$.`,
+          `$V_A = \\dfrac{${trimNumber(vs1 / r1, 4)} + ${trimNumber(vs2 / r3, 4)}}{${trimNumber(conductance, 4)}} = ${volts(va)}$.`,
+          `Sanity check: $V_A$ must fall between ground and the larger source, $${volts(Math.max(vs1, vs2))}$ — and it does.`,
+        ],
+        principle:
+          'Nodal analysis is one KCL equation per unknown node; the coefficient of the node voltage is always the sum of the conductances touching it.',
+        hints: [
+          'Take every branch current as leaving the node, then set the sum to zero.',
+          'The self-conductance term is the sum of 1/R over all branches at the node.',
+        ],
+      },
+    };
+  },
+};
+
+/**
+ * Two-mesh analysis with a shared branch.
+ *
+ * Deliberately a circuit that can also be solved by series-parallel reduction,
+ * so the worked solution can cross-check the answer two ways. Students who
+ * distrust mesh analysis usually do so because nothing ever confirmed it.
+ */
+export const meshTwoLoop: Generator = {
+  id: 'ee2300.mesh-analysis.two-loop',
+  title: 'Two-mesh analysis',
+  kcRefs: [
+    { kc: 'ee2300.mesh-analysis', weight: 0.8 },
+    { kc: 'ee2300.kvl', weight: 0.2 },
+  ],
+  difficultyB: 0.25,
+  generate(rng: Rng) {
+    const vs = supplyVoltage(rng);
+    // The coupling term is worth R3^2/((R1+R3)(R2+R3)) of the answer, so a small
+    // shared branch makes the "solved mesh 1 alone" trap land within answer
+    // tolerance of the right value — `separatedTraps` then deletes it and the
+    // item ships unable to detect the one error it was built around. Require
+    // the two to differ by enough that answering either is a decision.
+    const [r1, r2, r3] = resampleUntil(
+      rng,
+      (r) =>
+        [
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+        ] as [number, number, number],
+      ([a, b, c]) => (c * c) / ((a + c) * (b + c)) >= 0.06,
+    );
+
+    // (R1+R3) i1 - R3 i2 = Vs ;  -R3 i1 + (R2+R3) i2 = 0
+    const det = (r1 + r3) * (r2 + r3) - r3 * r3; // = R1(R2+R3) + R2 R3
+    const i1 = (vs * (r2 + r3)) / det;
+    const i2 = (vs * r3) / det;
+    // Ignoring the coupling term is the classic first mistake.
+    const uncoupled = vs / (r1 + r3);
+    // The closer the shared branch is to the others, the more the coupling
+    // term matters and the less a single-loop shortcut resembles the answer.
+    const difficultyB = adjustDifficulty(this.difficultyB, [
+      -ratioDifficulty(r3, r1),
+      mantissaDifficulty(r2),
+    ]);
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB,
+      stem:
+        `A $${volts(vs)}$ source drives mesh 1 through $R_1 = ${ohms(r1)}$. ` +
+        `$R_3 = ${ohms(r3)}$ is the shared branch between mesh 1 and mesh 2, and ` +
+        `$R_2 = ${ohms(r2)}$ closes mesh 2. With both mesh currents defined clockwise, find $i_1$.`,
+      answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Two clockwise meshes sharing R3')
+        .v('V1', { x: 4, y: 12 }, vs)
+        .r('R1', { x: 12, y: 6 }, r1, 90)
+        .r('R3', { x: 16, y: 10 }, r3)
+        .r('R2', { x: 24, y: 6 }, r2, 90)
+        .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 10, y: 6 })
+        .wire({ x: 14, y: 6 }, { x: 22, y: 6 })
+        .wire({ x: 16, y: 8 }, { x: 16, y: 6 })
+        .wire({ x: 26, y: 6 }, { x: 30, y: 6 }, { x: 30, y: 18 })
+        .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 30, y: 18 })
+        .wire({ x: 16, y: 12 }, { x: 16, y: 18 })
+        .ground({ x: 16, y: 18 })
+        .label({ x: 20, y: 6 }, 'x')
+        .note({ x: 9, y: 12 }, 'mesh 1')
+        .note({ x: 23, y: 12 }, 'mesh 2')
+        .expectVoltage('x', vs - i1 * r1)
+        .build(),
+      options: [],
+      misconceptionTraps: separatedTraps(i1, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'mesh.coupling-term-dropped',
+          value: uncoupled,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You solved mesh 1 alone as $V_s/(R_1+R_3)$, dropping the $-R_3 i_2$ coupling term. ` +
+            `The shared resistor carries **both** mesh currents, so the two equations cannot be separated.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `The shared resistor carries the difference of the two mesh currents, so KVL around each loop gives:`,
+          `Mesh 1: $(R_1 + R_3) i_1 - R_3 i_2 = ${trimNumber(vs)}$.`,
+          `Mesh 2: $-R_3 i_1 + (R_2 + R_3) i_2 = 0$.`,
+          `From mesh 2, $i_2 = \\dfrac{R_3}{R_2 + R_3} i_1$. Substituting into mesh 1:`,
+          `$i_1 = \\dfrac{V_s (R_2 + R_3)}{(R_1+R_3)(R_2+R_3) - R_3^2} = ${amps(i1)}$, and $i_2 = ${amps(i2)}$.`,
+          `Cross-check by reduction: the source sees $R_1$ in series with $R_2 \\| R_3 = ${ohms((r2 * r3) / (r2 + r3))}$, ` +
+            `so $i_1 = \\dfrac{${trimNumber(vs)}}{${trimNumber(r1 + (r2 * r3) / (r2 + r3), 4)}} = ${amps(i1)}$ — the same value.`,
+        ],
+        principle:
+          'A resistor shared between two meshes carries the difference of their currents, which is what couples the equations together.',
+        hints: [
+          'What current actually flows in the shared branch?',
+          'Mesh 2 has no source, so its equation sets $i_2$ in terms of $i_1$.',
+        ],
+      },
+    };
+  },
+};
+
+/**
+ * Supernode analysis.
+ *
+ * A voltage source floating between two non-reference nodes carries an unknown
+ * current, so KCL cannot be written at either node alone. Enclosing both trades
+ * that unknown current for a constraint equation between the node voltages.
+ * Omitting the constraint - two unknowns, one equation - is the defining error.
+ */
+export const supernode: Generator = {
+  id: 'ee2300.supernode.floating-source',
+  title: 'Supernode with a floating source',
+  kcRefs: [
+    { kc: 'ee2300.supernode', weight: 0.8 },
+    { kc: 'ee2300.nodal-analysis', weight: 0.2 },
+  ],
+  difficultyB: 0.65,
+  generate(rng: Rng) {
+    const vs = supplyVoltage(rng);
+    const isMa = pick(rng, [2, 3, 4, 5, 8, 10]);
+    const is = isMa / 1000;
+    const r1 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    const r2 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+
+    // Constraint: Va - Vb = Vs. Supernode KCL: Va/R1 + Vb/R2 = Is.
+    const vb = (is - vs / r1) / (1 / r1 + 1 / r2);
+    const va = vb + vs;
+
+    // Treating the pair as one node and dropping the source entirely.
+    const constraintOmitted = is / (1 / r1 + 1 / r2);
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [
+        ratioDifficulty(r1, r2),
+        mantissaDifficulty(vs),
+      ]),
+      stem:
+        `A $${amps(is)}$ current source drives node $A$. A $${volts(vs)}$ source sits **between** nodes $A$ and $B$ ` +
+        `with its **+** terminal at $A$, so neither node is grounded through it. ` +
+        `$R_1 = ${ohms(r1)}$ runs from $A$ to ground and $R_2 = ${ohms(r2)}$ from $B$ to ground. Find $V_A$.`,
+      answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Floating source between A and B')
+        .i('I1', { x: 4, y: 10 }, is, 180)
+        .r('R1', { x: 12, y: 10 }, r1)
+        .v('V1', { x: 18, y: 6 }, vs, 270)
+        .r('R2', { x: 26, y: 10 }, r2)
+        .wire({ x: 4, y: 8 }, { x: 4, y: 6 }, { x: 16, y: 6 })
+        .wire({ x: 20, y: 6 }, { x: 26, y: 6 })
+        .wire({ x: 12, y: 8 }, { x: 12, y: 6 })
+        .wire({ x: 26, y: 8 }, { x: 26, y: 6 })
+        .wire({ x: 4, y: 12 }, { x: 4, y: 16 }, { x: 26, y: 16 })
+        .wire({ x: 12, y: 12 }, { x: 12, y: 16 })
+        .wire({ x: 26, y: 12 }, { x: 26, y: 16 })
+        .ground({ x: 12, y: 16 })
+        .label({ x: 8, y: 6 }, 'a')
+        .label({ x: 24, y: 6 }, 'b')
+        .note({ x: 8, y: 4 }, 'A')
+        .note({ x: 24, y: 4 }, 'B')
+        .expectVoltage('a', va)
+        .expectVoltage('b', vb)
+        .build(),
+      options: [],
+      misconceptionTraps: separatedTraps(va, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'supernode.constraint-omitted',
+          value: constraintOmitted,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You wrote KCL around the supernode but never used the source constraint, so the two node ` +
+            `voltages were treated as one. Two unknowns need two equations: $V_A - V_B = ${trimNumber(vs)}$ is the second.`,
+        },
+        {
+          misconception: 'supernode.constraint-sign-error',
+          value: vb - vs + (va - vb),
+          tolerance: { rel: 0.015 },
+          feedback:
+            `Check the polarity in your constraint. The **+** terminal is at $A$, so $V_A - V_B = +${trimNumber(vs)}$, not the reverse.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `The current through a voltage source is unknown, so KCL at $A$ or $B$ alone introduces a term you cannot write.`,
+          `Enclose both nodes in a supernode. The source current is now internal and cancels, leaving only the resistor branches:`,
+          `$\\dfrac{V_A}{R_1} + \\dfrac{V_B}{R_2} = ${trimNumber(is)}$.`,
+          `That is one equation in two unknowns. The source itself supplies the second: $V_A - V_B = ${trimNumber(vs)}$.`,
+          `Substituting $V_A = V_B + ${trimNumber(vs)}$ and solving: $V_B = ${volts(vb)}$, so $V_A = ${volts(va)}$.`,
+        ],
+        principle:
+          'A supernode trades the unknown current through a floating source for a constraint equation between its two node voltages — the equation count never changes.',
+        hints: [
+          'What do you know about the current through an ideal voltage source?',
+          'After the supernode KCL you have one equation and two unknowns. Where does the second come from?',
+        ],
+      },
+    };
+  },
+};
+
+/**
+ * Supermesh analysis.
+ *
+ * The dual of the supernode: a current source shared between two meshes has an
+ * unknown voltage across it, so KVL cannot pass through that branch. The loop
+ * is drawn around it and the source supplies the constraint.
+ */
+export const supermesh: Generator = {
+  id: 'ee2300.supermesh.shared-source',
+  title: 'Supermesh with a shared current source',
+  kcRefs: [
+    { kc: 'ee2300.supermesh', weight: 0.8 },
+    { kc: 'ee2300.mesh-analysis', weight: 0.2 },
+  ],
+  difficultyB: 0.75,
+  generate(rng: Rng) {
+    const vs = supplyVoltage(rng);
+    // Both traps here differ from the answer only by the R2*Is term, so when
+    // that term is a small fraction of Vs they both fall inside answer
+    // tolerance and the item ships with nothing to diagnose. The source has to
+    // be doing visible work for "you ignored the source" to be a distinguishable
+    // wrong answer.
+    const [isMa, r1, r2] = resampleUntil(
+      rng,
+      (r) =>
+        [
+          pick(r, [1, 2, 3, 4, 5]),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+          resistor(r, { minDecade: 2, maxDecade: 3 }),
+        ] as [number, number, number],
+      ([ma, , b]) => (b * (ma / 1000)) / vs >= 0.08,
+    );
+    const is = isMa / 1000;
+
+    // Supermesh KVL: -Vs + R1*i1 + R2*i2 = 0, with constraint i2 - i1 = Is.
+    const i1 = (vs - r2 * is) / (r1 + r2);
+    const i2 = i1 + is;
+    // Ignoring the source and solving a single loop.
+    const sourceIgnored = vs / (r1 + r2);
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [
+        ratioDifficulty(r1, r2),
+        mantissaDifficulty(vs),
+      ]),
+      stem:
+        `Two clockwise meshes share a branch containing a $${amps(is)}$ current source, oriented so that ` +
+        `$i_2 - i_1 = ${trimNumber(is)}$ A. Mesh 1 also contains a $${volts(vs)}$ source and $R_1 = ${ohms(r1)}$; ` +
+        `mesh 2 also contains $R_2 = ${ohms(r2)}$. Find $i_1$.`,
+      answer: { kind: 'numeric' as const, value: i1, unit: 'A', tolerance: DEFAULT_TOLERANCE },
+      figure: figure('Supermesh: a current source in the shared branch')
+        .v('V1', { x: 4, y: 12 }, vs)
+        .r('R1', { x: 12, y: 6 }, r1, 90)
+        .i('I1', { x: 18, y: 10 }, is, 180)
+        .r('R2', { x: 28, y: 6 }, r2, 90)
+        .wire({ x: 4, y: 10 }, { x: 4, y: 6 }, { x: 10, y: 6 })
+        .wire({ x: 14, y: 6 }, { x: 26, y: 6 })
+        .wire({ x: 18, y: 8 }, { x: 18, y: 6 })
+        .wire({ x: 30, y: 6 }, { x: 32, y: 6 }, { x: 32, y: 18 })
+        .wire({ x: 4, y: 14 }, { x: 4, y: 18 }, { x: 32, y: 18 })
+        .wire({ x: 18, y: 12 }, { x: 18, y: 18 })
+        .ground({ x: 18, y: 18 })
+        .label({ x: 22, y: 6 }, 'x')
+        .note({ x: 9, y: 12 }, 'mesh 1')
+        .note({ x: 25, y: 12 }, 'mesh 2')
+        .expectVoltage('x', vs - i1 * r1)
+        .build(),
+      options: [],
+      misconceptionTraps: separatedTraps(i1, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'supermesh.source-ignored',
+          value: sourceIgnored,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You solved a single loop as if the current source were not there. The source forces a fixed ` +
+            `difference between the mesh currents, and that constraint changes the answer.`,
+        },
+        {
+          misconception: 'supermesh.constraint-sign-error',
+          value: (vs + r2 * is) / (r1 + r2),
+          tolerance: { rel: 0.015 },
+          feedback:
+            `Your constraint runs the wrong way. With $i_2 - i_1 = +${trimNumber(is)}$, substituting ` +
+            `$i_2 = i_1 + ${trimNumber(is)}$ makes the $R_2 I_s$ term **subtract** from $V_s$.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `The voltage across an ideal current source is unknown, so KVL cannot be written through that branch.`,
+          `Draw the loop **around** the source instead — the supermesh — and apply KVL to the outer path:`,
+          `$-${trimNumber(vs)} + R_1 i_1 + R_2 i_2 = 0$.`,
+          `The source supplies the missing equation: $i_2 - i_1 = ${trimNumber(is)}$.`,
+          `Substituting $i_2 = i_1 + ${trimNumber(is)}$: $i_1 = \\dfrac{${trimNumber(vs)} - (${trimNumber(r2)})(${trimNumber(is)})}{${trimNumber(r1)} + ${trimNumber(r2)}} = ${amps(i1)}$, and $i_2 = ${amps(i2)}$.`,
+          `Note the symmetry with the supernode: unknown current there, unknown voltage here, and in both cases the source itself provides the constraint.`,
+        ],
+        principle:
+          'A supermesh routes KVL around a shared current source, and the source supplies the constraint between the two mesh currents.',
+        hints: [
+          'What do you know about the voltage across an ideal current source?',
+          'Which path can you take KVL around that avoids the source branch entirely?',
+        ],
+      },
+    };
+  },
+};
+
+/**
+ * Nodal analysis with a current-controlled current source.
+ *
+ * The skill is writing the controlling variable in terms of the node voltage
+ * and carrying it into KCL, rather than treating the dependent source as a
+ * fixed independent one.
+ */
+export const dependentSource: Generator = {
+  id: 'ee2300.dependent-sources.cccs',
+  title: 'Current-controlled current source',
+  kcRefs: [
+    { kc: 'ee2300.dependent-sources', weight: 0.75 },
+    { kc: 'ee2300.nodal-analysis', weight: 0.25 },
+  ],
+  difficultyB: 0.85,
+  generate(rng: Rng) {
+    const vs = supplyVoltage(rng);
+    const r1 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    const r2 = resistor(rng, { minDecade: 2, maxDecade: 3 });
+    const beta = pick(rng, [0.5, 1, 1.5, 2, 3, 4]);
+
+    // Ix flows through R1 into node A; the source injects beta*Ix into A too.
+    // (1 + beta)(Vs - Va)/R1 = Va/R2
+    const va = ((1 + beta) * r2 * vs) / (r1 + (1 + beta) * r2);
+    // Ignoring the dependent source collapses this to a plain divider.
+    const sourceIgnored = (vs * r2) / (r1 + r2);
+
+    return {
+      type: 'numeric' as const,
+      kcRefs: this.kcRefs,
+      difficultyB: adjustDifficulty(this.difficultyB, [
+        mantissaDifficulty(beta * 10),
+        ratioDifficulty(r1, r2),
+      ]),
+      stem:
+        `A $${volts(vs)}$ source drives $R_1 = ${ohms(r1)}$ into node $A$, and $R_2 = ${ohms(r2)}$ returns from ` +
+        `$A$ to ground. The current $I_x$ flows through $R_1$ toward $A$, and a dependent current source ` +
+        `injects $\\beta I_x$ into node $A$ with $\\beta = ${trimNumber(beta)}$. Find $V_A$.`,
+      answer: { kind: 'numeric' as const, value: va, unit: 'V', tolerance: DEFAULT_TOLERANCE },
+      options: [],
+      misconceptionTraps: separatedTraps(va, DEFAULT_TOLERANCE, [
+        {
+          misconception: 'dependent.treated-as-absent',
+          value: sourceIgnored,
+          tolerance: { rel: 0.015 },
+          feedback:
+            `That is the plain divider result, which is what you get by leaving the dependent source out. ` +
+            `It injects $\\beta I_x$ into the node and must appear in KCL.`,
+        },
+        {
+          misconception: 'dependent.control-variable-fixed',
+          value: ((1 + beta) * r2 * vs) / (r1 + r2),
+          tolerance: { rel: 0.015 },
+          feedback:
+            `You scaled the answer by $(1+\\beta)$ after solving, treating $I_x$ as if it were already known. ` +
+            `$I_x$ depends on $V_A$, so the coupling has to enter **before** you solve, not after.`,
+        },
+      ]),
+      explanation: {
+        steps: [
+          `Express the controlling variable in terms of the unknown: $I_x = \\dfrac{V_s - V_A}{R_1}$.`,
+          `Write KCL at $A$. Current arrives from $R_1$ and from the dependent source, and leaves through $R_2$:`,
+          `$\\dfrac{V_s - V_A}{R_1} + \\beta\\dfrac{V_s - V_A}{R_1} = \\dfrac{V_A}{R_2}$.`,
+          `Collecting: $(1+\\beta)\\dfrac{V_s - V_A}{R_1} = \\dfrac{V_A}{R_2}$, so $V_A = \\dfrac{(1+\\beta) R_2 V_s}{R_1 + (1+\\beta) R_2} = ${volts(va)}$.`,
+          `With $\\beta = 0$ this reduces to the ordinary divider, $${volts(sourceIgnored)}$ — a useful check that the coupling entered correctly.`,
+        ],
+        principle:
+          'A dependent source is not a known quantity: write its controlling variable in terms of the unknowns and solve the coupled equation, never suppress it.',
+        hints: [
+          'What is $I_x$ in terms of $V_A$?',
+          'Does the dependent source add current to node $A$ or remove it?',
+        ],
+      },
+    };
+  },
+};

@@ -1,0 +1,82 @@
+name: Windows installer
+
+# Tauri cannot cross-compile a Windows binary from Linux without the MSVC CRT,
+# which has to be fetched from Microsoft and is not reachable from the
+# development container. So the Windows installers are built here, on real
+# Windows, and published as artifacts of the run.
+#
+# Kept out of ci.yml deliberately: a full Rust release build is minutes rather
+# than seconds, and the fast checks should stay fast.
+
+on:
+  push:
+    branches: ['**']
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  workflow_dispatch:
+
+jobs:
+  windows:
+    name: Build .msi and .exe
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          # Pinned independently of the action version: the committed lockfile
+          # was written by pnpm 10, and a newer major rewrites its format and
+          # then fails the frozen install.
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install the Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Cache the Rust build
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            apps/desktop/src-tauri/target
+          key: windows-cargo-${{ hashFiles('apps/desktop/src-tauri/Cargo.lock') }}
+          restore-keys: windows-cargo-
+
+      - run: pnpm install --frozen-lockfile
+
+      # The bundled item banks are generated, and a Windows build that shipped a
+      # stale bank would be a different application from the one CI verified.
+      - name: Check the committed bank matches its generators
+        run: |
+          pnpm content build --variants=18
+          git diff --exit-code content/packs/shared
+        shell: bash
+
+      - name: Build the installers
+        run: pnpm tauri build
+
+      - name: Collect the artifacts
+        shell: bash
+        run: |
+          mkdir -p dist-windows
+          find apps/desktop/src-tauri/target -path '*bundle*' \( -name '*.msi' -o -name '*setup.exe' \) \
+            -exec cp {} dist-windows/ \;
+          ls -la dist-windows
+
+      - name: Upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: engineering-trainer-windows
+          path: dist-windows/*
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,18 @@
+{
+  "name": "@et/pack-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Validate, verify and build content packs",
+  "bin": {
+    "pack": "./src/cli.ts"
+  },
+  "dependencies": {
+    "@et/content-schema": "workspace:*",
+    "@et/answer-engine": "workspace:*",
+    "@et/generators": "workspace:*",
+    "@et/domain": "workspace:*",
+    "yaml": "^2.9.1",
+    "@et/circuits": "workspace:*"
+  }
+}
