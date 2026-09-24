@@ -38,6 +38,12 @@ content/inbox/**
 !content/inbox/.gitkeep
 !content/inbox/README.md
 
+# Your own course material: homework, slides, notes, book chapters, syllabi.
+# Source rather than content — it is what items get written from, and none of
+# it is committed or bundled. See content/coursework/README.md.
+content/coursework/**
+!content/coursework/README.md
+
 # Local user database
 *.db
 *.db-journal

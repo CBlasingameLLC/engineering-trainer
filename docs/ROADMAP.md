@@ -21,12 +21,15 @@ machinery exists.
 | MATH 2358 Discrete Mathematics | 25 KCs, 308 items across all four units |
 | EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
 | EE 3300 Circuits II | 19 KCs, 16 generators, 281 items across all five units |
+| PHYS 2335 Waves and Heat | 20 KCs, 20 generators, 350 items; oscillations, waves, heat and thermodynamics |
 | Phasor answers | `complex` answer kind: six notations parsed, magnitude and phase graded separately |
 | Item figures | 252 EE 2300 items (op-amps included) and every EE 3300 circuit item carry a schematic, simulated by `pack verify` |
 | Circuit templates | 14 standard Circuits II topologies, loadable into the Lab, each proved solvable |
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
 | Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |
-| Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills |
+| Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills; 221 misconceptions in 17 families, all mapped |
+| Current term | Week-by-week unit schedule joined to the graph; readiness list ranking prerequisites by shortfall, dependence and how soon they are needed |
+| Coursework intake | Gitignored drop zone per course for homework, slides, notes and book chapters, with the licence quarantine documented |
 | Display | Dark mode (system/light/dark, persisted) and fullscreen |
 | Circuit lab | MNA solver (DC / DC sweep / AC / transient), drag-and-drop schematic capture with hotkeys, undo, rubber-band select, wheel zoom |
 | Design grading | `circuit-build` items graded by simulation |

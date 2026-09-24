@@ -181,6 +181,17 @@ admits one; reserve model authoring for what generators structurally cannot do.
 lives in gitignored `content/packs/personal/`, is rejected from redistributable
 packs by the schema, and never enters a release build. Don't weaken that.
 
+Raw course material — homework, slides, notes, book chapters, a syllabus — goes
+in gitignored `content/coursework/<COURSE>/`. It is *source*, not content: the
+app never reads it, and the route from a PDF to a served question runs through
+a KC graph, generators, and the same gate as everything else.
+`content/coursework/README.md` has the layout and the decision that matters
+most — whether a course is generatable at all. A closed-form course like
+PHYS 2335 is twenty generators with near-total verification; a definitional one
+like EE 4392 cannot be generated and gets hand- or model-authored items with a
+weaker guarantee behind them. Deciding which before starting is what stops the
+second kind being shipped with the confidence of the first.
+
 ## Conventions that will bite you
 
 - **Touching a generator? Rebuild and commit the bank.** CI runs
@@ -212,6 +223,20 @@ packs by the schema, and never enters a release build. Don't weaken that.
   maths that the segmenter read as two empty spans around plain text; and
   `\\n\\n` in a template literal, which is a literal backslash-n, not a
   paragraph break.
+- **An SI prefix is only a prefix in front of a unit symbol.** `extractNumbers`
+  folds the prefix into the value so `4.7\,\mathrm{k\Omega}` compares against a
+  stored 4700. The rule it applies has to be narrow, because a leading prefix
+  letter is not evidence of a prefix: `mol`, `m/s` and `kg` all start with one
+  and none is scaled, so folding them divides a molar quantity by a thousand
+  and multiplies a mass by a thousand. `PREFIXABLE_UNITS` in `verify.ts` lists
+  what a prefix may attach to, longest first so `VAR` is not read as `VA`, and
+  the group must close straight after — `ms` folds, `mol` does not. A unit's
+  own exponent is excluded too, so `\mathrm{m^2}` contributes no bare 2; a
+  spurious number can only ever make explanation-agreement pass when it should
+  have failed. The consequence for generators: `engineering()` is for units on
+  that list and nothing else. A temperature, a mass, a mole count or any
+  compound unit is written with the plain formatter in `phys2335/common.ts`,
+  which emits no prefix at all.
 - **Units are set in `\mathrm`, not `\text`, and nothing may parse either.**
   `\Omega` and `\mu` are maths-mode macros, so `\text{k\Omega}` asks KaTeX to
   typeset a maths macro in text mode — which is every resistance and every
@@ -253,6 +278,23 @@ packs by the schema, and never enters a release build. Don't weaken that.
   zero magnitude (every angle is the same phasor there, so no angle is
   demanded). Six notations parse, because rejecting five of them teaches
   notation rather than circuits.
+- **A term is the only document about *when*, and it joins by a bare string.**
+  `content/terms/*.yaml` says which unit of which course is live in which week,
+  and the join to the KC graph is the `unit` field matched by name. A typo binds
+  to nothing, schedules nothing, and is indistinguishable at runtime from a
+  quiet week — there is no later symptom — so `pack validate` checks every unit
+  name against the curriculum and refuses the build. A course listed on a term
+  with no curriculum document yet is the benign case and is reported as a note,
+  because "this is on your term and the app knows nothing about it" is worth
+  saying out loud; a term view that hid it would be disagreeing with the term.
+- **The term's value is `termReadiness`, not the schedule.** What is being
+  covered this week is something the learner already knows. What has quietly
+  decayed underneath the unit that starts in two weeks is not, and it needs both
+  halves — the schedule and the measured decay — which nothing else holds at
+  once. Ranking multiplies shortfall, edge strength and imminence; dropping the
+  last one gives a list that is true and useless. `untested` is included
+  deliberately rather than filtered, or the term view is quietest for the
+  learner who has used the app least.
 - **Never synthesize a study history to seed FSRS.** A semester of fabricated
   reviews inflates stability to S≈270d, so a year-old prerequisite reports
   R≈0.88 and looks perfectly retained — defeating the entire product. Use
@@ -428,8 +470,13 @@ produces a plausible-looking feed that points at the wrong work:
   error in a learner's first session as deteriorating is both false and
   indistinguishable from the case that genuinely is.
 
-`content/misconceptions/families.yaml` declares the cross-course families, and
-only that — per-item feedback already names the number the learner actually
+`content/misconceptions/families.yaml` declares the cross-course families and
+which misconception belongs to which, and only that. **A misconception used by
+an item and absent from this file is invisible to the feed** — recorded on the
+attempt, named in the item's own feedback, and missing from the ranking that
+decides what to drill. Eighteen shipped that way with EE 3300 before anyone
+noticed, so a new generator's traps are catalogued in the same change that
+introduces them — per-item feedback already names the number the learner actually
 wrote, and duplicating it centrally would create two descriptions that drift.
 The catalog lives outside `content/curriculum/` because everything in that
 directory is parsed as a course document.
@@ -468,11 +515,15 @@ only asserted.
 
 Not built:
 
-- **Curriculum breadth** (Phase 4) — Tier 1 is complete, and EE 3300 Circuits II
-  is now in: 19 KCs across sinusoidal steady state, AC power, frequency
-  response, coupling and three-phase, and the s-domain, with cross-course edges
-  into EE 2300 and MATH 3323. EE 3370 Signals and EE 3340 Electromagnetics have
-  no graph yet.
+- **Curriculum breadth** (Phase 4) — Tier 1 is complete. EE 3300 Circuits II is
+  in: 19 KCs across sinusoidal steady state, AC power, frequency response,
+  coupling and three-phase, and the s-domain. PHYS 2335 Waves and Heat is in:
+  20 KCs across oscillations, mechanical waves, heat and the ideal gas, and
+  thermodynamics — the first course in the bank whose subject is not
+  electrical, which is what makes the competency axis testable rather than
+  asserted. EE 3370 Signals and EE 3340 Electromagnetics have no graph yet, and
+  neither does PHYS 2325 Mechanics, which is why several honest PHYS 2335 edges
+  (energy, momentum, Newton's second law) are missing rather than wrong.
 - **Nonlinear devices** — diodes and transistors need Newton-Raphson around the
   existing stamping code plus a device-model library. Nothing in Circuits I/II
   requires them.

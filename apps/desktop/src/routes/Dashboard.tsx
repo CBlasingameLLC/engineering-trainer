@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import {
   byCompetency, byDomain, challengeReadiness, dailyQuest, levelProgress, rankMisconceptions,
-  streakAsOf, type Competency,
+  streakAsOf, termFocus, termReadiness, type Competency,
 } from '@et/domain';
 import { useApp } from '@/store';
+import { currentTerm } from '@/content';
 import { upcomingDecay } from '@/features/learner-model';
 import { BAND_STYLE, DIAGNOSIS_COPY, pct } from '@/ui/bands';
 
@@ -42,6 +43,16 @@ export function Dashboard(): React.ReactElement {
     [misconceptionEvents],
   );
 
+  const term = useMemo(() => (content ? currentTerm(content) : undefined), [content]);
+  // How many prerequisites of the next few weeks' material are not ready. This
+  // is the one number the dashboard cannot already show: every other figure on
+  // this screen is about what is known, and this one is about what is needed.
+  const notReady = useMemo(() => {
+    if (!content || !model || !term) return 0;
+    const focus = termFocus(term, content.graph.kcs.values(), { upcomingWeeks: 4 });
+    return termReadiness(content.graph, model.byKc, focus, { limit: 8 }).length;
+  }, [content, model, term]);
+
   const view = useMemo(() => {
     if (!model || !content) return null;
     const { graph } = content;
@@ -78,6 +89,27 @@ export function Dashboard(): React.ReactElement {
           <span className="text-sm text-slate-500 dark:text-slate-400">preparing for {profile.targetTerm}</span>
         )}
         <nav className="ml-auto flex items-center gap-3 text-sm">
+          {term && (
+            <button
+              className="text-slate-500 underline dark:text-slate-400"
+              onClick={() => goTo('term')}
+              data-testid="nav-term"
+            >
+              This term
+            </button>
+          )}
+          {/* Badged only when the schedule and the mastery model actually
+              disagree with each other. A count that is always on screen stops
+              being a signal, which is the same reason the drill badge is
+              conditional. */}
+          {notReady > 0 && (
+            <span
+              className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900 dark:text-amber-200"
+              data-testid="term-not-ready"
+            >
+              {notReady} not ready
+            </span>
+          )}
           <button className="text-slate-500 underline dark:text-slate-400" onClick={() => goTo('skillTree')}>Skill tree</button>
           <button className="text-slate-500 underline dark:text-slate-400" onClick={() => goTo('circuitLab')}>Circuit lab</button>
           <button
