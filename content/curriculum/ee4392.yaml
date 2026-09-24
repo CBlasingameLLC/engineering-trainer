@@ -46,6 +46,11 @@
 # concept is what this file should call one concept, and until the lectures
 # land that is not known — so these are named from the syllabus topics and will
 # be split properly when there is material to split them against.
+#
+# Diffusion and implantation are authored ahead of their lectures anyway,
+# because dopant transport is standard closed-form physics and the final is
+# cumulative. That is a bet on the content and not on the notation; see the
+# note above those units.
 
 code: EE4392
 title: Microelectronics Manufacturing I
@@ -341,9 +346,18 @@ kcs:
       - kc: ee4392.optical-resolution
         strength: 0.6
 
-  # --- Units awaiting lecture material --------------------------------------
-  # Everything below is on the syllabus and has not been taught yet. The titles
-  # come from the schedule; the decomposition will be redone against the slides.
+  # --- Units not yet lectured ------------------------------------------------
+  # Everything below is on the syllabus and has not been taught yet, so the
+  # titles come from the schedule and the decomposition will be redone against
+  # the slides when they land.
+  #
+  # Diffusion and Ion Implantation are the exception: their physics is
+  # standard and closed-form, so they carry generators and items already. What
+  # is provisional there is the *notation*, not the content — this file uses
+  # the near-universal symbols (Q for dose, N_s and N_0 for surface
+  # concentrations, x_j, R_p, Delta R_p) and the course may write something
+  # else. Where it does, the items should follow the course, because being
+  # marked wrong for notation teaches notation rather than process.
 
   - id: ee4392.etch-fundamentals
     title: Etch rate, selectivity and anisotropy

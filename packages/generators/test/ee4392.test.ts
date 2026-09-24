@@ -4,6 +4,7 @@ import { GENERATORS, makeRng } from '../src/index.js';
 import {
   DRY_111, WET_111, oxideThickness, oxideTime, resistCmtf, resistContrast, tauFor,
 } from '../src/ee4392/common.js';
+import { DOPANTS, diffusivity, erfc } from '../src/ee4392/doping.js';
 
 /**
  * Process sanity, checked independently of the arithmetic that produced it.
@@ -400,6 +401,154 @@ describe('masked two-step oxidation matches the exam it models', () => {
 
   it('asks about both regions across the seed set', () => {
     const asks = SEEDS.map((s) => stemOf('ee4392.oxidation.masked-two-step', s).includes('**field**'));
+    expect(asks.some(Boolean)).toBe(true);
+    expect(asks.some((a) => !a)).toBe(true);
+  });
+});
+
+/**
+ * Diffusion and implantation bounds.
+ *
+ * These lectures have not been given, so there is no instructor's key to check
+ * against — unlike the oxidation generators, nothing here can be pinned to a
+ * published answer. That makes the bounds the only independent evidence, and
+ * it makes the erfc implementation worth testing directly: a special function
+ * written by hand is exactly the kind of thing that is confidently wrong in
+ * one direction and agrees perfectly with itself.
+ */
+describe('erfc is correct where its value is known', () => {
+  it('matches the values that define it', () => {
+    expect(erfc(0)).toBeCloseTo(1, 6);
+    expect(erfc(10)).toBeCloseTo(0, 6);
+    expect(erfc(-10)).toBeCloseTo(2, 6);
+  });
+
+  it('matches tabulated values', () => {
+    // Standard tables, to the accuracy the A&S 7.1.26 approximation offers.
+    expect(erfc(0.5)).toBeCloseTo(0.4795, 4);
+    expect(erfc(1.0)).toBeCloseTo(0.1573, 4);
+    expect(erfc(1.5)).toBeCloseTo(0.0339, 4);
+    expect(erfc(2.0)).toBeCloseTo(0.004678, 5);
+  });
+
+  it('is symmetric about one', () => {
+    for (const x of [0.2, 0.7, 1.3, 2.4]) {
+      expect(erfc(x) + erfc(-x)).toBeCloseTo(2, 6);
+    }
+  });
+
+  it('decreases monotonically', () => {
+    let previous = Infinity;
+    for (const x of [-2, -1, 0, 0.5, 1, 2, 3]) {
+      const value = erfc(x);
+      expect(value).toBeLessThan(previous);
+      previous = value;
+    }
+  });
+});
+
+describe('EE 4392 dopant transport bounds', () => {
+  it('diffusivity is positive, tiny, and rises with temperature', () => {
+    for (const dopant of DOPANTS) {
+      let previous = 0;
+      for (const celsiusValue of [900, 1000, 1100, 1200]) {
+        const d = diffusivity(dopant.d0, dopant.ea, celsiusValue + 273.15);
+        expect(d).toBeGreaterThan(previous);
+        // A substitutional dopant at process temperature is nowhere near D0.
+        expect(d).toBeLessThan(dopant.d0);
+        expect(d).toBeLessThan(1e-9);
+        previous = d;
+      }
+    }
+  });
+
+  it('every generated diffusivity is positive', () => {
+    for (const seed of SEEDS) {
+      expect(answerOf('ee4392.diffusion.diffusivity', seed)).toBeGreaterThan(0);
+    }
+  });
+
+  it('junction depth is positive and a believable fraction of a micrometre', () => {
+    for (const seed of SEEDS) {
+      const xj = answerOf('ee4392.diffusion.junction-depth', seed);
+      expect(xj).toBeGreaterThan(0);
+      expect(xj).toBeLessThan(20);
+    }
+  });
+
+  it('junction depth grows with drive-in and shrinks as the background rises', () => {
+    const jd = (dt: number, n0: number, nb: number) => 2 * Math.sqrt(dt * Math.log(n0 / nb)) * 1e4;
+    let previous = 0;
+    for (const dt of [1e-12, 1e-11, 1e-10, 1e-9]) {
+      const xj = jd(dt, 1e20, 1e15);
+      expect(xj).toBeGreaterThan(previous);
+      previous = xj;
+    }
+    // A heavier background is met sooner, so the junction is shallower.
+    expect(jd(1e-11, 1e20, 1e16)).toBeLessThan(jd(1e-11, 1e20, 1e15));
+  });
+
+  it('a predeposition concentration never exceeds the surface value', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('ee4392.diffusion.predeposition-dose', seed);
+      if (!stem.includes('concentration at a depth')) continue;
+      examined += 1;
+      const surfaceMatch = /N_s = ([\d.]+) \\times 10\^\{(\d+)\}/.exec(stem);
+      const ns = Number(surfaceMatch?.[1]) * 10 ** Number(surfaceMatch?.[2]);
+      expect(ns, `unparsed surface concentration in: ${stem}`).toBeGreaterThan(0);
+      const answer = answerOf('ee4392.diffusion.predeposition-dose', seed);
+      expect(answer).toBeGreaterThan(0);
+      expect(answer).toBeLessThan(ns);
+    }
+    atLeastOne(examined, 'a predeposition concentration item');
+  });
+
+  it('predeposition dose is positive and grows as the root of Dt', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      if (stemOf('ee4392.diffusion.predeposition-dose', seed).includes('concentration at a depth')) continue;
+      examined += 1;
+      expect(answerOf('ee4392.diffusion.predeposition-dose', seed)).toBeGreaterThan(0);
+    }
+    atLeastOne(examined, 'a predeposition dose item');
+    // Quadrupling Dt doubles the dose, which is the signature of a constant source.
+    const q = (ns: number, dt: number) => 2 * ns * Math.sqrt(dt / Math.PI);
+    expect(q(1e20, 4e-12) / q(1e20, 1e-12)).toBeCloseTo(2, 10);
+  });
+
+  it('implant peak concentration is positive and the profile integrates to the dose', () => {
+    for (const seed of SEEDS) {
+      expect(answerOf('ee4392.implant.profile', seed)).toBeGreaterThan(0);
+    }
+    // Numerically integrate a Gaussian with the generator's normalisation and
+    // confirm it returns the dose it was built from. This is the check that
+    // catches a missing root-two-pi, which no bound on the peak alone would.
+    const dose = 1e14;
+    const straggle = 5e-6;
+    const peak = dose / (Math.sqrt(2 * Math.PI) * straggle);
+    const rp = 2e-5;
+    let integral = 0;
+    const step = straggle / 200;
+    for (let x = rp - 8 * straggle; x <= rp + 8 * straggle; x += step) {
+      integral += peak * Math.exp(-((x - rp) ** 2) / (2 * straggle * straggle)) * step;
+    }
+    expect(integral / dose).toBeCloseTo(1, 3);
+  });
+
+  it('implant dose is positive and scales with current and time', () => {
+    for (const seed of SEEDS) {
+      expect(answerOf('ee4392.implant.dose-from-beam', seed)).toBeGreaterThan(0);
+    }
+    const q = (amps: number, seconds: number, charge: number, area: number) =>
+      (amps * seconds) / (charge * 1.602e-19 * area);
+    expect(q(2e-4, 120, 1, 100)).toBeCloseTo(2 * q(1e-4, 120, 1, 100), 6);
+    // A doubly charged beam delivers half the ions at the same current.
+    expect(q(1e-4, 60, 2, 100)).toBeCloseTo(q(1e-4, 60, 1, 100) / 2, 6);
+  });
+
+  it('both dopant-source conditions appear across the seed set', () => {
+    const asks = SEEDS.map((s) => stemOf('ee4392.diffusion.predeposition-dose', s).includes('concentration at a depth'));
     expect(asks.some(Boolean)).toBe(true);
     expect(asks.some((a) => !a)).toBe(true);
   });

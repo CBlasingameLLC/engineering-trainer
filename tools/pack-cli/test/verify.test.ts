@@ -388,3 +388,60 @@ describe('course-unit lengths stay unfolded', () => {
     expect(readNumbers('6\\,\\mathrm{mW/cm^2}')).toContain(6);
   });
 });
+
+/**
+ * Scientific notation, which is the one place an exponent *is* the number.
+ *
+ * A doping concentration is written `5 \times 10^{20}` and neither half of
+ * that is the stated result, so a worked solution ending on 5e20 used to agree
+ * with nothing at all. EE 4392's diffusion and implantation items are written
+ * entirely in these quantities.
+ */
+describe('scientific notation folds to one value', () => {
+  const cases: [string, number][] = [
+    ['5 \\times 10^{20}\\,\\mathrm{cm^{-3}}', 5e20],
+    ['1.4\\times 10^{-4}\\,\\mathrm{cm^2/s}', 1.4e-4],
+    ['$N_0 = 2.5 \\times 10^{18}$', 2.5e18],
+    ['3 \\cdot 10^{15}', 3e15],
+    ['-2 \\times 10^{3}', -2000],
+    ['8.617 \\times 10^{-5}\\,\\mathrm{eV/K}', 8.617e-5],
+  ];
+
+  for (const [rendered, expected] of cases) {
+    it(`reads ${rendered} as ${expected}`, () => {
+      expect(readNumbers(rendered)).toContain(expected);
+    });
+  }
+
+  it('leaves neither the mantissa nor the exponent loose', () => {
+    // Both halves would be spurious, and a spurious number can only ever make
+    // explanation-agreement pass when it should have failed.
+    expect(readNumbers('5 \\times 10^{20}')).toEqual([5e20]);
+  });
+});
+
+/**
+ * Exponents and subscripts of any length, which is what finally settled this.
+ *
+ * Three successive lookbehinds each fixed the case in front of them and missed
+ * the next: `(?<!\^)` misses `^{2}`, adding `(?<!\^\{)` lets `^{-2}` restart on
+ * the digit, and adding `(?<!\^\{-)` still misses `^{18}`. No fixed number of
+ * them covers an arbitrary exponent, so the spans are stripped instead.
+ */
+describe('exponents and subscripts of any length are not results', () => {
+  const cases: [string, number[]][] = [
+    ['1.4\\,\\mathrm{m^2}', [1.4]],
+    ['0.5\\,\\mathrm{cm^{-2}}', [0.5]],
+    ['7\\,\\mathrm{cm^{-12}}', [7]],
+    ['4\\,\\mathrm{s^{-1}}', [4]],
+    ['$N_0 = 9$', [9]],
+    ['$R_{p} = 120\\,\\mathrm{{n}m}$', [120]],
+    ['$x_{j}^{2} = 6$', [6]],
+  ];
+
+  for (const [rendered, expected] of cases) {
+    it(`reads ${rendered} as exactly ${JSON.stringify(expected)}`, () => {
+      expect(readNumbers(rendered)).toEqual(expected);
+    });
+  }
+});

@@ -35,6 +35,36 @@ export const nm = (value: number, sigFigs = 4): string =>
 export const unit = (value: number, symbol: string, sigFigs = 4): string =>
   `${trimNumber(value, sigFigs)}\\,\\mathrm{${symbol}}`;
 
+/**
+ * A number that may be very large or very small, written the way a process
+ * engineer writes it.
+ *
+ * `trimNumber` falls back to JavaScript's own formatting outside a narrow
+ * range, which puts `2e-11` into the middle of a LaTeX expression — not a
+ * typesetting error so much as a different notation appearing halfway through
+ * a derivation. Doping concentrations and diffusivities live entirely outside
+ * that range, so they need this rather than `plain`.
+ *
+ * The verifier reads `a \times 10^{b}` as one number, so a worked solution
+ * written this way still agrees with its own answer key.
+ */
+export function sci(value: number, symbol?: string, sigFigs = 3): string {
+  const units = symbol ? `\\,\\mathrm{${symbol}}` : '';
+  if (value === 0) return `0${units}`;
+  const magnitude = Math.abs(value);
+  // Inside this range ordinary decimal notation is what anyone would write.
+  if (magnitude >= 1e-3 && magnitude < 1e4) return `${trimNumber(value, sigFigs)}${units}`;
+  const exponent = Math.floor(Math.log10(magnitude));
+  const mantissa = value / 10 ** exponent;
+  return `${trimNumber(mantissa, sigFigs)} \\times 10^{${exponent}}${units}`;
+}
+
+/** A dopant concentration, per cubic centimetre. */
+export const concentration = (value: number, sigFigs = 3): string => sci(value, 'cm^{-3}', sigFigs);
+
+/** A dose, per square centimetre. */
+export const dose = (value: number, sigFigs = 3): string => sci(value, 'cm^{-2}', sigFigs);
+
 /** A plain number with no unit — contrast, CMTF, MTF, Cp, yield. */
 export const plain = (value: number, sigFigs = 4): string => trimNumber(value, sigFigs);
 

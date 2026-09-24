@@ -704,3 +704,35 @@ misconceptions:
   - { id: rca.organics-blamed-on-hf,                    family: mechanism-attribution, title: "Organic removal credited to the HF step" }
   - { id: rca.organics-blamed-on-sc2,                   family: mechanism-attribution, title: "Organic removal credited to the SC-2 step" }
   - { id: rca.organics-blamed-on-rinse,                 family: mechanism-attribution, title: "Organic removal credited to ultrasonic rinsing" }
+
+  # --- EE 4392 diffusion and implantation -----------------------------------
+  # Almost none of these are mechanism-attribution, which is worth noticing:
+  # this unit is the closed-form part of the course, so its errors are the
+  # ordinary numerate ones — a dropped constant, a factor of two, a unit left
+  # unconverted — and they belong in the families the maths banks already use.
+  # The same learner can be reliable here and unreliable on process mechanism,
+  # which is exactly the split the competency axis exists to show.
+
+  # --- absolute-scale-discipline ---------------------------------------------
+  - { id: diffusion.celsius-used-as-kelvin,    family: absolute-scale-discipline, title: "Celsius substituted into a diffusivity exponent" }
+
+  # --- sign-convention-discipline --------------------------------------------
+  - { id: diffusion.activation-energy-sign,    family: sign-convention-discipline, title: "Activation energy entered with the wrong sign" }
+
+  # --- formula-substitution --------------------------------------------------
+  - { id: diffusion.logarithm-omitted,         family: formula-substitution, title: "Junction depth taken as the diffusion length alone" }
+  - { id: diffusion.factor-two-dropped,        family: formula-substitution, title: "Factor of two dropped from the junction-depth expression" }
+  - { id: diffusion.dose-factor-omitted,       family: formula-substitution, title: "Predeposition dose missing its factor of two" }
+  - { id: diffusion.dose-pi-omitted,           family: formula-substitution, title: "Predeposition dose missing the pi under the root" }
+  - { id: diffusion.erfc-argument-factor-two,  family: formula-substitution, title: "Complementary error function given x over the diffusion length undoubled" }
+  - { id: implant.normalisation-omitted,       family: formula-substitution, title: "Gaussian implant peak taken without its normalisation" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: diffusion.erf-used-for-erfc,         family: definition-precision, title: "Error function used where the complementary one is required" }
+  - { id: implant.range-used-as-straggle,      family: definition-precision, title: "Projected range used as the width of the distribution" }
+  - { id: implant.charge-state-ignored,        family: definition-precision, title: "Beam current converted to ions without the charge state" }
+  - { id: implant.area-omitted,                family: definition-precision, title: "Total ion count reported as a dose" }
+
+  # --- unit-conversion-discipline --------------------------------------------
+  - { id: implant.straggle-units-unconverted,  family: unit-conversion-discipline, title: "Straggle left in nanometres beside a dose per square centimetre" }
+  - { id: implant.microamp-unconverted,        family: unit-conversion-discipline, title: "Beam current left in microamps" }
