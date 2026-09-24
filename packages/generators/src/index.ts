@@ -31,6 +31,8 @@ import {
   acThevenin, bodeAsymptotes, conjugateMatch, mutualInductance, parallelResonance,
   powerFactorCorrection, rmsValue, sDomainPole, sinusoidToPhasor,
 } from './ee3300/power.js';
+import { PHYS2335_FLUID_GENERATORS } from './phys2335/fluids.js';
+import { PHYS2335_OPTICS_GENERATORS } from './phys2335/optics.js';
 import { PHYS2335_OSCILLATION_GENERATORS } from './phys2335/oscillations.js';
 import { PHYS2335_WAVE_GENERATORS } from './phys2335/waves.js';
 import { PHYS2335_THERMAL_GENERATORS } from './phys2335/thermal.js';
@@ -114,6 +116,8 @@ export const GENERATORS: readonly Generator[] = [
   // not electrical, which is what makes the competency axis testable: weak
   // `math-execution` across circuits, maths *and* physics is a different
   // finding from weak circuits.
+  ...PHYS2335_FLUID_GENERATORS,
+  ...PHYS2335_OPTICS_GENERATORS,
   ...PHYS2335_OSCILLATION_GENERATORS,
   ...PHYS2335_WAVE_GENERATORS,
   ...PHYS2335_THERMAL_GENERATORS,

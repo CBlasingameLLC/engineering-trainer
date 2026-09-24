@@ -382,6 +382,17 @@ describe('course-unit lengths stay unfolded', () => {
     expect(readNumbers('310\\,\\mathrm{{n}m}')).toContain(310);
   });
 
+  it('leaves every braced prefix bare, which is the one spelling generators use', () => {
+    // `unfoldedUnit` emits this form for all three. Millimetres is the case
+    // that shipped broken: `\mathrm{mm}` folds a 353 mm fringe to 0.3534, and
+    // the optics generator stored the answer in millimetres.
+    expect(readNumbers('0.477\\,\\mathrm{{\\mu}m}')).toEqual([0.477]);
+    expect(readNumbers('353.4\\,\\mathrm{{m}m}')).toEqual([353.4]);
+    expect(readNumbers('633\\,\\mathrm{{n}m}')).toEqual([633]);
+    // and the unbraced forms still fold, which is correct for a schematic
+    expect(readNumbers('353.4\\,\\mathrm{mm}')[0]).toBeCloseTo(0.3534, 10);
+  });
+
   it('leaves compound process units alone', () => {
     expect(readNumbers('0.344\\,\\mu\\mathrm{m^2/hr}')).toContain(0.344);
     expect(readNumbers('23\\,\\mathrm{mJ/cm^2}')).toContain(23);

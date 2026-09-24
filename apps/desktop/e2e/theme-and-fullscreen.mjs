@@ -41,7 +41,29 @@ const luminance = (rgb) => {
   });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
+/**
+ * Wait for `boot()` to finish before probing the DOM.
+ *
+ * `networkidle` only says the network went quiet, which happens well before
+ * the content bank has been parsed and the attempt log replayed — and that gap
+ * grows every time content is added. Counting at that moment is a race this
+ * driver lost silently: the onboarding branch was skipped because the prompt
+ * had not rendered yet, and the run then failed on the *next* wait with a
+ * message about the dashboard, pointing at the wrong place entirely.
+ *
+ * `.or()` rather than a comma, because the `text=` engine has no alternation
+ * and reads a comma-separated pair as one literal string.
+ */
+async function waitForBoot() {
+  await page
+    .locator('text=What have you already taken?')
+    .or(page.locator('text=Engineering Trainer'))
+    .first()
+    .waitFor({ state: 'visible', timeout: 20000 });
+}
+
 await page.goto(BASE, { waitUntil: 'networkidle' });
+await waitForBoot();
 
 if (await page.locator('text=What have you already taken?').count()) {
   await page.locator('label', { hasText: 'EE2300' }).first().locator('input[type=checkbox]').check();
@@ -64,6 +86,7 @@ if (seen[0] !== seen[3]) fail('the cycle does not return to where it started');
 // --- Dark actually applies --------------------------------------------------
 await page.evaluate(() => { localStorage.setItem('et.theme', 'dark'); });
 await page.reload({ waitUntil: 'networkidle' });
+await waitForBoot();
 await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
 
 const applied = await page.evaluate(() => ({
@@ -142,6 +165,7 @@ for (const [label, nav] of routes) {
     await page.waitForTimeout(300);
     if (!(await page.locator('[data-testid="nav-misconceptions"]').count())) {
       await page.goto(BASE, { waitUntil: 'networkidle' });
+      await waitForBoot();
       await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
     }
   }
@@ -157,6 +181,7 @@ console.log(`[5] fullscreen control present, state=${await fs.getAttribute('data
 // Light mode must still be intact.
 await page.evaluate(() => { localStorage.setItem('et.theme', 'light'); });
 await page.reload({ waitUntil: 'networkidle' });
+await waitForBoot();
 await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
 const lightBody = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 console.log(`[6] light mode body=${lightBody}`);

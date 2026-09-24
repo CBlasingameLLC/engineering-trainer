@@ -184,6 +184,32 @@ families:
       power-of-ten signature in the answer, which is what makes it worth
       naming separately.
 
+  - id: controlled-variables
+    title: Reasoning from a proportionality without holding the rest fixed
+    competency: modeling
+    description: >-
+      Reading "X is proportional to Y" out of a relation with more than two
+      variables, and applying it while a third one is moving. The ideal gas law
+      is where this is cleanest — "P = nRT/V, so halving the volume doubles the
+      pressure" is correct only at fixed n and T, and is confidently wrong in
+      any process where gas escapes — but it is the same habit behind judging a
+      fluid pressure from depth while the free surface is moving. What makes it
+      worth its own family rather than filing under substitution is that the
+      equation was used correctly: the error is in an unstated condition, not
+      in the algebra, so checking the arithmetic finds nothing.
+
+  - id: strategy-confidence
+    title: Abandoning a determinate problem as underdetermined
+    competency: strategy
+    description: >-
+      Concluding that there is not enough information when there is, usually
+      because the missing quantity was going to cancel or was fixed by
+      something outside the equation being stared at — a piston's force
+      balance, a connected fluid at the same height. It is a strategy failure
+      rather than a knowledge one, and it is invisible to any item that only
+      offers numeric answers, which is why it needs a distractor that says so
+      out loud.
+
   - id: state-and-sequence
     title: Tracking state through a sequence
     competency: modeling
@@ -801,3 +827,87 @@ misconceptions:
   - { id: vacuum.base-blamed-on-backstreaming-only,    family: mechanism-attribution, title: "Base pressure credited to pump backstreaming alone" }
   - { id: vacuum.base-blamed-on-metrology,             family: mechanism-attribution, title: "Base pressure credited to gauge calibration" }
   - { id: vacuum.base-blamed-on-plasma,                family: mechanism-attribution, title: "Base pressure credited to its effect on plasma density" }
+
+  # --- PHYS 2335 fluid statics and optics -----------------------------------
+  # Two units that were missing from the graph entirely until the syllabus
+  # arrived. Their errors are overwhelmingly about *which quantity* belongs in
+  # a correct equation rather than about the algebra: whose density, which
+  # volume, which pressure, which angle, and whether a condition locates the
+  # bright fringes or the dark ones. That is why so many land under
+  # definition-precision — the learner has the right formula and the wrong
+  # referent, and the resulting number survives every dimensional check.
+
+  # --- definition-precision --------------------------------------------------
+  - { id: fluids.gauge-absolute-confused,           family: definition-precision, title: "Gauge and absolute pressure interchanged" }
+  - { id: fluids.object-density-used-for-buoyancy,  family: definition-precision, title: "Object's density used for the buoyant force" }
+  - { id: fluids.submerged-emergent-confused,       family: definition-precision, title: "Emergent fraction reported as the submerged one" }
+  - { id: fluids.buoyancy-not-subtracted,           family: definition-precision, title: "True weight reported as apparent weight" }
+  - { id: fluids.equal-heights-assumed,             family: definition-precision, title: "Equal column heights assumed instead of equal pressures" }
+  - { id: optics.maxima-minima-condition-swapped,   family: definition-precision, title: "Maxima and minima conditions interchanged" }
+  - { id: optics.central-maximum-half-width,        family: definition-precision, title: "Half the central maximum reported as its width" }
+  - { id: optics.grating-order-ignored,             family: definition-precision, title: "Grating wavelength taken without dividing by the order" }
+  - { id: optics.angle-from-surface,                family: definition-precision, title: "Optical angle measured from the surface, not the normal" }
+
+  # --- ratio-inversion -------------------------------------------------------
+  - { id: fluids.manometer-ratio-inverted,          family: ratio-inversion, title: "Manometer column heights scaled by the wrong density ratio" }
+  - { id: fluids.density-ratio-inverted,            family: ratio-inversion, title: "Floating fraction taken as fluid over object density" }
+  - { id: fluids.hydraulic-ratio-inverted,          family: ratio-inversion, title: "Hydraulic lift made to reduce the applied force" }
+  - { id: optics.snell-indices-inverted,            family: ratio-inversion, title: "Refractive indices paired with the wrong angles" }
+  - { id: optics.critical-angle-ratio-inverted,     family: ratio-inversion, title: "Critical angle taken with the larger index on top" }
+  - { id: optics.grating-spacing-not-inverted,      family: ratio-inversion, title: "Lines per millimetre used as the slit spacing itself" }
+
+  # --- formula-substitution --------------------------------------------------
+  - { id: fluids.area-ratio-not-squared,            family: formula-substitution, title: "Radius ratio used where the area ratio belongs" }
+  - { id: fluids.gravity-omitted,                   family: formula-substitution, title: "Pressure taken as rho h without g" }
+  - { id: fluids.volume-from-edge-not-cubed,        family: formula-substitution, title: "Cube's edge squared instead of cubed" }
+  - { id: optics.tangent-used-for-sine,             family: formula-substitution, title: "Snell's law written in tangents" }
+  - { id: optics.small-angle-assumed,               family: formula-substitution, title: "Sine of an angle read as the angle in degrees" }
+  - { id: optics.fringe-spacing-screen-omitted,     family: formula-substitution, title: "Fringe spacing left as an angle rather than a distance" }
+
+  # --- unit-conversion-discipline --------------------------------------------
+  - { id: optics.grating-units-unconverted,         family: unit-conversion-discipline, title: "Grating spacing left in millimetres beside a wavelength in metres" }
+
+  # --- PHYS 2335 tutorial reasoning (personal-only items) -------------------
+  # These are named by the items in `content/packs/personal/`, which are
+  # derived from the McDermott tutorials and are not redistributable. The
+  # catalog entries are, because a name for an error is not the publisher's
+  # text — and leaving them out would make every one of those items invisible
+  # to the feed in exactly the build that has them.
+
+  # --- controlled-variables --------------------------------------------------
+  - { id: gas.pressure-from-volume-alone,                  family: controlled-variables, title: "Pressure inferred from volume alone" }
+  - { id: gas.pressure-from-amount-alone,                  family: controlled-variables, title: "Pressure inferred from the amount of gas alone" }
+  - { id: gas.proportional-reasoning-accepted,             family: controlled-variables, title: "Proportionality applied without checking what is fixed" }
+  - { id: gas.amount-assumed-fixed,                        family: controlled-variables, title: "Amount of gas assumed constant while gas escapes" }
+  - { id: gas.volume-assumed-fixed,                        family: controlled-variables, title: "Volume assumed constant while the piston moves" }
+  - { id: gas.pressure-assumed-free,                       family: controlled-variables, title: "Pressure treated as unconstrained when the piston sets it" }
+  - { id: gas.pressure-assumed-unchanged-when-pinned,      family: controlled-variables, title: "Free-piston result carried over to a pinned piston" }
+  - { id: gas.pinned-gas-assumed-expanding,                family: controlled-variables, title: "Gas assumed to expand against a fixed constraint" }
+  - { id: fluids.depth-only-reasoning,                     family: controlled-variables, title: "Pressure judged from depth while the reference surface moves" }
+  - { id: fluids.sealed-side-assumed-independent,          family: controlled-variables, title: "Sealed arm treated as independent of the open one" }
+  - { id: fluids.surface-height-assumed-volume-dependent,  family: controlled-variables, title: "Surface height ratio assumed to depend on how much was poured" }
+
+  # --- definition-precision --------------------------------------------------
+  - { id: fluids.pressure-assumed-above-atmospheric,       family: definition-precision, title: "Pressure assumed never to fall below atmospheric" }
+  - { id: fluids.under-water-implies-above-atmospheric,    family: definition-precision, title: "Submersion taken to imply pressure above atmospheric" }
+  - { id: fluids.connection-implies-equal-pressure,        family: definition-precision, title: "Connection to the atmosphere taken to mean equal pressure" }
+  - { id: fluids.open-arms-assumed-level,                  family: definition-precision, title: "Two open arms assumed to stand at equal heights" }
+  - { id: fluids.same-level-density-reasoning,             family: definition-precision, title: "Equal-height pressures judged by what floats above them" }
+  - { id: fluids.column-count-reasoning,                   family: definition-precision, title: "Pressure judged by how many fluids lie above the point" }
+  - { id: gas.pinned-piston-not-equilibrium,               family: definition-precision, title: "Pinned piston assumed not to be in equilibrium" }
+  - { id: gas.pressure-assumed-undefined,                  family: definition-precision, title: "Pressure assumed undefined during heating" }
+  - { id: gas.law-assumed-inapplicable,                    family: definition-precision, title: "Ideal gas law assumed not to apply to an open system" }
+  - { id: gas.method-assumed-temperature-limited,          family: definition-precision, title: "Force balance assumed to fail at high temperature" }
+  - { id: gas.constant-confused,                           family: definition-precision, title: "Molar and Boltzmann gas constants interchanged" }
+
+  # --- ratio-inversion -------------------------------------------------------
+  - { id: fluids.lighter-fluid-sits-lower,                 family: ratio-inversion, title: "Lighter fluid expected to stand in the shorter column" }
+
+  # --- formula-substitution --------------------------------------------------
+  - { id: fluids.density-implies-pressure,                 family: formula-substitution, title: "Density alone used to compare pressures" }
+  - { id: gas.pressure-from-density,                       family: formula-substitution, title: "Gas pressure inferred from its density relative to a liquid" }
+  - { id: fluids.sealed-gas-assumed-compressed,            family: formula-substitution, title: "Falling liquid level read as compressing a trapped gas" }
+
+  # --- strategy-confidence ---------------------------------------------------
+  - { id: fluids.underdetermined-assumed,                  family: strategy-confidence, title: "Fluid comparison abandoned as underdetermined" }
+  - { id: gas.underdetermined-assumed,                     family: strategy-confidence, title: "Gas process abandoned as underdetermined" }

@@ -196,6 +196,27 @@ export function trimNumber(value: number, sigFigs = 4): string {
   return String(fixed);
 }
 
+/**
+ * A prefixed unit written so the verifier reads the number in front of it.
+ *
+ * `engineering()` exists because a schematic writes 4700 ohms as 4.7 k, and
+ * `extractNumbers` folds that prefix back in so the two agree. That is right
+ * whenever the stored value is in the base unit. It is wrong whenever the
+ * course states quantities in the prefixed unit and the answer is stored that
+ * way too — a wavelength of 633 nm, an oxide 0.4 um thick, a fringe 353 mm
+ * across. Rendering those as `\mathrm{nm}` folds 633 to 6.33e-7, so a correct
+ * worked solution disagrees with a correct answer key and the gate reports the
+ * item as broken.
+ *
+ * Bracing the prefix renders identically and leaves the number bare. This is
+ * the single spelling for that; two courses had independently invented two,
+ * which is how the second one shipped the bug the first had already fixed.
+ * `tools/pack-cli/test/verify.test.ts` pins both halves.
+ */
+export function unfoldedUnit(value: number, prefix: string, base: string, sigFigs = 4): string {
+  return `${trimNumber(value, sigFigs)}\\,\\mathrm{{${prefix}}${base}}`;
+}
+
 /** Ohms with the LaTeX omega symbol. */
 export const ohms = (value: number): string => engineering(value, '\\Omega');
 export const volts = (value: number): string => engineering(value, 'V');

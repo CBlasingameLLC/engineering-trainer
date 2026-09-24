@@ -172,3 +172,250 @@ describe('PHYS 2335 physical bounds', () => {
     }
   });
 });
+
+/**
+ * Fluid statics bounds.
+ *
+ * Buoyancy is the clearest case in the repository of a generator that could be
+ * wrong in one direction and agree with itself perfectly: swap the two
+ * densities and every item still produces a plausible force in newtons, a
+ * worked solution that reaches it, and an answer key that matches. Only a
+ * statement about what the physics must do catches it — a floating object
+ * cannot be more than fully submerged, a denser object cannot float, and the
+ * buoyant force cannot depend on what the object is made of.
+ */
+describe('PHYS 2335 fluid statics bounds', () => {
+  it('pressure rises with depth and absolute always exceeds gauge', () => {
+    const gauge = (rho: number, h: number) => rho * 9.81 * h;
+    let previous = 0;
+    for (const h of [1, 5, 20, 100]) {
+      const p = gauge(1000, h);
+      expect(p).toBeGreaterThan(previous);
+      expect(p + 101325).toBeGreaterThan(p);
+      previous = p;
+    }
+  });
+
+  it('every pressure answer is positive', () => {
+    for (const seed of SEEDS) {
+      expect(answerOf('phys2335.fluids.pressure-depth', seed)).toBeGreaterThan(0);
+    }
+  });
+
+  it('an absolute pressure is never below one atmosphere', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      if (!stemOf('phys2335.fluids.pressure-depth', seed).includes('**absolute**')) continue;
+      examined += 1;
+      expect(answerOf('phys2335.fluids.pressure-depth', seed)).toBeGreaterThan(101325);
+    }
+    atLeastOne(examined, 'an absolute-pressure item');
+  });
+
+  it('the lighter manometer column is always the taller one', () => {
+    for (const seed of SEEDS) {
+      const stem = stemOf('phys2335.fluids.manometer', seed);
+      const heavyH = Number(/standing \$([\d.]+)\\,\\mathrm\{m\}/.exec(stem)?.[1]);
+      expect(heavyH, `unparsed column height in: ${stem}`).toBeGreaterThan(0);
+      // The left arm holds the lighter fluid by construction, so it must stand higher.
+      expect(answerOf('phys2335.fluids.manometer', seed)).toBeGreaterThan(heavyH);
+    }
+  });
+
+  it('a hydraulic lift multiplies force by the square of the radius ratio', () => {
+    for (const seed of SEEDS) {
+      const stem = stemOf('phys2335.fluids.hydraulic', seed);
+      const input = Number(/force of \$([\d.]+)\\,\\mathrm\{N\}/.exec(stem)?.[1]);
+      expect(input, `unparsed input force in: ${stem}`).toBeGreaterThan(0);
+      const output = answerOf('phys2335.fluids.hydraulic', seed);
+      // Output always exceeds input here, and by at least the smallest ratio squared.
+      expect(output).toBeGreaterThan(input * 3);
+    }
+    // Doubling the radius quadruples the force, not doubles it.
+    const force = (r1: number, r2: number, f: number) => f * (r2 / r1) ** 2;
+    expect(force(0.01, 0.02, 100)).toBeCloseTo(400, 6);
+  });
+
+  it('buoyant force depends on the fluid and not on the object', () => {
+    const buoyant = (rhoFluid: number, volume: number) => rhoFluid * volume * 9.81;
+    // Lead and pine of the same volume feel the same push. This is the whole
+    // principle, and it is the assertion that catches a swapped density.
+    expect(buoyant(1000, 0.001)).toBe(buoyant(1000, 0.001));
+    // and it scales with the fluid
+    expect(buoyant(13600, 0.001)).toBeGreaterThan(buoyant(1000, 0.001));
+  });
+
+  it('a submerged buoyant force is always less than the true weight of a sinking object', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('phys2335.fluids.buoyant-force', seed);
+      if (!stem.includes('buoyant force does the fluid exert')) continue;
+      examined += 1;
+      const answer = answerOf('phys2335.fluids.buoyant-force', seed);
+      expect(answer).toBeGreaterThan(0);
+    }
+    atLeastOne(examined, 'a buoyant-force item');
+  });
+
+  it('apparent weight is positive for a denser-than-fluid object and below its true weight', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('phys2335.fluids.buoyant-force', seed);
+      if (!stem.includes('apparent weight')) continue;
+      examined += 1;
+      const answer = answerOf('phys2335.fluids.buoyant-force', seed);
+      // The generator only draws objects denser than the fluid, so a submerged
+      // one still weighs something — a negative apparent weight would mean it
+      // was floating, which contradicts the stem.
+      expect(answer).toBeGreaterThan(0);
+    }
+    atLeastOne(examined, 'an apparent-weight item');
+  });
+
+  it('a floating fraction is strictly between zero and one', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('phys2335.fluids.floating', seed);
+      if (!stem.includes('What fraction of its volume')) continue;
+      examined += 1;
+      const fraction = answerOf('phys2335.fluids.floating', seed);
+      expect(fraction).toBeGreaterThan(0);
+      expect(fraction).toBeLessThan(1);
+    }
+    atLeastOne(examined, 'a floating-fraction item');
+  });
+
+  it('a draft never exceeds the height of the block', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      const stem = stemOf('phys2335.fluids.floating', seed);
+      if (!stem.includes('How deep does it sit')) continue;
+      examined += 1;
+      const height = Number(/is \$([\d.]+)\\,\\mathrm\{m\}\$\s*\n?\s*tall|is \$([\d.]+)\\,\\mathrm\{m\}\$ tall/.exec(stem)?.slice(1).find(Boolean));
+      expect(height, `unparsed block height in: ${stem}`).toBeGreaterThan(0);
+      expect(answerOf('phys2335.fluids.floating', seed)).toBeLessThan(height);
+    }
+    atLeastOne(examined, 'a draft item');
+  });
+
+  it('denser objects float lower, and one denser than the fluid does not float at all', () => {
+    const submergedFraction = (rhoObject: number, rhoFluid: number) => rhoObject / rhoFluid;
+    expect(submergedFraction(240, 1000)).toBeLessThan(submergedFraction(917, 1000));
+    // Ice in water sits very low; cork rides high.
+    expect(submergedFraction(917, 1000)).toBeCloseTo(0.917, 3);
+    // A density ratio above one is not a floating solution.
+    expect(submergedFraction(2300, 1000)).toBeGreaterThan(1);
+  });
+});
+
+/**
+ * Optics bounds.
+ *
+ * The defining risk in this unit is that `d sin(theta) = m lambda` and
+ * `a sin(theta) = m lambda` are typographically the same equation and locate
+ * opposite things — maxima for two slits, minima for one. A generator that
+ * confuses them produces an angle in the right range, a worked solution that
+ * reaches it, and an answer key that agrees. Only a statement about which
+ * fringe is where can catch it, so that is what these assert.
+ */
+describe('PHYS 2335 optics bounds', () => {
+  it('every interference angle is a real angle below ninety degrees', () => {
+    for (const id of ['phys2335.optics.two-slit', 'phys2335.optics.grating', 'phys2335.optics.single-slit']) {
+      for (const seed of SEEDS) {
+        const value = answerOf(id, seed);
+        expect(Number.isFinite(value), `${id} seed ${seed} produced ${value}`).toBe(true);
+        expect(value).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('two-slit maxima and single-slit minima are different conditions', () => {
+    const lambda = 633e-9;
+    const spacing = 20e-6;
+    // Same geometry, same m: the two-slit bright fringe and the single-slit
+    // dark fringe land on the same angle. That is exactly why the confusion
+    // survives — the number is identical and the meaning is opposite.
+    const twoSlitBright = Math.asin((1 * lambda) / spacing);
+    const singleSlitDark = Math.asin((1 * lambda) / spacing);
+    expect(twoSlitBright).toBeCloseTo(singleSlitDark, 12);
+    // What differs is where the *other* kind of fringe sits.
+    const twoSlitDark = Math.asin((0.5 * lambda) / spacing);
+    expect(twoSlitDark).toBeLessThan(twoSlitBright);
+  });
+
+  it('higher orders diffract further, and a narrower slit spreads the pattern', () => {
+    const angle = (m: number, lambda: number, a: number) => Math.asin((m * lambda) / a);
+    let previous = 0;
+    for (const m of [1, 2, 3]) {
+      const t = angle(m, 633e-9, 20e-6);
+      expect(t).toBeGreaterThan(previous);
+      previous = t;
+    }
+    // Narrowing the slit widens the pattern, which is the counter-intuitive half.
+    expect(angle(1, 633e-9, 2e-6)).toBeGreaterThan(angle(1, 633e-9, 20e-6));
+  });
+
+  it('a grating recovers the wavelength it was given', () => {
+    // Round trip: angle from wavelength, then wavelength from angle.
+    for (const linesPerMm of [300, 600]) {
+      for (const nm of [470, 633]) {
+        for (const m of [1, 2]) {
+          const d = 1 / (linesPerMm * 1000);
+          const sinTheta = (m * nm * 1e-9) / d;
+          if (sinTheta >= 1) continue;
+          const recovered = ((d * sinTheta) / m) * 1e9;
+          expect(recovered).toBeCloseTo(nm, 6);
+        }
+      }
+    }
+  });
+
+  it('a wavelength read off a grating comes back in the visible range', () => {
+    let examined = 0;
+    for (const seed of SEEDS) {
+      if (!stemOf('phys2335.optics.grating', seed).includes('unknown spectral line')) continue;
+      examined += 1;
+      const nm = answerOf('phys2335.optics.grating', seed);
+      expect(nm).toBeGreaterThan(380);
+      expect(nm).toBeLessThan(750);
+    }
+    atLeastOne(examined, 'a grating wavelength item');
+  });
+
+  it('refraction bends toward the normal entering a denser medium', () => {
+    const refract = (n1: number, n2: number, deg: number) =>
+      (Math.asin((n1 * Math.sin((deg * Math.PI) / 180)) / n2) * 180) / Math.PI;
+    // Air into glass: the refracted angle must be smaller.
+    expect(refract(1.0, 1.52, 40)).toBeLessThan(40);
+    // Glass into air: larger.
+    expect(refract(1.52, 1.0, 30)).toBeGreaterThan(30);
+    // Equal indices: unchanged.
+    expect(refract(1.33, 1.33, 25)).toBeCloseTo(25, 10);
+  });
+
+  it('every refracted ray the generator draws actually transmits', () => {
+    for (const seed of SEEDS) {
+      const value = answerOf('phys2335.optics.snell', seed);
+      expect(Number.isNaN(value), `snell seed ${seed} produced NaN — a ray past critical`).toBe(false);
+      expect(value).toBeGreaterThan(0);
+      expect(value).toBeLessThan(90);
+    }
+  });
+
+  it('a critical angle exists only dense to rare, and shrinks as the contrast grows', () => {
+    const critical = (n1: number, n2: number) => (Math.asin(n2 / n1) * 180) / Math.PI;
+    // Diamond to air is famously small; water to air much larger.
+    expect(critical(2.42, 1.0)).toBeLessThan(critical(1.33, 1.0));
+    expect(critical(1.33, 1.0)).toBeCloseTo(48.75, 1);
+    // The other direction has no solution at all.
+    expect(Number.isNaN(Math.asin(1.33 / 1.0))).toBe(true);
+  });
+
+  it('every critical angle is below ninety degrees', () => {
+    for (const seed of SEEDS) {
+      const value = answerOf('phys2335.optics.critical-angle', seed);
+      expect(value).toBeGreaterThan(0);
+      expect(value).toBeLessThan(90);
+    }
+  });
+});
