@@ -20,7 +20,7 @@ machinery exists.
 | MATH 2471 / 3323 / 3376 | 13 generators, 209 verified items, all 6 cross-course KCs covered |
 | MATH 2358 Discrete Mathematics | 25 KCs, 308 items across all four units |
 | EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
-| EE 3300 Circuits II | 19 KCs, 16 generators, 281 items across all five units |
+| EE 3300 Circuits II | 32 KCs, 32 generators, 567 items across all seven units |
 | PHYS 2335 Waves and Heat | 30 KCs across seven units, 30 generators, 512 items; fluid statics, heat and the ideal gas, thermodynamics, oscillations, waves, wave optics and geometric optics, from the real syllabus. Ten personal-only tutorial items sit in the quarantined pack |
 | EE 4392 Microelectronics Manufacturing I | 29 KCs across all nine syllabus units, every one carrying items; 21 generators and 345 items for the closed-form parts (Deal-Grove, yield, Rayleigh, resist contrast, dopant diffusion and implantation, etch, deposition, interconnect), 63 hand-authored items for the process knowledge that has no closed form |
 | Phasor answers | `complex` answer kind: six notations parsed, magnitude and phase graded separately |
@@ -29,7 +29,7 @@ machinery exists.
 | Symbolic items | Residual-verified answer keys; 78 items across calculus, ODEs |
 | Truth tables & Boolean | Tri-state grid widget, exact Boolean grading, literal budgets |
 | Misconception feed | Ranked recurring errors, cross-course habit roll-up, targeted drills; 518 misconceptions in 21 families, all mapped |
-| Current term | Week-by-week unit schedule joined to the graph; readiness list ranking prerequisites by shortfall, dependence and how soon they are needed. EE 4392's and PHYS 2335's blocks come from their syllabi; EE 3300 is still an estimate and marked as such |
+| Current term | Week-by-week unit schedule joined to the graph; readiness list ranking prerequisites by shortfall, dependence and how soon they are needed. EE 4392's and PHYS 2335's blocks come from their syllabi; EE 3300's come from its lecture sequence, since its syllabus carries no topic schedule, and everything past the first exam is marked PROJECTED |
 | Coursework intake | Gitignored drop zone per course for homework, slides, notes and book chapters, with the licence quarantine documented |
 | Display | Dark mode (system/light/dark, persisted) and fullscreen |
 | Circuit lab | MNA solver (DC / DC sweep / AC / transient), drag-and-drop schematic capture with hotkeys, undo, rubber-band select, wheel zoom |

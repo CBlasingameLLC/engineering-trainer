@@ -911,3 +911,70 @@ misconceptions:
   # --- strategy-confidence ---------------------------------------------------
   - { id: fluids.underdetermined-assumed,                  family: strategy-confidence, title: "Fluid comparison abandoned as underdetermined" }
   - { id: gas.underdetermined-assumed,                     family: strategy-confidence, title: "Gas process abandoned as underdetermined" }
+
+
+  # --- EE 3300 chapter 8: the second-order analysis method ---------------------
+  - { id: rlc.alpha-wrong-topology,                      family: formula-substitution, title: "Parallel alpha formula used on a series circuit, or the reverse" }
+  - { id: rlc.critical-r-wrong-topology,                 family: formula-substitution, title: "Critical resistance taken from the other topology" }
+  - { id: rlc.alpha-missing-factor-two,                  family: formula-substitution, title: "Factor of two dropped from the neper frequency" }
+  - { id: rlc.omega0-uses-resistance,                    family: formula-substitution, title: "Resistance folded into the resonant radian frequency" }
+  - { id: rlc.root-discriminant-uses-omega0,             family: formula-substitution, title: "Characteristic discriminant taken over omega-0 alone" }
+  - { id: rlc.roots-swapped-in-fit,                      family: formula-substitution, title: "Coefficients paired with the wrong characteristic roots" }
+  - { id: rlc.damped-frequency-sign-flipped,             family: formula-substitution, title: "Damped frequency taken as a difference rather than a root" }
+  - { id: rlc.omega0-not-rooted,                         family: exponent-bookkeeping, title: "Resonant frequency left as 1/LC instead of 1/sqrt(LC)" }
+  - { id: rlc.critical-r-ratio-inverted,                 family: ratio-inversion, title: "L over C inverted in the critical resistance" }
+  - { id: rlc.root-sign-dropped,                         family: sign-convention-discipline, title: "Characteristic root reported positive" }
+  - { id: rlc.initial-derivative-ignored,                family: initial-conditions, title: "Response fitted to the initial value alone" }
+  - { id: rlc.coefficients-split-evenly,                 family: initial-conditions, title: "Initial value halved between the two coefficients" }
+  - { id: rlc.step-final-value-not-subtracted,           family: initial-conditions, title: "Step coefficients fitted before removing the final value" }
+  - { id: rlc.final-value-divided-by-r,                  family: dynamic-response, title: "Final value taken through the resistor at t = infinity" }
+  - { id: rlc.regime-comparison-inverted,                family: dynamic-response, title: "Damping regime read off the inequality backwards" }
+  - { id: rlc.critical-assumed-from-proximity,           family: dynamic-response, title: "Critical damping claimed from closeness rather than equality" }
+  - { id: rlc.damped-frequency-uses-omega0,              family: dynamic-response, title: "Undamped frequency reported as the damped one" }
+
+  # --- EE 3300 chapter 12: the transform, and reading its table ----------------
+  - { id: laplace.exponential-pole-sign,                 family: sign-convention-discipline, title: "Pole of a decaying exponential placed in the right half plane" }
+  - { id: laplace.delay-factor-sign,                     family: sign-convention-discipline, title: "Delay written with a positive exponent" }
+  - { id: laplace.frequency-shift-sign,                  family: sign-convention-discipline, title: "Frequency shift displaced in the wrong direction" }
+  - { id: laplace.sine-cosine-numerator-swapped,         family: formula-substitution, title: "Sine and cosine transforms told apart by the wrong numerator" }
+  - { id: laplace.ramp-transformed-as-step,              family: formula-substitution, title: "Ramp given the step's transform" }
+  - { id: laplace.shift-applied-in-wrong-domain,         family: formula-substitution, title: "Time shift and frequency shift interchanged" }
+  - { id: laplace.value-theorems-swapped,                family: formula-substitution, title: "Initial- and final-value theorems interchanged" }
+  - { id: laplace.value-theorem-missing-s-factor,        family: formula-substitution, title: "Value theorem applied to F(s) rather than sF(s)" }
+  - { id: laplace.time-function-evaluated-in-s,          family: definition-precision, title: "Time function evaluated where the transform was asked for" }
+  - { id: laplace.fvt-applied-to-marginal-poles,         family: definition-precision, title: "Final-value theorem used on poles that sit on the imaginary axis" }
+  - { id: laplace.fvt-refused-when-valid,                family: definition-precision, title: "Final-value theorem refused although its condition holds" }
+  - { id: impulse.sifting-treated-as-integration,        family: definition-precision, title: "Impulse integral accumulated instead of sampled" }
+  - { id: impulse.sifting-evaluated-at-origin,           family: definition-precision, title: "Impulse sampled at the origin rather than at its own location" }
+  - { id: step.shift-direction-reversed,                 family: definition-precision, title: "Shifted step switched on at the negative of its argument" }
+  - { id: step.both-terms-always-active,                 family: definition-precision, title: "Every step in a sum treated as already switched on" }
+  - { id: step.later-step-ignored,                       family: definition-precision, title: "A step already switched on left out of the sum" }
+
+  # --- EE 3300 chapter 12: partial fractions and the s-domain ------------------
+  - { id: pfe.residue-evaluated-at-wrong-sign,           family: sign-convention-discipline, title: "Residue evaluated at +p rather than at the pole -p" }
+  - { id: pfe.repeated-pole-derivative-sign,             family: sign-convention-discipline, title: "Sign lost differentiating for a repeated-pole coefficient" }
+  - { id: pfe.repeated-pole-derivative-skipped,          family: formula-substitution, title: "Repeated-pole coefficient taken without differentiating" }
+  - { id: pfe.repeated-pole-treated-as-simple,           family: formula-substitution, title: "Repeated factor covered up only once" }
+  - { id: pfe.numerator-zero-ignored,                    family: formula-substitution, title: "Numerator left unevaluated at the pole" }
+  - { id: pfe.complex-amplitude-missing-factor-two,      family: formula-substitution, title: "Conjugate partner omitted from the damped sinusoid amplitude" }
+  - { id: pfe.complex-denominator-uses-omega-squared,    family: exponent-bookkeeping, title: "Residue denominator squared" }
+  - { id: sdomain.element-roles-swapped,                 family: formula-substitution, title: "sL and 1/(sC) attached to the wrong elements" }
+  - { id: sdomain.impedance-inverted,                    family: ratio-inversion, title: "Element impedance written upside down in s" }
+  - { id: sdomain.impedance-ratio-inverted,              family: ratio-inversion, title: "sqrt(LC) reported where its reciprocal was asked for" }
+  - { id: sdomain.lc-product-not-rooted,                 family: exponent-bookkeeping, title: "Square root omitted solving s^2 LC = 1" }
+
+  # --- EE 3300 chapters 9 and 10: the power triangle and rms -------------------
+  - { id: power-factor.sense-sign-reversed,       family: sign-convention-discipline, title: "Leading and lagging power factor interchanged" }
+  - { id: power.sine-used-for-power-factor,       family: formula-substitution, title: "Sine used where the power factor is a cosine" }
+  - { id: rms.offset-added-linearly,              family: formula-substitution, title: "DC offset added to an rms value instead of in quadrature" }
+
+  # --- First-order energy: the factor of two, and where the energy goes --------
+  # These are exercised only by the personal-only Nilsson pack, and they are
+  # catalogued here anyway. The families file is what makes a misconception
+  # visible to the ranking that decides what to drill, and an error that only
+  # a quarantined pack can detect is still an error worth ranking.
+  - { id: energy.time-constant-not-halved,        family: exponent-bookkeeping, title: "Energy decayed at tau instead of tau/2" }
+  - { id: energy.percentage-from-voltage-decay,   family: exponent-bookkeeping, title: "Energy fraction taken from the voltage decay" }
+  - { id: energy.dissipation-split-inverted,      family: network-topology, title: "Energy split by R where it splits by 1/R, or the reverse" }
+  - { id: energy.dissipation-split-evenly,        family: network-topology, title: "Energy assumed to split equally between unequal resistors" }
+  - { id: unit-conversion.microseconds-unconverted, family: unit-conversion-discipline, title: "Microseconds substituted as seconds" }

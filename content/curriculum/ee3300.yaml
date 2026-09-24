@@ -146,7 +146,99 @@ kcs:
       - kc: ee2300.max-power-transfer
         strength: 0.6
 
-  # --- Unit 3: Frequency response -------------------------------------------
+  # --- Unit 3: Second-order circuits ----------------------------------------
+  # Nilsson chapter 8, taught across two lectures and the lead topic on the
+  # first exam. It sits in this course rather than only in Circuits I because
+  # EE 3300 re-teaches it as its own block and examines it: `ee2300.second-order-rlc`
+  # is its parent, not its substitute. The split below follows the analysis
+  # method the lectures actually state — parameters, then classification, then
+  # roots, then coefficients — because a learner who can compute alpha and
+  # omega-0 and still cannot place the response in a damping regime has a
+  # different problem from one who cannot solve for A1 and A2, and a single
+  # "second-order response" KC reports them identically.
+  - id: ee3300.rlc-damping-parameters
+    title: Neper and resonant radian frequencies
+    unit: Second-Order Circuits
+    domain: circuits
+    competencies: [math-execution, concept]
+    difficultyPrior: -0.2
+    description: >-
+      The damping coefficient alpha and the resonant radian frequency omega-0.
+      Alpha is 1/(2RC) for a parallel RLC circuit and R/(2L) for a series one;
+      omega-0 is 1/sqrt(LC) for both. Reaching for the wrong alpha is the single
+      most common way an otherwise correct second-order solution goes wrong,
+      because nothing downstream of it looks unusual.
+    prerequisites:
+      - kc: ee2300.second-order-rlc
+        strength: 0.7
+      - kc: ee2300.capacitor-iv
+        strength: 0.4
+      - kc: ee2300.inductor-iv
+        strength: 0.4
+
+  - id: ee3300.rlc-damping-classification
+    title: Classifying the damping regime
+    unit: Second-Order Circuits
+    domain: circuits
+    competencies: [concept, numeracy]
+    difficultyPrior: 0.0
+    description: >-
+      Comparing alpha squared against omega-0 squared to decide overdamped,
+      underdamped or critically damped, and inverting that comparison to find
+      the resistance that makes a given LC pair critically damped.
+    prerequisites:
+      - ee3300.rlc-damping-parameters
+
+  - id: ee3300.rlc-characteristic-roots
+    title: Characteristic roots and the damped frequency
+    unit: Second-Order Circuits
+    domain: circuits
+    competencies: [math-execution]
+    difficultyPrior: 0.2
+    description: >-
+      Solving s^2 + 2*alpha*s + omega-0^2 = 0 for s1 and s2, and the damped
+      radian frequency omega-d = sqrt(omega-0^2 - alpha^2) in the underdamped
+      case. The roots are real and distinct, complex conjugate, or real and
+      repeated exactly as the classification says.
+    prerequisites:
+      - ee3300.rlc-damping-classification
+      - kc: math3323.second-order-ode
+        strength: 0.7
+
+  - id: ee3300.rlc-natural-response
+    title: Natural response of series and parallel RLC circuits
+    unit: Second-Order Circuits
+    domain: circuits
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.6
+    description: >-
+      Solving for the response coefficients from the initial value and the
+      initial derivative. The derivative condition is the one that gets skipped:
+      it comes from the element i-v relation at t = 0, not from the response
+      form, and a solution that fits only the initial value fits infinitely many
+      circuits.
+    prerequisites:
+      - ee3300.rlc-characteristic-roots
+      - kc: ee2300.first-order-natural
+        strength: 0.4
+
+  - id: ee3300.rlc-step-response
+    title: Step response of series and parallel RLC circuits
+    unit: Second-Order Circuits
+    domain: circuits
+    competencies: [math-execution, strategy]
+    difficultyPrior: 0.8
+    description: >-
+      The same three response forms displaced by a final value. The primed
+      coefficients are fitted to the transient part alone, so subtracting the
+      final value before applying the initial conditions is the step that
+      separates a correct step response from a correct natural one.
+    prerequisites:
+      - ee3300.rlc-natural-response
+      - kc: ee2300.first-order-step
+        strength: 0.5
+
+  # --- Unit 4: Frequency response -------------------------------------------
   - id: ee3300.transfer-functions
     title: Transfer functions and frequency response
     unit: Frequency Response
@@ -223,7 +315,7 @@ kcs:
     prerequisites:
       - ee3300.series-resonance
 
-  # --- Unit 4: Coupled circuits and three-phase -----------------------------
+  # --- Unit 5: Coupled circuits and three-phase -----------------------------
   - id: ee3300.mutual-inductance
     title: Mutual inductance and the dot convention
     unit: Coupled Circuits
@@ -278,7 +370,139 @@ kcs:
       - ee3300.three-phase-wye-delta
       - ee3300.complex-power
 
-  # --- Unit 5: The s-domain -------------------------------------------------
+  # --- Unit 6: The s-domain -------------------------------------------------
+  # Nilsson chapters 12 and 13, two full lectures, and examined on all three
+  # exams. This unit was previously a single KC called "circuit analysis in the
+  # s-domain" whose only generator asked for the time constant of a first-order
+  # RL pole — so a learner could answer every item in it without meeting a
+  # transform pair, a partial fraction or a value theorem, and be reported
+  # proficient in the s-domain for it. The split below is chapter 12's own
+  # structure: the transform, the singularity functions, the operational
+  # properties, the three partial-fraction cases the lectures treat separately,
+  # and the value theorems used to check a result before inverting it.
+  - id: ee3300.laplace-definition-pairs
+    title: The Laplace transform and its standard pairs
+    unit: The s-Domain
+    domain: circuits
+    competencies: [math-execution, concept]
+    difficultyPrior: 0.0
+    description: >-
+      The defining integral, and the table of pairs that replaces evaluating it.
+      Both directions: the transform of an exponential, a ramp or a damped
+      sinusoid, and the function a simple F(s) came from.
+    prerequisites:
+      - kc: math2471.integration-basics
+        strength: 0.6
+      - kc: math2471.exponential-functions
+        strength: 0.5
+
+  - id: ee3300.step-impulse-functions
+    title: Step and impulse functions
+    unit: The s-Domain
+    domain: circuits
+    competencies: [concept, modeling]
+    difficultyPrior: -0.2
+    description: >-
+      The unit step and its shifts, a pulse written as a sum of steps, and the
+      impulse as the step's derivative. The sifting property is what makes the
+      impulse usable: integrating a function against it samples that function at
+      one instant rather than accumulating anything.
+    prerequisites:
+      - kc: math2471.integration-basics
+        strength: 0.4
+
+  - id: ee3300.laplace-operational-properties
+    title: Operational properties of the transform
+    unit: The s-Domain
+    domain: circuits
+    competencies: [math-execution]
+    difficultyPrior: 0.3
+    description: >-
+      Linearity, translation in time and in frequency, differentiation and
+      integration, and scaling. Time shift multiplies the transform by an
+      exponential in s; frequency shift displaces s in the transform. They are
+      easy to swap and the swap produces a well-formed wrong answer.
+    prerequisites:
+      - ee3300.laplace-definition-pairs
+      - ee3300.step-impulse-functions
+      - kc: math2471.derivative-basics
+        strength: 0.5
+
+  - id: ee3300.pfe-distinct-poles
+    title: Partial fractions with distinct real poles
+    unit: The s-Domain
+    domain: circuits
+    competencies: [math-execution]
+    difficultyPrior: 0.3
+    description: >-
+      Residues at simple real poles by covering up the factor and evaluating the
+      rest at the pole. The base case the other two build on.
+    prerequisites:
+      - ee3300.laplace-definition-pairs
+
+  - id: ee3300.pfe-repeated-poles
+    title: Partial fractions with repeated real poles
+    unit: The s-Domain
+    domain: circuits
+    competencies: [math-execution, strategy]
+    difficultyPrior: 0.7
+    description: >-
+      A pole of multiplicity n needs n terms, and every coefficient below the
+      highest power requires differentiating before evaluating. Writing one term
+      per distinct factor is the characteristic error and it leaves the identity
+      unsatisfiable rather than merely inaccurate.
+    prerequisites:
+      - ee3300.pfe-distinct-poles
+
+  - id: ee3300.pfe-complex-poles
+    title: Partial fractions with complex conjugate poles
+    unit: The s-Domain
+    domain: circuits
+    competencies: [math-execution, numeracy]
+    difficultyPrior: 0.8
+    description: >-
+      Conjugate poles give conjugate residues, so only one has to be computed.
+      In the time domain the pair collapses to a single damped sinusoid whose
+      amplitude is twice the residue magnitude and whose phase is its angle.
+    prerequisites:
+      - ee3300.pfe-distinct-poles
+      - kc: ee3300.sinusoids-phasors
+        strength: 0.4
+
+  - id: ee3300.initial-final-value
+    title: The initial- and final-value theorems
+    unit: The s-Domain
+    domain: circuits
+    competencies: [concept, strategy]
+    difficultyPrior: 0.2
+    description: >-
+      Reading f(0+) and f(infinity) off F(s) without inverting it, which is how
+      an s-domain result gets checked before the algebra that follows it. Both
+      have conditions: the final-value theorem says nothing at all unless every
+      pole of sF(s) is in the left half plane, so applying it to an undamped
+      oscillation returns a confident number for a limit that does not exist.
+    prerequisites:
+      - ee3300.laplace-definition-pairs
+
+  - id: ee3300.s-domain-elements
+    title: Circuit elements in the s-domain
+    unit: The s-Domain
+    domain: circuits
+    competencies: [modeling, concept]
+    difficultyPrior: 0.4
+    description: >-
+      R, sL and 1/(sC), and the initial conditions that come with them as an
+      independent source in series or in parallel. Dropping that source is what
+      turns a transient problem into a steady-state one without any warning.
+    prerequisites:
+      - ee3300.laplace-definition-pairs
+      - kc: ee3300.impedance-admittance
+        strength: 0.6
+      - kc: ee2300.capacitor-iv
+        strength: 0.4
+      - kc: ee2300.inductor-iv
+        strength: 0.4
+
   - id: ee3300.laplace-circuit-analysis
     title: Circuit analysis in the s-domain
     unit: The s-Domain
@@ -289,7 +513,9 @@ kcs:
       Impedances in s, initial conditions as sources, and solving a transient by
       algebra instead of by differential equation.
     prerequisites:
-      - ee3300.impedance-admittance
+      - ee3300.s-domain-elements
+      - ee3300.pfe-distinct-poles
+      - ee3300.initial-final-value
       - kc: math3323.second-order-ode
         strength: 0.7
       - kc: math3323.first-order-ode
