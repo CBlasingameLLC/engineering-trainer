@@ -18,7 +18,7 @@ machinery exists.
 | Content pipeline | One schema, five producers, `validate / verify / stats / build / import` |
 | EE 2300 Circuits I | 28 KCs, 26 generators, 467 verified items |
 | MATH 2471 / 3323 / 3376 | 13 generators, 209 verified items, all 6 cross-course KCs covered |
-| MATH 2358 Discrete Mathematics | 25 KCs, 308 items across all four units |
+| MATH 2358 Discrete Mathematics I | 32 KCs, 22 generators, 434 items; proof construction graded by three new answer kinds |
 | EE 2320 Digital Logic | 23 KCs, 229 items, combinational through FSMs |
 | EE 3300 Circuits II | 32 KCs, 32 generators, 567 items across all seven units |
 | PHYS 2335 Waves and Heat | 30 KCs across seven units, 30 generators, 512 items; fluid statics, heat and the ideal gas, thermodynamics, oscillations, waves, wave optics and geometric optics, from the real syllabus. Ten personal-only tutorial items sit in the quarantined pack |
@@ -54,7 +54,7 @@ is drawn and only the item banks are missing.
 | **MATH 2471** Calculus I | **done** | 99 items | — |
 | **MATH 3323** Differential Equations | **done** | 56 items | — |
 | **MATH 3376** Linear Algebra | **done** | 54 items | — |
-| **MATH 2358** Discrete Mathematics | **done** | 309 items | — |
+| **MATH 2358** Discrete Mathematics | **done** | 434 items | — |
 | **EE 2320** Digital Logic | **done** | 229 items | — |
 
 **Tier 1 is complete.** All 82 knowledge components across six courses carry

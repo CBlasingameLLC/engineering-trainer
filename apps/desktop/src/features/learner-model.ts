@@ -112,14 +112,24 @@ export function buildLearnerModel(
   for (const attempt of attempts) {
     attemptedItemIds.add(attempt.itemId);
     const difficulty = { b: 0, n: 50 }; // item difficulty is calibrated in the bank, not here
+    // Self-scored evidence moves the model less. The item declares how much.
+    const evidence = attempt.evidenceWeight ?? 1;
     const updated = updateElo(abilities, difficulty, attempt.kcRefs, attempt.correct, DEFAULT_ELO_PARAMS);
-    for (const [kcId, ability] of updated.abilities) abilities.set(kcId, ability);
+    for (const [kcId, ability] of updated.abilities) {
+      const before = abilities.get(kcId);
+      abilities.set(
+        kcId,
+        before === undefined || evidence >= 1
+          ? ability
+          : { ...ability, theta: before.theta + evidence * (ability.theta - before.theta) },
+      );
+    }
 
     for (const ref of attempt.kcRefs) {
       const previous = pMastery.get(ref.kc) ?? DEFAULT_BKT_PARAMS.pInit;
       const next = bktUpdate(previous, attempt.correct, DEFAULT_BKT_PARAMS, attempt.optionCount);
       // Partial attribution earns partial belief movement.
-      pMastery.set(ref.kc, previous + ref.weight * (next - previous));
+      pMastery.set(ref.kc, previous + evidence * ref.weight * (next - previous));
 
       const seen = latencies.get(ref.kc) ?? [];
       const median = seen.length > 0 ? [...seen].sort((a, b) => a - b)[Math.floor(seen.length / 2)] : undefined;

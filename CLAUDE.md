@@ -251,6 +251,34 @@ worked examples rather than the topic list.
   maths that the segmenter read as two empty spans around plain text; and
   `\\n\\n` in a template literal, which is a literal backslash-n, not a
   paragraph break.
+- **An answer kind is a claim about what can be measured, and adding one is
+  sometimes the only fix.** MATH 2358 is assessed almost entirely by writing
+  proofs; the bank's answer to that was eight multiple-choice items asking
+  which strategy "is the natural first choice". That is recognition, not
+  construction, and no quantity of further such items would have closed the
+  gap, because the gap was in the engine. There are now three kinds:
+  `ordering` (arrange shuffled lines, with distractors that belong to no valid
+  proof), `proof-skeleton` (separately graded fields — base case, hypothesis,
+  what the step must establish, the algebraic bridge) and `proof-rubric` (write
+  it out, then score it against published criteria). None of them reads
+  English. When the real task cannot be graded, the move is to find the parts
+  of it that can be, not to grade something adjacent and relabel it.
+- **`evidenceWeight` is how a self-scored attempt is allowed to count less, and
+  `kcRefs.weight` cannot be used for it.** That field distributes an item
+  across components and the schema requires it to sum to 1, so setting it to
+  0.35 does not down-weight an item — it makes the item invalid. The attempt
+  carries `evidenceWeight` instead, and the replay scales both the Elo step and
+  the BKT blend by it. It lives on the *attempt*, not looked up from the bank at
+  replay time, because the replay reads the attempt log: an item whose weight
+  changes later must not silently rescore attempts already made under the old
+  one. Rubric items are 0.35; everything graded is 1.
+- **A new field on `Attempt` needs a SQLite migration or the desktop build
+  drops it silently.** `appendAttempt` in the Tauri adapter lists its columns
+  explicitly, so an added field typechecks, works in the browser (IndexedDB
+  stores the object structurally) and is lost on the only build that ships.
+  `evidenceWeight` needed migration 003 plus both the insert and the select.
+  The two adapters are deliberately interchangeable; that is exactly what makes
+  this divergence invisible until someone runs the installer.
 - **A knowledge component is only as honest as the generators under it, and
   item count cannot tell you.** `ee3300.laplace-circuit-analysis` carried 18
   items across two difficulty bands and looked, on every coverage report the
@@ -599,6 +627,14 @@ Not built:
   document that says what a course actually contains, and a topic list is not
   one.
 
+  MATH 2358 made it a third way, with no course title or catalog description
+  involved at all: its graph had been written from what a discrete maths
+  course *usually* contains. Against the real syllabus — which carries a
+  numbered day-by-day list of Rosen sections, the most directly sourced
+  document in this repository — nine taught sections had no component, two of
+  them on the first test, while ten components covered chapters the course
+  never reaches. Genre knowledge is not a syllabus either.
+
   EE 3300 then made the same mistake wearing a better disguise. Its graph was
   written from the *catalog description* — "transient analysis, application of
   Laplace transforms, Bode plots, and network principles" — which sounds like a
@@ -619,7 +655,12 @@ Not built:
   20 KCs across oscillations, mechanical waves, heat and the ideal gas, and
   thermodynamics — the first course in the bank whose subject is not
   electrical, which is what makes the competency axis testable rather than
-  asserted. EE 3370 Signals and EE 3340 Electromagnetics have no graph yet, and
+  asserted. MATH 2358 Discrete Mathematics I is in, and now matches its own
+  syllabus rather than the genre: 32 KCs, with sequences and summations,
+  cardinality, base representations, linear congruences, graph isomorphism,
+  shortest paths and tree traversal added, and ten components covering Rosen
+  chapters 6, 8, 9 and 12 moved to units the term never schedules.
+  EE 3370 Signals and EE 3340 Electromagnetics have no graph yet, and
   neither does PHYS 2325 Mechanics, which is why several honest PHYS 2335 edges
   (energy, momentum, Newton's second law) are missing rather than wrong.
 - **Nonlinear devices** — diodes and transistors need Newton-Raphson around the

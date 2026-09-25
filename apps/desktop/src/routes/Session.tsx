@@ -7,6 +7,7 @@ import { SchematicFigure } from '@/features/schematic/SchematicFigure';
 import { MathText } from '@/ui/Math';
 import { ExpressionInput } from '@/ui/ExpressionInput';
 import { TruthTableInput } from '@/ui/TruthTableInput';
+import { OrderingInput, RubricInput, SkeletonInput } from '@/ui/ProofInputs';
 import { SchematicEditor } from '@/features/schematic/SchematicEditor';
 
 /**
@@ -41,6 +42,9 @@ export function Session(): React.ReactElement {
   const [circuitInput, setCircuitInput] = useState<'draw' | 'netlist'>('draw');
   const [deck, setDeck] = useState('');
   const [tableRows, setTableRows] = useState<(boolean | null)[]>([]);
+  const [order, setOrder] = useState<string[]>([]);
+  const [skeleton, setSkeleton] = useState<Record<string, string>>({});
+  const [rubricMet, setRubricMet] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Clear the field and refocus when a new item arrives, so the learner can
@@ -55,6 +59,9 @@ export function Session(): React.ReactElement {
         ? Array.from({ length: active.item.answer.rows.length }, () => null)
         : [],
     );
+    setOrder([]);
+    setSkeleton({});
+    setRubricMet([]);
     inputRef.current?.focus();
   }, [active]);
 
@@ -67,6 +74,9 @@ export function Session(): React.ReactElement {
   const isCircuit = item.type === 'circuit-build';
   const isSymbolic = item.answer.kind === 'symbolic' || item.answer.kind === 'boolean';
   const isTable = item.answer.kind === 'truth-table';
+  const isOrdering = item.answer.kind === 'ordering';
+  const isSkeleton = item.answer.kind === 'proof-skeleton';
+  const isRubric = item.answer.kind === 'proof-rubric';
   const tableComplete = tableRows.length > 0 && tableRows.every((r) => r !== null);
   const budget = DEFAULT_CAT_CONFIG.maxItems;
   const outstanding = shouldStop(cat, bank, DEFAULT_CAT_CONFIG).outstanding.length;
@@ -84,6 +94,18 @@ export function Session(): React.ReactElement {
       ? choice
         ? { kind: 'choice', optionId: choice }
         : null
+      : isOrdering
+        ? order.length > 0
+          ? { kind: 'ordering', order: [...order] }
+          : null
+      : isSkeleton
+        ? Object.keys(skeleton).length > 0
+          ? { kind: 'proof-skeleton', responses: { ...skeleton } }
+          : null
+      : isRubric
+        // An empty rubric is a real submission: it means the proof met none of
+        // the criteria, which is a score of zero rather than a missing answer.
+        ? { kind: 'proof-rubric', met: [...rubricMet] }
       : isTable
         ? tableComplete
           ? { kind: 'truth-table', rows: tableRows.map((r) => r === true) }
@@ -94,6 +116,12 @@ export function Session(): React.ReactElement {
     if (response) {
       const raw = isChoice
         ? (choice ?? '')
+        : isOrdering
+          ? order.join(',')
+        : isSkeleton
+          ? JSON.stringify(skeleton)
+        : isRubric
+          ? rubricMet.join(',')
         : isTable
           ? tableRows.map((r) => (r === true ? '1' : '0')).join('')
           : text;
@@ -223,6 +251,18 @@ export function Session(): React.ReactElement {
                 );
               })}
             </div>
+          ) : isOrdering && item.answer.kind === 'ordering' ? (
+            <OrderingInput
+              answer={item.answer}
+              itemId={item.id}
+              order={order}
+              disabled={settled}
+              onChange={setOrder}
+            />
+          ) : isSkeleton && item.answer.kind === 'proof-skeleton' ? (
+            <SkeletonInput answer={item.answer} values={skeleton} disabled={settled} onChange={setSkeleton} />
+          ) : isRubric && item.answer.kind === 'proof-rubric' ? (
+            <RubricInput answer={item.answer} met={rubricMet} settled={settled} onChange={setRubricMet} />
           ) : isTable && item.answer.kind === 'truth-table' ? (
             <TruthTableInput
               answer={item.answer}

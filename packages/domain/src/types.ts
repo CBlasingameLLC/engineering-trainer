@@ -76,6 +76,17 @@ export interface Attempt {
   at: Date;
   /** Number of options, for MC items — sets the BKT guess floor. */
   optionCount?: number;
+  /**
+   * How far this attempt is allowed to move the model, 0 to 1. Defaults to 1.
+   *
+   * Not every attempt is equally good evidence. A self-scored proof is the
+   * learner's own judgement of their own work, which is worth recording and is
+   * not worth as much as a graded response — so the item declares a weight and
+   * the replay scales both the Elo step and the BKT blend by it. Without this
+   * the only lever would be `kcRefs.weight`, which cannot be used: it
+   * distributes an item across components and is required to sum to one.
+   */
+  evidenceWeight?: number;
 }
 
 export type MasteryBand = 'gap' | 'developing' | 'proficient' | 'mastered';

@@ -735,6 +735,11 @@ async function recordAttempt(
     misconceptions: outcome.result.misconception ? [outcome.result.misconception] : [],
     at: new Date(),
     ...(active.item.type === 'multiple-choice' ? { optionCount: active.item.options.length } : {}),
+    // Carried onto the attempt rather than looked up at replay time, because
+    // the replay reads the attempt log and not the bank: an item whose weight
+    // changes later must not silently rescore attempts already made under the
+    // old one.
+    ...(active.item.evidenceWeight !== undefined ? { evidenceWeight: active.item.evidenceWeight } : {}),
   };
 
   await storage.appendAttempt(attempt);

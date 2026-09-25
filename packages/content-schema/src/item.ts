@@ -224,6 +224,89 @@ export const complexAnswerSchema = z.object({
     ),
 });
 
+/**
+ * Three answer kinds for proof, which the engine previously could not grade at
+ * all.
+ *
+ * MATH 2358 is assessed almost entirely by writing proofs — its weekly quizzes
+ * ask for an induction, an irrationality argument, a conjecture formulated and
+ * then proved — and the bank's response to that was eight multiple-choice
+ * items asking which strategy "is the natural first choice". That measures
+ * recognising a proof's shape, which is a real thing and is not the thing the
+ * course examines. No number of further such items would have closed the gap,
+ * because the gap is in the answer kinds.
+ *
+ * The three below trade off the same way any assessment does. Ordering and
+ * skeleton are deterministically gradeable and so produce hard evidence, at
+ * the cost of supplying scaffolding the real exam does not. The rubric kind
+ * removes the scaffolding and accepts softer evidence in exchange, which is
+ * why rubric items are authored with a reduced `kcRefs` weight: that weight
+ * already scales both the Elo update and the BKT blend, so a self-scored
+ * attempt moves the model less than a graded one without any special case in
+ * the mastery code.
+ */
+
+/** Arrange shuffled lines into a valid proof. */
+export const orderingAnswerSchema = z.object({
+  kind: z.literal('ordering'),
+  /** The lines, stored in their correct order. */
+  lines: z.array(z.object({ id: slug, text: z.string().min(1) })).min(3).max(12),
+  /**
+   * Lines that belong to no correct proof of this claim. Including one is the
+   * interesting failure — assuming what is to be proved, or appealing to the
+   * inductive hypothesis at n + 1 rather than at n — so each names the
+   * misconception it encodes.
+   */
+  distractors: z
+    .array(z.object({ id: slug, text: z.string().min(1), misconception: z.string().min(1) }))
+    .default([]),
+});
+
+/** A proof broken into separately graded parts. */
+export const proofSkeletonAnswerSchema = z.object({
+  kind: z.literal('proof-skeleton'),
+  steps: z
+    .array(
+      z.object({
+        id: slug,
+        /** What this step asks for, e.g. "State the inductive hypothesis". */
+        prompt: z.string().min(1),
+        expect: z.discriminatedUnion('kind', [
+          z.object({
+            kind: z.literal('expression'),
+            /** Graded by the symbolic sampler, so any equivalent form passes. */
+            expression: z.string().min(1),
+            variables: z.array(z.string().min(1)).min(1),
+            domain: z.record(z.string(), z.tuple([z.number(), z.number()])).optional(),
+          }),
+          z.object({
+            kind: z.literal('choice'),
+            correctId: z.string().min(1),
+            options: z
+              .array(z.object({ id: slug, text: z.string().min(1), misconception: z.string().optional() }))
+              .min(2)
+              .max(5),
+          }),
+        ]),
+      }),
+    )
+    .min(2)
+    .max(6),
+});
+
+/** A written proof, scored by the learner against a published rubric. */
+export const proofRubricAnswerSchema = z.object({
+  kind: z.literal('proof-rubric'),
+  /** Shown only after submitting, so it cannot be copied into the answer. */
+  model: z.string().min(1),
+  criteria: z
+    .array(z.object({ id: slug, text: z.string().min(1), weight: z.number().positive().default(1) }))
+    .min(2)
+    .max(8),
+  /** Weighted fraction of criteria needed for the attempt to count as correct. */
+  passingScore: z.number().min(0).max(1).default(0.75),
+});
+
 export const answerSchema = z.discriminatedUnion('kind', [
   numericAnswerSchema,
   symbolicAnswerSchema,
@@ -232,6 +315,9 @@ export const answerSchema = z.discriminatedUnion('kind', [
   truthTableAnswerSchema,
   circuitAnswerSchema,
   complexAnswerSchema,
+  orderingAnswerSchema,
+  proofSkeletonAnswerSchema,
+  proofRubricAnswerSchema,
 ]);
 
 /**
@@ -323,6 +409,7 @@ export const explanationSchema = z.object({
 export const ITEM_TYPES = [
   'numeric', 'symbolic', 'boolean', 'multiple-choice', 'truth-table',
   'circuit-build', 'derivation-order', 'short-answer', 'phasor',
+  'proof-skeleton', 'proof-rubric',
 ] as const;
 
 export const itemSchema = z
@@ -332,6 +419,21 @@ export const itemSchema = z
     kcRefs: z.array(kcRefSchema).min(1),
     /** Difficulty on the logit scale, same units as learner ability. */
     difficultyB: z.number().min(-4).max(4),
+    /**
+     * How far an attempt on this item may move the mastery model, 0 to 1.
+     *
+     * Absent means one, which is everything that is graded. Below one only
+     * where the grade is self-reported, which today means `proof-rubric`
+     * items: they ask for the real task and accept the learner's own scoring
+     * of it, so they should register without being able to certify mastery on
+     * their own.
+     *
+     * Optional rather than defaulted so the field appears only on the items
+     * that actually carry it — a default would write `evidenceWeight: 1` into
+     * all 2862 items in the bank and make every future diff noisier for no
+     * information.
+     */
+    evidenceWeight: z.number().gt(0).max(1).optional(),
     /** Question text. KaTeX permitted. */
     stem: z.string().min(1),
     /** Generator seed, so a parameterized variant can be reproduced exactly. */
@@ -438,6 +540,25 @@ export const itemSchema = z
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['answer'], message: 'circuit-build items need a circuit answer' });
     }
 
+    if (item.type === 'derivation-order' && item.answer.kind !== 'ordering') {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['answer'], message: 'derivation-order items need an ordering answer' });
+    }
+    if (item.type === 'proof-skeleton' && item.answer.kind !== 'proof-skeleton') {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['answer'], message: 'proof-skeleton items need a proof-skeleton answer' });
+    }
+    if (item.type === 'proof-rubric' && item.answer.kind !== 'proof-rubric') {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['answer'], message: 'proof-rubric items need a proof-rubric answer' });
+    }
+
+    // Line ids must be unique across the lines and the distractors, or a
+    // submitted order cannot be read back unambiguously.
+    if (item.answer.kind === 'ordering') {
+      const ids = [...item.answer.lines, ...item.answer.distractors].map((l) => l.id);
+      if (new Set(ids).size !== ids.length) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['answer', 'lines'], message: 'line and distractor ids must be unique' });
+      }
+    }
+
     // An AC measurement without a frequency, or a transient one without a time,
     // cannot be evaluated at all - the grader would have to report the item as
     // broken to the learner, which is the worst place to discover it.
@@ -464,6 +585,9 @@ export const itemSchema = z
 export type KcRefInput = z.infer<typeof kcRefSchema>;
 export type Provenance = z.infer<typeof provenanceSchema>;
 export type Answer = z.infer<typeof answerSchema>;
+export type OrderingAnswer = z.infer<typeof orderingAnswerSchema>;
+export type ProofSkeletonAnswer = z.infer<typeof proofSkeletonAnswerSchema>;
+export type ProofRubricAnswer = z.infer<typeof proofRubricAnswerSchema>;
 export type NumericAnswer = z.infer<typeof numericAnswerSchema>;
 export type SymbolicAnswer = z.infer<typeof symbolicAnswerSchema>;
 export type ComplexAnswer = z.infer<typeof complexAnswerSchema>;

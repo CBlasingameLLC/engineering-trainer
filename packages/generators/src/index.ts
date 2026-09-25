@@ -19,6 +19,8 @@ import { MATH2358_LOGIC_GENERATORS } from './math2358/logic.js';
 import { MATH2358_SET_GENERATORS } from './math2358/sets.js';
 import { MATH2358_COUNTING_GENERATORS } from './math2358/counting.js';
 import { MATH2358_GRAPH_GENERATORS } from './math2358/graphs.js';
+import { MATH2358_DISCRETE_GENERATORS } from './math2358/discrete.js';
+import { MATH2358_PROOF_GENERATORS } from './math2358/proofs.js';
 import { EE2320_NUMBER_GENERATORS } from './ee2320/numbers.js';
 import { EE2320_LOGIC_GENERATORS } from './ee2320/logic.js';
 import { EE2320_BLOCK_GENERATORS } from './ee2320/blocks.js';
@@ -92,6 +94,8 @@ export const GENERATORS: readonly Generator[] = [
   ...MATH2358_SET_GENERATORS,
   ...MATH2358_COUNTING_GENERATORS,
   ...MATH2358_GRAPH_GENERATORS,
+  ...MATH2358_DISCRETE_GENERATORS,
+  ...MATH2358_PROOF_GENERATORS,
   ...EE2320_NUMBER_GENERATORS,
   ...EE2320_LOGIC_GENERATORS,
   ...EE2320_BLOCK_GENERATORS,
