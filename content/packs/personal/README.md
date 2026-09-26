@@ -7,6 +7,11 @@ Packs derived from a textbook or other third-party source live here with
 pnpm content import --personal
 ```
 
+**Getting these into an installed application is a separate question with three
+answers — see `docs/PERSONAL-CONTENT.md`.** The short version: the shipped app
+reads `*.json` from a folder beside its database, so the normal answer is to
+copy the file there and restart. Nothing below changes.
+
 ## The three places this is enforced, and the fourth that was missing
 
 1. This directory is gitignored, so the material is never committed.
@@ -33,6 +38,11 @@ someone else, and CI never sets it.
    screen, with the item count. Three enforcement points that are all invisible
    from inside the running binary are three points that cannot be checked by
    the person holding it.
+
+The same badge counts packs loaded from the runtime folder, which matters more
+than it first looks: a redistributable installer that has been pointed at
+somebody's personal packs is, from that moment, an installation carrying owned
+material, and the count is the only thing that says so.
 
 ## What belongs here
 

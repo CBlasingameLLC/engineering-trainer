@@ -3,7 +3,7 @@ import { termFocus, termLengthWeeks, termReadiness, upcomingExams, type Schedule
 import { useApp } from '@/store';
 import { currentTerm } from '@/content';
 import { DIAGNOSIS_COPY } from '@/ui/bands';
-import { Countdown } from '@/ui/shell';
+import { Countdown, Screen } from '@/ui/shell';
 
 /**
  * The term in progress.
@@ -140,14 +140,14 @@ export function Term(): React.ReactElement {
 
   if (!content || !term || !focus) {
     return (
-      <div className="mx-auto max-w-3xl p-6">
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">No term declared</h1>
+      <Screen>
+        <h1 className="title">No term declared</h1>
         <p className="mt-2 text-sm text-ink-dim">
           Add a term document under <code>content/terms/</code> to see what is live this week and which
           prerequisites are not ready for it.
         </p>
         <button className="btn-secondary mt-4" onClick={() => goTo('dashboard')}>Back</button>
-      </div>
+      </Screen>
     );
   }
 
@@ -159,10 +159,10 @@ export function Term(): React.ReactElement {
       : 'Term finished';
 
   return (
-    <div className="mx-auto max-w-3xl px-5 py-6" data-testid="term-view">
+    <Screen testId="term-view">
       <div className="mb-4 flex flex-wrap items-center gap-3">
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">{term.title}</h1>
-        <span className="font-mono text-[11px] text-ink-dim" data-testid="term-week">{position}</span>
+        <h1 className="title">{term.title}</h1>
+        <span className="font-mono text-2xs text-ink-dim" data-testid="term-week">{position}</span>
         <span className="h-px flex-1 bg-line" />
       </div>
 
@@ -180,10 +180,10 @@ export function Term(): React.ReactElement {
           {exams.slice(0, 6).map((exam) => (
             <div key={exam.id} className="flex items-center gap-3 border-b border-line px-3 py-2 last:border-b-0">
               <Countdown days={exam.daysAway} />
-              <span className="shrink-0 font-mono text-[12px] text-ink">
+              <span className="shrink-0 font-mono text-xs text-ink">
                 {exam.course} {exam.title}
               </span>
-              <span className="min-w-0 flex-1 truncate text-[11px] text-ink-faint">
+              <span className="min-w-0 flex-1 truncate text-2xs text-ink-faint">
                 {exam.scope ?? exam.units.map((u) => u.unit).join(' · ')}
               </span>
               <button
@@ -199,97 +199,107 @@ export function Term(): React.ReactElement {
         </section>
       ) : null}
 
-      {/* The readiness list comes first on purpose. What is live this week is
-          something the learner already knows; what has quietly decayed
-          underneath what is coming next is not. */}
-      <section className="card mt-4 p-4">
-        <h2 className="text-sm font-semibold text-ink">Not ready for what is coming</h2>
-        <p className="mt-1 text-xs text-ink-dim">
-          Prerequisites of the next four weeks&rsquo; material, ranked by how far they have slipped and how
-          soon they are needed.
-        </p>
-        {readiness.length === 0 ? (
-          <p className="mt-3 text-sm text-ink-dim" data-testid="readiness-clear">
-            Nothing is flagged. Either the prerequisites are in place or there is not enough evidence yet —
-            a placement exam settles which.
-          </p>
-        ) : (
-          <ul className="mt-3" data-testid="readiness-list">
-            {readiness.map((gap) => {
-              const kc = content.graph.kcs.get(gap.kc);
-              return (
-                <li
-                  key={gap.kc}
-                  className="flex items-center gap-3 border-t border-line py-2 first:border-t-0"
-                  data-kc-id={gap.kc}
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] ${DIAGNOSIS_COPY[gap.diagnosis].chip}`}
-                        title={DIAGNOSIS_COPY[gap.diagnosis].detail}
+      {/* Two columns above 1280px. Readiness is the column that earns the
+          width — it is the list the whole view exists to produce — while the
+          schedule beside it is what explains the ranking. Stacked, the
+          explanation was a scroll away from the thing it explained. */}
+      <div className="grid items-start gap-4 xl:grid-cols-2">
+        <div>
+          {/* The readiness list comes first on purpose. What is live this week is
+              something the learner already knows; what has quietly decayed
+              underneath what is coming next is not. */}
+          <section className="card p-4">
+            <h2 className="text-sm font-semibold text-ink">Not ready for what is coming</h2>
+            <p className="mt-1 text-xs text-ink-dim">
+              Prerequisites of the next four weeks&rsquo; material, ranked by how far they have slipped and how
+              soon they are needed.
+            </p>
+            {readiness.length === 0 ? (
+              <p className="mt-3 text-sm text-ink-dim" data-testid="readiness-clear">
+                Nothing is flagged. Either the prerequisites are in place or there is not enough evidence yet —
+                a placement exam settles which.
+              </p>
+            ) : (
+              <ul className="mt-3" data-testid="readiness-list">
+                {readiness.map((gap) => {
+                  const kc = content.graph.kcs.get(gap.kc);
+                  return (
+                    <li
+                      key={gap.kc}
+                      className="flex items-center gap-3 border-t border-line py-2 first:border-t-0"
+                      data-kc-id={gap.kc}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`px-1.5 py-0.5 font-mono text-3xs uppercase tracking-[0.08em] ${DIAGNOSIS_COPY[gap.diagnosis].chip}`}
+                            title={DIAGNOSIS_COPY[gap.diagnosis].detail}
+                          >
+                            {DIAGNOSIS_COPY[gap.diagnosis].label}
+                          </span>
+                          <span className="truncate text-sm text-ink">{kc?.title ?? gap.kc}</span>
+                        </div>
+                        <div className="label mt-0.5 truncate">
+                          {kc?.courseId ?? ''} · needed by {gap.course} {gap.unit}, {whenLabel(gap.startsInWeeks)}
+                        </div>
+                      </div>
+                      <button
+                        className="btn-secondary shrink-0"
+                        data-testid="shore-up"
+                        onClick={() => startKcs([gap.kc])}
                       >
-                        {DIAGNOSIS_COPY[gap.diagnosis].label}
-                      </span>
-                      <span className="truncate text-[13px] text-ink">{kc?.title ?? gap.kc}</span>
-                    </div>
-                    <div className="label mt-0.5 truncate">
-                      {kc?.courseId ?? ''} · needed by {gap.course} {gap.unit}, {whenLabel(gap.startsInWeeks)}
-                    </div>
-                  </div>
-                  <button
-                    className="btn-secondary shrink-0"
-                    data-testid="shore-up"
-                    onClick={() => startKcs([gap.kc])}
-                  >
-                    Shore this up
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
+                        Shore this up
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </section>
+        </div>
 
-      <section className="card mt-4 p-4">
-        <h2 className="text-sm font-semibold text-ink">Covering now</h2>
-        {focus.live.length === 0 ? (
-          <p className="mt-2 text-sm text-ink-dim">
-            Nothing is scheduled for this week.
-          </p>
-        ) : (
-          <ul className="mt-2" data-testid="live-units">
-            {focus.live.map((unit) => (
-              <UnitRow
-                key={`${unit.course}-${unit.unit}`}
-                unit={unit}
-                kcs={kcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
-                mappedKcs={mappedKcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
-                onStudy={() => startUnit(unit.course, unit.unit)}
-              />
-            ))}
-          </ul>
-        )}
-      </section>
+        <div className="space-y-4">
+          <section className="card p-4">
+            <h2 className="text-sm font-semibold text-ink">Covering now</h2>
+            {focus.live.length === 0 ? (
+              <p className="mt-2 text-sm text-ink-dim">
+                Nothing is scheduled for this week.
+              </p>
+            ) : (
+              <ul className="mt-2" data-testid="live-units">
+                {focus.live.map((unit) => (
+                  <UnitRow
+                    key={`${unit.course}-${unit.unit}`}
+                    unit={unit}
+                    kcs={kcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
+                    mappedKcs={mappedKcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
+                    onStudy={() => startUnit(unit.course, unit.unit)}
+                  />
+                ))}
+              </ul>
+            )}
+          </section>
 
-      <section className="card mt-4 p-4">
-        <h2 className="text-sm font-semibold text-ink">Coming up</h2>
-        {focus.upcoming.length === 0 ? (
-          <p className="mt-2 text-sm text-ink-dim">Nothing in the next four weeks.</p>
-        ) : (
-          <ul className="mt-2" data-testid="upcoming-units">
-            {focus.upcoming.map((unit) => (
-              <UnitRow
-                key={`${unit.course}-${unit.unit}`}
-                unit={unit}
-                kcs={kcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
-                mappedKcs={mappedKcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
-                onStudy={() => startUnit(unit.course, unit.unit)}
-              />
-            ))}
-          </ul>
-        )}
-      </section>
+          <section className="card p-4">
+            <h2 className="text-sm font-semibold text-ink">Coming up</h2>
+            {focus.upcoming.length === 0 ? (
+              <p className="mt-2 text-sm text-ink-dim">Nothing in the next four weeks.</p>
+            ) : (
+              <ul className="mt-2" data-testid="upcoming-units">
+                {focus.upcoming.map((unit) => (
+                  <UnitRow
+                    key={`${unit.course}-${unit.unit}`}
+                    unit={unit}
+                    kcs={kcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
+                    mappedKcs={mappedKcsForUnit.get(`${unit.course}\u0000${unit.unit}`) ?? []}
+                    onStudy={() => startUnit(unit.course, unit.unit)}
+                  />
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
+      </div>
 
       {content.termCoursesWithoutGraph.length > 0 && (
         // Said out loud rather than quietly omitted. A course on the term that
@@ -300,6 +310,6 @@ export function Term(): React.ReactElement {
           knowledge components, so nothing above accounts for them.
         </p>
       )}
-    </div>
+    </Screen>
   );
 }

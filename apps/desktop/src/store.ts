@@ -33,6 +33,7 @@ import { checkAnswer, type CheckResult, type Response } from '@et/answer-engine'
 import { gradeCircuit, parseNetlist, toNetlist, type GradeResult, type Schematic } from '@et/circuits';
 import type { Item } from '@et/content-schema';
 import { loadContent, currentTerm, drillCandidates, itemsForCourses, itemsForKcs, type LoadedContent } from '@/content';
+import { readSideloadedPacks } from '@/content/sideload';
 import { examCandidates, examsForTerm, unitOfKcMap } from '@/content/exams';
 import { buildLearnerModel, type LearnerModel } from '@/features/learner-model';
 import { WebStorageAdapter } from '@/storage/web';
@@ -262,7 +263,11 @@ export const useApp = create<AppState>((set, get) => ({
     // never learns which, so the same code path is exercised either way.
     const kind = isTauri() ? 'SQLite (desktop)' : 'IndexedDB (browser)';
     try {
-      const content = loadContent();
+      // The learner's own packs, read from disk before the bundled content is
+      // assembled. `loadContent` has to be synchronous — the graph must exist
+      // before the first route renders — so the one asynchronous part of it
+      // happens here and is handed in.
+      const content = loadContent(await readSideloadedPacks());
       const storage: StorageAdapter = isTauri() ? new TauriSqlAdapter() : new WebStorageAdapter();
       await storage.init();
 

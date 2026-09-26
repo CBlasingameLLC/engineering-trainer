@@ -442,7 +442,7 @@ export function SchematicEditor({
             Ground
           </ToolButton>
 
-          <div className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Parts</div>
+          <div className="pt-2 text-2xs font-semibold uppercase tracking-wide text-ink-faint">Parts</div>
           {PALETTE.map((entry) => (
             <ToolButton
               key={entry.kind}
@@ -469,7 +469,7 @@ export function SchematicEditor({
             <div className="mt-3 rounded border border-line p-2">
               <div className="font-mono text-xs font-semibold text-ink">{only.id}</div>
               {only.kind !== 'opamp' && (
-                <label className="mt-2 block text-[11px] text-ink-dim">
+                <label className="mt-2 block text-2xs text-ink-dim">
                   Value
                   <input
                     key={only.id}
@@ -492,7 +492,7 @@ export function SchematicEditor({
           {selectedWire && (
             <div className="mt-3 rounded border border-line p-2 text-xs">
               <div className="text-ink">Wire · {selectedWire.points.length} vertices</div>
-              <p className="mt-1 text-[11px] text-ink-dim">Drag a handle to reroute.</p>
+              <p className="mt-1 text-2xs text-ink-dim">Drag a handle to reroute.</p>
               <div className="mt-2 flex gap-1">
                 <SmallButton tone="danger" onClick={deleteSelection}>Delete</SmallButton>
               </div>
@@ -687,7 +687,7 @@ export function SchematicEditor({
         </div>
 
         {!readOnly && (
-          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-ink-faint">
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-2xs text-ink-faint">
             {HOTKEY_HINTS.map(([key, label]) => (
               <span key={key}>
                 <kbd className="rounded border border-line-strong px-1 font-mono">{key}</kbd> {label}
@@ -723,7 +723,7 @@ function ToolButton({
     >
       <span className="min-w-0 flex-1 truncate">{children}</span>
       {hint && (
-        <kbd className={`ml-1 shrink-0 font-mono text-[10px] ${active ? 'text-ink-faint' : 'text-ink-faint'}`}>
+        <kbd className={`ml-1 shrink-0 font-mono text-3xs ${active ? 'text-ink-faint' : 'text-ink-faint'}`}>
           {hint}
         </kbd>
       )}
@@ -736,7 +736,7 @@ function SmallButton({
 }: { onClick: () => void; tone?: 'danger'; children: React.ReactNode }): React.ReactElement {
   return (
     <button
-      className={`flex-1 rounded px-1 py-0.5 text-[11px] ${
+      className={`flex-1 rounded px-1 py-0.5 text-2xs ${
         tone === 'danger'
           ? 'bg-danger/10 text-danger '
           : 'bg-surface-2'

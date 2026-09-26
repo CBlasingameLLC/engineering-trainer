@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useApp } from '@/store';
 import { DIAGNOSIS_COPY, pct } from '@/ui/bands';
+import { Screen } from '@/ui/shell';
 
 /**
  * Gap report.
@@ -44,9 +45,9 @@ export function Report(): React.ReactElement {
   // told there are no results.
   if (challenge) {
     return (
-      <div className="mx-auto max-w-3xl px-6 py-10">
+      <Screen>
         <header className="flex items-baseline gap-3">
-          <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">
+          <h1 className="title">
             {challenge.courseId} challenge exam
           </h1>
           <span
@@ -116,7 +117,7 @@ export function Report(): React.ReactElement {
             </ul>
           </section>
         )}
-      </div>
+      </Screen>
     );
   }
 
@@ -137,9 +138,9 @@ export function Report(): React.ReactElement {
   const solid = grouped.measured.filter((r) => r.mastery.diagnosis === 'solid');
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10">
+    <Screen>
       <header>
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink" data-testid="placement-results">Placement results</h1>
+        <h1 className="title" data-testid="placement-results">Placement results</h1>
         <p className="mt-2 text-sm text-ink-dim">
           {placement.itemsAdministered} items measured {grouped.measured.length} concepts directly, and
           implied {grouped.inferred.length} more through the prerequisite graph.{' '}
@@ -215,7 +216,7 @@ export function Report(): React.ReactElement {
           Go to dashboard
         </button>
       </footer>
-    </div>
+    </Screen>
   );
 }
 

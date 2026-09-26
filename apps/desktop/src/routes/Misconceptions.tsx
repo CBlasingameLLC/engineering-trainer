@@ -10,6 +10,7 @@ import {
 import { drillCandidates } from '@/content';
 import { useApp } from '@/store';
 import { MathText } from '@/ui/Math';
+import { Screen } from '@/ui/shell';
 
 /**
  * The misconception feed.
@@ -78,9 +79,9 @@ export function Misconceptions(): React.ReactElement {
   }, [content]);
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-8">
+    <Screen>
       <header className="flex items-baseline gap-4">
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink" data-testid="misconception-feed">Recurring errors</h1>
+        <h1 className="title" data-testid="misconception-feed">Recurring errors</h1>
         <button className="btn-ghost ml-auto" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
@@ -165,7 +166,7 @@ export function Misconceptions(): React.ReactElement {
           </section>
         </>
       )}
-    </div>
+    </Screen>
   );
 }
 

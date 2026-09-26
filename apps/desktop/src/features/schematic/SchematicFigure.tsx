@@ -139,7 +139,7 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
         ))}
       </svg>
       {figure.title && (
-        <figcaption className="border-t border-line px-2 py-1 text-[11px] text-ink-dim">
+        <figcaption className="border-t border-line px-2 py-1 text-2xs text-ink-dim">
           {figure.title}
         </figcaption>
       )}

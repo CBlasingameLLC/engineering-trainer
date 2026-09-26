@@ -49,8 +49,8 @@ export function Onboarding(): React.ReactElement {
     });
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">What have you already taken?</h1>
+    <div className="mx-auto h-full max-w-4xl overflow-y-auto px-6 py-10">
+      <h1 className="title">What have you already taken?</h1>
       <p className="mt-2 max-w-xl text-sm text-ink-dim">
         Grades set the starting belief; the term sets how long it has had to fade. A course finished
         last spring and one finished two years ago are very different starting points, and the

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import type { ExamResult, TimeFinding } from '@et/domain';
 import { useApp } from '@/store';
-import { Countdown, DataRow, Empty, Meter, Panel, Rule, Stat } from '@/ui/shell';
+import { Countdown, DataRow, Empty, Meter, Panel, Rule, Screen, Stat } from '@/ui/shell';
 
 /**
  * What a sat paper produced.
@@ -76,7 +76,7 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
     <div className="space-y-4" data-testid={`exam-result-${result.examId}`}>
       <Panel
         title={`${result.course} ${result.title}`}
-        right={<span className="tabular font-mono text-[11px] text-ink-faint">{result.served} questions</span>}
+        right={<span className="tabular font-mono text-2xs text-ink-faint">{result.served} questions</span>}
       >
         <div className="grid grid-cols-2 divide-x divide-line border-b border-line">
           <div className="px-4 py-3">
@@ -110,7 +110,7 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
         <div className="border-b border-line px-4 py-3">
           <div className="flex flex-wrap items-baseline gap-2">
             <span
-              className={`font-mono text-[13px] font-semibold ${
+              className={`font-mono text-sm font-semibold ${
                 note.tone === 'danger' ? 'text-danger'
                   : note.tone === 'warn' ? 'text-warn'
                   : note.tone === 'accent' ? 'text-accent'
@@ -125,7 +125,7 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
               </span>
             ) : null}
           </div>
-          <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-dim">{note.detail}</p>
+          <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-ink-dim">{note.detail}</p>
         </div>
 
         <DataRow
@@ -153,7 +153,7 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
                 className="flex items-center gap-3 border-b border-line px-3 py-2 last:border-b-0"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="truncate font-mono text-[12px] text-ink">{unit.unit}</div>
+                  <div className="truncate font-mono text-xs text-ink">{unit.unit}</div>
                   <div className="label mt-0.5">{unit.course}</div>
                 </div>
                 <div className="w-28 shrink-0">
@@ -163,7 +163,7 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
                   />
                 </div>
                 <span
-                  className={`tabular w-10 shrink-0 text-right font-mono text-[12px] ${
+                  className={`tabular w-10 shrink-0 text-right font-mono text-xs ${
                     unit.score >= 0.7 ? 'text-accent' : unit.score >= 0.5 ? 'text-warn' : 'text-danger'
                   }`}
                 >
@@ -182,10 +182,10 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
             {result.weakest.slice(0, 10).map((kc) => (
               <div key={kc.kcId} className="flex items-center gap-3 border-b border-line px-3 py-2 last:border-b-0">
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-[12px] text-ink">{titleOf(kc.kcId)}</div>
+                  <div className="truncate text-xs text-ink">{titleOf(kc.kcId)}</div>
                   <div className="label mt-0.5 truncate">{kc.kcId}</div>
                 </div>
-                <span className="tabular shrink-0 font-mono text-[11px] text-ink-faint">
+                <span className="tabular shrink-0 font-mono text-2xs text-ink-faint">
                   {kc.correct.toFixed(1)}/{kc.asked.toFixed(1)}
                 </span>
                 <button
@@ -226,10 +226,10 @@ function ResultBlock({ result }: { result: ExamResult }): React.ReactElement {
                 key={m.misconceptionId}
                 className="flex items-center gap-3 border-b border-line px-3 py-1.5 last:border-b-0"
               >
-                <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-ink-dim">
+                <span className="min-w-0 flex-1 truncate font-mono text-2xs text-ink-dim">
                   {m.misconceptionId}
                 </span>
-                <span className="tabular shrink-0 font-mono text-[11px] text-warn">×{m.count}</span>
+                <span className="tabular shrink-0 font-mono text-2xs text-warn">×{m.count}</span>
               </div>
             ))}
           </Panel>
@@ -251,7 +251,7 @@ export function ExamReport(): React.ReactElement {
 
   if (!outcome || outcome.results.length === 0) {
     return (
-      <div className="mx-auto max-w-4xl px-5 py-6">
+      <Screen>
         <Panel title="No paper sat yet">
           <Empty>
             Run a diagnostic first.
@@ -262,19 +262,19 @@ export function ExamReport(): React.ReactElement {
             </div>
           </Empty>
         </Panel>
-      </div>
+      </Screen>
     );
   }
 
   const triage = outcome.kind === 'triage';
 
   return (
-    <div className="mx-auto max-w-4xl px-5 py-6" data-testid="exam-report">
+    <Screen testId="exam-report">
       <header className="mb-5">
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">
+        <h1 className="title">
           {triage ? 'Triage results' : 'Exam result'}
         </h1>
-        <p className="mt-1.5 max-w-2xl text-[12px] leading-relaxed text-ink-dim">
+        <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-ink-dim">
           {triage
             ? 'One pass across every exam still ahead. Each block below is scored only against its own paper, so the three are directly comparable — the lowest one is where the next few days belong.'
             : 'Two scores, kept apart on purpose. One is what this paper was worth; the other is what you know. The distance between them is a pace problem rather than a knowledge one, and only the pair can tell you which you have.'}
@@ -312,6 +312,6 @@ export function ExamReport(): React.ReactElement {
           Full gap report
         </button>
       </div>
-    </div>
+    </Screen>
   );
 }

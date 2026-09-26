@@ -6,6 +6,7 @@ import {
 } from '@et/circuits';
 import { SchematicEditor } from '@/features/schematic/SchematicEditor';
 import { useApp } from '@/store';
+import { Screen } from '@/ui/shell';
 
 /**
  * Circuit lab.
@@ -78,9 +79,9 @@ export function CircuitLab(): React.ReactElement {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-8">
+    <Screen>
       <header className="flex items-baseline gap-4">
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">Circuit lab</h1>
+        <h1 className="title">Circuit lab</h1>
         <button className="btn-ghost ml-auto" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
@@ -309,7 +310,7 @@ export function CircuitLab(): React.ReactElement {
           </ul>
         </section>
       )}
-    </div>
+    </Screen>
   );
 }
 

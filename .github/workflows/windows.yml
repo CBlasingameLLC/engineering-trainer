@@ -21,6 +21,8 @@ jobs:
     name: Build .msi and .exe
     runs-on: windows-latest
     timeout-minutes: 45
+    env:
+      PERSONAL_PACKS_B64: ${{ secrets.PERSONAL_PACKS_B64 }}
 
     steps:
       - uses: actions/checkout@v7
@@ -62,8 +64,38 @@ jobs:
           git diff --exit-code content/packs/shared
         shell: bash
 
+      # Optional: the learner's own packs, restored from an encrypted secret.
+      #
+      # `content/packs/personal/` is gitignored, so a fresh clone has nothing in
+      # it and a build here would faithfully bundle zero personal items —
+      # succeeding, reporting nothing, and shipping a smaller bank than whoever
+      # asked for it expects. This is the one way to close that from CI, and it
+      # is opt-in because it means the material lives in GitHub's secret store
+      # rather than only on one machine. Route 1 in docs/PERSONAL-CONTENT.md
+      # avoids the question entirely and is the one to prefer.
+      #
+      # `secrets` cannot be read in a step-level `if`, so it is lifted into the
+      # environment first and the condition tests that.
+      - name: Restore personal packs from the secret
+        id: personal
+        if: env.PERSONAL_PACKS_B64 != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p content/packs/personal
+          printf '%s' "$PERSONAL_PACKS_B64" | base64 -d | tar xzf - -C content/packs/personal
+          # Names are fine to log; contents are not, so only the names.
+          n=$(find content/packs/personal -maxdepth 1 -name '*.json' | tee /dev/stderr | wc -l | tr -d ' ')
+          # Left unset when the archive turned out to be empty, so a secret that
+          # decodes to nothing does not mislabel a perfectly ordinary artifact.
+          if [ "$n" -gt 0 ]; then echo "count=$n" >> "$GITHUB_OUTPUT"; fi
+
       - name: Build the installers
         run: pnpm tauri build
+        env:
+          # Empty unless the step above ran, and an empty value is not "1", so
+          # the default build is redistributable without anyone deciding so.
+          VITE_ET_INCLUDE_PERSONAL: ${{ steps.personal.outputs.count && '1' || '' }}
 
       - name: Collect the artifacts
         shell: bash
@@ -73,10 +105,16 @@ jobs:
             -exec cp {} dist-windows/ \;
           ls -la dist-windows
 
+      # Two names, deliberately. An artifact carrying owned material must not be
+      # confused with one that can be handed to somebody else, and the file name
+      # is the only label that survives being downloaded.
       - name: Upload
         uses: actions/upload-artifact@v7
         with:
-          name: engineering-trainer-windows
+          name: >-
+            ${{ steps.personal.outputs.count
+                && 'engineering-trainer-windows-personal'
+                || 'engineering-trainer-windows' }}
           path: dist-windows/*
           if-no-files-found: error
           retention-days: 30

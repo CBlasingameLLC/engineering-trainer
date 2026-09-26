@@ -52,12 +52,12 @@ function Rail(): React.ReactElement {
 
   return (
     <nav
-      className="flex w-11 shrink-0 flex-col items-center gap-0.5 border-r border-line bg-surface py-2"
+      className="flex w-12 shrink-0 flex-col items-center gap-0.5 border-r border-line bg-surface py-2"
       data-testid="nav-rail"
       aria-label="Sections"
     >
       <div
-        className="mb-2 flex h-7 w-7 items-center justify-center border border-accent-dim font-mono text-[11px] font-bold text-accent"
+        className="mb-2 flex h-7 w-7 items-center justify-center border border-accent-dim font-mono text-2xs font-bold text-accent"
         title="Engineering Trainer"
       >
         ET
@@ -112,7 +112,7 @@ function StatusStrip(): React.ReactElement | null {
       {next ? (
         <span className="flex items-center gap-1.5 whitespace-nowrap">
           <span className="label">Next</span>
-          <span className="font-mono text-[11px] text-ink">
+          <span className="font-mono text-2xs text-ink">
             {next.course} {next.title}
           </span>
           <Countdown days={next.daysAway} />
@@ -121,27 +121,29 @@ function StatusStrip(): React.ReactElement | null {
         <span className="label whitespace-nowrap">No exams scheduled</span>
       )}
       <span className="h-3 w-px bg-line" />
-      <span className="whitespace-nowrap font-mono text-[11px] text-ink-dim">
+      <span className="whitespace-nowrap font-mono text-2xs text-ink-dim">
         <span className="label mr-1.5">Streak</span>
         <span className="tabular text-ink">{profile.streak.current}d</span>
       </span>
-      <span className="whitespace-nowrap font-mono text-[11px] text-ink-dim">
+      <span className="whitespace-nowrap font-mono text-2xs text-ink-dim">
         <span className="label mr-1.5">XP</span>
         <span className="tabular text-ink">{profile.totalXp.toLocaleString()}</span>
       </span>
-      <span className="whitespace-nowrap font-mono text-[11px] text-ink-dim">
+      <span className="whitespace-nowrap font-mono text-2xs text-ink-dim">
         <span className="label mr-1.5">Bank</span>
         <span className="tabular text-ink">{content.items.length.toLocaleString()}</span>
       </span>
+      <span className="ml-auto" />
       {personal > 0 ? (
         <span
-          className="ml-auto whitespace-nowrap border border-warn/50 px-1.5 py-px font-mono text-[10px] uppercase tracking-[0.08em] text-warn"
+          className="whitespace-nowrap border border-warn/50 px-1.5 py-px font-mono text-3xs uppercase tracking-[0.08em] text-warn"
           data-testid="personal-content-badge"
           title={`This build includes ${personal} personal-only items derived from owned material. Do not redistribute it.`}
         >
           {personal} personal · do not redistribute
         </span>
       ) : null}
+      <DisplayControls />
     </footer>
   );
 }
@@ -178,7 +180,7 @@ export function App(): React.ReactElement {
         <p className="text-sm text-ink-dim">
           Startup failed before any data was loaded. Nothing has been lost; the error is below.
         </p>
-        <pre className="mt-3 overflow-x-auto whitespace-pre-wrap border border-line bg-surface-2 p-3 font-mono text-[11px] text-ink">
+        <pre className="mt-3 overflow-x-auto whitespace-pre-wrap border border-line bg-surface-2 p-3 font-mono text-2xs text-ink">
           {bootError}
         </pre>
       </Fatal>
@@ -190,12 +192,12 @@ export function App(): React.ReactElement {
   if (content && content.issues.length > 0) {
     return (
       <Fatal title="Content failed to load">
-        <ul className="space-y-1 font-mono text-[11px] text-ink">
+        <ul className="space-y-1 font-mono text-2xs text-ink">
           {content.issues.map((issue) => (
             <li key={issue}>{issue}</li>
           ))}
         </ul>
-        <p className="mt-3 font-mono text-[11px] text-ink-faint">
+        <p className="mt-3 font-mono text-2xs text-ink-faint">
           Run <code className="text-accent">pnpm content validate</code> for detail.
         </p>
       </Fatal>
@@ -229,18 +231,23 @@ export function App(): React.ReactElement {
   if (route === 'onboarding' || route === 'loading') {
     return (
       <div className="gridfield h-full">
-        <DisplayControls />
+        <DisplayControls floating />
         {view}
       </div>
     );
   }
 
+  // `overflow-hidden` rather than `overflow-auto`, and that single word is the
+  // whole no-scroll layout. The frame gives each route exactly the height
+  // between the controls and the status strip and then refuses to grow; a route
+  // that has more to say than fits scrolls the panel that has it, not the
+  // window. The alternative — a scrolling main — is why the briefing's third
+  // column used to run off the bottom of a screen that had room for it.
   return (
     <div className="flex h-full">
       <Rail />
       <div className="flex min-w-0 flex-1 flex-col">
-        <DisplayControls />
-        <main className="gridfield min-h-0 flex-1 overflow-auto">{view}</main>
+        <main className="gridfield relative min-h-0 flex-1 overflow-hidden">{view}</main>
         <StatusStrip />
       </div>
     </div>

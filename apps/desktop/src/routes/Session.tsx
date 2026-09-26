@@ -50,7 +50,7 @@ function ExamClock(): React.ReactElement | null {
 
   return (
     <span
-      className={`tabular flex items-center gap-1.5 font-mono text-[13px] font-semibold ${
+      className={`tabular flex items-center gap-1.5 font-mono text-sm font-semibold ${
         over ? 'text-danger' : remaining < 300_000 ? 'text-warn' : 'text-ink'
       }`}
       data-testid="exam-clock"
@@ -90,10 +90,10 @@ function PaperControls(): React.ReactElement | null {
   if (expired && !paper.continuedPastBell) {
     return (
       <div className="mt-3 border border-danger/60 bg-danger/5 px-3 py-2.5" data-testid="bell">
-        <div className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-danger">
+        <div className="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-danger">
           Time
         </div>
-        <p className="mt-1 max-w-xl text-[12px] leading-relaxed text-ink-dim">
+        <p className="mt-1 max-w-xl text-xs leading-relaxed text-ink-dim">
           On the real paper this is where it gets collected, with{' '}
           {unreached > 0 ? `${unreached} question${unreached === 1 ? '' : 's'}` : 'nothing'} left. You can
           hand in now and take that as the result, or keep working — everything from here is scored
@@ -115,7 +115,7 @@ function PaperControls(): React.ReactElement | null {
   return (
     <div className="mt-2 flex items-center gap-2">
       {expired ? (
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-danger">
+        <span className="font-mono text-3xs uppercase tracking-[0.12em] text-danger">
           Past the limit — scored separately
         </span>
       ) : null}
@@ -254,23 +254,23 @@ export function Session(): React.ReactElement {
     : 'Placement';
 
   return (
-    <div className="mx-auto flex h-full max-w-3xl flex-col px-6 py-6" data-testid="session" data-mode={paper ? paper.kind : mode}>
+    <div className="mx-auto flex h-full max-w-5xl flex-col px-5 py-5 xl:px-6" data-testid="session" data-mode={paper ? paper.kind : mode}>
       <header className="flex flex-wrap items-center gap-x-4 gap-y-1">
-        <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-ink">
+        <span className="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-ink">
           {heading}
         </span>
-        <span className="tabular font-mono text-[11px] text-ink-faint">
+        <span className="tabular font-mono text-2xs text-ink-faint">
           {paper ? `${position} of ${total}` : `item ${position} of at most ${total}`}
         </span>
         {paper ? null : (
-          <span className="tabular font-mono text-[11px] text-gold">{sessionXp} XP</span>
+          <span className="tabular font-mono text-2xs text-gold">{sessionXp} XP</span>
         )}
         <span className="flex-1" />
         {/* A sealed paper reports nothing back, and that includes the running
             score: a live tally is feedback, and seeing it climb or stall
             changes how the remaining questions are answered. */}
         {sealed ? <ExamClock /> : (
-          <span className="tabular font-mono text-[11px] text-ink-dim">
+          <span className="tabular font-mono text-2xs text-ink-dim">
             {correct}/{answered} correct
           </span>
         )}
@@ -278,7 +278,7 @@ export function Session(): React.ReactElement {
 
       <Meter className="mt-2.5" value={Math.min(1, (paper ? paper.cursor : answered) / Math.max(1, total))} />
 
-      <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
+      <p className="mt-1.5 font-mono text-3xs uppercase tracking-[0.12em] text-ink-faint">
         {paper
           ? sealed
             ? 'Sealed — nothing is shown back until you hand in'
@@ -288,7 +288,10 @@ export function Session(): React.ReactElement {
 
       {paper ? <PaperControls /> : null}
 
-      <main className="mt-8 flex-1">
+      {/* The shell frame no longer scrolls, so a long item scrolls here. A
+          truth table with sixteen rows, or a proof skeleton with four fields,
+          is taller than the window and used to be handled a level up. */}
+      <main className="mt-5 min-h-0 flex-1 overflow-y-auto">
         {/* The item id is exposed so end-to-end drivers and bug reports can
             identify exactly which variant was on screen. KaTeX rewrites the
             stem text, so the rendered DOM is not a reliable identifier. The
