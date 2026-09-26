@@ -150,6 +150,14 @@ jobs:
       - name: Check dark mode contrast and the theme control
         run: pnpm --filter @et/desktop e2e:theme
 
+      # Sits a real paper: the clock runs, nothing is shown back, handing in
+      # grades what was served rather than what was answered, and the report
+      # spans the unit this exam borrows from another course. The sealing in
+      # particular has no unit test that can reach it — it is a property of the
+      # player, not of the grader.
+      - name: Sit a sealed exam end to end
+        run: pnpm --filter @et/desktop e2e:exam
+
       - name: Upload screenshots on failure
         if: failure()
         uses: actions/upload-artifact@v7
