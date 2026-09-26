@@ -92,8 +92,12 @@ if ((states.available ?? 0) + (states.learning ?? 0) + (states.proficient ?? 0) 
 const locked = nodes.find((n) => n.state === 'locked');
 if (locked) {
   await page.locator(`g[data-kc-id="${locked.kc}"]`).click();
-  await page.waitForSelector('text=Locked because', { timeout: 5000 });
-  const blockers = await page.locator('section:has-text("Locked because") li').count();
+  // An id, not a tag plus a phrase. This read `section:has-text("Locked
+  // because") li` until the detail panel became a floating `aside` — at which
+  // point it counted zero blockers and reported a dead end that was on screen
+  // the whole time. The panel's shape is presentation; the list is the claim.
+  await page.waitForSelector('[data-testid="blockers"]', { timeout: 5000 });
+  const blockers = await page.locator('[data-testid="blockers"] li').count();
   console.log(`    locked node "${locked.kc}" names ${blockers} blocking prerequisite(s)`);
   if (blockers === 0) fail('a locked node did not name any blocking prerequisite');
 } else {

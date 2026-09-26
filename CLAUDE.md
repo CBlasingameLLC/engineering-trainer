@@ -194,6 +194,26 @@ benefit. The distinction that matters is redistributable against personal, not
 development against production — a learner's own installer is a production
 build.
 
+**The build-time flag cannot be the only route, because the machine that builds
+the installer is not the machine that has the packs.** Windows installers are
+built by CI from a fresh clone, and a fresh clone has no gitignored files, so
+`VITE_ET_INCLUDE_PERSONAL=1` there bundles zero items — succeeding, reporting
+nothing and shipping a bank quietly smaller than whoever asked for it expects.
+So the shipped app also reads `*.json` packs from a folder beside its database
+at startup (`personal_packs` in `src-tauri/src/main.rs`, `content/sideload.ts`
+in the renderer), and that is the route to prefer: the artifact stays
+redistributable, the owned material never leaves the one machine entitled to
+it, and adding a pack later costs a file copy rather than a rebuild.
+`docs/PERSONAL-CONTENT.md` has all three routes and their trade-offs.
+
+Two things that fall out of reading packs at runtime. The renderer parses them
+through the same `parsePack` gate as the compiled bank — validation in two
+languages is two opinions that can disagree, so the Rust side reads bytes and
+decides nothing. And item ids are deduped across every source on the way out,
+because a sideloaded copy of a pack that also shipped would otherwise count
+twice as evidence for whatever it measures; the bundled packs cannot collide
+with each other, but nothing stops a folder from holding a copy of one.
+
 Raw course material — homework, slides, notes, book chapters, a syllabus — goes
 in gitignored `content/coursework/<COURSE>/`. It is *source*, not content: the
 app never reads it, and the route from a PDF to a served question runs through
@@ -316,6 +336,45 @@ worked examples rather than the topic list.
   works with the resolved `{course, unit}` pair, because `packages/domain`
   mirrors the term structurally and a second parser for one notation is how
   two parsers drift.
+- **Every size in this app is in rem, and one number scales all of them.**
+  The interface used to be written in literal pixels — `text-[11px]` in thirty
+  places, four spellings of the same size across thirteen routes — which is a
+  design that cannot answer "this is a step too small on my monitor". Eleven
+  pixels on a fourteen-inch laptop and eleven pixels on a twenty-seven-inch
+  panel three feet away are not the same request. The type scale in
+  `tailwind.config.js` is rem and *replaces* Tailwind's rather than extending
+  it, Tailwind's own spacing scale is already rem, and `ui/scale.ts` sets
+  `html { font-size }` from a stored preference — so a step up widens the
+  padding inside every panel, the gaps between them and the navigation rail by
+  the same proportion, which is what "bigger boxes" actually asks for.
+
+  Deliberately not CSS `zoom`, which is the obvious alternative and breaks the
+  one thing this app cannot afford: `zoom` rescales `getBoundingClientRect`
+  without rescaling `clientX`, so the pan-zoom camera under the knowledge map
+  and the Circuit Lab would drift by the scale factor on every drag.
+- **The shell frame does not scroll, and each route says what it is.** `main`
+  is `overflow-hidden`, which is the whole no-scroll layout: a route gets
+  exactly the height between the display controls and the status strip and
+  cannot grow. `Screen` in `ui/shell.tsx` is the ordinary case and scrolls its
+  own body. The briefing divides that height between three columns whose panels
+  scroll internally, so a forty-row queue cannot push the competency axes off
+  the bottom of a screen that had room for them; the knowledge map is a camera
+  and fills the frame. Width is uncapped on purpose — a centred 1360-pixel
+  column on a 2560-pixel monitor spends half the screen on nothing, and these
+  panels hold dense readout rather than prose. Prose inside them keeps its own
+  `max-w-[Nch]`, which is where a reading measure belongs: it is a property of
+  a paragraph, not of a window.
+- **A layered layout has no bound on how wide a layer gets.** Prerequisite
+  depth decides the layering and nothing constrains how many components share a
+  depth — across nine courses, thirty-three of them depend on nothing, so the
+  graph came out eleven layers tall and thirty-three wide. Fit that to a
+  sixteen-by-nine window and it spends all of the width, less than half the
+  height, and renders every label at a size that needs zooming in, at which
+  point the shape the map exists to show is off screen. `maxPerRow` wraps a
+  layer onto further lines, spaced closer together than two layers are so the
+  band still reads as one rank, and the caller scales it with the square root
+  of the graph — the run length that squares up 181 components turns a
+  32-component course into four stubby rows.
 - **A colour in this app is a role, not a value.** Every surface used to carry
   `bg-white dark:bg-slate-900`, which meant the two themes were separate
   palettes maintained in parallel on three hundred elements, and neither was

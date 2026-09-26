@@ -187,8 +187,24 @@ export function Dashboard(): React.ReactElement {
   }[brief.tone];
 
   return (
-    <div className="mx-auto max-w-[1360px] px-5 py-5" data-testid="dashboard">
-      <header className="mb-4">
+    /*
+     * A fixed-viewport grid rather than a scrolling page.
+     *
+     * The briefing is the screen someone opens at eight in the morning to find
+     * out what to do, and a readout that has to be scrolled to be read is a
+     * report. So the three columns divide exactly the height the shell gives
+     * them and each panel scrolls its own body: the queue can be forty rows
+     * long without pushing the competency axes off the bottom.
+     *
+     * Below `lg` that inverts. Three columns become one, a fixed height would
+     * make every panel a two-inch window, and the page scrolls instead — which
+     * is the right answer at that width and the wrong one above it.
+     */
+    <div
+      className="flex h-full min-h-0 flex-col gap-3 overflow-y-auto px-4 py-4 lg:overflow-hidden xl:px-6 xl:py-5"
+      data-testid="dashboard"
+    >
+      <header className="shrink-0">
         <div className="mb-2 flex flex-wrap items-baseline gap-3">
           <span className="label">Briefing</span>
           <span className="h-px flex-1 bg-line" />
@@ -198,12 +214,12 @@ export function Dashboard(): React.ReactElement {
         </div>
 
         <h1
-          className={`max-w-5xl text-[26px] font-semibold leading-[1.15] tracking-tightest ${headlineTone}`}
+          className={`max-w-[58ch] text-3xl font-semibold leading-[1.12] tracking-tightest ${headlineTone}`}
           data-testid="briefing-headline"
         >
           {brief.headline}
         </h1>
-        <p className="mt-2 max-w-4xl text-[13px] leading-relaxed text-ink-dim" data-testid="briefing-sub">
+        <p className="mt-2 max-w-[86ch] text-sm leading-relaxed text-ink-dim" data-testid="briefing-sub">
           {brief.sub}
         </p>
 
@@ -235,7 +251,7 @@ export function Dashboard(): React.ReactElement {
         </div>
       </header>
 
-      <div className="panel mb-4">
+      <div className="panel shrink-0">
         <DataRow
           entries={[
             {
@@ -263,17 +279,18 @@ export function Dashboard(): React.ReactElement {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+      <div className="grid grid-cols-1 gap-3 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
         {/* ---------------- Exam readiness ---------------- */}
-        <div className="space-y-4 lg:col-span-5">
-          <Panel title="Exam readiness" right={<span className="label">{view.ahead.length} ahead</span>} testId="exam-readiness">
+        <div className="flex min-h-0 flex-col gap-3 lg:col-span-5">
+          <Panel title="Exam readiness" right={<span className="label">{view.ahead.length} ahead</span>} testId="exam-readiness"
+            className="lg:flex-[5]">
             {view.ahead.length === 0 ? (
               <Empty>No exams on the term.</Empty>
             ) : (
               view.readiness.slice(0, EXAMS_SHOWN).map((r) => (
                 <div key={r.exam.id} className="border-b border-line px-3 py-2.5 last:border-b-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[12px] font-semibold text-ink">
+                    <span className="font-mono text-xs font-semibold text-ink">
                       {r.exam.course} {r.exam.title}
                     </span>
                     <Countdown days={r.exam.daysAway} />
@@ -292,7 +309,7 @@ export function Dashboard(): React.ReactElement {
                       value={r.measured.length === 0 ? 0 : r.readiness}
                       tone={r.readiness >= PROFICIENT ? 'mastered' : r.readiness >= 0.4 ? 'developing' : 'gap'}
                     />
-                    <span className="tabular w-9 shrink-0 text-right font-mono text-[11px] text-ink-dim">
+                    <span className="tabular w-9 shrink-0 text-right font-mono text-2xs text-ink-dim">
                       {r.measured.length === 0 ? '—' : pct(r.readiness)}
                     </span>
                   </div>
@@ -302,7 +319,7 @@ export function Dashboard(): React.ReactElement {
                       : `${r.below.length} below · ${r.untested} untested · ${r.total} in scope`}
                   </div>
                   {r.exam.unitsWithoutKcs.length > 0 ? (
-                    <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.08em] text-warn">
+                    <div className="mt-1 font-mono text-3xs uppercase tracking-[0.08em] text-warn">
                       No knowledge map for {r.exam.unitsWithoutKcs.map((u) => u.unit).join(', ')}
                     </div>
                   ) : null}
@@ -322,6 +339,7 @@ export function Dashboard(): React.ReactElement {
             title="Priority queue"
             right={<span className="label">exam-weighted</span>}
             testId="priority-queue"
+            className="lg:flex-[6]"
           >
             {view.priorities.length === 0 ? (
               <Empty>
@@ -333,11 +351,11 @@ export function Dashboard(): React.ReactElement {
               <>
                 {view.priorities.slice(0, 9).map((p) => (
                   <div key={p.kcId} className="flex items-center gap-2 border-b border-line px-3 py-1.5 last:border-b-0">
-                    <span className="tabular w-8 shrink-0 font-mono text-[10px] text-ink-faint">
+                    <span className="tabular w-8 shrink-0 font-mono text-3xs text-ink-faint">
                       {p.daysAway}d
                     </span>
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-[12px] text-ink">{titleOf(p.kcId)}</div>
+                      <div className="truncate text-xs text-ink">{titleOf(p.kcId)}</div>
                       <div className="label mt-0.5 truncate">
                         {p.course} {p.examTitle}
                         {p.role === 'prerequisite' ? ' · prerequisite' : ''}
@@ -365,8 +383,9 @@ export function Dashboard(): React.ReactElement {
         </div>
 
         {/* ---------------- Competency → remediation ---------------- */}
-        <div className="space-y-4 lg:col-span-4">
-          <Panel title="Habits worth fixing" right={<span className="label">competency join</span>} testId="remediation">
+        <div className="flex min-h-0 flex-col gap-3 lg:col-span-4">
+          <Panel title="Habits worth fixing" right={<span className="label">competency join</span>} testId="remediation"
+            className="lg:flex-[6]">
             {view.plan.length === 0 ? (
               <Empty>
                 {view.families.length === 0
@@ -377,8 +396,8 @@ export function Dashboard(): React.ReactElement {
               view.plan.map((step) => (
                 <div key={step.family.id} className="border-b border-line px-3 py-2.5 last:border-b-0">
                   <div className="flex items-center gap-2">
-                    <span className="tabular font-mono text-[10px] text-ink-faint">{step.rank}</span>
-                    <span className="min-w-0 flex-1 truncate font-mono text-[12px] font-semibold text-ink">
+                    <span className="tabular font-mono text-3xs text-ink-faint">{step.rank}</span>
+                    <span className="min-w-0 flex-1 truncate font-mono text-xs font-semibold text-ink">
                       {step.family.title}
                     </span>
                     {step.crossCourse ? (
@@ -387,7 +406,7 @@ export function Dashboard(): React.ReactElement {
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-1 text-[11px] leading-snug text-ink-dim">{step.family.description}</p>
+                  <p className="mt-1 text-2xs leading-snug text-ink-dim">{step.family.description}</p>
                   <div className="label mt-1.5">
                     {step.competency} at {pct(step.competencyComposite)}
                     {step.relativeShortfall > 0
@@ -406,7 +425,7 @@ export function Dashboard(): React.ReactElement {
                         Drill {step.drill.length} items
                       </button>
                     ) : (
-                      <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-faint">
+                      <span className="font-mono text-3xs uppercase tracking-[0.08em] text-ink-faint">
                         Diagnosed — no item can test it yet
                       </span>
                     )}
@@ -416,14 +435,14 @@ export function Dashboard(): React.ReactElement {
             )}
           </Panel>
 
-          <Panel title="Competency axes" testId="competency-axes">
+          <Panel title="Competency axes" testId="competency-axes" className="lg:flex-[4]">
             {view.findings.length === 0 ? (
               <Empty>Nothing measured yet.</Empty>
             ) : (
               view.findings.map((f) => (
                 <div key={f.competency} className="flex items-center gap-3 border-b border-line px-3 py-1.5 last:border-b-0">
                   <div className="w-28 shrink-0">
-                    <div className="truncate font-mono text-[11px] text-ink">{f.competency}</div>
+                    <div className="truncate font-mono text-2xs text-ink">{f.competency}</div>
                     {f.standoutWeakness ? (
                       <div className="label text-warn">your weak axis</div>
                     ) : null}
@@ -432,7 +451,7 @@ export function Dashboard(): React.ReactElement {
                     value={f.testedCount === 0 ? 0 : f.composite}
                     tone={f.composite >= PROFICIENT ? 'mastered' : f.composite >= 0.4 ? 'developing' : 'gap'}
                   />
-                  <span className="tabular w-9 shrink-0 text-right font-mono text-[11px] text-ink-dim">
+                  <span className="tabular w-9 shrink-0 text-right font-mono text-2xs text-ink-dim">
                     {f.testedCount === 0 ? '—' : pct(f.composite)}
                   </span>
                 </div>
@@ -442,17 +461,17 @@ export function Dashboard(): React.ReactElement {
         </div>
 
         {/* ---------------- Course standing ---------------- */}
-        <div className="space-y-4 lg:col-span-3">
-          <Panel title="By course" testId="course-standing">
+        <div className="flex min-h-0 flex-col gap-3 lg:col-span-3">
+          <Panel title="By course" testId="course-standing" className="lg:min-h-[9rem] lg:flex-[6]">
             {view.courses.length === 0 ? (
               <Empty>Nothing measured yet.</Empty>
             ) : (
               view.courses.map((c) => (
                 <div key={c.key} className="border-b border-line px-3 py-1.5 last:border-b-0">
                   <div className="flex items-baseline gap-2">
-                    <span className="font-mono text-[11px] text-ink">{c.key}</span>
+                    <span className="font-mono text-2xs text-ink">{c.key}</span>
                     <span className="flex-1" />
-                    <span className="tabular font-mono text-[11px] text-ink-dim">{pct(c.composite)}</span>
+                    <span className="tabular font-mono text-2xs text-ink-dim">{pct(c.composite)}</span>
                   </div>
                   <Meter
                     className="mt-1"
@@ -463,6 +482,75 @@ export function Dashboard(): React.ReactElement {
                 </div>
               ))
             )}
+          </Panel>
+
+          {/*
+            * The library, which is also where the packs folder is documented.
+            *
+            * A feature whose whole interface is "put a file in a directory"
+            * has to say which directory, in the application, on the machine
+            * it applies to — a path in a README is a path on somebody else's
+            * computer. It also answers the question that follows the copy:
+            * whether the file was picked up, and if not, why.
+            */}
+          <Panel
+            title="Content library"
+            right={<span className="label">{content.items.length.toLocaleString()} items</span>}
+            testId="content-library"
+          >
+            <div className="space-y-2.5 px-3 py-2.5">
+              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <span className="font-mono text-2xs text-ink-dim">
+                  <span className="label mr-1.5">Bundled</span>
+                  <span className="tabular text-ink">
+                    {(content.items.length - content.personalItemCount).toLocaleString()}
+                  </span>
+                </span>
+                <span className="font-mono text-2xs text-ink-dim">
+                  <span className="label mr-1.5">Personal</span>
+                  <span className={`tabular ${content.personalItemCount > 0 ? 'text-warn' : 'text-ink'}`}>
+                    {content.personalItemCount.toLocaleString()}
+                  </span>
+                </span>
+              </div>
+
+              {content.sideloadSupported ? (
+                <>
+                  <div>
+                    <div className="label">Your packs folder</div>
+                    <code
+                      className="mt-1 block select-all break-all border border-line bg-surface-2 px-1.5 py-1 font-mono text-3xs text-ink-dim"
+                      data-testid="packs-folder"
+                    >
+                      {content.sideloadDir ?? 'unavailable'}
+                    </code>
+                  </div>
+                  {content.sideloadedPacks.length === 0 ? (
+                    <p className="text-3xs leading-relaxed text-ink-faint">
+                      Empty. Copy a pack&rsquo;s <code>.json</code> in and restart — it loads through the
+                      same gate as everything shipped, and never enters the installer.
+                    </p>
+                  ) : (
+                    <ul className="space-y-1" data-testid="sideloaded-packs">
+                      {content.sideloadedPacks.map((pack) => (
+                        <li key={pack.name} className="flex items-baseline gap-2">
+                          <span className="min-w-0 flex-1 truncate font-mono text-3xs text-ink">
+                            {pack.name}
+                          </span>
+                          {pack.personal ? <span className="label text-warn">personal</span> : null}
+                          <span className="tabular font-mono text-3xs text-ink-dim">{pack.items}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ) : (
+                <p className="text-3xs leading-relaxed text-ink-faint">
+                  Running in a browser, so there is no packs folder to read. The desktop build loads
+                  <code> *.json</code> packs from a folder beside its database.
+                </p>
+              )}
+            </div>
           </Panel>
 
           <Panel title="Elsewhere">

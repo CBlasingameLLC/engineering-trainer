@@ -52,6 +52,24 @@ export interface LayoutOptions {
   rowGap?: number;
   /** Barycentre ordering sweeps. Four is well past the point of diminishing returns here. */
   sweeps?: number;
+  /**
+   * Nodes drawn side by side before a layer wraps onto another line.
+   *
+   * Prerequisite depth decides the layering, and nothing constrains how many
+   * components land at one depth: across nine courses, depth 0 holds every
+   * topic that depends on nothing, which is thirty-three of them. Laid out in
+   * a single run that is a graph eleven layers tall and thirty-three wide — a
+   * ribbon with an aspect ratio near four to one, which on a sixteen-by-nine
+   * screen fits to the width and leaves more than half the height empty, with
+   * every label too small to read at the only zoom that shows the shape.
+   *
+   * Wrapping trades a little of the "above means prerequisite" reading for a
+   * layout that fits the screen it is drawn on: the lines of one layer sit
+   * closer together than two layers do, so a wrapped rank still reads as one
+   * band. Left unset there is no wrapping and the layout is exactly what it
+   * was, which is what the layered-layout tests pin.
+   */
+  maxPerRow?: number;
 }
 
 export function layoutGraph(graph: KcGraph, options: LayoutOptions = {}): GraphLayout {
@@ -109,24 +127,47 @@ export function layoutGraph(graph: KcGraph, options: LayoutOptions = {}): GraphL
     }
   }
 
-  const widest = Math.max(1, ...layers.map((l) => l?.length ?? 0));
+  // How many lines each layer needs, and how many nodes go on each. Dividing
+  // evenly rather than filling the first line to the brim keeps a layer of 33
+  // as three lines of 11 instead of two of 16 and one of 1.
+  const maxPerRow = options.maxPerRow && options.maxPerRow > 0 ? options.maxPerRow : Infinity;
+  const runs = layers.map((layer) => {
+    const count = layer?.length ?? 0;
+    const lines = Math.max(1, Math.ceil(count / maxPerRow));
+    return { lines, perLine: Math.max(1, Math.ceil(count / lines)) };
+  });
+
+  const widest = Math.max(
+    1,
+    ...layers.map((l, i) => Math.min(l?.length ?? 0, runs[i]?.perLine ?? Infinity)),
+  );
   const width = widest * columnGap;
 
+  // A wrapped layer's lines sit closer together than two layers do, so the
+  // band still reads as one rank rather than as two ranks with no edges
+  // between them.
+  const lineGap = rowGap * 0.66;
+
   const nodes: LayoutNode[] = [];
+  let top = 0;
   layers.forEach((layer, layerIndex) => {
-    if (!layer) return;
-    // Centre each layer against the widest one, so the tree reads as a tree
-    // rather than as left-aligned columns.
-    const offset = (width - layer.length * columnGap) / 2;
+    const run = runs[layerIndex];
+    if (!layer || !run) return;
     layer.forEach((kcId, order) => {
+      const line = Math.floor(order / run.perLine);
+      const onLine = Math.min(run.perLine, layer.length - line * run.perLine);
+      // Centre every line against the widest one, so the tree reads as a tree
+      // rather than as left-aligned columns.
+      const offset = (width - onLine * columnGap) / 2;
       nodes.push({
         kcId,
         layer: layerIndex,
         order,
-        x: offset + order * columnGap + columnGap / 2,
-        y: layerIndex * rowGap + rowGap / 2,
+        x: offset + (order % run.perLine) * columnGap + columnGap / 2,
+        y: top + line * lineGap + rowGap / 2,
       });
     });
+    top += (run.lines - 1) * lineGap + rowGap;
   });
 
   const edges: LayoutEdge[] = [];
@@ -147,7 +188,7 @@ export function layoutGraph(graph: KcGraph, options: LayoutOptions = {}): GraphL
     nodes,
     edges,
     width,
-    height: layers.length * rowGap,
+    height: top,
     layers: layers.map((l) => l ?? []),
   };
 }

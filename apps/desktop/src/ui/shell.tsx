@@ -9,6 +9,46 @@ import type { ReactElement, ReactNode } from 'react';
  * own spacing and its own idea of a heading. These are the shapes.
  */
 
+/**
+ * A route frame.
+ *
+ * The shell hands every route exactly the height between the display controls
+ * and the status strip and then refuses to grow, so a route has to say which
+ * kind it is. A `scroll` route scrolls its own body — a report, a feed, a
+ * schedule. The two that do not are the briefing, which divides that height
+ * between its panels, and the knowledge map, which is a camera; both build
+ * their own frame.
+ *
+ * Width is uncapped on purpose. A centred 1360-pixel column on a 2560-pixel
+ * monitor spends half the screen on nothing, and what sits in these panels is
+ * dense readout rather than prose — a table of thirty knowledge components
+ * wants the room, and giving it less was the complaint. Prose inside a panel
+ * still carries its own `max-w-[Nch]` measure, which is where a reading limit
+ * belongs: a measure is a property of a paragraph, not of a window.
+ */
+export function Screen({
+  children,
+  className = '',
+  testId,
+  scroll = true,
+}: {
+  children: ReactNode;
+  className?: string;
+  testId?: string;
+  scroll?: boolean;
+}): ReactElement {
+  return (
+    <div
+      className={`h-full w-full px-4 py-4 xl:px-6 xl:py-5 ${
+        scroll ? 'overflow-y-auto overflow-x-hidden' : 'overflow-hidden'
+      } ${className}`}
+      data-testid={testId}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function Label({ children, className = '' }: { children: ReactNode; className?: string }): ReactElement {
   return <div className={`label ${className}`}>{children}</div>;
 }
@@ -78,16 +118,26 @@ export function Stat({
   }[tone];
   return (
     <div className="min-w-0">
-      <div className={`tabular font-mono text-[22px] font-semibold leading-none tracking-tightest ${colour}`}>
+      <div className={`tabular font-mono text-2xl font-semibold leading-none tracking-tightest ${colour}`}>
         {value}
       </div>
       <div className="label mt-1.5 truncate">{label}</div>
-      {sub ? <div className="mt-0.5 truncate font-mono text-[10px] text-ink-faint">{sub}</div> : null}
+      {sub ? <div className="mt-0.5 truncate font-mono text-3xs text-ink-faint">{sub}</div> : null}
     </div>
   );
 }
 
-/** A 2px bar. Thin enough to sit under a row of text without becoming the row. */
+/**
+ * A hairline bar. Thin enough to sit under a row of text without becoming the row.
+ *
+ * Sized by `w-full` and nothing else, deliberately. It briefly carried
+ * `flex-1` as well, on the theory that it is usually the stretchy middle of a
+ * row — which is true, and which flex already does by shrinking a `w-full`
+ * item to fit its siblings. What `flex-1` added was a *grow* factor, and the
+ * session player puts this bar directly inside a full-height flex column: it
+ * grew to four hundred pixels of empty track above the question. A primitive
+ * used in two kinds of container cannot assert anything about the container.
+ */
 export function Meter({
   value,
   tone = 'accent',
@@ -106,7 +156,7 @@ export function Meter({
     danger: 'bg-danger',
   }[tone];
   return (
-    <div className={`h-[2px] w-full bg-line ${className}`}>
+    <div className={`h-[3px] w-full bg-line ${className}`}>
       <div className={`h-full ${fill}`} style={{ width: `${Math.max(0, Math.min(1, value)) * 100}%` }} />
     </div>
   );
@@ -132,7 +182,7 @@ export function Countdown({ days, className = '' }: { days: number; className?: 
       : `${days} days`;
   return (
     <span
-      className={`tabular inline-block whitespace-nowrap border px-1.5 py-px font-mono text-[10px] uppercase tracking-[0.08em] ${tone} ${className}`}
+      className={`tabular inline-block whitespace-nowrap border px-1.5 py-px font-mono text-3xs uppercase tracking-[0.08em] ${tone} ${className}`}
     >
       {text}
     </span>
@@ -179,6 +229,18 @@ export function DataRow({
   );
 }
 
+/**
+ * What a panel says when it has nothing to say.
+ *
+ * Centred in whatever height the panel was given rather than pinned to the
+ * top, because on a fixed-height grid an empty panel is a tall box with one
+ * line of text in the corner — which reads as a rendering fault rather than as
+ * a state.
+ */
 export function Empty({ children }: { children: ReactNode }): ReactElement {
-  return <div className="px-3 py-6 text-center font-mono text-[11px] text-ink-faint">{children}</div>;
+  return (
+    <div className="grid h-full place-items-center px-3 py-6 text-center font-mono text-2xs text-ink-faint">
+      <span className="max-w-[46ch]">{children}</span>
+    </div>
+  );
 }

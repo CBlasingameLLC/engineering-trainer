@@ -47,6 +47,9 @@
     --band-proficient: #2f6b80;
     --band-mastered: #3f6b3d;
 
+    --edge: #b9bfb2;
+    --edge-cross: #7c3aed;
+
     --grid: rgba(0, 0, 0, 0.035);
   }
 
@@ -78,8 +81,30 @@
     --band-proficient: #5a90a8;
     --band-mastered: #7ea87a;
 
+    --edge: #2f3529;
+    --edge-cross: #9575e8;
+
     --grid: rgba(255, 255, 255, 0.028);
   }
+
+  /*
+   * The root font size is the interface's scale control.
+   *
+   * Every size in the app is in rem — the type scale in `tailwind.config.js`
+   * and Tailwind's own spacing, so padding, gaps, the navigation rail and the
+   * panels all move together. That makes "everything is a bit small on this
+   * monitor" one number rather than a second stylesheet, and it is set from
+   * `ui/scale.ts` before the first paint. 17px is the default because the
+   * previous literal pixel sizes were tuned on a laptop and read a step too
+   * small on anything larger.
+   *
+   * Deliberately not CSS `zoom`, which is the obvious alternative and breaks
+   * the one thing this app cannot afford to break: `zoom` rescales
+   * `getBoundingClientRect` without rescaling `clientX`, so the pan-zoom
+   * camera under the skill tree and the Circuit Lab would drift by the scale
+   * factor on every drag.
+   */
+  html { font-size: 17px; }
 
   html, body, #root { height: 100%; }
 
@@ -119,7 +144,15 @@
    * card, no border and no heading weight in between.
    */
   .label {
-    @apply font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ink-faint;
+    @apply font-mono text-3xs font-medium uppercase tracking-[0.14em] text-ink-faint;
+  }
+
+  /*
+   * A screen heading. Eleven routes spelled this out longhand, which is how
+   * three of them ended up a pixel apart from the other eight.
+   */
+  .title {
+    @apply font-mono text-lg font-semibold uppercase tracking-[0.1em] text-ink;
   }
 
   /* A label followed by a hairline that runs to the end of the row. */
@@ -132,7 +165,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-1.5 border px-3 py-1.5 font-mono text-[11px]
+    @apply inline-flex items-center justify-center gap-1.5 border px-3 py-1.5 font-mono text-2xs
            font-medium uppercase tracking-[0.08em] transition-colors
            disabled:cursor-not-allowed disabled:opacity-35;
   }

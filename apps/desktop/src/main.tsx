@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { initScale } from '@/ui/scale';
 import { initTheme } from '@/ui/theme';
 import { App } from './App';
 import './index.css';
@@ -11,6 +12,7 @@ if (!root) throw new Error('missing #root');
 // light, which on a desktop app reads as a broken window rather than a
 // transition.
 initTheme();
+initScale();
 
 createRoot(root).render(
   <StrictMode>

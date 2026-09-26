@@ -342,4 +342,63 @@ describe('skill tree layout', () => {
       expect(node.x).toBeLessThanOrEqual(layout.width);
     }
   });
+
+  /*
+   * Layer wrapping. Depth decides the layering and nothing bounds how many
+   * components share a depth — across nine courses, thirty-three of them
+   * depend on nothing — so a single run produces a ribbon far wider than any
+   * screen it is drawn on.
+   */
+  describe('wrapping a wide layer', () => {
+    /** Twenty roots and one node that depends on all of them: two layers, 20 wide. */
+    const wide = (): KcGraph =>
+      new KcGraph(
+        [...Array.from({ length: 20 }, (_, i) => kc(`r${i}`)), kc('sink')],
+        Array.from({ length: 20 }, (_, i) => ({ from: `r${i}`, to: 'sink', strength: 0.5 })),
+      );
+
+    it('is off unless asked for, so the plain layout is unchanged', () => {
+      expect(layoutGraph(wide()).width).toBe(20 * 180);
+    });
+
+    it('narrows the layout to the requested run length', () => {
+      const layout = layoutGraph(wide(), { columnGap: 100, rowGap: 80, maxPerRow: 7 });
+      // 20 across at most 7 divides into three lines of at most 7.
+      expect(layout.width).toBe(7 * 100);
+    });
+
+    it('divides a layer evenly rather than filling each line to the brim', () => {
+      // 33 over a limit of 16 is where the two strategies part company:
+      // filling each line to the brim gives 16/16/1, dividing evenly gives
+      // 11/11/11, and only the second is a layout rather than a ledge.
+      const many = new KcGraph(
+        [...Array.from({ length: 33 }, (_, i) => kc(`r${i}`)), kc('sink')],
+        Array.from({ length: 33 }, (_, i) => ({ from: `r${i}`, to: 'sink', strength: 0.5 })),
+      );
+      const layout = layoutGraph(many, { columnGap: 100, rowGap: 80, maxPerRow: 16 });
+      expect(layout.width).toBe(11 * 100);
+    });
+
+    it('keeps a wrapped layer above the layer that depends on it', () => {
+      const layout = layoutGraph(wide(), { columnGap: 100, rowGap: 80, maxPerRow: 7 });
+      const sink = layout.nodes.find((n) => n.kcId === 'sink')!;
+      for (const node of layout.nodes) {
+        if (node.kcId === 'sink') continue;
+        expect(node.y, `${node.kcId} must sit above its dependent`).toBeLessThan(sink.y);
+      }
+    });
+
+    it('grows the height to pay for the width it saved', () => {
+      const plain = layoutGraph(wide(), { columnGap: 100, rowGap: 80 });
+      const wrapped = layoutGraph(wide(), { columnGap: 100, rowGap: 80, maxPerRow: 7 });
+      expect(wrapped.height).toBeGreaterThan(plain.height);
+      expect(wrapped.width).toBeLessThan(plain.width);
+    });
+
+    it('stays deterministic', () => {
+      const once = layoutGraph(wide(), { maxPerRow: 7 }).nodes;
+      const twice = layoutGraph(wide(), { maxPerRow: 7 }).nodes;
+      expect(once).toEqual(twice);
+    });
+  });
 });

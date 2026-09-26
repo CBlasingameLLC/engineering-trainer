@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { rankCredentials, shortlist, type CareerTrack, type RankedCredential } from '@et/domain';
 import { useApp } from '@/store';
+import { Screen } from '@/ui/shell';
 
 /**
  * Credential recommendations.
@@ -61,9 +62,9 @@ export function Credentials(): React.ReactElement {
   if (!content) return <div className="grid h-full place-items-center text-sm text-ink-faint">Loading…</div>;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-10">
+    <Screen>
       <header className="flex items-baseline gap-4">
-        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">Credentials worth your time</h1>
+        <h1 className="title">Credentials worth your time</h1>
         <button className="btn-ghost ml-auto" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
@@ -152,7 +153,7 @@ export function Credentials(): React.ReactElement {
           Nothing matches those filters. Try allowing paid credentials or raising the hour budget.
         </p>
       )}
-    </div>
+    </Screen>
   );
 }
 

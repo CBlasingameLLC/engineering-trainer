@@ -1,4 +1,5 @@
 import { KcGraph, type DrillCandidate, type Kc, type KcEdge } from '@et/domain';
+import { NO_SIDELOAD, type Sideload } from '@/content/sideload';
 import { parse as parseYaml } from 'yaml';
 import {
   checkTermUnits, loadCurriculum, parseCredentialCatalog, parseMisconceptionCatalog, parsePack,
@@ -109,14 +110,49 @@ export interface LoadedContent {
    * obvious instead of silent.
    */
   personalItemCount: number;
+  /**
+   * Packs read from the runtime folder rather than compiled into the build.
+   *
+   * Listed by name and size because the learner is the one who put them there
+   * and is the only person who can tell a pack that failed to load from a pack
+   * they forgot to copy.
+   */
+  sideloadedPacks: { name: string; items: number; personal: boolean }[];
+  /** Absolute path of that folder, or null in a build that has none. */
+  sideloadDir: string | null;
+  /** Whether this build reads a packs folder at all. False in the browser. */
+  sideloadSupported: boolean;
+  /**
+   * Items dropped because their id was already loaded.
+   *
+   * An item loaded twice counts twice as evidence, which quietly doubles the
+   * weight of whatever it measures. The bundled packs cannot collide with each
+   * other — `generatorsForCourse` routes a generator to exactly one pack — but
+   * a sideloaded copy of a pack that also shipped can, and silently.
+   */
+  duplicateItemIds: string[];
   /** Problems found while loading. Surfaced rather than swallowed. */
   issues: string[];
 }
 
 let cached: LoadedContent | null = null;
+let cachedFor = '';
 
-export function loadContent(): LoadedContent {
-  if (cached) return cached;
+/**
+ * Load everything the app knows about.
+ *
+ * `sideloaded` is the learner's own packs, read from disk by the caller before
+ * this runs — the read is asynchronous and this is not, because the graph has
+ * to exist before the first route renders.
+ *
+ * The cache is keyed on which files were handed in rather than being a plain
+ * singleton, so a second call with different packs rebuilds instead of
+ * returning the first call's answer. A cache that ignores its argument is the
+ * kind of thing that works until the day something calls it twice.
+ */
+export function loadContent(sideloaded: Sideload = NO_SIDELOAD): LoadedContent {
+  const signature = sideloaded.files.map((f) => `${f.name}:${f.text.length}`).join('|');
+  if (cached && cachedFor === signature) return cached;
 
   const documents = Object.entries(curriculumFiles).map(([path, text]) => ({
     source: path.split('/').pop() ?? path,
@@ -155,6 +191,46 @@ export function loadContent(): LoadedContent {
         issues.push(...result.issues.map((i) => `${path.split('/').pop()} ${i.path}: ${i.message}`));
       }
     }
+  }
+
+  /*
+   * Packs from the runtime folder.
+   *
+   * Loaded after the bundled ones so the dedupe below prefers what shipped: if
+   * a learner has a copy of a pack that is also in the build, the build's copy
+   * is the one the gate verified in CI.
+   *
+   * Every failure here is reported and none is fatal. This folder is edited by
+   * hand, so a half-written file is an ordinary Tuesday rather than a
+   * corrupted installation, and the app has to keep working without it.
+   */
+  const sideloadedPacks: LoadedContent['sideloadedPacks'] = [];
+  if (sideloaded.error) {
+    issues.push(`packs folder: ${sideloaded.error}`);
+  }
+  for (const file of sideloaded.files) {
+    if (file.text.length === 0) {
+      issues.push(`${file.name}: could not be read`);
+      continue;
+    }
+    let raw: unknown;
+    try {
+      raw = JSON.parse(file.text);
+    } catch (error) {
+      issues.push(`${file.name}: not valid JSON — ${(error as Error).message}`);
+      continue;
+    }
+    const result = parsePack(raw);
+    if (!result.pack) {
+      issues.push(...result.issues.map((i) => `${file.name} ${i.path}: ${i.message}`));
+      continue;
+    }
+    packs.push(result.pack);
+    const personal = result.pack.items.filter(
+      (item) => item.provenance.licenseTier === 'personal-only',
+    ).length;
+    personalItems += personal;
+    sideloadedPacks.push({ name: file.name, items: result.pack.items.length, personal: personal > 0 });
   }
 
   const credentials: Credential[] = [];
@@ -220,13 +296,40 @@ export function loadContent(): LoadedContent {
   }
   terms.sort((a, b) => b.startsOn.localeCompare(a.startsOn));
 
+  // One item, one id. Everything downstream — the Elo update, the BKT blend,
+  // the misconception tally — treats each attempt as independent evidence, so
+  // an item present twice is a thumb on the scale for whatever it measures.
+  const seen = new Set<string>();
+  const duplicateItemIds: string[] = [];
+  const items: Item[] = [];
+  for (const item of packs.flatMap((p) => p.items)) {
+    if (seen.has(item.id)) {
+      duplicateItemIds.push(item.id);
+      continue;
+    }
+    seen.add(item.id);
+    items.push(item);
+  }
+  if (duplicateItemIds.length > 0) {
+    issues.push(
+      `${duplicateItemIds.length} item ${duplicateItemIds.length === 1 ? 'id was' : 'ids were'} ` +
+        `loaded more than once and the later copy was dropped: ${duplicateItemIds.slice(0, 5).join(', ')}` +
+        `${duplicateItemIds.length > 5 ? ', …' : ''}`,
+    );
+  }
+
   cached = {
-    graph, courses, packs, items: packs.flatMap((p) => p.items), credentials,
+    graph, courses, packs, items, credentials,
     misconceptionFamilies, misconceptionTitles,
     terms, termCoursesWithoutGraph: [...termCoursesWithoutGraph].sort(),
     personalItemCount: personalItems,
+    sideloadedPacks,
+    sideloadDir: sideloaded.dir,
+    sideloadSupported: sideloaded.supported,
+    duplicateItemIds,
     issues,
   };
+  cachedFor = signature;
   return cached;
 }
 
