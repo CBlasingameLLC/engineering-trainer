@@ -98,8 +98,8 @@ export class TauriSqlAdapter implements StorageAdapter {
     // No ON CONFLICT clause: attempts are append-only, and a duplicate id means
     // a logic error upstream that should surface rather than overwrite evidence.
     await this.database.execute(
-      `INSERT INTO attempts (id, session_id, item_id, kc_refs, correct, latency_ms, hints_used, option_count, at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      `INSERT INTO attempts (id, session_id, item_id, kc_refs, correct, latency_ms, hints_used, option_count, at, evidence_weight)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         attempt.id,
         attempt.sessionId,
@@ -110,13 +110,14 @@ export class TauriSqlAdapter implements StorageAdapter {
         attempt.hintsUsed,
         attempt.optionCount ?? null,
         attempt.at.toISOString(),
+        attempt.evidenceWeight ?? null,
       ],
     );
   }
 
   async listAttempts(): Promise<AttemptRecord[]> {
     const rows = await this.database.select<
-      { id: string; session_id: string; item_id: string; kc_refs: string; correct: number; latency_ms: number; hints_used: number; option_count: number | null; at: string }[]
+      { id: string; session_id: string; item_id: string; kc_refs: string; correct: number; latency_ms: number; hints_used: number; option_count: number | null; at: string; evidence_weight: number | null }[]
     >('SELECT * FROM attempts ORDER BY at ASC');
 
     return rows.map((row) => ({
@@ -130,6 +131,7 @@ export class TauriSqlAdapter implements StorageAdapter {
       misconceptions: [],
       at: new Date(row.at),
       ...(row.option_count !== null ? { optionCount: row.option_count } : {}),
+      ...(row.evidence_weight !== null ? { evidenceWeight: row.evidence_weight } : {}),
     }));
   }
 

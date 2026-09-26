@@ -19,12 +19,25 @@ import { useApp } from '@/store';
  * answers the only question worth asking of it.
  */
 
+/**
+ * Node styling, as theme tokens rather than literal colours.
+ *
+ * The tree used to paint white cards with pastel fills, which was the one
+ * screen that never changed when the theme did — a light-mode diagram sitting
+ * on a near-black page. Tokens go through `var()`, so the same five states
+ * read correctly in both themes and match every band colour used elsewhere in
+ * the app: a node is coloured by what it *means*, and it means the same thing
+ * here as it does on the dashboard.
+ *
+ * SVG presentation attributes do not resolve `var()`, so these are applied as
+ * CSS properties through `style` rather than as `fill=`/`stroke=`.
+ */
 const STATE_STYLE: Record<SkillState, { fill: string; stroke: string; text: string; label: string }> = {
-  locked: { fill: '#f1f5f9', stroke: '#cbd5e1', text: '#94a3b8', label: 'Locked' },
-  available: { fill: '#ffffff', stroke: '#64748b', text: '#334155', label: 'Ready to start' },
-  learning: { fill: '#fef3c7', stroke: '#f59e0b', text: '#92400e', label: 'Learning' },
-  proficient: { fill: '#dbeafe', stroke: '#3b82f6', text: '#1e40af', label: 'Proficient' },
-  mastered: { fill: '#fef9c3', stroke: '#ca8a04', text: '#854d0e', label: 'Mastered' },
+  locked: { fill: 'var(--surface)', stroke: 'var(--line)', text: 'var(--text-faint)', label: 'Locked' },
+  available: { fill: 'var(--surface-2)', stroke: 'var(--line-strong)', text: 'var(--text-dim)', label: 'Ready to start' },
+  learning: { fill: 'var(--surface-2)', stroke: 'var(--band-developing)', text: 'var(--band-developing)', label: 'Learning' },
+  proficient: { fill: 'var(--surface-2)', stroke: 'var(--band-proficient)', text: 'var(--band-proficient)', label: 'Proficient' },
+  mastered: { fill: 'var(--surface-2)', stroke: 'var(--band-mastered)', text: 'var(--band-mastered)', label: 'Mastered' },
 };
 
 const NODE = { width: 132, height: 44 };
@@ -32,7 +45,7 @@ const NODE = { width: 132, height: 44 };
 export function SkillTree(): React.ReactElement {
   const content = useApp((s) => s.content);
   const model = useApp((s) => s.model);
-  const goTo = useApp((s) => s.goTo);
+
   const [focused, setFocused] = useState<KcId | null>(null);
   const [courseFilter, setCourseFilter] = useState<string>('all');
 
@@ -69,7 +82,7 @@ export function SkillTree(): React.ReactElement {
   const dragOrigin = useRef<{ x: number; y: number } | null>(null);
 
   if (!content || !graph || !layout) {
-    return <div className="grid h-full place-items-center text-sm text-slate-400 dark:text-slate-500">Loading…</div>;
+    return <div className="grid h-full place-items-center text-sm text-ink-faint">Loading…</div>;
   }
 
   const nodeById = new Map(layout.nodes.map((n) => [n.kcId, n]));
@@ -84,33 +97,30 @@ export function SkillTree(): React.ReactElement {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-8">
-      <header className="flex flex-wrap items-baseline gap-4">
-        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">Skill tree</h1>
+      <header className="mb-3 flex flex-wrap items-center gap-3">
+        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">
+          Knowledge map
+        </h1>
         <select
-          className="rounded border border-slate-300 px-2 py-1 text-sm dark:border-slate-600"
+          className="border border-line bg-surface-2 px-1.5 py-0.5 font-mono text-[11px] text-ink-dim focus:border-accent focus:outline-none"
           value={courseFilter}
           onChange={(e) => { setCourseFilter(e.target.value); setFocused(null); }}
         >
           <option value="all">All courses</option>
           {courses.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
-        <button className="ml-auto text-sm text-slate-500 underline dark:text-slate-400" onClick={() => goTo('dashboard')}>
-          Back to dashboard
-        </button>
-      </header>
-
-      <div className="mt-3 flex flex-wrap gap-4 text-xs">
+        <span className="h-px flex-1 bg-line" />
         {(Object.keys(STATE_STYLE) as SkillState[]).map((state) => (
-          <span key={state} className="flex items-center gap-1.5">
+          <span key={state} className="flex items-center gap-1.5 whitespace-nowrap">
             <span
-              className="inline-block h-3 w-3 rounded-sm border"
+              className="inline-block h-2.5 w-2.5 border"
               style={{ background: STATE_STYLE[state].fill, borderColor: STATE_STYLE[state].stroke }}
             />
-            <span className="text-slate-600 dark:text-slate-400">{STATE_STYLE[state].label}</span>
-            <span className="tabular-nums text-slate-400 dark:text-slate-500">{tally[state] ?? 0}</span>
+            <span className="label">{STATE_STYLE[state].label}</span>
+            <span className="tabular font-mono text-[11px] text-ink-dim">{tally[state] ?? 0}</span>
           </span>
         ))}
-      </div>
+      </header>
 
       <div className="card relative mt-4 overflow-hidden p-0">
         <div className="pointer-events-none absolute right-3 top-3 z-10 flex flex-col gap-1">
@@ -118,7 +128,7 @@ export function SkillTree(): React.ReactElement {
           <ZoomButton label="−" title="Zoom out" onClick={() => camera.zoomBy(1 / 1.3)} />
           <ZoomButton label="⤢" title="Fit to view" onClick={camera.fit} />
         </div>
-        <span className="pointer-events-none absolute bottom-2 left-3 z-10 text-[11px] text-slate-400 dark:text-slate-500">
+        <span className="pointer-events-none absolute bottom-2 left-3 z-10 text-[11px] text-ink-faint">
           Scroll to zoom · drag to pan · {Math.round(camera.scale * 100)}%
         </span>
         <svg
@@ -173,23 +183,25 @@ export function SkillTree(): React.ReactElement {
                 data-skill-state={state}
               >
                 <rect
-                  width={NODE.width} height={NODE.height} rx={6}
-                  fill={style.fill}
-                  stroke={isFocused ? '#0f172a' : style.stroke}
-                  strokeWidth={isFocused ? 2.5 : 1.5}
+                  width={NODE.width} height={NODE.height} rx={1}
+                  style={{
+                    fill: style.fill,
+                    stroke: isFocused ? 'var(--accent)' : style.stroke,
+                  }}
+                  strokeWidth={isFocused ? 2 : 1}
                 />
                 {/* Mastery fill along the bottom edge: the bar is the number. */}
                 {mastery && mastery.composite > 0 && (
                   <rect
                     x={2} y={NODE.height - 6}
                     width={Math.max(2, (NODE.width - 4) * Math.min(1, mastery.composite))}
-                    height={4} rx={2} fill={style.stroke} opacity={0.7}
+                    height={4} rx={0} style={{ fill: style.stroke }} opacity={0.8}
                   />
                 )}
-                <text x={NODE.width / 2} y={17} textAnchor="middle" fontSize={9.5} fill={style.text}>
+                <text x={NODE.width / 2} y={17} textAnchor="middle" fontSize={9.5} style={{ fill: style.text }}>
                   {truncate(kc?.title ?? node.kcId, 22)}
                 </text>
-                <text x={NODE.width / 2} y={30} textAnchor="middle" fontSize={8.5} fill={style.text} opacity={0.75}>
+                <text x={NODE.width / 2} y={30} textAnchor="middle" fontSize={8.5} style={{ fill: style.text }} opacity={0.7}>
                   {kc?.courseId ?? ''}
                 </text>
               </g>
@@ -201,8 +213,8 @@ export function SkillTree(): React.ReactElement {
       {focusedKc && (
         <section className="card mt-4 p-4">
           <div className="flex flex-wrap items-baseline gap-2">
-            <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">{focusedKc.title}</h2>
-            <span className="text-xs text-slate-400 dark:text-slate-500">{focusedKc.courseId} · {focusedKc.unit}</span>
+            <h2 className="text-base font-semibold text-ink">{focusedKc.title}</h2>
+            <span className="text-xs text-ink-faint">{focusedKc.courseId} · {focusedKc.unit}</span>
             <span
               className="rounded px-1.5 py-0.5 text-xs"
               style={{
@@ -214,7 +226,7 @@ export function SkillTree(): React.ReactElement {
             </span>
           </div>
 
-          {focusedKc.description && <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{focusedKc.description}</p>}
+          {focusedKc.description && <p className="mt-2 text-sm text-ink-dim">{focusedKc.description}</p>}
 
           {focusedMastery && focusedMastery.attempts > 0 ? (
             <dl className="mt-3 flex flex-wrap gap-6 text-sm">
@@ -224,21 +236,21 @@ export function SkillTree(): React.ReactElement {
               <Stat label="Attempts" value={String(focusedMastery.attempts)} />
             </dl>
           ) : (
-            <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">No evidence yet — this topic has not been tested.</p>
+            <p className="mt-3 text-sm text-ink-dim">No evidence yet — this topic has not been tested.</p>
           )}
 
           {blockers.length > 0 && (
-            <div className="mt-3 rounded border-l-2 border-orange-300 pl-3">
-              <p className="text-sm text-slate-700 dark:text-slate-300">
+            <div className="mt-3 rounded border-l-2 border-warn/40 pl-3">
+              <p className="text-sm text-ink-dim">
                 Locked because {blockers.length === 1 ? 'this prerequisite is' : 'these prerequisites are'} not in place:
               </p>
               <ul className="mt-1 space-y-0.5 text-sm">
                 {blockers.map((id) => (
                   <li key={id}>
-                    <button className="text-slate-900 underline dark:text-slate-100" onClick={() => setFocused(id)}>
+                    <button className="text-ink underline" onClick={() => setFocused(id)}>
                       {content.graph.kcs.get(id)?.title ?? id}
                     </button>
-                    <span className="ml-2 text-xs text-slate-400 dark:text-slate-500">
+                    <span className="ml-2 text-xs text-ink-faint">
                       {content.graph.kcs.get(id)?.courseId}
                     </span>
                   </li>
@@ -249,7 +261,7 @@ export function SkillTree(): React.ReactElement {
         </section>
       )}
 
-      <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
+      <p className="mt-4 text-xs text-ink-dim">
         Dashed purple edges cross a course boundary — those are the dependencies a per-course
         gradebook cannot represent.
       </p>
@@ -266,7 +278,7 @@ function ZoomButton({
       title={title}
       aria-label={title}
       onClick={onClick}
-      className="pointer-events-auto h-7 w-7 rounded border border-slate-300 bg-white/90 text-sm leading-none text-slate-600 shadow-sm hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-300 dark:hover:bg-slate-800"
+      className="pointer-events-auto h-7 w-7 rounded border border-line-strong bg-surface/90 text-sm leading-none text-ink-dim shadow-sm hover:bg-surface"
     >
       {label}
     </button>
@@ -276,8 +288,8 @@ function ZoomButton({
 function Stat({ label, value }: { label: string; value: string }): React.ReactElement {
   return (
     <div>
-      <dt className="text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">{label}</dt>
-      <dd className="tabular-nums text-slate-900 dark:text-slate-100">{value}</dd>
+      <dt className="text-xs uppercase tracking-wide text-ink-faint">{label}</dt>
+      <dd className="tabular-nums text-ink">{value}</dd>
     </div>
   );
 }

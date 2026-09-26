@@ -1,0 +1,13 @@
+-- How much an attempt is allowed to move the mastery model, 0 to 1.
+--
+-- Null means one, which is every attempt recorded before this column existed
+-- and every graded attempt after it. Below one only where the grade is
+-- self-reported: a `proof-rubric` item asks the learner to write a proof and
+-- then score it themselves, which is worth recording and is not worth as much
+-- as a graded response.
+--
+-- It is stored on the attempt rather than looked up from the bank at replay
+-- time, because the replay reads this log and not the bank. An item whose
+-- weight is changed later must not silently rescore attempts already made
+-- under the old one.
+ALTER TABLE attempts ADD COLUMN evidence_weight REAL;

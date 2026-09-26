@@ -80,12 +80,13 @@ await page.screenshot({ path: `${SHOT}/01-onboarding.png`, fullPage: true });
 await page.getByRole('button', { name: /Continue with/ }).click();
 
 // --- Dashboard -------------------------------------------------------------
-await page.waitForSelector('text=Start with a placement exam', { timeout: 10000 });
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 console.log('[3] dashboard rendered (no data yet)');
 await page.screenshot({ path: `${SHOT}/02-dashboard-empty.png`, fullPage: true });
 
-await page.getByRole('button', { name: 'Begin placement' }).click();
-await page.waitForSelector('text=Placement', { timeout: 10000 });
+await page.locator('[data-testid="nav-diagnostics"]').click();
+await page.locator('[data-testid="placement-launch"]').click();
+await page.waitForSelector('[data-testid="session"]', { timeout: 10000 });
 console.log('[4] placement session started');
 
 // --- Placement -------------------------------------------------------------
@@ -112,7 +113,7 @@ let figuresServed = 0;
 let figuresDrawn = 0;
 
 while (answered < 60) {
-  const done = await page.locator('text=Placement results').count();
+  const done = await page.locator('[data-testid="placement-results"]').count();
   if (done > 0) break;
 
   // The rendered stem is rewritten by KaTeX, so identify the item by the id
@@ -228,12 +229,12 @@ console.log(`    bank contains ${circuitItems} design task(s) graded by simulati
 if (unmatched > 0) { console.error(`FAIL: ${unmatched} items could not be matched to the bank`); process.exitCode = 1; }
 
 // --- Report ----------------------------------------------------------------
-await page.waitForSelector('text=Placement results', { timeout: 15000 });
+await page.waitForSelector('[data-testid="placement-results"]', { timeout: 15000 });
 const summary = await page.locator('header + div').first().innerText();
 console.log('[6] gap report rendered');
 console.log('    tallies:', summary.replace(/\n/g, ' '));
 
-const inferredCount = await page.locator('text=Inferred, not tested').count();
+const inferredCount = await page.locator('[data-testid="inferred-heading"]').count();
 console.log('    inferred section present:', inferredCount > 0);
 if (inferredCount > 0) {
   const inferred = await page.locator('h2:has-text("Inferred, not tested") + p + ul li').count();
@@ -250,12 +251,15 @@ if (inferredCount > 0) {
 const gapKcs = await page
   .locator('section:has(h2:text("Start here")) li[data-kc-id]')
   .evaluateAll((els) => els.map((e) => e.getAttribute('data-kc-id')));
+// Read the row itself rather than a utility class on a span inside it. A
+// class name is presentation and changes with the design; the row carrying a
+// `data-kc-id` is the contract.
 const gapTitles = await page
-  .locator('section:has(h2:text("Start here")) li span.font-medium.text-slate-900')
+  .locator('section:has(h2:text("Start here")) li[data-kc-id]')
   .allInnerTexts();
 
 const stray = gapKcs.filter((kc) => !missedKcs.has(kc));
-console.log(`    gaps: ${gapTitles.join(' | ')}`);
+console.log(`    gaps: ${gapTitles.map((t) => t.split('\n')[0].trim()).join(' | ')}`);
 console.log(`    localisation: ${gapKcs.length - stray.length}/${gapKcs.length} gaps are KCs this run actually missed`);
 
 // Precision, stated as what the model actually claims. A KC answered correctly
@@ -294,16 +298,22 @@ if (gapKcs.length === 0) {
 }
 await page.screenshot({ path: `${SHOT}/04-report.png`, fullPage: true });
 
-await page.getByRole('button', { name: 'Go to dashboard' }).click();
-await page.waitForSelector('text=By competency', { timeout: 10000 });
+await page.locator('[data-testid="nav-dashboard"]').click();
+await page.waitForSelector('[data-testid="competency-axes"]', { timeout: 10000 });
 console.log('[7] dashboard with data rendered');
-const comp = await page.locator('section:has(h2:text("By competency")) li').allInnerTexts();
-console.log('    competency axis:', comp.map((c) => c.split('\n').slice(0, 2).join(' ')).join(' | '));
+const comp = await page
+  .locator('[data-testid="competency-axes"] > div > div')
+  .allInnerTexts();
+console.log('    competency axis:', comp.map((c) => c.split('\n').filter(Boolean).slice(0, 2).join(' ')).join(' | '));
+if (comp.length === 0) {
+  console.error('FAIL: the competency panel rendered no axes after a placement run');
+  process.exitCode = 1;
+}
 await page.screenshot({ path: `${SHOT}/05-dashboard-data.png`, fullPage: true });
 
 // --- Persistence -----------------------------------------------------------
 await page.reload({ waitUntil: 'networkidle' });
-await page.waitForSelector('text=By competency', { timeout: 10000 });
+await page.waitForSelector('[data-testid="competency-axes"]', { timeout: 10000 });
 console.log('[8] state survived a reload (rebuilt from the attempt log)');
 
 console.log(errors.length === 0 ? '\nNo console errors.' : `\nConsole errors:\n${errors.join('\n')}`);

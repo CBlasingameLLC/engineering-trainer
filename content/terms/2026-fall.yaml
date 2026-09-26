@@ -27,6 +27,13 @@
 # week n, which is a coincidence of the two courses starting together and not
 # something to rely on for the next one.
 #
+# MATH 2358's blocks are the most directly sourced of the four: its syllabus
+# carries a numbered day-by-day list of Rosen sections, so there was nothing to
+# infer. Reading it also showed the graph had been written from what a discrete
+# maths course usually contains rather than from what this one teaches — nine
+# taught sections had no component at all, and ten components cover chapters it
+# never reaches.
+#
 # EE 3300 is no longer an estimate, but it is not a syllabus reading either,
 # because that syllabus contains no topic schedule at all — only three exam
 # dates. Weeks 1 to 7 below are read off the eleven lecture decks themselves:
@@ -103,6 +110,102 @@ courses:
         units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
         note: Final on Monday 7 December, 11:00-13:30 — comprehensive
 
+    exams:
+      - id: exam-1
+        title: Exam 1
+        on: 2026-09-30
+        scope: Chapters 14, 1-3 — fluids, calorimetry, the ideal gas and the first law
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics]
+      - id: exam-2
+        title: Exam 2
+        on: 2026-11-04
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics]
+      - id: exam-3
+        title: Exam 3
+        on: 2026-11-30
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
+      - id: final
+        title: Final
+        on: 2026-12-07
+        minutes: 150
+        scope: Comprehensive, 11:00-13:30
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
+
+  # The most complete syllabus of the four: a day-by-day section list, so these
+  # blocks are a direct reading rather than an inference. Class days map onto
+  # term weeks exactly — day 1 is Thursday 20 August, in week 1.
+  #
+  # Four units are deliberately absent from every block. Combinatorics,
+  # Relations, Recurrences and Boolean Algebra cover Rosen chapters 6, 9, 8 and
+  # 12, and this syllabus reaches none of them; their components still carry
+  # items and are still reachable from the skill tree, they simply never
+  # compete for study time. Same treatment as PHYS 2335's Sound unit.
+  - course: MATH2358
+    blocks:
+      - fromWeek: 1
+        toWeek: 3
+        units: [Logic and Proof]
+        note: Rosen 1.1-1.5 then 1.7-1.8 — propositional and predicate logic, then proofs
+      - fromWeek: 4
+        toWeek: 4
+        units: [Induction]
+        note: Rosen 5.1 over two class days
+      - fromWeek: 5
+        toWeek: 6
+        units: [Sets and Functions]
+        note: Rosen 2.1-2.5 — sets, functions, sequences and summations, cardinality
+      - fromWeek: 7
+        toWeek: 7
+        units: [Logic and Proof, Induction, Sets and Functions]
+        note: Test 1 on Tuesday 29 September — 1.1-1.8, 5.1, 2.1-2.5
+      - fromWeek: 7
+        toWeek: 10
+        units: [Number Theory]
+        note: Rosen 4.1-4.5 — divisibility, bases, primes and GCD, congruences
+      - fromWeek: 10
+        toWeek: 12
+        units: [Graphs]
+        note: Rosen 10.1-10.5 — terminology, representation and isomorphism, connectivity
+      - fromWeek: 13
+        toWeek: 13
+        units: [Number Theory, Graphs]
+        note: Test 2 on Tuesday 10 November; 10.6 shortest paths follows on the Thursday
+      - fromWeek: 14
+        toWeek: 15
+        units: [Trees]
+        note: Rosen 11.1-11.4 — trees, traversal and spanning trees
+      - fromWeek: 16
+        toWeek: 16
+        units: [Logic and Proof, Induction, Sets and Functions, Number Theory, Graphs, Trees]
+        note: Review for the final on Tuesday 1 December
+      - fromWeek: 17
+        toWeek: 17
+        units: [Logic and Proof, Induction, Sets and Functions, Number Theory, Graphs, Trees]
+        note: Final on Tuesday 8 December, 11:00-13:30 — comprehensive
+
+    exams:
+      - id: test-1
+        title: Test 1
+        on: 2026-09-29
+        scope: Rosen 1.1-1.8, 5.1 and 2.1-2.5
+        units: [Logic and Proof, Induction, Sets and Functions]
+      - id: test-2
+        title: Test 2
+        on: 2026-11-10
+        scope: Rosen 4.1-4.5 and 10.1-10.5
+        units: [Number Theory, Graphs]
+      - id: final
+        title: Final
+        on: 2026-12-08
+        minutes: 150
+        scope: Comprehensive, 11:00-13:30
+        cumulative: true
+        units: [Logic and Proof, Induction, Sets and Functions, Number Theory, Graphs, Trees]
+
   # Circuits II spends its first three lectures re-teaching Circuits I, so that
   # material is genuinely live again rather than merely assumed. Chapter 7 in
   # particular is not revision: the Exam 1 review deck names "first and second
@@ -174,6 +277,34 @@ courses:
         units: [Sinusoidal Steady State, AC Power, Second-Order Circuits, The s-Domain, Frequency Response, Coupled Circuits, Three-Phase]
         note: Final on Tuesday 8 December, 08:00-10:30 — comprehensive
 
+    exams:
+      # The one exam in this term whose scope leaves its own course. The review
+      # deck names "first and second order circuits" together, and the
+      # first-order response is Nilsson chapter 7 — taught again in week 3 of
+      # Circuits II, examined here, and owned by EE 2300's graph.
+      - id: exam-1
+        title: Exam 1
+        on: 2026-09-28
+        scope: Chapters 8, 9, 10 and 12, with the first-order response from chapter 7
+        units:
+          - Second-Order Circuits
+          - Sinusoidal Steady State
+          - AC Power
+          - The s-Domain
+          - EE2300:Energy Storage and Transients
+      - id: exam-2
+        title: Exam 2
+        on: 2026-11-05
+        scope: PROJECTED — chapter 13 and frequency response
+        units: [The s-Domain, Frequency Response]
+      - id: final
+        title: Final
+        on: 2026-12-08
+        minutes: 150
+        scope: Comprehensive, 08:00-10:30
+        cumulative: true
+        units: [Sinusoidal Steady State, AC Power, Second-Order Circuits, The s-Domain, Frequency Response, Coupled Circuits, Three-Phase]
+
   # From the syllabus, not estimated. Lecture numbers are the instructor's.
   #
   # The blocks past week 6 name units that exist in the knowledge map and carry
@@ -223,3 +354,20 @@ courses:
         toWeek: 17
         units: [Oxidation, Photolithography, Diffusion, Ion Implantation]
         note: Final on Thursday 10 December, 11:00-13:30 — cumulative
+
+    exams:
+      - id: exam-1
+        title: Exam 1
+        on: 2026-09-24
+        units: [Oxidation, Cleanroom Defects and Yield, Photolithography]
+      - id: exam-2
+        title: Exam 2
+        on: 2026-10-29
+        units: [Etch, Thin Film Deposition, Interconnect]
+      - id: final
+        title: Final
+        on: 2026-12-10
+        minutes: 150
+        scope: Cumulative, 11:00-13:30
+        cumulative: true
+        units: [Oxidation, Photolithography, Diffusion, Ion Implantation]

@@ -52,7 +52,7 @@ export interface CircuitRecord {
   updatedAt: string;
 }
 
-export type SessionMode = 'placement' | 'practice' | 'review' | 'challenge' | 'drill';
+export type SessionMode = 'placement' | 'practice' | 'review' | 'challenge' | 'drill' | 'exam';
 
 export interface SessionRecord {
   id: string;

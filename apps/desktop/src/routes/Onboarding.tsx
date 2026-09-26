@@ -50,8 +50,8 @@ export function Onboarding(): React.ReactElement {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-100">What have you already taken?</h1>
-      <p className="mt-2 max-w-xl text-sm text-slate-600 dark:text-slate-400">
+      <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">What have you already taken?</h1>
+      <p className="mt-2 max-w-xl text-sm text-ink-dim">
         Grades set the starting belief; the term sets how long it has had to fade. A course finished
         last spring and one finished two years ago are very different starting points, and the
         placement exam is calibrated from both.
@@ -67,16 +67,16 @@ export function Onboarding(): React.ReactElement {
                   type="checkbox"
                   checked={Boolean(entry)}
                   onChange={() => toggle(course.code)}
-                  className="h-4 w-4 rounded border-slate-300 dark:border-slate-600"
+                  className="h-4 w-4 rounded border-line-strong"
                   aria-label={`${course.code} ${course.title}`}
                 />
-                <span className="font-mono text-sm text-slate-500 dark:text-slate-400">{course.code}</span>
-                <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{course.title}</span>
-                <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">{course.kcs.length} concepts</span>
+                <span className="font-mono text-sm text-ink-dim">{course.code}</span>
+                <span className="text-sm font-medium text-ink">{course.title}</span>
+                <span className="ml-auto text-xs text-ink-faint">{course.kcs.length} concepts</span>
               </label>
 
               {entry && (
-                <div className="mt-3 flex flex-wrap items-center gap-4 border-t border-slate-100 pt-3 pl-7 dark:border-slate-800">
+                <div className="mt-3 flex flex-wrap items-center gap-4 border-t border-line pt-3 pl-7">
                   <label className="flex items-center gap-2 text-sm">
                     <span className="label">Grade</span>
                     <select
@@ -84,7 +84,7 @@ export function Onboarding(): React.ReactElement {
                       onChange={(e) =>
                         setSelected((p) => ({ ...p, [course.code]: { ...entry, grade: e.target.value as CourseGrade } }))
                       }
-                      className="rounded border border-slate-300 px-2 py-1 text-sm dark:border-slate-600"
+                      className="rounded border border-line-strong px-2 py-1 text-sm "
                     >
                       {GRADES.map((g) => (
                         <option key={g} value={g}>
@@ -98,7 +98,7 @@ export function Onboarding(): React.ReactElement {
                     <select
                       value={entry.term}
                       onChange={(e) => setSelected((p) => ({ ...p, [course.code]: { ...entry, term: e.target.value } }))}
-                      className="rounded border border-slate-300 px-2 py-1 text-sm dark:border-slate-600"
+                      className="rounded border border-line-strong px-2 py-1 text-sm "
                     >
                       {TERMS.map((t) => (
                         <option key={t} value={t}>
@@ -114,13 +114,13 @@ export function Onboarding(): React.ReactElement {
         })}
       </div>
 
-      <div className="mt-8 flex items-center gap-4 border-t border-slate-200 pt-6 dark:border-slate-700">
+      <div className="mt-8 flex items-center gap-4 border-t border-line pt-6">
         <label className="flex items-center gap-2 text-sm">
           <span className="label">Preparing for</span>
           <input
             value={targetTerm}
             onChange={(e) => setTargetTerm(e.target.value)}
-            className="w-36 rounded border border-slate-300 px-2 py-1 text-sm dark:border-slate-600"
+            className="w-36 rounded border border-line-strong px-2 py-1 text-sm "
           />
         </label>
         <button className="btn-primary ml-auto" onClick={() => void complete(chosen, targetTerm)}>

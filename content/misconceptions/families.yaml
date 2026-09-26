@@ -978,3 +978,55 @@ misconceptions:
   - { id: energy.dissipation-split-inverted,      family: network-topology, title: "Energy split by R where it splits by 1/R, or the reverse" }
   - { id: energy.dissipation-split-evenly,        family: network-topology, title: "Energy assumed to split equally between unequal resistors" }
   - { id: unit-conversion.microseconds-unconverted, family: unit-conversion-discipline, title: "Microseconds substituted as seconds" }
+
+  # --- MATH 2358: the sections the syllabus teaches -----------------------------
+  - { id: summation.term-count-off-by-one,        family: definition-precision, title: "Summation limits miscounted by one term" }
+  - { id: summation.arithmetic-form-on-geometric, family: formula-substitution, title: "Arithmetic closed form used on a geometric series" }
+  - { id: summation.closed-form-squared,          family: exponent-bookkeeping, title: "Sum of squares confused with the square of a sum" }
+  - { id: summation.recurrence-constant-dropped,  family: formula-substitution, title: "Additive constant dropped from a recurrence" }
+  - { id: cardinality.infinite-assumed-uncountable, family: definition-precision, title: "Infinite set assumed uncountable" }
+  - { id: cardinality.uncountable-assumed-listable, family: definition-precision, title: "Uncountable set assumed enumerable" }
+  - { id: sets.product-size-added,                family: counting-strategy, title: "Cartesian product sized by addition" }
+  - { id: congruence.inverse-taken-as-negation,   family: definition-precision, title: "Additive inverse given where a multiplicative one was asked" }
+  - { id: congruence.divided-instead-of-inverted, family: formula-substitution, title: "Division attempted in modular arithmetic" }
+  - { id: congruence.result-not-reduced,          family: definition-precision, title: "Congruence solution left outside its residue range" }
+  - { id: graphs.edges-counted-as-vertices,       family: definition-precision, title: "Vertex count reported as an edge count" }
+  - { id: graphs.invariant-mismatch-ignored,      family: strategy-confidence, title: "Mismatched invariant not taken as decisive" }
+  - { id: graphs.presentation-mistaken-for-structure, family: definition-precision, title: "Labelling or drawing mistaken for graph structure" }
+  - { id: shortest-path.fewest-edges-taken,       family: strategy-confidence, title: "Fewest-edges route taken as the shortest path" }
+  - { id: shortest-path.all-edges-summed,         family: network-topology, title: "Every edge in the graph summed instead of one path" }
+  - { id: trees.spanning-depends-on-graph-edges,  family: network-topology, title: "Spanning tree size taken from the graph's edge count" }
+  - { id: trees.traversal-order-confused,         family: state-and-sequence, title: "One tree traversal order given for another" }
+  - { id: trees.traversal-read-as-level-order,    family: state-and-sequence, title: "Traversal read off the tree level by level" }
+
+  # --- Proof construction, and the Test 1 sections it is examined on -----------
+  # The ordering distractors and the skeleton's choice fields carry these, which
+  # is why the ranking has to read those shapes too: a misconception recorded
+  # from a proof item is the same habit as one recorded from a numeric one.
+  - { id: proof.assumes-the-conclusion,           family: logical-form, title: "Proof begins by assuming what it must show" }
+  - { id: proof.example-offered-as-proof,         family: strategy-confidence, title: "An example offered where a proof was required" }
+  - { id: proof.disjunction-weakened-to-one-side, family: logical-form, title: "Disjunctive conclusion replaced by one of its disjuncts" }
+  - { id: proof.contradiction-source-unidentified, family: strategy-confidence, title: "Contradiction proof with nothing identified to contradict" }
+  - { id: proof.incidental-condition-mistaken-for-essential, family: definition-precision, title: "Incidental hypothesis mistaken for the load-bearing one" }
+  - { id: induction.base-case-outside-claim,      family: initial-conditions, title: "Base case checked outside the range the claim covers" }
+  - { id: induction.base-case-boundary-misread,   family: initial-conditions, title: "Base case taken at the excluded boundary" }
+  - { id: logic.quantifier-order-misapplied,      family: logical-form, title: "Quantifier order read the wrong way round" }
+  - { id: logic.domain-ignored,                   family: definition-precision, title: "Counterexample offered from outside the stated domain" }
+  - { id: logic.domain-restriction-ignored,       family: definition-precision, title: "Domain restriction dropped from a quantified claim" }
+  - { id: logic.antecedent-ignored,               family: logical-form, title: "Excluded case treated as a counterexample to an implication" }
+  - { id: logic.boundary-case-misread,            family: definition-precision, title: "Boundary case misread as a failure" }
+  - { id: logic.existential-assumed-from-form,    family: strategy-confidence, title: "Existential asserted from the shape of the statement" }
+  - { id: logic.predicate-confused-with-proposition, family: definition-precision, title: "Open predicate treated as a proposition" }
+  - { id: logic.biconditional-as-disjunction,     family: logical-form, title: "Biconditional rewritten as a disjunction of implications" }
+  - { id: logic.biconditional-as-implication,     family: logical-form, title: "Biconditional reduced to one implication" }
+  - { id: strategy.quantifier-treated-as-free-variable, family: strategy-confidence, title: "Quantified statement abandoned as underdetermined" }
+  - { id: strategy.rule-accepted-without-reason,  family: strategy-confidence, title: "Identity accepted as convention rather than derived" }
+  - { id: functions.composition-order-reversed,   family: state-and-sequence, title: "Composition applied in the wrong order" }
+  - { id: functions.composition-constant-mishandled, family: formula-substitution, title: "Outer function's constant dropped in a composition" }
+  - { id: functions.composition-read-as-product,  family: formula-substitution, title: "Composition read as a product of the two functions" }
+  - { id: cardinality.proper-subset-assumed-smaller, family: definition-precision, title: "Proper subset of an infinite set assumed smaller" }
+  - { id: cardinality.infinite-assumed-incomparable, family: strategy-confidence, title: "Infinite cardinalities assumed incomparable" }
+  - { id: numeracy.squaring-assumed-increasing,   family: definition-precision, title: "Squaring assumed to increase every number" }
+  - { id: sets.identity-justified-by-outcome,     family: strategy-confidence, title: "Set identity justified by its result rather than its reason" }
+  - { id: summation.lower-limit-ignored,          family: definition-precision, title: "Lower summation limit ignored in the term count" }
+  - { id: summation.limits-added,                 family: formula-substitution, title: "Summation limits added instead of differenced" }

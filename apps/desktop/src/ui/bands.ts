@@ -11,37 +11,37 @@ import type { KcDiagnosis, MasteryBand } from '@et/domain';
  */
 
 export const BAND_STYLE: Record<MasteryBand, { bar: string; text: string; chip: string; label: string }> = {
-  gap: { bar: 'bg-red-500', text: 'text-red-700', chip: 'bg-red-100 text-red-800', label: 'Gap' },
-  developing: { bar: 'bg-amber-500', text: 'text-amber-700', chip: 'bg-amber-100 text-amber-800', label: 'Developing' },
-  proficient: { bar: 'bg-blue-500', text: 'text-blue-700', chip: 'bg-blue-100 text-blue-800', label: 'Proficient' },
-  mastered: { bar: 'bg-yellow-500', text: 'text-yellow-700', chip: 'bg-yellow-100 text-yellow-800', label: 'Mastered' },
+  gap: { bar: 'bg-danger/15', text: 'text-danger', chip: 'bg-danger/15 text-danger', label: 'Gap' },
+  developing: { bar: 'bg-warn/15', text: 'text-warn', chip: 'bg-warn/15 text-warn', label: 'Developing' },
+  proficient: { bar: 'bg-info/15', text: 'text-info', chip: 'bg-info/15 text-info', label: 'Proficient' },
+  mastered: { bar: 'bg-accent/15', text: 'text-accent', chip: 'bg-accent/15 text-accent', label: 'Mastered' },
 };
 
 export const DIAGNOSIS_COPY: Record<KcDiagnosis, { label: string; detail: string; chip: string }> = {
   untested: {
     label: 'Untested',
     detail: 'No evidence yet.',
-    chip: 'bg-slate-100 text-slate-600',
+    chip: 'bg-surface-2 text-ink-dim',
   },
   gap: {
     label: 'Gap',
     detail: 'Little sign this was learned. Needs instruction, not review.',
-    chip: 'bg-red-100 text-red-800',
+    chip: 'bg-danger/15 text-danger',
   },
   decayed: {
     label: 'Decayed',
     detail: 'Learned before, faded since. A review session should restore it quickly.',
-    chip: 'bg-violet-100 text-violet-800',
+    chip: 'bg-gold/15 text-gold',
   },
   fragile: {
     label: 'Fragile',
     detail: 'Partially held. Inconsistent under pressure.',
-    chip: 'bg-amber-100 text-amber-800',
+    chip: 'bg-warn/15 text-warn',
   },
   solid: {
     label: 'Solid',
     detail: 'Learned and still available.',
-    chip: 'bg-emerald-100 text-emerald-800',
+    chip: 'bg-accent/15 text-accent',
   },
 };
 

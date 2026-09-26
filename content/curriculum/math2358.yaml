@@ -60,7 +60,7 @@ kcs:
 
   - id: math2358.boolean-algebra
     title: Boolean algebra as an algebraic system
-    unit: Logic and Proof
+    unit: Boolean Algebra
     domain: math
     competencies: [math-execution, concept]
     difficultyPrior: 0.1
@@ -101,7 +101,7 @@ kcs:
   # --- Unit 2: Sets, relations and functions --------------------------------
   - id: math2358.set-operations
     title: Set operations and membership
-    unit: Sets, Relations and Functions
+    unit: Sets and Functions
     domain: math
     competencies: [concept, visual]
     difficultyPrior: -1.2
@@ -112,7 +112,7 @@ kcs:
 
   - id: math2358.set-identities
     title: Set identities and membership tables
-    unit: Sets, Relations and Functions
+    unit: Sets and Functions
     domain: math
     competencies: [math-execution, visual]
     difficultyPrior: -0.2
@@ -127,7 +127,7 @@ kcs:
 
   - id: math2358.cartesian-products
     title: Cartesian products and ordered pairs
-    unit: Sets, Relations and Functions
+    unit: Sets and Functions
     domain: math
     competencies: [concept, numeracy]
     difficultyPrior: -0.5
@@ -136,7 +136,7 @@ kcs:
 
   - id: math2358.relation-properties
     title: Properties of relations
-    unit: Sets, Relations and Functions
+    unit: Relations
     domain: math
     competencies: [concept, modeling]
     difficultyPrior: 0.3
@@ -149,7 +149,7 @@ kcs:
 
   - id: math2358.equivalence-relations
     title: Equivalence relations and partitions
-    unit: Sets, Relations and Functions
+    unit: Relations
     domain: math
     competencies: [concept, strategy]
     difficultyPrior: 0.6
@@ -161,7 +161,7 @@ kcs:
 
   - id: math2358.functions
     title: Injective, surjective and bijective functions
-    unit: Sets, Relations and Functions
+    unit: Sets and Functions
     domain: math
     competencies: [concept, math-execution]
     difficultyPrior: 0.2
@@ -234,7 +234,7 @@ kcs:
   # --- Unit 4: Induction, recursion, graphs ---------------------------------
   - id: math2358.mathematical-induction
     title: Mathematical induction
-    unit: Induction, Recursion and Graphs
+    unit: Induction
     domain: math
     competencies: [strategy, math-execution]
     difficultyPrior: 0.8
@@ -246,7 +246,7 @@ kcs:
 
   - id: math2358.recurrence-relations
     title: Recurrence relations and closed forms
-    unit: Induction, Recursion and Graphs
+    unit: Recurrences
     domain: math
     competencies: [math-execution, modeling]
     difficultyPrior: 1.0
@@ -258,7 +258,7 @@ kcs:
 
   - id: math2358.graph-basics
     title: Graphs, degree and the handshake theorem
-    unit: Induction, Recursion and Graphs
+    unit: Graphs
     domain: math
     competencies: [concept, visual]
     difficultyPrior: -0.3
@@ -267,7 +267,7 @@ kcs:
 
   - id: math2358.graph-connectivity
     title: Paths, connectivity, Euler and Hamilton
-    unit: Induction, Recursion and Graphs
+    unit: Graphs
     domain: math
     competencies: [concept, strategy, visual]
     difficultyPrior: 0.5
@@ -280,7 +280,7 @@ kcs:
 
   - id: math2358.trees
     title: Trees and their properties
-    unit: Induction, Recursion and Graphs
+    unit: Graphs
     domain: math
     competencies: [concept, visual]
     difficultyPrior: 0.3
@@ -309,3 +309,109 @@ kcs:
       repeated-division-with-remainder that converts a number between bases.
     prerequisites:
       - math2358.gcd-euclidean
+
+  # --- Sections the syllabus teaches that had no component ------------------
+  # The graph was written from what a discrete maths course usually contains.
+  # This one's syllabus carries a day-by-day section list, and against it nine
+  # taught sections had nothing at all while ten components covered chapters
+  # the course never reaches. The ten are still here and still carry items;
+  # they simply live in units the term never schedules, so they stay reachable
+  # from the skill tree without competing for study time.
+  - id: math2358.sequences-summations
+    title: Sequences and summations
+    unit: Sets and Functions
+    domain: math
+    competencies: [math-execution, numeracy]
+    difficultyPrior: -0.2
+    description: >-
+      Closed forms for arithmetic and geometric sums, and sequences defined by
+      a recurrence evaluated term by term. Rosen 2.4, and on the first test.
+      The limits are where this goes wrong: a sum from 0 to n has n + 1 terms,
+      and the geometric closed form is written for exactly that range.
+    prerequisites:
+      - math2358.functions
+
+  - id: math2358.cardinality
+    title: Cardinality of sets
+    unit: Sets and Functions
+    domain: math
+    competencies: [concept, strategy]
+    difficultyPrior: 0.4
+    description: >-
+      Counting a finite set, and the harder claim that two infinite sets have
+      the same size because a bijection exists between them. Rosen 2.5, and on
+      the first test. Countable does not mean finite, and a proper subset of an
+      infinite set can be the same size as the whole of it — which is the point
+      at which intuition from finite sets stops being a guide.
+    prerequisites:
+      - math2358.functions
+      - math2358.set-operations
+
+  - id: math2358.integer-representations
+    title: Integer representations and base conversion
+    unit: Number Theory
+    domain: math
+    competencies: [math-execution, numeracy]
+    difficultyPrior: 0.0
+    description: >-
+      Base-b expansions and converting between them. Rosen 4.2. The same skill
+      EE 2320 exercises on binary and hexadecimal, stated for an arbitrary base.
+    prerequisites:
+      - math2358.modular-arithmetic
+
+  - id: math2358.linear-congruences
+    title: Solving linear congruences
+    unit: Number Theory
+    domain: math
+    competencies: [math-execution]
+    difficultyPrior: 0.5
+    description: >-
+      Inverses modulo m and the solutions of ax = b (mod m). Rosen 4.4. An
+      inverse exists exactly when gcd(a, m) = 1, so the Euclidean algorithm is
+      not a separate topic here but the thing that decides whether the problem
+      has an answer at all.
+    prerequisites:
+      - math2358.modular-arithmetic
+      - math2358.gcd-euclidean
+
+  - id: math2358.graph-isomorphism
+    title: Representing graphs and isomorphism
+    unit: Graphs
+    domain: math
+    competencies: [concept, visual]
+    difficultyPrior: 0.4
+    description: >-
+      Adjacency matrices and lists, and the invariants that decide isomorphism.
+      Rosen 10.3, two class days. Matching invariants never prove two graphs
+      isomorphic; a single mismatched invariant proves they are not, which is
+      why the negative direction is the tractable one.
+    prerequisites:
+      - math2358.graph-basics
+
+  - id: math2358.shortest-path
+    title: Shortest-path problems
+    unit: Graphs
+    domain: math
+    competencies: [math-execution, modeling]
+    difficultyPrior: 0.5
+    description: >-
+      Dijkstra's algorithm on a weighted graph. Rosen 10.6, taught immediately
+      after the second exam. The greedy step is only valid because the weights
+      are non-negative.
+    prerequisites:
+      - math2358.graph-basics
+      - math2358.graph-connectivity
+
+  - id: math2358.tree-traversal
+    title: Tree traversal and spanning trees
+    unit: Trees
+    domain: math
+    competencies: [math-execution, visual]
+    difficultyPrior: 0.3
+    description: >-
+      Preorder, inorder and postorder traversal, and spanning trees of a
+      connected graph. Rosen 11.3 and 11.4. A spanning tree of an n-vertex
+      connected graph always has exactly n - 1 edges, whatever the graph.
+    prerequisites:
+      - math2358.trees
+

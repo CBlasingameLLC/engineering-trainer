@@ -64,7 +64,7 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
   }, [figure]);
 
   return (
-    <figure className={`overflow-hidden rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900 ${className ?? ''}`}>
+    <figure className={`overflow-hidden rounded border border-line bg-surface  ${className ?? ''}`}>
       <svg
         viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`}
         className="block h-auto w-full"
@@ -78,13 +78,13 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
             key={wire.id}
             points={wire.points.map((p) => `${p.x * GRID},${p.y * GRID}`).join(' ')}
             fill="none"
-            className="stroke-slate-800 dark:stroke-slate-200"
+            className="stroke-ink"
             strokeWidth={2}
           />
         ))}
 
         {figure.grounds.map((g, i) => (
-          <g key={`gnd-${i}`} transform={`translate(${g.x * GRID},${g.y * GRID})`} className="stroke-slate-800 dark:stroke-slate-200">
+          <g key={`gnd-${i}`} transform={`translate(${g.x * GRID},${g.y * GRID})`} className="stroke-ink">
             <GroundSymbol grid={GRID} />
           </g>
         ))}
@@ -93,7 +93,7 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
           <g
             key={component.id}
             transform={`translate(${component.at.x * GRID},${component.at.y * GRID}) rotate(${component.rotation})`}
-            className="stroke-slate-800 dark:stroke-slate-200"
+            className="stroke-ink"
             data-component-id={component.id}
           >
             <ComponentSymbol kind={component.kind} grid={GRID} />
@@ -105,7 +105,7 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
               x={component.kind === 'opamp' ? -GRID * 1.6 : GRID * 1.2}
               y={component.kind === 'opamp' ? -GRID * 2.9 : -GRID * 0.35}
               fontSize={10} stroke="none"
-              className="fill-slate-700 dark:fill-slate-300"
+              className="fill-ink "
               transform={`rotate(${-component.rotation})`}
             >
               {component.id}
@@ -113,7 +113,7 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
             {component.kind !== 'opamp' && (
               <text
                 x={GRID * 1.2} y={GRID * 0.75} fontSize={10} stroke="none"
-                className="fill-slate-500 dark:fill-slate-400"
+                className="fill-ink-dim"
                 transform={`rotate(${-component.rotation})`}
               >
                 {siValue(component.kind, component.value)}
@@ -124,7 +124,7 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
 
         {/* Junction dots, so a T-crossing is not read as two wires passing. */}
         {junctions(figure).map((p, i) => (
-          <circle key={`j${i}`} cx={p.x * GRID} cy={p.y * GRID} r={2.6} className="fill-slate-800 dark:fill-slate-200" />
+          <circle key={`j${i}`} cx={p.x * GRID} cy={p.y * GRID} r={2.6} className="fill-ink" />
         ))}
 
         {figure.annotations.map((note, i) => (
@@ -132,14 +132,14 @@ export function SchematicFigure({ figure, className }: SchematicFigureProps): Re
             key={`n${i}`}
             x={note.at.x * GRID} y={note.at.y * GRID}
             fontSize={11} textAnchor={note.anchor} stroke="none"
-            className="fill-slate-600 dark:fill-slate-400"
+            className="fill-ink-dim"
           >
             {note.text}
           </text>
         ))}
       </svg>
       {figure.title && (
-        <figcaption className="border-t border-slate-100 px-2 py-1 text-[11px] text-slate-500 dark:border-slate-800 dark:text-slate-400">
+        <figcaption className="border-t border-line px-2 py-1 text-[11px] text-ink-dim">
           {figure.title}
         </figcaption>
       )}

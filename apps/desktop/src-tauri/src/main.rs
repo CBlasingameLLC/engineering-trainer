@@ -23,6 +23,12 @@ fn migrations() -> Vec<Migration> {
             sql: include_str!("../migrations/002_circuits_and_progress.sql"),
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 3,
+            description: "per-attempt evidence weight for self-scored responses",
+            sql: include_str!("../migrations/003_evidence_weight.sql"),
+            kind: MigrationKind::Up,
+        },
     ]
 }
 

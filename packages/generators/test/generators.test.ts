@@ -91,6 +91,20 @@ describe.each(GENERATORS.map((g) => [g.id, g] as const))('%s', (_id, generator) 
           ? ({ kind: 'choice', optionId: item.answer.correctId } as const)
           : item.answer.kind === 'symbolic' || item.answer.kind === 'boolean'
             ? ({ kind: 'text', value: item.answer.expression } as const)
+            : item.answer.kind === 'ordering'
+              ? ({ kind: 'ordering' as const, order: item.answer.lines.map((l) => l.id) })
+            : item.answer.kind === 'proof-skeleton'
+              ? ({
+                  kind: 'proof-skeleton' as const,
+                  responses: Object.fromEntries(
+                    item.answer.steps.map((st) => [
+                      st.id,
+                      st.expect.kind === 'choice' ? st.expect.correctId : st.expect.expression,
+                    ]),
+                  ),
+                })
+            : item.answer.kind === 'proof-rubric'
+              ? ({ kind: 'proof-rubric' as const, met: item.answer.criteria.map((c) => c.id) })
             : item.answer.kind === 'truth-table'
               ? ({ kind: 'truth-table' as const, rows: [...item.answer.rows] })
               : item.answer.kind === 'complex'

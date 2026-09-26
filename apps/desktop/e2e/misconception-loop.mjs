@@ -74,7 +74,12 @@ const fail = (message) => { console.error(`FAIL: ${message}`); process.exitCode 
 async function waitForNextItem(previousId) {
   await page.waitForFunction(
     (prev) => {
-      if (document.body.innerText.includes('Placement results')) return true;
+      // By test id, not by `innerText`. `innerText` returns *rendered* text, so
+      // a heading styled `text-transform: uppercase` comes back as
+      // "PLACEMENT RESULTS" and a substring check for the written form silently
+      // stops matching — the driver then waits out its timeout at the end of
+      // every session, blaming the item that never arrived.
+      if (document.querySelector('[data-testid="placement-results"]') !== null) return true;
       const article = document.querySelector('article[data-item-id]');
       return article !== null && article.getAttribute('data-item-id') !== prev;
     },
@@ -90,11 +95,12 @@ await page.waitForSelector('text=What have you already taken?', { timeout: 15000
 const ee = page.locator('label', { hasText: 'EE2300' }).first();
 await ee.locator('input[type=checkbox]').check();
 await page.getByRole('button', { name: /Continue with/ }).click();
-await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 console.log('[1] onboarded');
 
-await page.getByRole('button', { name: 'Begin placement' }).click();
-await page.waitForSelector('text=Placement', { timeout: 10000 });
+await page.locator('[data-testid="nav-diagnostics"]').click();
+await page.locator('[data-testid="placement-launch"]').click();
+await page.waitForSelector('[data-testid="session"]', { timeout: 10000 });
 
 // --- Answer into the traps --------------------------------------------------
 // Built during the run, not beside the content.
@@ -103,7 +109,7 @@ const note = (id) => committed.set(id, (committed.get(id) ?? 0) + 1);
 
 let answered = 0;
 while (answered < 60) {
-  if (await page.locator('text=Placement results').count() > 0) break;
+  if (await page.locator('[data-testid="placement-results"]').count() > 0) break;
 
   const itemId = await page
     .locator('article[data-item-id]').first().getAttribute('data-item-id').catch(() => null);
@@ -190,10 +196,10 @@ console.log('    top:', [...committed.entries()].sort((a, b) => b[1] - a[1]).sli
 if (committed.size === 0) fail('no misconception traps were triggered; the run proves nothing');
 
 // --- The feed ---------------------------------------------------------------
-await page.getByRole('button', { name: 'Go to dashboard' }).first().click();
+await page.locator('[data-testid="nav-dashboard"]').click();
 await page.waitForSelector('[data-testid="nav-misconceptions"]', { timeout: 10000 });
 await page.locator('[data-testid="nav-misconceptions"]').click();
-await page.waitForSelector('text=Recurring errors', { timeout: 10000 });
+await page.waitForSelector('[data-testid="misconception-feed"]', { timeout: 10000 });
 
 const listed = await page.locator('[data-misconception-id]').evaluateAll((els) =>
   els.map((e) => e.getAttribute('data-misconception-id')),

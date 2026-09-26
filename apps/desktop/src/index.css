@@ -3,35 +3,172 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * The palette is one set of semantic tokens, redefined for light, rather than
+ * two sets of literal colours selected by a `dark:` variant on every element.
+ *
+ * That was the previous arrangement and it is why the app looked assembled
+ * from a component library: every surface carried `bg-white dark:bg-slate-900`,
+ * so the two themes drifted independently and neither was designed. A token
+ * means a *role* — a hairline, a dimmed label, the live accent — and a screen
+ * built from roles reads as one instrument in either theme.
+ *
+ * Green because it is a measurement instrument, and muted because a saturated
+ * phosphor green on black is a costume. #7ea87a sits about where an aged CRT
+ * actually lands, holds contrast against the near-black, and stays legible as
+ * a text colour, which #39ff14 does not.
+ */
 @layer base {
-  body {
-    @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200;
+  :root {
+    color-scheme: light;
+
+    --bg: #f4f5f2;
+    --surface: #fbfbf9;
+    --surface-2: #eceee8;
+    --line: #dcdfd6;
+    --line-strong: #c2c7b8;
+
+    --text: #1b1e1a;
+    --text-dim: #5d6358;
+    --text-faint: #8a9084;
+
+    --accent: #3f6b3d;
+    --accent-dim: #8fae8d;
+    --accent-bright: #2f5a2e;
+    --accent-fg: #fbfbf9;
+
+    --danger: #a8352d;
+    --warn: #96661f;
+    --info: #2f6b80;
+    --gold: #8a6a1f;
+
+    --band-gap: #a8352d;
+    --band-developing: #96661f;
+    --band-proficient: #2f6b80;
+    --band-mastered: #3f6b3d;
+
+    --grid: rgba(0, 0, 0, 0.035);
   }
-  /* KaTeX defaults to a slightly larger optical size than surrounding prose. */
-  .katex { font-size: 1.05em; }
+
+  .dark {
+    color-scheme: dark;
+
+    --bg: #0a0b09;
+    --surface: #101210;
+    --surface-2: #171a16;
+    --line: #23271f;
+    --line-strong: #363c31;
+
+    --text: #d9ddd4;
+    --text-dim: #8d9487;
+    --text-faint: #5e6559;
+
+    --accent: #7ea87a;
+    --accent-dim: #4c6949;
+    --accent-bright: #a3ca9e;
+    --accent-fg: #0a0b09;
+
+    --danger: #c2544d;
+    --warn: #c9903f;
+    --info: #5a90a8;
+    --gold: #c0a052;
+
+    --band-gap: #c2544d;
+    --band-developing: #c9903f;
+    --band-proficient: #5a90a8;
+    --band-mastered: #7ea87a;
+
+    --grid: rgba(255, 255, 255, 0.028);
+  }
+
+  html, body, #root { height: 100%; }
+
+  body {
+    @apply bg-bg text-ink antialiased;
+    font-feature-settings: 'tnum' 1, 'cv05' 1;
+  }
+
+  /* Every number in this app is meant to be compared against the one above it. */
+  .tabular, input[type='number'] { font-variant-numeric: tabular-nums; }
+
+  .katex { font-size: 1.04em; }
   /* KaTeX hard-codes its colour, so maths would stay near-black on a dark
      background and become unreadable. Inherit instead. */
-  .dark .katex { color: inherit; }
+  .katex { color: inherit; }
+
+  ::selection { background: var(--accent-dim); color: var(--accent-fg); }
+
+  /* A scrollbar in the chrome's default grey is the single loudest tell that a
+     dark interface was themed rather than designed. */
+  * { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+  *::-webkit-scrollbar { width: 9px; height: 9px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb { background: var(--line-strong); border: 2px solid var(--bg); }
+  *::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+  :focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; }
 }
 
 @layer components {
+  /*
+   * The micro-label. Ten pixels, uppercase, widely tracked, faint.
+   *
+   * It is doing most of the work in this design. A dense instrument panel needs
+   * every region named without any of those names competing with the data, and
+   * a label that recedes this far lets a figure sit directly beneath it with no
+   * card, no border and no heading weight in between.
+   */
+  .label {
+    @apply font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ink-faint;
+  }
+
+  /* A label followed by a hairline that runs to the end of the row. */
+  .rule {
+    @apply flex items-center gap-2 after:h-px after:flex-1 after:bg-line after:content-[''];
+  }
+
+  .panel {
+    @apply border border-line bg-surface;
+  }
+
   .btn {
-    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium
-           transition-colors disabled:cursor-not-allowed disabled:opacity-40;
+    @apply inline-flex items-center justify-center gap-1.5 border px-3 py-1.5 font-mono text-[11px]
+           font-medium uppercase tracking-[0.08em] transition-colors
+           disabled:cursor-not-allowed disabled:opacity-35;
   }
   .btn-primary {
-    @apply btn bg-slate-900 text-white hover:bg-slate-700
-           dark:bg-slate-200 dark:text-slate-900 dark:hover:bg-white;
+    @apply btn border-accent bg-accent text-accent-fg hover:border-accent-bright hover:bg-accent-bright;
   }
   .btn-secondary {
-    @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-100
-           dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+    @apply btn border-line-strong bg-transparent text-ink-dim hover:border-accent hover:text-accent;
   }
-  .card {
-    @apply rounded-lg border border-slate-200 bg-white
-           dark:border-slate-700 dark:bg-slate-900;
+  .btn-ghost {
+    @apply btn border-transparent bg-transparent text-ink-faint hover:text-accent;
   }
-  .label {
-    @apply text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400;
+  .btn-danger {
+    @apply btn border-danger/50 bg-transparent text-danger hover:border-danger hover:bg-danger/10;
+  }
+
+  .field {
+    @apply w-full border border-line bg-surface-2 px-2.5 py-1.5 font-mono text-sm text-ink
+           placeholder:text-ink-faint focus:border-accent focus:outline-none;
+  }
+
+  /* Kept as an alias so older markup keeps its box while the look changes. */
+  .card { @apply panel; }
+
+  /*
+   * A faint engineering grid behind the shell.
+   *
+   * Two repeating gradients rather than an image, so it costs nothing, scales
+   * with zoom and recolours with the theme. At 2.8% opacity it is below the
+   * threshold of conscious notice and still stops a large dark area reading as
+   * an empty void.
+   */
+  .gridfield {
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 }

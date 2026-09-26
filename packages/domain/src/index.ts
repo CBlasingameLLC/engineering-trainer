@@ -22,3 +22,9 @@ export * from './cat/session.js';
 
 export * from './credentials/rank.js';
 export * from './session/term.js';
+
+export * from './exam/blueprint.js';
+export * from './exam/assemble.js';
+export * from './exam/grade.js';
+export * from './exam/priority.js';
+export * from './misconception/remediation.js';

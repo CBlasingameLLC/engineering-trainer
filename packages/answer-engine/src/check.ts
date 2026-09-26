@@ -14,6 +14,7 @@ import { normalizeInput } from './normalize.js';
 import {
   BooleanParseError, booleanEquivalent, literalCount, parseBoolean,
 } from './boolean.js';
+import { checkOrdering, checkProofRubric, checkProofSkeleton } from './proof.js';
 
 /**
  * Answer checking.
@@ -453,7 +454,10 @@ export function checkComplex(
 export type Response =
   | { kind: 'text'; value: string }
   | { kind: 'choice'; optionId: string }
-  | { kind: 'truth-table'; rows: boolean[] };
+  | { kind: 'truth-table'; rows: boolean[] }
+  | { kind: 'ordering'; order: string[] }
+  | { kind: 'proof-skeleton'; responses: Record<string, string> }
+  | { kind: 'proof-rubric'; met: string[] };
 
 /** Grade a response against an item, dispatching on the item's answer kind. */
 export function checkAnswer(response: Response, item: Item): CheckResult {
@@ -483,6 +487,18 @@ export function checkAnswer(response: Response, item: Item): CheckResult {
     case 'complex':
       if (response.kind !== 'text') return mismatch('a typed phasor');
       return checkComplex(response.value, answer, item.misconceptionTraps);
+
+    case 'ordering':
+      if (response.kind !== 'ordering') return mismatch('an arranged sequence of lines');
+      return checkOrdering(response.order, answer);
+
+    case 'proof-skeleton':
+      if (response.kind !== 'proof-skeleton') return mismatch('a completed proof skeleton');
+      return checkProofSkeleton(response.responses, answer);
+
+    case 'proof-rubric':
+      if (response.kind !== 'proof-rubric') return mismatch('a scored rubric');
+      return checkProofRubric(response.met, answer);
 
     case 'circuit':
       // Graded by simulating the submitted netlist; see @et/circuits.

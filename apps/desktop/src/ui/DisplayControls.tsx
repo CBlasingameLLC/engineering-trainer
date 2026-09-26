@@ -32,17 +32,16 @@ export function DisplayControls(): React.ReactElement {
   }, []);
 
   return (
-    <div className="fixed right-3 top-3 z-50 flex items-center gap-1" data-testid="display-controls">
+    <div className="fixed right-2 top-2 z-50 flex items-center gap-px" data-testid="display-controls">
       <button
         type="button"
         onClick={() => setTheme(nextTheme(theme))}
         title={`Theme: ${LABEL[theme]} — click to change`}
         data-testid="theme-toggle"
         data-theme={theme}
-        className="rounded-md border border-slate-300 bg-white/80 px-2 py-1 text-xs font-medium text-slate-600
-                   backdrop-blur transition-colors hover:bg-white
-                   dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-800
-                   dark:text-slate-400"
+        className="border border-line bg-surface/85 px-1.5 py-0.5 font-mono text-[10px] uppercase
+                   tracking-[0.08em] text-ink-faint backdrop-blur transition-colors
+                   hover:border-accent hover:text-accent"
       >
         {LABEL[theme]}
       </button>
@@ -52,12 +51,11 @@ export function DisplayControls(): React.ReactElement {
         title={full ? 'Leave fullscreen' : 'Enter fullscreen'}
         data-testid="fullscreen-toggle"
         data-fullscreen={full ? 'true' : 'false'}
-        className="rounded-md border border-slate-300 bg-white/80 px-2 py-1 text-xs font-medium text-slate-600
-                   backdrop-blur transition-colors hover:bg-white
-                   dark:border-slate-600 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-800
-                   dark:text-slate-400"
+        className="border border-line bg-surface/85 px-1.5 py-0.5 font-mono text-[10px] uppercase
+                   tracking-[0.08em] text-ink-faint backdrop-blur transition-colors
+                   hover:border-accent hover:text-accent"
       >
-        {full ? 'Exit full' : 'Fullscreen'}
+        {full ? 'Exit' : 'Full'}
       </button>
     </div>
   );
