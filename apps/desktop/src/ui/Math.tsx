@@ -25,7 +25,7 @@ interface MathTextProps {
 function renderEmphasis(text: string, keyPrefix: string): React.ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
     part.startsWith('**') && part.endsWith('**') ? (
-      <strong key={`${keyPrefix}-b${i}`} className="font-semibold text-slate-900 dark:text-slate-100">
+      <strong key={`${keyPrefix}-b${i}`} className="font-semibold text-ink">
         {part.slice(2, -2)}
       </strong>
     ) : (

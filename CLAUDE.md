@@ -54,6 +54,7 @@ pnpm --filter @et/desktop e2e           # placement -> gap report
 pnpm --filter @et/desktop e2e:lab       # skill tree + schematic editor + solver
 pnpm --filter @et/desktop e2e:misconceptions  # answer into traps -> feed -> drill
 pnpm --filter @et/desktop e2e:theme     # theme cycle + dark-mode contrast, all routes
+pnpm --filter @et/desktop e2e:exam      # sealed exam -> hand in -> report -> triage
 ```
 
 The container's preinstalled Chromium can lag the installed Playwright. When the
@@ -293,6 +294,45 @@ worked examples rather than the topic list.
   when a KC covers a chapter, check that its generators span the chapter's own
   sections rather than that its cells are non-zero. It is now nine KCs.
 
+- **An exam is a date, and a date is not a week.** Coverage blocks are written
+  in weeks because that is how a syllabus states them and because a term that
+  slips is one line to fix. An exam is a specific morning, and the quantity
+  every urgency figure is built on is how many *days* away it is — a week
+  number cannot tell Saturday from the Monday two days later. `daysUntil`
+  reduces both sides to a whole-day index before subtracting, and it has to
+  reduce them *differently*: the exam is a bare calendar date with no timezone,
+  while `now` is an instant that must be read as the local day it falls on.
+  Subtracting raw milliseconds — the obvious version, and what the week
+  arithmetic gets away with — puts anyone west of UTC a day out for most of
+  their waking hours.
+- **An exam's scope can leave its own course, so `units` entries may be
+  `COURSE:Unit Name`.** EE 3300's first exam examines the first-order response:
+  Nilsson chapter 7, re-taught in week 3 of Circuits II and tested alongside
+  chapter 8, but owned by EE 2300's curriculum. A scope confined to its own
+  course would have to omit that material or duplicate the component into
+  EE 3300, and duplicating it splits the learner's evidence across two
+  components that mean the same thing. The prefix is parsed in exactly one
+  place — `examUnits` in `@et/content-schema` — and every consumer downstream
+  works with the resolved `{course, unit}` pair, because `packages/domain`
+  mirrors the term structurally and a second parser for one notation is how
+  two parsers drift.
+- **A colour in this app is a role, not a value.** Every surface used to carry
+  `bg-white dark:bg-slate-900`, which meant the two themes were separate
+  palettes maintained in parallel on three hundred elements, and neither was
+  designed. `index.css` now defines one set of semantic tokens — `--surface`,
+  `--line`, `--text-dim`, `--accent`, the four band colours — and redefines
+  them under `.dark`; `tailwind.config.js` maps them to `bg-surface`,
+  `border-line`, `text-ink-dim` and so on. A screen built from roles reads as
+  one instrument in either theme, and a new route cannot ship with a missing
+  dark variant because there are no dark variants to miss.
+
+  Two traps from doing the migration mechanically. Folding a palette by name
+  collapses distinctions that carried meaning: `amber` and `yellow` both map to
+  "warn", which silently made `mastered` and `developing` the same colour —
+  two bands that mean opposite things. And a regex that tidies the whitespace
+  left by removed `dark:` classes will happily eat the indentation of a SQL
+  template literal, so scope it to class strings or check the diff with
+  `git diff -w` and revert anything that comes back empty.
 - **A course that states quantities in a prefixed unit needs `unfoldedUnit`.**
   `engineering()` folds the prefix back into the value, which is right when the
   stored answer is in the base unit — 4700 ohms written as 4.7 k. It is wrong
@@ -418,7 +458,22 @@ worked examples rather than the topic list.
   Wait for onboarding *or* the dashboard, with `.or()` — the `text=` engine has
   no alternation, so a comma-separated pair waits forever on a literal string.
 - **E2E: match on `data-item-id` / `data-kc-id`, never rendered text.** KaTeX
-  rewrites stems, so text scraping is unstable. More importantly: **never
+  rewrites stems, so text scraping is unstable. The shell redesign proved the
+  rest of the case: four drivers broke at once on `text=Engineering Trainer`,
+  `Begin placement`, `By competency` and half a dozen button labels, none of
+  which was a product change — every one was a heading being reworded. They
+  drive off `data-testid` now, including the navigation rail (`nav-dashboard`,
+  `nav-diagnostics`, …), so a rewrite of the copy cannot present itself as a
+  regression.
+
+  The sharpest instance was a `document.body.innerText.includes('Placement
+  results')` guard, which survived the rename and then stopped matching anyway:
+  `innerText` returns *rendered* text, and the heading had become
+  `text-transform: uppercase`, so the page said `PLACEMENT RESULTS`. The driver
+  did not fail at the heading — it waited out a twenty-second timeout at the
+  end of every session, reporting a question that never arrived. A CSS property
+  can change what a text match sees without changing a character of the source,
+  which is one more reason the match belongs on an id. More importantly: **never
   maintain a hand-written list of expected outcomes beside the list that drives
   the run.** That pair drifts the moment content is added and reports a content
   addition as a product regression. This bug class has appeared twice (a stale
@@ -553,6 +608,76 @@ Things that will bite:
 - Design tasks are graded on **measured behaviour, never topology**, so two
   2.35k resistors in series pass a 4.7k spec.
 
+### Exam mode is not adaptive, and that is the point
+
+`packages/domain/exam/` assembles a paper before the clock starts and never
+changes it. Adaptive selection maximises Fisher information by keeping every
+question near the learner's ability, which is the right way to *measure an
+ability* in the fewest items and the wrong way to answer "could you do this
+paper on Monday" — a CAT that stops asking about chapter 12 after two wrong
+answers has measured accurately and said nothing about the exam. So
+`assembleExam` works to coverage rules instead: every unit in scope appears or
+is named as having no content, every component is asked before any is asked
+twice, and difficulty spans the pool rather than tracking ability. Units are
+interleaved rather than grouped, because grouping makes "ran out of time" and
+"does not know chapter 12" produce identical data.
+
+**There are two scores and they must stay apart**, for the same reason
+`M = P × R` keeps its factors apart. `scoreAtBell` is what the paper was worth;
+`scoreOverall` counts answers made after the clock expired. Someone who answers
+26 of 30 correctly but reaches 18 inside the time has a pace problem, not a
+circuits problem, and one percentage reports them identically to someone who
+knew 18 and guessed. The clock is therefore allowed to run out *without ending
+the sitting* — stopping there would throw away the evidence that distinguishes
+them. Unreached items are graded as wrong at the bell, because a blank answer
+is worth zero on the real paper.
+
+**Everything the report shows is clipped to the exam's own scope.** An item is
+evidence about every component its `kcRefs` name, and those reach outside the
+paper: a chapter 12 question weighted 0.8 s-domain and 0.2 frequency response
+says a little about frequency response, which is not on this exam. Left in, the
+breakdown grew a "Frequency Response 100%" row off a fifth of one answer, in a
+list the learner reads as what the exam covered. The evidence is not discarded —
+the full weighted tally stays in `byKc` and the learner model replays from the
+attempt log — only the *report* is scoped, because that is what it claims to be
+about.
+
+### Scheduling against the calendar
+
+`termReadiness` ranks by imminence in **weeks**, read off the coverage schedule,
+which says what is being *taught*. `examPriorities` ranks by proximity in
+**days**, read off the exams, which say what is being *tested*. Both are needed
+and they disagree: a unit can be live all month and never examined, and a unit
+finished three weeks ago can be half of Monday's paper.
+
+Proximity decays hyperbolically (`1 / (1 + days/5)`), not exponentially. An
+exponential with any sensible half-life drives everything past a fortnight to
+arithmetic zero, which turns a study planner into a cramming tool — the only
+thing it can ever say is "revise the next exam", and the decayed prerequisite
+that will sink the exam after it stays invisible until that one is imminent too.
+
+**A component examined by two exams belongs to the nearer one**, not to the sum.
+Summing would let three distant exams outrank Monday's, which is the exact
+inversion the module exists to prevent.
+
+### The competency axis now reads back
+
+The radar had been drawn since the dashboard shipped and nothing read it, which
+was a real defect rather than a missing nicety: a competency score cannot be
+acted on by itself, because there is no such thing as a math-execution
+exercise. `misconception/remediation.ts` is the join. The radar says which axis
+is costing most, the misconception family (which carries a `competency`) names
+the specific habit on it, and `assembleDrill` builds a set from items that can
+actually catch that error. Each of the three pieces existed; none pointed at
+the next.
+
+Ranking multiplies the family's recency-weighted score by `(1 - composite) ×
+(1 + relativeShortfall)`. The relative term is the radar's actual claim — an
+axis 0.2 below someone's own average is *their* particular weakness, which is a
+different statement from a low absolute score — and the absolute term is the
+floor, because relative shortfall alone ranks nothing for a learner who is
+uniformly weak.
+
 ### The misconception loop
 
 Every distractor and trap names the error that produces it, and those tags have
@@ -611,6 +736,22 @@ Plan Phases 0–3 are complete. The EE 2300 vertical slice runs end to end
 (onboard → adaptive placement → gap report → dashboard), plus the skill tree,
 XP/streaks/quests/challenge exams, and the circuit lab with its own MNA solver.
 
+The app is now built around the term rather than around the bank. The shell is
+a navigation rail plus a briefing that states a conclusion — "EE 3300 Exam 1 is
+in 2 days: 11 of 25 measured components are below proficient, 2 never asked
+about" — computed from the model rather than chosen from a template, and it
+only ever states what has been measured. Underneath it: exam readiness per
+paper, a priority queue weighted by days-to-exam, and the competency→habit→drill
+join.
+
+Diagnostics are plural on purpose, because "where are my gaps" is not one
+question. `Diagnostics` offers four scopes: a **triage** run across every exam
+still ahead with items shared by proximity (untimed, explains as it goes); a
+**sealed exam** per paper, assembled from its own scope and timed, where the
+clock can expire without ending the sitting; **placement** across selected
+courses; and placement across everything. All four feed the same model, so
+none of the evidence is wasted whichever is chosen.
+
 The cross-course claim is now testable rather than inferred. All 34 KCs carry
 items, including the six math KCs that Circuits I points at, so a propagated
 diagnosis ("your calculus is the problem") can be confirmed by asking instead of
@@ -668,9 +809,6 @@ Not built:
   requires them.
 - **Schematic reconstruction from a netlist.** Importing a deck gives topology
   with no geometry; the Lab says so rather than inventing a layout.
-- **Nothing reads the competency radar for remediation.** The misconception
-  families carry a `competency`, and the dashboard draws that axis, but the two
-  are not joined.
 
 **The desktop build works and has been run.** `tauri build` produces `.deb`,
 `.rpm` and `.AppImage`; the app has been launched headless under Xvfb, driven

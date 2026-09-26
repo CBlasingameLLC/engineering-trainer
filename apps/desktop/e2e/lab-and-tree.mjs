@@ -51,7 +51,7 @@ async function waitForBoot() {
   // comma-separated pair is read as one literal string and waits forever.
   await page
     .locator('text=What have you already taken?')
-    .or(page.locator('text=Engineering Trainer'))
+    .or(page.locator('[data-testid="dashboard"]'))
     .first()
     .waitFor({ state: 'visible', timeout: 20000 });
 }
@@ -65,11 +65,11 @@ if (await page.locator('text=What have you already taken?').count() > 0) {
   await ee.locator('input[type=checkbox]').check();
   await page.getByRole('button', { name: /Continue with/ }).click();
 }
-await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 console.log('[1] dashboard rendered');
 
 // --- Skill tree -------------------------------------------------------------
-await page.getByRole('button', { name: 'Skill tree', exact: true }).click();
+await page.locator('[data-testid="nav-skillTree"]').click();
 await page.waitForSelector('[data-testid="skill-tree"]', { timeout: 10000 });
 
 const nodes = await page.locator('[data-testid="skill-tree"] g[data-kc-id]').evaluateAll((els) =>
@@ -138,10 +138,10 @@ if (scrollable !== null) fail(`the skill tree still scrolls (overflowing element
 await page.screenshot({ path: `${SHOT}/06-skill-tree.png`, fullPage: true });
 
 // --- Circuit lab ------------------------------------------------------------
-await page.getByRole('button', { name: 'Back to dashboard' }).click();
-await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+await page.locator('[data-testid="nav-dashboard"]').click();
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 // Exact: the empty-state also offers "Open the circuit lab".
-await page.getByRole('button', { name: 'Circuit lab', exact: true }).click();
+await page.locator('[data-testid="nav-circuitLab"]').click();
 await page.waitForSelector('[data-testid="schematic-canvas"]', { timeout: 10000 });
 console.log('[3] circuit lab rendered');
 

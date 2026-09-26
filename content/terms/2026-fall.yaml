@@ -110,6 +110,31 @@ courses:
         units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
         note: Final on Monday 7 December, 11:00-13:30 — comprehensive
 
+    exams:
+      - id: exam-1
+        title: Exam 1
+        on: 2026-09-30
+        scope: Chapters 14, 1-3 — fluids, calorimetry, the ideal gas and the first law
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics]
+      - id: exam-2
+        title: Exam 2
+        on: 2026-11-04
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics]
+      - id: exam-3
+        title: Exam 3
+        on: 2026-11-30
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
+      - id: final
+        title: Final
+        on: 2026-12-07
+        minutes: 150
+        scope: Comprehensive, 11:00-13:30
+        cumulative: true
+        units: [Fluid Statics, Heat and the Ideal Gas, Thermodynamics, Oscillations, Mechanical Waves, Wave Optics, Geometric Optics]
+
   # The most complete syllabus of the four: a day-by-day section list, so these
   # blocks are a direct reading rather than an inference. Class days map onto
   # term weeks exactly — day 1 is Thursday 20 August, in week 1.
@@ -161,6 +186,25 @@ courses:
         toWeek: 17
         units: [Logic and Proof, Induction, Sets and Functions, Number Theory, Graphs, Trees]
         note: Final on Tuesday 8 December, 11:00-13:30 — comprehensive
+
+    exams:
+      - id: test-1
+        title: Test 1
+        on: 2026-09-29
+        scope: Rosen 1.1-1.8, 5.1 and 2.1-2.5
+        units: [Logic and Proof, Induction, Sets and Functions]
+      - id: test-2
+        title: Test 2
+        on: 2026-11-10
+        scope: Rosen 4.1-4.5 and 10.1-10.5
+        units: [Number Theory, Graphs]
+      - id: final
+        title: Final
+        on: 2026-12-08
+        minutes: 150
+        scope: Comprehensive, 11:00-13:30
+        cumulative: true
+        units: [Logic and Proof, Induction, Sets and Functions, Number Theory, Graphs, Trees]
 
   # Circuits II spends its first three lectures re-teaching Circuits I, so that
   # material is genuinely live again rather than merely assumed. Chapter 7 in
@@ -233,6 +277,34 @@ courses:
         units: [Sinusoidal Steady State, AC Power, Second-Order Circuits, The s-Domain, Frequency Response, Coupled Circuits, Three-Phase]
         note: Final on Tuesday 8 December, 08:00-10:30 — comprehensive
 
+    exams:
+      # The one exam in this term whose scope leaves its own course. The review
+      # deck names "first and second order circuits" together, and the
+      # first-order response is Nilsson chapter 7 — taught again in week 3 of
+      # Circuits II, examined here, and owned by EE 2300's graph.
+      - id: exam-1
+        title: Exam 1
+        on: 2026-09-28
+        scope: Chapters 8, 9, 10 and 12, with the first-order response from chapter 7
+        units:
+          - Second-Order Circuits
+          - Sinusoidal Steady State
+          - AC Power
+          - The s-Domain
+          - EE2300:Energy Storage and Transients
+      - id: exam-2
+        title: Exam 2
+        on: 2026-11-05
+        scope: PROJECTED — chapter 13 and frequency response
+        units: [The s-Domain, Frequency Response]
+      - id: final
+        title: Final
+        on: 2026-12-08
+        minutes: 150
+        scope: Comprehensive, 08:00-10:30
+        cumulative: true
+        units: [Sinusoidal Steady State, AC Power, Second-Order Circuits, The s-Domain, Frequency Response, Coupled Circuits, Three-Phase]
+
   # From the syllabus, not estimated. Lecture numbers are the instructor's.
   #
   # The blocks past week 6 name units that exist in the knowledge map and carry
@@ -282,3 +354,20 @@ courses:
         toWeek: 17
         units: [Oxidation, Photolithography, Diffusion, Ion Implantation]
         note: Final on Thursday 10 December, 11:00-13:30 — cumulative
+
+    exams:
+      - id: exam-1
+        title: Exam 1
+        on: 2026-09-24
+        units: [Oxidation, Cleanroom Defects and Yield, Photolithography]
+      - id: exam-2
+        title: Exam 2
+        on: 2026-10-29
+        units: [Etch, Thin Film Deposition, Interconnect]
+      - id: final
+        title: Final
+        on: 2026-12-10
+        minutes: 150
+        scope: Cumulative, 11:00-13:30
+        cumulative: true
+        units: [Oxidation, Photolithography, Diffusion, Ion Implantation]

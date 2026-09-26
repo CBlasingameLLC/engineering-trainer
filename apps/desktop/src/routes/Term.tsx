@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import { termFocus, termLengthWeeks, termReadiness, type ScheduledUnit } from '@et/domain';
+import { termFocus, termLengthWeeks, termReadiness, upcomingExams, type ScheduledUnit } from '@et/domain';
 import { useApp } from '@/store';
 import { currentTerm } from '@/content';
 import { DIAGNOSIS_COPY } from '@/ui/bands';
+import { Countdown } from '@/ui/shell';
 
 /**
  * The term in progress.
@@ -56,14 +57,14 @@ function UnitRow(
       ? 'This unit is in the knowledge map but has no questions in the bank yet'
       : 'No knowledge components map to this unit yet';
   return (
-    <li className="flex flex-wrap items-center gap-2 border-t border-slate-100 py-2 first:border-t-0 dark:border-slate-800">
-      <span className="font-mono text-xs text-slate-500 dark:text-slate-400">{unit.course}</span>
-      <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{unit.unit}</span>
-      <span className="text-xs text-slate-400 dark:text-slate-500">
+    <li className="flex flex-wrap items-center gap-2 border-t border-line py-2 first:border-t-0">
+      <span className="font-mono text-xs text-ink-dim">{unit.course}</span>
+      <span className="text-sm font-medium text-ink">{unit.unit}</span>
+      <span className="text-xs text-ink-faint">
         weeks {unit.fromWeek}–{unit.toWeek}
       </span>
       {unit.note && (
-        <span className="text-xs italic text-amber-700 dark:text-amber-400">{unit.note}</span>
+        <span className="text-xs italic text-warn">{unit.note}</span>
       )}
       <button
         className="btn-secondary ml-auto text-xs"
@@ -82,7 +83,7 @@ function UnitRow(
         Study this
       </button>
       {reason && (
-        <span className="w-full text-xs text-slate-400 dark:text-slate-500">{reason}</span>
+        <span className="w-full text-xs text-ink-faint">{reason}</span>
       )}
     </li>
   );
@@ -94,8 +95,11 @@ export function Term(): React.ReactElement {
   const goTo = useApp((s) => s.goTo);
   const startUnit = useApp((s) => s.startUnit);
   const startKcs = useApp((s) => s.startKcs);
+  const startExam = useApp((s) => s.startExam);
+  const blueprints = useApp((s) => s.examBlueprints)();
 
   const term = useMemo(() => (content ? currentTerm(content) : undefined), [content]);
+  const exams = useMemo(() => upcomingExams(blueprints), [blueprints]);
 
   const focus = useMemo(
     () => (content && term ? termFocus(term, content.graph.kcs.values(), { upcomingWeeks: 4 }) : null),
@@ -137,8 +141,8 @@ export function Term(): React.ReactElement {
   if (!content || !term || !focus) {
     return (
       <div className="mx-auto max-w-3xl p-6">
-        <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">No term declared</h1>
-        <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">No term declared</h1>
+        <p className="mt-2 text-sm text-ink-dim">
           Add a term document under <code>content/terms/</code> to see what is live this week and which
           prerequisites are not ready for it.
         </p>
@@ -155,24 +159,57 @@ export function Term(): React.ReactElement {
       : 'Term finished';
 
   return (
-    <div className="mx-auto max-w-3xl p-6" data-testid="term-view">
-      <div className="flex flex-wrap items-baseline gap-3">
-        <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{term.title}</h1>
-        <span className="text-sm text-slate-500 dark:text-slate-400" data-testid="term-week">{position}</span>
-        <button className="btn-secondary ml-auto text-xs" onClick={() => goTo('dashboard')}>Dashboard</button>
+    <div className="mx-auto max-w-3xl px-5 py-6" data-testid="term-view">
+      <div className="mb-4 flex flex-wrap items-center gap-3">
+        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink">{term.title}</h1>
+        <span className="font-mono text-[11px] text-ink-dim" data-testid="term-week">{position}</span>
+        <span className="h-px flex-1 bg-line" />
       </div>
+
+      {/* Exams first, because the term's schedule is the *reason* the readiness
+          list below it is ranked the way it is. A learner looking at "not ready
+          for what is coming" should be able to see what is coming without
+          leaving the page. */}
+      {exams.length > 0 ? (
+        <section className="panel mb-4" data-testid="term-exams">
+          <header className="flex items-center gap-2 border-b border-line px-3 py-2">
+            <span className="label">Exams ahead</span>
+            <span className="h-px flex-1 bg-line" />
+            <span className="label">{exams.length}</span>
+          </header>
+          {exams.slice(0, 6).map((exam) => (
+            <div key={exam.id} className="flex items-center gap-3 border-b border-line px-3 py-2 last:border-b-0">
+              <Countdown days={exam.daysAway} />
+              <span className="shrink-0 font-mono text-[12px] text-ink">
+                {exam.course} {exam.title}
+              </span>
+              <span className="min-w-0 flex-1 truncate text-[11px] text-ink-faint">
+                {exam.scope ?? exam.units.map((u) => u.unit).join(' · ')}
+              </span>
+              <button
+                type="button"
+                className="btn-ghost shrink-0"
+                data-testid="sit-exam"
+                onClick={() => startExam(exam.id)}
+              >
+                Sit
+              </button>
+            </div>
+          ))}
+        </section>
+      ) : null}
 
       {/* The readiness list comes first on purpose. What is live this week is
           something the learner already knows; what has quietly decayed
           underneath what is coming next is not. */}
       <section className="card mt-4 p-4">
-        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Not ready for what is coming</h2>
-        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        <h2 className="text-sm font-semibold text-ink">Not ready for what is coming</h2>
+        <p className="mt-1 text-xs text-ink-dim">
           Prerequisites of the next four weeks&rsquo; material, ranked by how far they have slipped and how
           soon they are needed.
         </p>
         {readiness.length === 0 ? (
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-400" data-testid="readiness-clear">
+          <p className="mt-3 text-sm text-ink-dim" data-testid="readiness-clear">
             Nothing is flagged. Either the prerequisites are in place or there is not enough evidence yet —
             a placement exam settles which.
           </p>
@@ -183,23 +220,25 @@ export function Term(): React.ReactElement {
               return (
                 <li
                   key={gap.kc}
-                  className="flex flex-wrap items-center gap-2 border-t border-slate-100 py-2 first:border-t-0 dark:border-slate-800"
+                  className="flex items-center gap-3 border-t border-line py-2 first:border-t-0"
                   data-kc-id={gap.kc}
                 >
-                  <span
-                    className={`rounded px-1.5 py-0.5 text-xs ${DIAGNOSIS_COPY[gap.diagnosis].chip}`}
-                    title={DIAGNOSIS_COPY[gap.diagnosis].detail}
-                  >
-                    {DIAGNOSIS_COPY[gap.diagnosis].label}
-                  </span>
-                  <span className="text-sm font-medium text-slate-900 dark:text-slate-100">
-                    {kc?.title ?? gap.kc}
-                  </span>
-                  <span className="text-xs text-slate-400 dark:text-slate-500">
-                    {kc?.courseId ?? ''} · needed by {gap.course} {gap.unit}, {whenLabel(gap.startsInWeeks)}
-                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] ${DIAGNOSIS_COPY[gap.diagnosis].chip}`}
+                        title={DIAGNOSIS_COPY[gap.diagnosis].detail}
+                      >
+                        {DIAGNOSIS_COPY[gap.diagnosis].label}
+                      </span>
+                      <span className="truncate text-[13px] text-ink">{kc?.title ?? gap.kc}</span>
+                    </div>
+                    <div className="label mt-0.5 truncate">
+                      {kc?.courseId ?? ''} · needed by {gap.course} {gap.unit}, {whenLabel(gap.startsInWeeks)}
+                    </div>
+                  </div>
                   <button
-                    className="btn-secondary ml-auto text-xs"
+                    className="btn-secondary shrink-0"
                     data-testid="shore-up"
                     onClick={() => startKcs([gap.kc])}
                   >
@@ -213,9 +252,9 @@ export function Term(): React.ReactElement {
       </section>
 
       <section className="card mt-4 p-4">
-        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Covering now</h2>
+        <h2 className="text-sm font-semibold text-ink">Covering now</h2>
         {focus.live.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-2 text-sm text-ink-dim">
             Nothing is scheduled for this week.
           </p>
         ) : (
@@ -234,9 +273,9 @@ export function Term(): React.ReactElement {
       </section>
 
       <section className="card mt-4 p-4">
-        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Coming up</h2>
+        <h2 className="text-sm font-semibold text-ink">Coming up</h2>
         {focus.upcoming.length === 0 ? (
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Nothing in the next four weeks.</p>
+          <p className="mt-2 text-sm text-ink-dim">Nothing in the next four weeks.</p>
         ) : (
           <ul className="mt-2" data-testid="upcoming-units">
             {focus.upcoming.map((unit) => (
@@ -256,7 +295,7 @@ export function Term(): React.ReactElement {
         // Said out loud rather than quietly omitted. A course on the term that
         // the app knows nothing about is a real state of affairs, and a term
         // view that hid it would be disagreeing with the term.
-        <p className="mt-4 text-xs text-slate-500 dark:text-slate-400" data-testid="courses-without-graph">
+        <p className="mt-4 text-xs text-ink-dim" data-testid="courses-without-graph">
           On your term but not yet mapped: {content.termCoursesWithoutGraph.join(', ')}. These have no
           knowledge components, so nothing above accounts for them.
         </p>

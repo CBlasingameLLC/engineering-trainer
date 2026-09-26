@@ -44,9 +44,55 @@ export const termBlockSchema = z
     path: ['toWeek'],
   });
 
+/**
+ * A scheduled exam.
+ *
+ * Exams carry a date where coverage blocks carry a week, and the difference is
+ * deliberate. A block is written in weeks because that is how a syllabus
+ * states it, and because a term that slips by a week is then one line to fix
+ * rather than forty. An exam is a specific morning, and the quantity that
+ * drives every decision near it is how many *days* away it is — a week number
+ * cannot tell Saturday from the Monday two days later, and that distinction is
+ * the entire value of scheduling around an exam at all.
+ *
+ * An exam is also the first thing in this repository that makes a course's
+ * scope exceed its own graph, which is why `units` entries may name another
+ * course. EE 3300's first exam examines the first-order response: Nilsson
+ * chapter 7, re-taught in week 3 of Circuits II and tested alongside chapter 8,
+ * but owned by EE 2300's curriculum because that is the course it belongs to.
+ * A scope confined to its own course would have to either omit that material
+ * or duplicate the component into EE 3300, and duplicating it would split the
+ * learner's evidence across two components that mean the same thing.
+ */
+export const termExamSchema = z.object({
+  /** Unique within its course: "exam-1", "test-2", "final". */
+  id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'lowercase dash separated slug'),
+  title: z.string().min(1),
+  /** The day it is sat. */
+  on: isoDate,
+  /**
+   * Units examined. A bare name is a unit of the course that owns the exam;
+   * `COURSE:Unit Name` names one belonging to another course.
+   */
+  units: z.array(z.string().min(1)).min(1),
+  /**
+   * How long the exam runs.
+   *
+   * Optional because most syllabi state it for the final and for nothing else.
+   * A missing duration is the honest state and the app says so rather than
+   * printing an invented number as though it were read off a document.
+   */
+  minutes: z.number().int().min(5).max(600).optional(),
+  /** The scope as the course itself words it: "chapters 8, 9, 10 and 12". */
+  scope: z.string().optional(),
+  /** Cumulative exams change what is worth revising, so they say so. */
+  cumulative: z.boolean().default(false),
+});
+
 export const termCourseSchema = z.object({
   course: z.string().regex(/^[A-Z]{2,4}\d{4}$/, 'course code like "PHYS2335"'),
   blocks: z.array(termBlockSchema).default([]),
+  exams: z.array(termExamSchema).default([]),
 });
 
 export const termSchema = z
@@ -66,6 +112,7 @@ export const termSchema = z
 export type Term = z.infer<typeof termSchema>;
 export type TermCourse = z.infer<typeof termCourseSchema>;
 export type TermBlock = z.infer<typeof termBlockSchema>;
+export type TermExam = z.infer<typeof termExamSchema>;
 
 export interface TermIssue {
   path: string;
@@ -107,9 +154,50 @@ export function parseTerm(input: unknown): TermParseResult {
       }
       spans.add(key);
     }
+
+    // An exam outside the term's own dates is always a typo, and it is a
+    // costly one: every urgency figure in the app is a countdown to one of
+    // these dates, so a year slip silently reprioritises the whole term.
+    const examIds = new Set<string>();
+    for (const [ei, exam] of course.exams.entries()) {
+      if (examIds.has(exam.id)) {
+        issues.push({ path: `courses.${ci}.exams.${ei}.id`, message: `${exam.id} is listed twice` });
+      }
+      examIds.add(exam.id);
+
+      if (exam.on < term.startsOn || exam.on > term.endsOn) {
+        issues.push({
+          path: `courses.${ci}.exams.${ei}.on`,
+          message: `${exam.on} falls outside the term (${term.startsOn} to ${term.endsOn})`,
+        });
+      }
+    }
   }
 
   return { ok: issues.length === 0, term, issues };
+}
+
+/** A unit reference resolved to the course that owns it. */
+export interface ResolvedUnitRef {
+  course: string;
+  unit: string;
+}
+
+/**
+ * Split an exam's unit references into `{course, unit}` pairs.
+ *
+ * The `COURSE:Unit` prefix is parsed in exactly one place, here, and every
+ * consumer downstream works with the resolved pair. `packages/domain` mirrors
+ * the term's shape structurally rather than importing this contract, so a
+ * second copy of this parser would have to live over there — and two parsers
+ * for one notation is how the two drift.
+ */
+export function examUnits(owningCourse: string, exam: TermExam): ResolvedUnitRef[] {
+  return exam.units.map((raw) => {
+    const split = raw.indexOf(':');
+    if (split < 0) return { course: owningCourse, unit: raw };
+    return { course: raw.slice(0, split), unit: raw.slice(split + 1) };
+  });
 }
 
 /**
@@ -140,6 +228,27 @@ export function checkTermUnits(
           issues.push({
             path: `courses.${ci}.blocks.${bi}.units.${ui}`,
             message: `"${unit}" is not a unit of ${course.course} (known: ${[...known].join(', ')})`,
+          });
+        }
+      }
+    }
+
+    // Exam scopes resolve against whichever course owns each unit, which is
+    // not always the course sitting the exam.
+    for (const [ei, exam] of course.exams.entries()) {
+      for (const [ui, ref] of examUnits(course.course, exam).entries()) {
+        const owner = unitsByCourse.get(ref.course);
+        if (!owner) {
+          issues.push({
+            path: `courses.${ci}.exams.${ei}.units.${ui}`,
+            message: `${ref.course} has no curriculum document, so "${ref.unit}" cannot be examined`,
+          });
+          continue;
+        }
+        if (!owner.has(ref.unit)) {
+          issues.push({
+            path: `courses.${ci}.exams.${ei}.units.${ui}`,
+            message: `"${ref.unit}" is not a unit of ${ref.course} (known: ${[...owner].join(', ')})`,
           });
         }
       }

@@ -48,14 +48,14 @@ export function OrderingInput({
               key={id}
               disabled={disabled}
               onClick={() => onChange([...order, id])}
-              className="flex w-full items-start gap-2 rounded-md border border-slate-200 p-3 text-left text-sm
-                         hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:hover:bg-slate-800"
+              className="flex w-full items-start gap-2 rounded-md border border-line p-3 text-left text-sm
+                         hover:bg-surface-2 disabled:opacity-50"
             >
               <MathText>{textFor(id)}</MathText>
             </button>
           ))}
           {pool.length === 0 && (
-            <p className="text-xs text-slate-400 dark:text-slate-500">All lines placed.</p>
+            <p className="text-xs text-ink-faint">All lines placed.</p>
           )}
         </div>
       </div>
@@ -67,16 +67,16 @@ export function OrderingInput({
               <button
                 disabled={disabled}
                 onClick={() => onChange(order.filter((x) => x !== id))}
-                className="flex w-full items-start gap-3 rounded-md border border-slate-900 bg-slate-50 p-3
-                           text-left text-sm disabled:opacity-70 dark:border-slate-200 dark:bg-slate-900"
+                className="flex w-full items-start gap-3 rounded-md border border-ink bg-surface-2 p-3
+                           text-left text-sm disabled:opacity-70"
               >
-                <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{i + 1}</span>
+                <span className="font-mono text-xs text-ink-faint">{i + 1}</span>
                 <MathText>{textFor(id)}</MathText>
               </button>
             </li>
           ))}
           {order.length === 0 && (
-            <p className="text-xs text-slate-400 dark:text-slate-500">
+            <p className="text-xs text-ink-faint">
               Click lines on the left to build the proof. One of them belongs to no correct proof.
             </p>
           )}
@@ -99,7 +99,7 @@ export function SkeletonInput({
       {answer.steps.map((step, i) => (
         <div key={step.id}>
           <p className="label flex items-baseline gap-2">
-            <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{i + 1}</span>
+            <span className="font-mono text-xs text-ink-faint">{i + 1}</span>
             <MathText>{step.prompt}</MathText>
           </p>
           {step.expect.kind === 'choice' ? (
@@ -112,8 +112,8 @@ export function SkeletonInput({
                   className={[
                     'flex w-full items-start gap-3 rounded-md border p-3 text-left text-sm',
                     values[step.id] === option.id
-                      ? 'border-slate-900 bg-slate-50 dark:border-slate-200 dark:bg-slate-900'
-                      : 'border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800',
+                      ? 'border-ink bg-surface-2'
+                      : 'border-line hover:bg-surface-2',
                   ].join(' ')}
                 >
                   <MathText>{option.text}</MathText>
@@ -127,8 +127,8 @@ export function SkeletonInput({
               onChange={(e) => onChange({ ...values, [step.id]: e.target.value })}
               spellCheck={false}
               placeholder="an expression, e.g. k*(k+1)/2"
-              className="mt-2 w-full rounded-md border border-slate-300 p-2 font-mono text-sm
-                         focus:border-slate-900 focus:outline-none disabled:bg-slate-50 dark:border-slate-600"
+              className="mt-2 w-full rounded-md border border-line-strong p-2 font-mono text-sm
+                         focus:border-ink focus:outline-none disabled:bg-surface-2 "
             />
           )}
         </div>
@@ -152,8 +152,8 @@ export function RubricInput({
         {answer.criteria.map((c) => (
           <label
             key={c.id}
-            className="flex cursor-pointer items-start gap-3 rounded-md border border-slate-200 p-3 text-sm
-                       hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+            className="flex cursor-pointer items-start gap-3 rounded-md border border-line p-3 text-sm
+                       hover:bg-surface-2"
           >
             <input
               type="checkbox"
@@ -163,17 +163,17 @@ export function RubricInput({
               className="mt-0.5"
             />
             <span className="flex-grow"><MathText>{c.text}</MathText></span>
-            <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{c.weight}</span>
+            <span className="font-mono text-xs text-ink-faint">{c.weight}</span>
           </label>
         ))}
       </div>
       {settled ? (
-        <div className="mt-4 rounded-md border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-900">
+        <div className="mt-4 rounded-md border border-line bg-surface-2 p-3">
           <p className="label">Model proof</p>
           <div className="mt-1 text-sm"><MathText>{answer.model}</MathText></div>
         </div>
       ) : (
-        <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
+        <p className="mt-3 text-xs text-ink-faint">
           Write the proof out before ticking anything. The model proof appears after you submit, and this attempt
           counts for less than a graded one because you are scoring it yourself.
         </p>

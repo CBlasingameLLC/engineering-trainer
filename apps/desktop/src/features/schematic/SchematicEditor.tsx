@@ -436,13 +436,13 @@ export function SchematicEditor({
             Select
           </ToolButton>
           <ToolButton tool="wire" active={tool === 'wire'} hint="W" onClick={() => { setTool('wire'); setSelection(new Set()); }}>
-            Wire{tool === 'wire' && <span className="ml-1 text-slate-300 dark:text-slate-600">· Enter to finish</span>}
+            Wire{tool === 'wire' && <span className="ml-1 text-ink-faint">· Enter to finish</span>}
           </ToolButton>
           <ToolButton tool="ground" active={tool === 'ground'} hint="G" onClick={() => { setTool('ground'); setSelection(new Set()); }}>
             Ground
           </ToolButton>
 
-          <div className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">Parts</div>
+          <div className="pt-2 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Parts</div>
           {PALETTE.map((entry) => (
             <ToolButton
               key={entry.kind}
@@ -456,8 +456,8 @@ export function SchematicEditor({
           ))}
 
           {selection.size > 1 && (
-            <div className="mt-3 rounded border border-slate-200 p-2 text-xs dark:border-slate-700">
-              <div className="text-slate-900 dark:text-slate-100">{selection.size} selected</div>
+            <div className="mt-3 rounded border border-line p-2 text-xs">
+              <div className="text-ink">{selection.size} selected</div>
               <div className="mt-2 flex gap-1">
                 <SmallButton onClick={rotateSelection}>Rotate</SmallButton>
                 <SmallButton tone="danger" onClick={deleteSelection}>Delete</SmallButton>
@@ -466,14 +466,14 @@ export function SchematicEditor({
           )}
 
           {only && (
-            <div className="mt-3 rounded border border-slate-200 p-2 dark:border-slate-700">
-              <div className="font-mono text-xs font-semibold text-slate-900 dark:text-slate-100">{only.id}</div>
+            <div className="mt-3 rounded border border-line p-2">
+              <div className="font-mono text-xs font-semibold text-ink">{only.id}</div>
               {only.kind !== 'opamp' && (
-                <label className="mt-2 block text-[11px] text-slate-500 dark:text-slate-400">
+                <label className="mt-2 block text-[11px] text-ink-dim">
                   Value
                   <input
                     key={only.id}
-                    className="mt-0.5 w-full rounded border border-slate-300 px-1 py-0.5 text-xs tabular-nums dark:border-slate-600"
+                    className="mt-0.5 w-full rounded border border-line-strong px-1 py-0.5 text-xs tabular-nums "
                     defaultValue={formatValue(only.value)}
                     onBlur={(e) => {
                       const parsed = Number(e.target.value) || parseSuffixed(e.target.value);
@@ -490,9 +490,9 @@ export function SchematicEditor({
           )}
 
           {selectedWire && (
-            <div className="mt-3 rounded border border-slate-200 p-2 text-xs dark:border-slate-700">
-              <div className="text-slate-900 dark:text-slate-100">Wire · {selectedWire.points.length} vertices</div>
-              <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">Drag a handle to reroute.</p>
+            <div className="mt-3 rounded border border-line p-2 text-xs">
+              <div className="text-ink">Wire · {selectedWire.points.length} vertices</div>
+              <p className="mt-1 text-[11px] text-ink-dim">Drag a handle to reroute.</p>
               <div className="mt-2 flex gap-1">
                 <SmallButton tone="danger" onClick={deleteSelection}>Delete</SmallButton>
               </div>
@@ -502,7 +502,7 @@ export function SchematicEditor({
       )}
 
       <div className="min-w-0 flex-1">
-        <div className="relative overflow-hidden rounded border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+        <div className="relative overflow-hidden rounded border border-line bg-surface">
           {!readOnly && (
             <div className="pointer-events-none absolute right-2 top-2 z-10 flex flex-col gap-1">
               <SmallSquare title="Zoom in" onClick={() => camera.zoomBy(1.3)}>+</SmallSquare>
@@ -672,25 +672,25 @@ export function SchematicEditor({
           </svg>
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+        <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-ink-dim">
           <span>{value.components.length} part(s)</span>
           <span>{Math.max(0, nets.byNet.size - 1)} net(s)</span>
           {built.issues.length > 0 && (
-            <span className="text-orange-700">
+            <span className="text-warn">
               {built.issues.length} issue(s): {built.issues[0]!.message}
             </span>
           )}
           {built.issues.length === 0 && value.components.length > 0 && (
-            <span className="text-emerald-700 dark:text-emerald-300">connected</span>
+            <span className="text-accent">connected</span>
           )}
           <span className="ml-auto tabular-nums">{Math.round(camera.scale * 100)}%</span>
         </div>
 
         {!readOnly && (
-          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-slate-400 dark:text-slate-500">
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-ink-faint">
             {HOTKEY_HINTS.map(([key, label]) => (
               <span key={key}>
-                <kbd className="rounded border border-slate-300 px-1 font-mono dark:border-slate-600">{key}</kbd> {label}
+                <kbd className="rounded border border-line-strong px-1 font-mono">{key}</kbd> {label}
               </span>
             ))}
             <span>wheel zoom · middle-drag pan · shift-click multi-select</span>
@@ -717,13 +717,13 @@ function ToolButton({
       data-tool={tool}
       data-active={active ? 'true' : undefined}
       className={`flex w-full items-center rounded px-2 py-1 text-left text-xs ${
-        active ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+        active ? 'bg-surface-2 text-white' : 'bg-surface-2 text-ink'
       }`}
       onClick={onClick}
     >
       <span className="min-w-0 flex-1 truncate">{children}</span>
       {hint && (
-        <kbd className={`ml-1 shrink-0 font-mono text-[10px] ${active ? 'text-slate-300' : 'text-slate-400 dark:text-slate-500'}`}>
+        <kbd className={`ml-1 shrink-0 font-mono text-[10px] ${active ? 'text-ink-faint' : 'text-ink-faint'}`}>
           {hint}
         </kbd>
       )}
@@ -738,8 +738,8 @@ function SmallButton({
     <button
       className={`flex-1 rounded px-1 py-0.5 text-[11px] ${
         tone === 'danger'
-          ? 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300'
-          : 'bg-slate-100 dark:bg-slate-800 dark:text-slate-300'
+          ? 'bg-danger/10 text-danger '
+          : 'bg-surface-2'
       }`}
       onClick={onClick}
     >
@@ -757,7 +757,7 @@ function SmallSquare({
       title={title}
       aria-label={title}
       onClick={onClick}
-      className="pointer-events-auto h-7 w-7 rounded border border-slate-300 bg-white/90 text-sm leading-none text-slate-600 shadow-sm hover:bg-white dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-300 dark:hover:bg-slate-800"
+      className="pointer-events-auto h-7 w-7 rounded border border-line-strong bg-surface/90 text-sm leading-none text-ink-dim shadow-sm hover:bg-surface"
     >
       {children}
     </button>

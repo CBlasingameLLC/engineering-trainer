@@ -9,6 +9,8 @@ import { ExpressionInput } from '@/ui/ExpressionInput';
 import { TruthTableInput } from '@/ui/TruthTableInput';
 import { OrderingInput, RubricInput, SkeletonInput } from '@/ui/ProofInputs';
 import { SchematicEditor } from '@/features/schematic/SchematicEditor';
+import { Meter } from '@/ui/shell';
+import { IconClock } from '@/ui/icons';
 
 /**
  * The session player.
@@ -19,6 +21,111 @@ import { SchematicEditor } from '@/features/schematic/SchematicEditor';
  * distractor is only useful at the moment the learner still remembers why they
  * picked it.
  */
+
+/**
+ * How long is left, ticking.
+ *
+ * Counts down to zero and then keeps counting *up*, because the paper does not
+ * end at the bell. An exam clock that stopped at 00:00 would hide the one
+ * number the time-management finding is built from — how far past the limit
+ * the sitting actually ran.
+ */
+function ExamClock(): React.ReactElement | null {
+  const paper = useApp((s) => s.paper);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  if (!paper || paper.allowedMs === null) return null;
+
+  const elapsed = now - paper.startedAt;
+  const remaining = paper.allowedMs - elapsed;
+  const over = remaining < 0;
+  const magnitude = Math.abs(over ? remaining : remaining);
+  const mm = Math.floor(magnitude / 60_000);
+  const ss = Math.floor((magnitude % 60_000) / 1000);
+
+  return (
+    <span
+      className={`tabular flex items-center gap-1.5 font-mono text-[13px] font-semibold ${
+        over ? 'text-danger' : remaining < 300_000 ? 'text-warn' : 'text-ink'
+      }`}
+      data-testid="exam-clock"
+      data-expired={over ? 'true' : 'false'}
+    >
+      <IconClock className="h-3.5 w-3.5" />
+      {over ? '+' : ''}
+      {String(mm).padStart(2, '0')}:{String(ss).padStart(2, '0')}
+    </span>
+  );
+}
+
+/**
+ * Handing in, and the bell.
+ *
+ * The interruption at expiry is deliberate and is the one moment this screen
+ * takes over: a learner who works past the limit without noticing has produced
+ * a result that looks like knowledge and is partly pace, and they need to have
+ * *chosen* to carry on for the two scores in the report to mean anything.
+ */
+function PaperControls(): React.ReactElement | null {
+  const paper = useApp((s) => s.paper);
+  const continuePastBell = useApp((s) => s.continuePastBell);
+  const finishPaper = useApp((s) => s.finishPaper);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  if (!paper) return null;
+
+  const expired = paper.allowedMs !== null && now - paper.startedAt > paper.allowedMs;
+  const unreached = paper.served.length - paper.cursor - 1;
+
+  if (expired && !paper.continuedPastBell) {
+    return (
+      <div className="mt-3 border border-danger/60 bg-danger/5 px-3 py-2.5" data-testid="bell">
+        <div className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-danger">
+          Time
+        </div>
+        <p className="mt-1 max-w-xl text-[12px] leading-relaxed text-ink-dim">
+          On the real paper this is where it gets collected, with{' '}
+          {unreached > 0 ? `${unreached} question${unreached === 1 ? '' : 's'}` : 'nothing'} left. You can
+          hand in now and take that as the result, or keep working — everything from here is scored
+          separately, so you still find out what you know without it flattering what you would have
+          scored.
+        </p>
+        <div className="mt-2 flex gap-2">
+          <button type="button" className="btn-primary" data-testid="hand-in" onClick={() => void finishPaper()}>
+            Hand in
+          </button>
+          <button type="button" className="btn-secondary" data-testid="keep-going" onClick={continuePastBell}>
+            Keep going
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-2 flex items-center gap-2">
+      {expired ? (
+        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-danger">
+          Past the limit — scored separately
+        </span>
+      ) : null}
+      <span className="flex-1" />
+      <button type="button" className="btn-ghost" data-testid="hand-in" onClick={() => void finishPaper()}>
+        Hand in{unreached > 0 ? ` · ${unreached} left` : ''}
+      </button>
+    </div>
+  );
+}
 
 export function Session(): React.ReactElement {
   const active = useApp((s) => s.active);
@@ -35,6 +142,7 @@ export function Session(): React.ReactElement {
   const showHint = useApp((s) => s.showHint);
   const mode = useApp((s) => s.mode);
   const sessionXp = useApp((s) => s.sessionXp);
+  const paper = useApp((s) => s.paper);
 
   const [text, setText] = useState('');
   const [choice, setChoice] = useState<string | null>(null);
@@ -66,7 +174,7 @@ export function Session(): React.ReactElement {
   }, [active]);
 
   if (!active || !cat) {
-    return <div className="grid h-full place-items-center text-sm text-slate-400 dark:text-slate-500">Preparing…</div>;
+    return <div className="grid h-full place-items-center text-sm text-ink-faint">Preparing…</div>;
   }
 
   const { item } = active;
@@ -133,30 +241,52 @@ export function Session(): React.ReactElement {
     graded?.result.outcome === 'unparseable' || graded?.result.outcome === 'wrong-dimension';
   const settled = graded !== null && !needsCorrection;
 
+  const sealed = paper?.kind === 'exam';
+  const total = paper ? paper.served.length : budget;
+  const position = paper ? paper.cursor + 1 : answered + 1;
+  const heading = paper
+    ? paper.kind === 'exam'
+      ? `${paper.blueprints[0]?.course ?? ''} ${paper.blueprints[0]?.title ?? 'Exam'}`
+      : 'Exam triage'
+    : mode === 'challenge' ? 'Challenge exam'
+    : mode === 'drill' ? 'Targeted drill'
+    : mode === 'practice' ? 'Practice'
+    : 'Placement';
+
   return (
-    <div className="mx-auto flex h-full max-w-3xl flex-col px-6 py-8">
-      <header className="flex items-center gap-4 text-sm">
-        <span className="font-medium text-slate-900 dark:text-slate-100">
-          {mode === 'challenge' ? 'Challenge exam' : mode === 'practice' ? 'Daily quest' : 'Placement'}
+    <div className="mx-auto flex h-full max-w-3xl flex-col px-6 py-6" data-testid="session" data-mode={paper ? paper.kind : mode}>
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-1">
+        <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.1em] text-ink">
+          {heading}
         </span>
-        <span className="text-slate-400 dark:text-slate-500">
-          item {answered + 1} of at most {budget}
+        <span className="tabular font-mono text-[11px] text-ink-faint">
+          {paper ? `${position} of ${total}` : `item ${position} of at most ${total}`}
         </span>
-        <span className="tabular-nums text-amber-700 dark:text-amber-300">{sessionXp} XP</span>
-        <span className="ml-auto tabular-nums text-slate-500 dark:text-slate-400">
-          {correct}/{answered} correct
-        </span>
+        {paper ? null : (
+          <span className="tabular font-mono text-[11px] text-gold">{sessionXp} XP</span>
+        )}
+        <span className="flex-1" />
+        {/* A sealed paper reports nothing back, and that includes the running
+            score: a live tally is feedback, and seeing it climb or stall
+            changes how the remaining questions are answered. */}
+        {sealed ? <ExamClock /> : (
+          <span className="tabular font-mono text-[11px] text-ink-dim">
+            {correct}/{answered} correct
+          </span>
+        )}
       </header>
 
-      <div className="mt-3 h-1 overflow-hidden rounded bg-slate-200 dark:bg-slate-700">
-        <div
-          className="h-full bg-slate-900 transition-all duration-300 dark:bg-slate-100"
-          style={{ width: `${Math.min(100, (answered / budget) * 100)}%` }}
-        />
-      </div>
-      <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
-        {outstanding} concept{outstanding === 1 ? '' : 's'} still need evidence
+      <Meter className="mt-2.5" value={Math.min(1, (paper ? paper.cursor : answered) / Math.max(1, total))} />
+
+      <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-faint">
+        {paper
+          ? sealed
+            ? 'Sealed — nothing is shown back until you hand in'
+            : `${paper.blueprints.length} exam${paper.blueprints.length === 1 ? '' : 's'} in scope`
+          : `${outstanding} concept${outstanding === 1 ? '' : 's'} still need evidence`}
       </p>
+
+      {paper ? <PaperControls /> : null}
 
       <main className="mt-8 flex-1">
         {/* The item id is exposed so end-to-end drivers and bug reports can
@@ -171,7 +301,7 @@ export function Session(): React.ReactElement {
           data-item-type={item.type}
           data-kc-id={[...item.kcRefs].sort((a, b) => b.weight - a.weight)[0]?.kc}
         >
-          <MathText className="block text-base leading-relaxed text-slate-800 dark:text-slate-200">{item.stem}</MathText>
+          <MathText className="block text-base leading-relaxed text-ink">{item.stem}</MathText>
 
           {/* Above the answer controls and below the question, which is where a
               textbook puts it: the figure is what the question refers to, so it
@@ -186,13 +316,13 @@ export function Session(): React.ReactElement {
                     key={choice}
                     disabled={settled}
                     onClick={() => setCircuitInput(choice)}
-                    className={`rounded px-2 py-1 text-xs ${circuitInput === choice ? 'bg-slate-800 text-white dark:bg-slate-700' : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'}`}
+                    className={`rounded px-2 py-1 text-xs ${circuitInput === choice ? 'bg-surface-2 text-white' : 'bg-surface-2 text-ink'}`}
                     data-circuit-input={choice}
                   >
                     {choice === 'draw' ? 'Draw it' : 'Write a netlist'}
                   </button>
                 ))}
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-ink-dim">
                   Graded by simulating what you build — any circuit meeting the specification counts.
                 </span>
               </div>
@@ -214,11 +344,10 @@ export function Session(): React.ReactElement {
                     onChange={(e) => setDeck(e.target.value)}
                     spellCheck={false}
                     placeholder={'my design\nV1 in 0 1\nR1 in inv 2.2k\nRf inv out 22k\nXU1 out 0 inv opamp\n.op'}
-                    className="h-44 w-full rounded-md border border-slate-300 p-2 font-mono text-xs
-                               focus:border-slate-900 focus:outline-none disabled:bg-slate-50
-                   dark:border-slate-600"
+                    className="h-44 w-full rounded-md border border-line-strong p-2 font-mono text-xs
+                               focus:border-ink focus:outline-none disabled:bg-surface-2"
                   />
-                  <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                  <p className="mt-1 text-xs text-ink-faint">
                     SPICE subset. First line is the title. Node names from the question must match.
                   </p>
                 </div>
@@ -237,15 +366,15 @@ export function Session(): React.ReactElement {
                     className={[
                       'flex w-full items-start gap-3 rounded-md border p-3 text-left text-sm transition-colors',
                       isAnswer
-                        ? 'border-emerald-500 bg-emerald-50 dark:border-emerald-600 dark:bg-emerald-950'
+                        ? 'border-accent/50 bg-accent/10 '
                         : chosenThis
-                          ? 'border-red-400 bg-red-50 dark:border-red-600 dark:bg-red-950'
+                          ? 'border-danger/50 bg-danger/10 '
                           : choice === option.id
-                            ? 'border-slate-900 bg-slate-50 dark:border-slate-200 dark:bg-slate-900'
-                            : 'border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800',
+                            ? 'border-ink bg-surface-2'
+                            : 'border-line hover:bg-surface-2',
                     ].join(' ')}
                   >
-                    <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{option.id.toUpperCase()}</span>
+                    <span className="font-mono text-xs text-ink-faint">{option.id.toUpperCase()}</span>
                     <MathText>{option.text}</MathText>
                   </button>
                 );
@@ -302,18 +431,17 @@ export function Session(): React.ReactElement {
                     ? 'e.g. 50∠53.1°, 30 + j40, 50 < 53.1'
                     : 'e.g. 4.7k, 6.2 V, 5 kΩ'
                 }
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-mono text-sm
-                           focus:border-slate-900 focus:outline-none disabled:bg-slate-50
-                   dark:border-slate-600"
+                className="mt-1 w-full rounded-md border border-line-strong px-3 py-2 font-mono text-sm
+                           focus:border-ink focus:outline-none disabled:bg-surface-2"
               />
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+              <p className="mt-1 text-xs text-ink-faint">
                 Engineering notation, SI prefixes and units are all accepted.
               </p>
             </div>
           )}
 
           {needsCorrection && (
-            <p className="mt-4 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+            <p className="mt-4 rounded-md bg-warn/10 px-3 py-2 text-sm text-warn">
               {graded.result.feedback}
             </p>
           )}
@@ -321,7 +449,7 @@ export function Session(): React.ReactElement {
           {hintsShown > 0 && !settled && (
             <div className="mt-4 space-y-2">
               {item.explanation.hints.slice(0, hintsShown).map((hint, i) => (
-                <p key={i} className="rounded-md bg-sky-50 px-3 py-2 text-sm text-sky-900 dark:bg-sky-950 dark:text-sky-100">
+                <p key={i} className="rounded-md bg-info/10 px-3 py-2 text-sm text-info">
                   <MathText>{hint}</MathText>
                 </p>
               ))}
@@ -347,12 +475,16 @@ export function Session(): React.ReactElement {
               >
                 Submit
               </button>
-              {hintsShown < item.explanation.hints.length && (
+              {/* No hints in a sealed exam. The real paper has none, and taking
+                  one here would both flatter the score and record the attempt
+                  as a weaker recall than it was — corrupting the one measurement
+                  the sitting exists to produce. */}
+              {!sealed && hintsShown < item.explanation.hints.length && (
                 <button className="btn-secondary" onClick={showHint}>
                   Hint
                 </button>
               )}
-              <span className="ml-auto text-xs text-slate-400 dark:text-slate-500">
+              <span className="ml-auto text-xs text-ink-faint">
                 {hintsShown > 0 ? 'Hints used — this counts as a weaker recall' : 'Press Enter to submit'}
               </span>
             </div>
@@ -385,21 +517,21 @@ function Feedback(): React.ReactElement | null {
         <span
           className={[
             'rounded px-2 py-0.5 text-xs font-semibold',
-            result.correct ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+            result.correct ? 'bg-accent/15 text-accent ' : 'bg-danger/15 text-danger',
           ].join(' ')}
         >
           {result.correct ? 'Correct' : 'Not quite'}
         </span>
         {result.misconception && (
-          <span className="font-mono text-xs text-slate-400 dark:text-slate-500">{result.misconception}</span>
+          <span className="font-mono text-xs text-ink-faint">{result.misconception}</span>
         )}
         {graded.xpAwarded > 0 && (
-          <span className="ml-auto text-xs tabular-nums text-amber-700 dark:text-amber-300">+{graded.xpAwarded} XP</span>
+          <span className="ml-auto text-xs tabular-nums text-warn">+{graded.xpAwarded} XP</span>
         )}
       </div>
 
       {result.feedback && !result.correct && (
-        <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-900 dark:bg-red-950">
+        <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-sm text-danger">
           <MathText>{result.feedback}</MathText>
         </p>
       )}
@@ -407,7 +539,7 @@ function Feedback(): React.ReactElement | null {
       {graded.circuit && (
         <table className="mt-3 w-full text-sm">
           <thead>
-            <tr className="text-left text-xs uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            <tr className="text-left text-xs uppercase tracking-wide text-ink-faint">
               <th className="pb-1 font-medium">Measurement</th>
               <th className="pb-1 text-right font-medium">Required</th>
               <th className="pb-1 text-right font-medium">Your circuit</th>
@@ -415,10 +547,10 @@ function Feedback(): React.ReactElement | null {
           </thead>
           <tbody>
             {graded.circuit.results.map((row) => (
-              <tr key={row.probe} className="border-t border-slate-100 dark:border-slate-800">
-                <td className="py-1 font-mono text-xs text-slate-600 dark:text-slate-400">{row.probe}</td>
-                <td className="py-1 text-right tabular-nums text-slate-500 dark:text-slate-400">{formatValue(row.expected)}</td>
-                <td className={`py-1 text-right tabular-nums ${row.within ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-700 dark:text-red-300'}`}>
+              <tr key={row.probe} className="border-t border-line">
+                <td className="py-1 font-mono text-xs text-ink-dim">{row.probe}</td>
+                <td className="py-1 text-right tabular-nums text-ink-dim">{formatValue(row.expected)}</td>
+                <td className={`py-1 text-right tabular-nums ${row.within ? 'text-accent' : 'text-danger'}`}>
                   {row.actual === null ? (row.message ?? 'not measurable') : formatValue(row.actual)}
                 </td>
               </tr>
@@ -429,14 +561,14 @@ function Feedback(): React.ReactElement | null {
 
       <ol className="mt-4 space-y-2">
         {item.explanation.steps.map((step, i) => (
-          <li key={i} className="flex gap-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-            <span className="mt-0.5 font-mono text-xs text-slate-300 dark:text-slate-600">{i + 1}</span>
+          <li key={i} className="flex gap-3 text-sm leading-relaxed text-ink-dim">
+            <span className="mt-0.5 font-mono text-xs text-ink-faint">{i + 1}</span>
             <MathText>{step}</MathText>
           </li>
         ))}
       </ol>
 
-      <p className="mt-4 border-t border-slate-100 pt-3 text-sm italic text-slate-600 dark:border-slate-800 dark:text-slate-400">
+      <p className="mt-4 border-t border-line pt-3 text-sm italic text-ink-dim">
         <MathText>{item.explanation.principle}</MathText>
       </p>
     </section>

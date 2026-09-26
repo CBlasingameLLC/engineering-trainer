@@ -11,19 +11,29 @@ import {
   selectNextItem,
   shouldStop,
   xpForAttempt,
+  assembleExam,
+  examShares,
+  gradeExam,
+  upcomingExams,
   type CatItem,
   type CatSessionState,
   type ChallengeResponse,
   type ChallengeResult,
   type KcId,
   type PlacementResult,
+  type ExamBlueprint,
+  type ExamCoverage,
+  type ExamResponse,
+  type ExamResult,
+  type ExamUnitRef,
   type Quest,
   type StreakUpdate,
 } from '@et/domain';
 import { checkAnswer, type CheckResult, type Response } from '@et/answer-engine';
 import { gradeCircuit, parseNetlist, toNetlist, type GradeResult, type Schematic } from '@et/circuits';
 import type { Item } from '@et/content-schema';
-import { loadContent, drillCandidates, itemsForCourses, itemsForKcs, type LoadedContent } from '@/content';
+import { loadContent, currentTerm, drillCandidates, itemsForCourses, itemsForKcs, type LoadedContent } from '@/content';
+import { examCandidates, examsForTerm, unitOfKcMap } from '@/content/exams';
 import { buildLearnerModel, type LearnerModel } from '@/features/learner-model';
 import { WebStorageAdapter } from '@/storage/web';
 import { TauriSqlAdapter, isTauri } from '@/storage/tauri';
@@ -50,7 +60,8 @@ import {
 
 type Route =
   | 'loading' | 'onboarding' | 'dashboard' | 'session' | 'report'
-  | 'credentials' | 'skillTree' | 'circuitLab' | 'misconceptions' | 'term';
+  | 'credentials' | 'skillTree' | 'circuitLab' | 'misconceptions' | 'term'
+  | 'diagnostics' | 'examReport';
 
 export interface ActiveItem {
   item: Item;
@@ -85,6 +96,44 @@ export interface DrillResult {
   correct: number;
   /** Times the same misconception fired again during the drill. */
   refired: number;
+}
+
+/**
+ * A fixed-form sitting: an exam, or a triage run across several of them.
+ *
+ * Distinct from a CAT session, and it has to be. Adaptive selection puts every
+ * question near the learner's current ability, which measures that ability in
+ * the fewest items and is exactly wrong here — an adaptive run that stops
+ * asking about chapter 12 after two wrong answers has measured accurately and
+ * said nothing about Monday's paper. So the queue is built once, up front, with
+ * coverage guaranteed, and served in order.
+ *
+ * `allowedMs` being null is what separates the two uses. An exam is sealed and
+ * timed; a triage run is neither, because its job is to find gaps rather than
+ * to reproduce exam conditions.
+ */
+export interface PaperSession {
+  kind: 'exam' | 'triage';
+  /** One for an exam; every exam covered, for a triage run. */
+  blueprints: ExamBlueprint[];
+  /** The whole paper, in serve order, including items not yet reached. */
+  served: { itemId: string; kcId: KcId }[];
+  cursor: number;
+  startedAt: number;
+  /** null when untimed. */
+  allowedMs: number | null;
+  responses: ExamResponse[];
+  /** True once the learner has chosen to work past the bell. */
+  continuedPastBell: boolean;
+  coverage: ExamCoverage[];
+  unitsWithoutItems: ExamUnitRef[];
+  short: boolean;
+}
+
+export interface PaperOutcome {
+  kind: 'exam' | 'triage';
+  /** One result per blueprint, so a triage run reports each exam separately. */
+  results: ExamResult[];
 }
 
 interface AppState {
@@ -131,6 +180,9 @@ interface AppState {
   /** Working schematic for a circuit-build item. */
   workingSchematic: Schematic | null;
 
+  paper: PaperSession | null;
+  lastPaper: PaperOutcome | null;
+
   boot(): Promise<void>;
   completeOnboarding(courses: CompletedCourse[], targetTerm: string): Promise<void>;
   startPlacement(courseCodes: string[]): void;
@@ -141,6 +193,11 @@ interface AppState {
   startUnit(courseCode: string, unit: string): void;
   /** Practise a named set of KCs — what the term view hands back. */
   startKcs(kcIds: readonly string[]): void;
+  startExam(examId: string, options?: { size?: number }): void;
+  startTriage(options?: { size?: number }): void;
+  continuePastBell(): void;
+  finishPaper(): Promise<void>;
+  examBlueprints(): ExamBlueprint[];
   submit(response: Response, raw: string): Promise<void>;
   submitCircuit(schematic: Schematic): Promise<void>;
   submitCircuitNetlist(deck: string): Promise<void>;
@@ -197,6 +254,8 @@ export const useApp = create<AppState>((set, get) => ({
   challengeCourse: null,
   challengeResponses: [],
   workingSchematic: null,
+  paper: null,
+  lastPaper: null,
 
   async boot() {
     // SQLite under the desktop shell, IndexedDB in a browser. The renderer
@@ -326,6 +385,242 @@ export const useApp = create<AppState>((set, get) => ({
       cat: createCatSession([...wanted], priors),
       bank,
       itemsById,
+    });
+  },
+
+  /**
+   * Every exam the current term declares, resolved against the graph.
+   *
+   * Recomputed on call rather than cached: `daysAway` is the field everything
+   * else is ranked by, and a cached copy is wrong the moment the clock passes
+   * midnight — on the one screen where being a day out matters most.
+   */
+  examBlueprints() {
+    const { content } = get();
+    if (!content) return [];
+    return examsForTerm(content, currentTerm(content));
+  },
+
+  /**
+   * Sit one exam under its own conditions.
+   *
+   * The paper is assembled before the clock starts and never changes, which is
+   * the point: the learner is measured against the exam's scope rather than
+   * against their own current ability.
+   */
+  startExam(examId, options = {}) {
+    const { content, model } = get();
+    if (!content || !model) return;
+
+    const blueprint = get().examBlueprints().find((b) => b.id === examId);
+    if (!blueprint) return;
+
+    const unitOfKc = unitOfKcMap(content);
+    const inScope = new Set(blueprint.kcIds);
+    const paper = assembleExam(
+      blueprint,
+      examCandidates(content.items, inScope),
+      unitOfKc,
+      {
+        size: options.size ?? examSizeFor(blueprint.minutes),
+        seed: (Date.now() & 0x7fffffff) || 1,
+        attempted: new Set(model.attemptedItemIds),
+      },
+    );
+    if (paper.items.length === 0) return;
+
+    const { bank, itemsById } = buildBank(
+      paper.items.map((i) => content.items.find((item) => item.id === i.itemId)).filter(isItem),
+    );
+    const targetKcs = [...inScope];
+    const priors = new Map(
+      targetKcs.map((kc) => [kc, model.pMastery.get(kc) ?? DEFAULT_CAT_CONFIG.bkt.pInit]),
+    );
+
+    beginSession(set, get, {
+      mode: 'exam',
+      cat: createCatSession(targetKcs, priors),
+      bank,
+      itemsById,
+      paper: {
+        kind: 'exam',
+        blueprints: [blueprint],
+        served: paper.items.map((i) => ({ itemId: i.itemId, kcId: i.kcId })),
+        cursor: 0,
+        startedAt: Date.now(),
+        allowedMs: blueprint.minutes * 60_000,
+        responses: [],
+        continuedPastBell: false,
+        coverage: paper.coverage,
+        unitsWithoutItems: paper.unitsWithoutItems,
+        short: paper.short,
+      },
+    });
+  },
+
+  /**
+   * One run across every exam still ahead, weighted by how soon each is sat.
+   *
+   * Untimed and unsealed, because this is a gap-finder rather than a rehearsal:
+   * the question it answers is "which of the papers I sit this week is in the
+   * worst shape", and hiding the explanations would make it a worse answer
+   * without making it a more honest one. Every upcoming exam gets items —
+   * an exam with none produces no evidence, which defeats the run.
+   */
+  startTriage(options = {}) {
+    const { content, model } = get();
+    if (!content || !model) return;
+
+    const ahead = upcomingExams(get().examBlueprints()).filter((b) => b.kcIds.length > 0);
+    if (ahead.length === 0) return;
+
+    const unitOfKc = unitOfKcMap(content);
+    const total = options.size ?? DEFAULT_TRIAGE_SIZE;
+    const seed = (Date.now() & 0x7fffffff) || 1;
+
+    const served: { itemId: string; kcId: KcId }[] = [];
+    const coverage: ExamCoverage[] = [];
+    const unitsWithoutItems: ExamUnitRef[] = [];
+    let short = false;
+
+    for (const share of examShares(ahead, total)) {
+      const paper = assembleExam(
+        share.exam,
+        examCandidates(content.items, new Set(share.exam.kcIds)),
+        unitOfKc,
+        { size: share.items, seed, attempted: new Set(model.attemptedItemIds) },
+      );
+      // One item cannot sit on two exams' papers in the same run, and a
+      // cumulative exam overlaps its predecessors heavily.
+      for (const item of paper.items) {
+        if (served.some((s) => s.itemId === item.itemId)) continue;
+        served.push({ itemId: item.itemId, kcId: item.kcId });
+      }
+      coverage.push(...paper.coverage);
+      unitsWithoutItems.push(...paper.unitsWithoutItems);
+      short = short || paper.short;
+    }
+    if (served.length === 0) return;
+
+    const { bank, itemsById } = buildBank(
+      served.map((s) => content.items.find((item) => item.id === s.itemId)).filter(isItem),
+    );
+    const targetKcs = [...new Set(ahead.flatMap((b) => b.kcIds))];
+    const priors = new Map(
+      targetKcs.map((kc) => [kc, model.pMastery.get(kc) ?? DEFAULT_CAT_CONFIG.bkt.pInit]),
+    );
+
+    beginSession(set, get, {
+      mode: 'placement',
+      cat: createCatSession(targetKcs, priors),
+      bank,
+      itemsById,
+      paper: {
+        kind: 'triage',
+        blueprints: ahead,
+        served,
+        cursor: 0,
+        startedAt: Date.now(),
+        allowedMs: null,
+        responses: [],
+        continuedPastBell: false,
+        coverage,
+        unitsWithoutItems,
+        short,
+      },
+    });
+  },
+
+  continuePastBell() {
+    const { paper } = get();
+    if (!paper) return;
+    set({ paper: { ...paper, continuedPastBell: true } });
+  },
+
+  /**
+   * Close the paper and grade it.
+   *
+   * Reachable two ways — the queue runs out, or the learner hands in early —
+   * and both have to grade the same way, so unreached items are supplied to
+   * `gradeExam` rather than dropped. A question left blank is worth zero on the
+   * real paper and reporting it as "not asked" would inflate every score.
+   */
+  async finishPaper() {
+    const { paper, cat, content, storage, sessionId } = get();
+    if (!paper || !cat || !content || !storage || !sessionId) return;
+
+    const unitOfKc = unitOfKcMap(content);
+    const servedIds = new Set(paper.served.map((s) => s.itemId));
+
+    const results = paper.blueprints.map((blueprint) => {
+      const mine = paper.served.filter((s) => blueprint.kcIds.includes(s.kcId));
+      return gradeExam(
+        blueprint,
+        mine,
+        paper.responses.filter((r) => mine.some((m) => m.itemId === r.itemId)),
+        unitOfKc,
+      );
+    });
+
+    const recordedAt = new Date().toISOString();
+    const xp = get().sessionXp;
+    const streakUpdate = recordActivity(get().profile.streak, new Date());
+
+    // An exam is a broad, coverage-balanced sample of its scope, so its
+    // responses are exactly the evidence graph propagation is designed for.
+    const decision = shouldStop(cat, get().bank, DEFAULT_CAT_CONFIG);
+    const placement = finalizePlacement(cat, content.graph, decision.reason, DEFAULT_CAT_CONFIG);
+    await storage.savePriors(
+      [...placement.inferred.values()].map((adj) => ({
+        kcId: adj.kcId,
+        prior: adj.prior,
+        sourceKcId: adj.source,
+        distance: adj.distance,
+        recordedAt,
+      })),
+    );
+
+    await storage.saveSession({
+      id: sessionId,
+      mode: paper.kind === 'exam' ? 'exam' : 'placement',
+      courseIds: [...new Set(paper.blueprints.map((b) => b.course))],
+      startedAt: new Date(paper.startedAt).toISOString(),
+      endedAt: recordedAt,
+      xpEarned: xp,
+      summary: {
+        paper: paper.kind,
+        served: paper.served.length,
+        answered: paper.responses.length,
+        unreached: paper.served.length - paper.responses.filter((r) => servedIds.has(r.itemId)).length,
+      },
+    });
+
+    const profile: Profile = {
+      ...get().profile,
+      totalXp: get().profile.totalXp + xp,
+      streak: streakUpdate.state,
+      lastActiveAt: recordedAt,
+    };
+    await storage.saveProfile(profile);
+
+    const [attempts, allPriors, misconceptionEvents] = await Promise.all([
+      storage.listAttempts(),
+      storage.listPriors(),
+      storage.listMisconceptionEvents(),
+    ]);
+
+    set({
+      profile,
+      model: buildLearnerModel(content.graph, profile, attempts, allPriors),
+      misconceptionEvents,
+      lastStreak: streakUpdate,
+      lastPlacement: placement,
+      lastPaper: { kind: paper.kind, results },
+      paper: null,
+      active: null,
+      graded: null,
+      workingSchematic: null,
+      route: 'examReport',
     });
   },
 
@@ -472,8 +767,29 @@ export const useApp = create<AppState>((set, get) => ({
   },
 
   async advance() {
-    const { cat, bank, itemsById, content, storage, sessionId, mode } = get();
+    const { cat, bank, itemsById, content, storage, sessionId, mode, paper } = get();
     if (!cat || !content || !storage || !sessionId) return;
+
+    // A paper walks its queue to the end and then grades. It never consults
+    // the adaptive stopping rule, which would happily end the sitting early
+    // having decided it knows enough — true, and not what an exam is for.
+    if (paper) {
+      const next = paper.cursor + 1;
+      const entry = paper.served[next];
+      const catItem = entry ? bank.find((b) => b.id === entry.itemId) : undefined;
+      if (catItem) {
+        set({
+          paper: { ...paper, cursor: next },
+          active: activeItemFor(catItem, itemsById, get().model),
+          graded: null,
+          hintsShown: 0,
+          workingSchematic: null,
+        });
+        return;
+      }
+      await get().finishPaper();
+      return;
+    }
 
     const decision = shouldStop(cat, bank, DEFAULT_CAT_CONFIG);
     if (!decision.stop) {
@@ -637,6 +953,23 @@ export const useApp = create<AppState>((set, get) => ({
 
 // ---------------------------------------------------------------------------
 
+/**
+ * How many questions a paper of a given length should hold.
+ *
+ * Two and a half minutes an item is the pace a written engineering exam is
+ * usually set at, and it is the number that makes the clock mean something:
+ * a 30-item paper in 75 minutes puts real time pressure on, where 12 items
+ * would measure knowledge and nothing else. Capped so a 150-minute final does
+ * not produce a paper nobody will finish in one sitting.
+ */
+export const examSizeFor = (minutes: number): number =>
+  Math.max(10, Math.min(45, Math.round(minutes / 2.5)));
+
+/** A triage run is one sitting across every upcoming exam, so it stays short. */
+export const DEFAULT_TRIAGE_SIZE = 24;
+
+const isItem = (item: Item | undefined): item is Item => item !== undefined;
+
 type Setter = (partial: Partial<AppState>) => void;
 type Getter = () => AppState;
 
@@ -669,9 +1002,14 @@ function beginSession(
     itemsById: Map<string, Item>;
     challengeCourse?: string;
     drillTarget?: string;
+    paper?: PaperSession;
   },
 ): void {
-  const first = selectNextItem(options.cat, options.bank, DEFAULT_CAT_CONFIG);
+  // A paper is served in its own order. Letting the adaptive selector choose
+  // the opening question would undo the coverage the paper was assembled for.
+  const first = options.paper
+    ? options.bank.find((b) => b.id === options.paper?.served[0]?.itemId)
+    : selectNextItem(options.cat, options.bank, DEFAULT_CAT_CONFIG);
   set({
     mode: options.mode,
     sessionId: uid(),
@@ -688,6 +1026,7 @@ function beginSession(
     challengeResponses: [],
     drillTarget: options.drillTarget ?? null,
     workingSchematic: null,
+    paper: options.paper ?? null,
     route: 'session',
   });
 }
@@ -721,7 +1060,7 @@ async function recordAttempt(
   correct: boolean,
   outcome: { result: CheckResult; submitted: string; circuit?: GradeResult },
 ): Promise<void> {
-  const { active, cat, storage, sessionId, hintsShown, mode } = get();
+  const { active, cat, storage, sessionId, hintsShown, mode, paper } = get();
   if (!active || !cat || !storage || !sessionId) return;
 
   const attempt: AttemptRecord = {
@@ -762,20 +1101,49 @@ async function recordAttempt(
     retrievabilityBefore: active.retrievabilityBefore,
   });
 
+  // A sealed exam shows nothing back until it is handed in. `graded` is left
+  // unset rather than set and then cleared, because clearing it a tick later
+  // flashes the answer on screen — which is the one thing sealing is for.
+  const sealed = paper?.kind === 'exam';
+
   set({
-    graded: {
-      result: outcome.result,
-      item: active.item,
-      submitted: outcome.submitted,
-      xpAwarded: award.total,
-      ...(outcome.circuit ? { circuit: outcome.circuit } : {}),
-    },
+    graded: sealed
+      ? null
+      : {
+          result: outcome.result,
+          item: active.item,
+          submitted: outcome.submitted,
+          xpAwarded: award.total,
+          ...(outcome.circuit ? { circuit: outcome.circuit } : {}),
+        },
     cat: recordResponse(cat, active.catItem, correct, DEFAULT_CAT_CONFIG, {
       ...(attempt.optionCount !== undefined ? { optionCount: attempt.optionCount } : {}),
     }),
     answered: get().answered + 1,
     correctCount: get().correctCount + (correct ? 1 : 0),
     sessionXp: get().sessionXp + award.total,
+    ...(paper
+      ? {
+          paper: {
+            ...paper,
+            responses: [
+              ...paper.responses,
+              {
+                itemId: active.item.id,
+                kcRefs: active.item.kcRefs.map((r) => ({ kc: r.kc, weight: r.weight })),
+                correct,
+                latencyMs: attempt.latencyMs,
+                misconceptions: attempt.misconceptions,
+                // Measured from the start of the sitting, not from the start of
+                // the item: whether this answer landed before the bell is a
+                // fact about the paper, and per-item latencies cannot be summed
+                // to recover it once the learner pauses between questions.
+                atElapsedMs: Date.now() - paper.startedAt,
+              },
+            ],
+          },
+        }
+      : {}),
     ...(mode === 'challenge'
       ? {
           challengeResponses: [
@@ -785,6 +1153,8 @@ async function recordAttempt(
         }
       : {}),
   });
+
+  if (sealed) await get().advance();
 }
 
 /** Re-exported so the circuit lab can parse a pasted deck without importing twice. */

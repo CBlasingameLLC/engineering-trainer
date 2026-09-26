@@ -28,10 +28,10 @@ import { MathText } from '@/ui/Math';
  */
 
 const TREND_STYLE: Record<MisconceptionTrend, { label: string; className: string }> = {
-  new: { label: 'new', className: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
-  worsening: { label: 'getting worse', className: 'bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300' },
-  steady: { label: 'steady', className: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
-  fading: { label: 'fading', className: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' },
+  new: { label: 'new', className: 'bg-surface-2 text-ink-dim' },
+  worsening: { label: 'getting worse', className: 'bg-danger/10 text-danger' },
+  steady: { label: 'steady', className: 'bg-surface-2 text-ink-dim' },
+  fading: { label: 'fading', className: 'bg-accent/10 text-accent' },
 };
 
 export function Misconceptions(): React.ReactElement {
@@ -80,29 +80,29 @@ export function Misconceptions(): React.ReactElement {
   return (
     <div className="mx-auto max-w-4xl px-6 py-8">
       <header className="flex items-baseline gap-4">
-        <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Recurring errors</h1>
-        <button className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" onClick={() => goTo('dashboard')}>
+        <h1 className="font-mono text-[15px] font-semibold uppercase tracking-[0.1em] text-ink" data-testid="misconception-feed">Recurring errors</h1>
+        <button className="btn-ghost ml-auto" onClick={() => goTo('dashboard')}>
           Back to dashboard
         </button>
       </header>
 
       {lastDrill && (
         <section
-          className="mt-4 rounded-md border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900"
+          className="mt-4 rounded-md border border-line bg-surface p-4 "
           data-testid="drill-result"
         >
-          <h2 className="text-sm font-medium text-slate-900 dark:text-slate-100">
+          <h2 className="text-sm font-medium text-ink">
             Drill finished — {titleOf(lastDrill.misconceptionId)}
           </h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-1 text-sm text-ink-dim">
             {lastDrill.correct} of {lastDrill.asked} correct.{' '}
             {lastDrill.refired === 0 ? (
-              <span className="text-emerald-700 dark:text-emerald-300">
+              <span className="text-accent">
                 The error did not reappear once. That is the result worth having — every item in a
                 drill is one that <em>could</em> have caught it.
               </span>
             ) : (
-              <span className="text-amber-800 dark:text-amber-200">
+              <span className="text-warn">
                 It reappeared {lastDrill.refired} time{lastDrill.refired === 1 ? '' : 's'}. Worth
                 another pass.
               </span>
@@ -112,7 +112,7 @@ export function Misconceptions(): React.ReactElement {
       )}
 
       {ranked.length === 0 ? (
-        <p className="mt-8 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mt-8 text-sm text-ink-dim">
           No recurring errors recorded yet. Wrong answers get tagged with the specific mistake that
           produces them, so this fills in as you work — and stays empty if nothing repeats.
         </p>
@@ -120,8 +120,8 @@ export function Misconceptions(): React.ReactElement {
         <>
           {families.some((f) => f.crossCourse) && (
             <section className="mt-6" data-testid="habit-rollup">
-              <h2 className="text-sm font-medium text-slate-900 dark:text-slate-100">Habits crossing course boundaries</h2>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              <h2 className="text-sm font-medium text-ink">Habits crossing course boundaries</h2>
+              <p className="mt-1 text-xs text-ink-dim">
                 The same mistake in more than one course is one habit, not several problems. This is
                 the view a gradebook cannot produce.
               </p>
@@ -131,16 +131,16 @@ export function Misconceptions(): React.ReactElement {
                   .map((family) => (
                     <div
                       key={family.family.id}
-                      className="rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950"
+                      className="rounded-md border border-warn/40 bg-warn/10 p-3 "
                       data-family-id={family.family.id}
                     >
                       <div className="flex items-baseline gap-2">
-                        <span className="text-sm font-medium text-amber-900 dark:text-amber-100">{family.family.title}</span>
-                        <span className="text-xs text-amber-700 dark:text-amber-300">
+                        <span className="text-sm font-medium text-warn">{family.family.title}</span>
+                        <span className="text-xs text-warn">
                           {family.totalHits} across {family.courses.map((c) => c.toUpperCase()).join(', ')}
                         </span>
                       </div>
-                      <p className="mt-1 text-xs text-amber-800 dark:text-amber-200">{family.family.description}</p>
+                      <p className="mt-1 text-xs text-warn">{family.family.description}</p>
                     </div>
                   ))}
               </div>
@@ -148,7 +148,7 @@ export function Misconceptions(): React.ReactElement {
           )}
 
           <section className="mt-8">
-            <h2 className="text-sm font-medium text-slate-900 dark:text-slate-100">Ranked by what is costing you now</h2>
+            <h2 className="text-sm font-medium text-ink">Ranked by what is costing you now</h2>
             <ul className="mt-3 space-y-3">
               {ranked.map((entry) => (
                 <MisconceptionCard
@@ -186,25 +186,25 @@ function MisconceptionCard({
   return (
     <li className="card p-4" data-misconception-id={entry.misconceptionId}>
       <div className="flex flex-wrap items-baseline gap-2">
-        <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{title}</span>
+        <span className="text-sm font-medium text-ink">{title}</span>
         {familyTitle && (
-          <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-400">{familyTitle}</span>
+          <span className="rounded bg-surface-2 px-1.5 py-0.5 text-xs text-ink-dim">{familyTitle}</span>
         )}
         <span className={`rounded px-1.5 py-0.5 text-xs ${trend.className}`}>{trend.label}</span>
         {entry.drillDue && (
-          <span className="rounded bg-sky-100 px-1.5 py-0.5 text-xs text-sky-800 dark:bg-sky-900 dark:text-sky-200">drill due</span>
+          <span className="rounded bg-info/15 px-1.5 py-0.5 text-xs text-info">drill due</span>
         )}
       </div>
 
-      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+      <p className="mt-1 text-xs text-ink-dim">
         {entry.totalHits} time{entry.totalHits === 1 ? '' : 's'} total, {entry.recentHits} in the last{' '}
         {DEFAULT_MISCONCEPTION_CONFIG.windowDays} days · {entry.kcs.length} topic
         {entry.kcs.length === 1 ? '' : 's'}
-        {entry.crossCourse ? ` · ${entry.courses.map((c) => c.toUpperCase()).join(' and ')}` : ''}
+        {entry.crossCourse ? ` · ${entry.courses.map((c) => c.toUpperCase()).join(' and')}` : ''}
       </p>
 
       {feedback && (
-        <MathText className="mt-2 block text-sm leading-relaxed text-slate-700 dark:text-slate-300">{feedback}</MathText>
+        <MathText className="mt-2 block text-sm leading-relaxed text-ink-dim">{feedback}</MathText>
       )}
 
       <div className="mt-3">
@@ -213,7 +213,7 @@ function MisconceptionCard({
             Drill this
           </button>
         ) : (
-          <p className="text-xs text-slate-400 dark:text-slate-500">
+          <p className="text-xs text-ink-faint">
             No items in the bank can currently catch this error, so a drill would not be able to tell
             you whether it is fixed.
           </p>

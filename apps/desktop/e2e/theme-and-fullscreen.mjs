@@ -57,7 +57,7 @@ const luminance = (rgb) => {
 async function waitForBoot() {
   await page
     .locator('text=What have you already taken?')
-    .or(page.locator('text=Engineering Trainer'))
+    .or(page.locator('[data-testid="dashboard"]'))
     .first()
     .waitFor({ state: 'visible', timeout: 20000 });
 }
@@ -69,7 +69,7 @@ if (await page.locator('text=What have you already taken?').count()) {
   await page.locator('label', { hasText: 'EE2300' }).first().locator('input[type=checkbox]').check();
   await page.getByRole('button', { name: /Continue with/ }).click();
 }
-await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 console.log('[1] dashboard rendered');
 
 // --- The control cycles through all three states ----------------------------
@@ -87,7 +87,7 @@ if (seen[0] !== seen[3]) fail('the cycle does not return to where it started');
 await page.evaluate(() => { localStorage.setItem('et.theme', 'dark'); });
 await page.reload({ waitUntil: 'networkidle' });
 await waitForBoot();
-await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 
 const applied = await page.evaluate(() => ({
   klass: document.documentElement.classList.contains('dark'),
@@ -138,18 +138,24 @@ const probeContrast = () => page.evaluate(() => {
 // Walk every route a learner can reach from the dashboard. A single-page check
 // would have missed exactly the case this is for: one route whose utilities
 // never got a dark variant.
+// Driven off the navigation rail's test ids rather than button labels. Every
+// one of these broke when the shell was redesigned, which is a change to the
+// wording and not to the product — exactly the drift the repository's own rule
+// about matching on ids exists to stop.
 const routes = [
   ['dashboard', null],
-  ['skill tree', 'Skill tree'],
-  ['circuit lab', 'Circuit lab'],
-  ['recurring errors', 'Recurring errors'],
-  ['credentials', 'Credentials'],
+  ['diagnostics', 'nav-diagnostics'],
+  ['term', 'nav-term'],
+  ['skill tree', 'nav-skillTree'],
+  ['circuit lab', 'nav-circuitLab'],
+  ['recurring errors', 'nav-misconceptions'],
+  ['credentials', 'nav-credentials'],
 ];
 
 let totalBad = 0;
 for (const [label, nav] of routes) {
   if (nav) {
-    await page.getByRole('button', { name: nav, exact: true }).first().click();
+    await page.locator(`[data-testid="${nav}"]`).click();
     await page.waitForTimeout(400);
   }
   const bad = await probeContrast();
@@ -166,7 +172,7 @@ for (const [label, nav] of routes) {
     if (!(await page.locator('[data-testid="nav-misconceptions"]').count())) {
       await page.goto(BASE, { waitUntil: 'networkidle' });
       await waitForBoot();
-      await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+      await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
     }
   }
 }
@@ -182,7 +188,7 @@ console.log(`[5] fullscreen control present, state=${await fs.getAttribute('data
 await page.evaluate(() => { localStorage.setItem('et.theme', 'light'); });
 await page.reload({ waitUntil: 'networkidle' });
 await waitForBoot();
-await page.waitForSelector('text=Engineering Trainer', { timeout: 10000 });
+await page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 });
 const lightBody = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
 console.log(`[6] light mode body=${lightBody}`);
 if (luminance(lightBody) < 0.5) fail(`light mode is not light (${lightBody})`);
