@@ -469,6 +469,25 @@ worked examples rather than the topic list.
   zero magnitude (every angle is the same phasor there, so no angle is
   demanded). Six notations parse, because rejecting five of them teaches
   notation rather than circuits.
+
+  **And the rectangular path has to hand each term to the same number reader
+  the polar path uses.** It did not: it canonicalised `j4` to `4i` and matched
+  one anchored pattern, which is a second, partial number reader — the mistake
+  this repository relearns more often than any other. It parsed `3 - j4` and
+  rejected `4.7k - j2.2k`, because canonicalising `j2.2` strands the `k` past
+  the anchor, and an impedance in kilohms is how Circuits II writes nearly
+  every answer it asks for. `1.2e3 + j4.5e2` failed the same way with the
+  exponent stranded, and `3 – j4` failed because an en dash is what a PDF
+  pastes. Ten of thirty-eight spellings an engineer actually types were
+  refused.
+
+  What made it worse than a wrong answer: **a rejected answer does not advance
+  the session.** `unparseable` is not a grade, it is a request to retype, so
+  the learner sits on the same question typing the same correct impedance —
+  which reads as the application being broken rather than as a parser being
+  narrow. Splitting on signed terms and calling `readNumber` per term fixes all
+  of it at once, because that reader already knows SI prefixes, unit words and
+  typographic characters.
 - **A term is the only document about *when*, and it joins by a bare string.**
   `content/terms/*.yaml` says which unit of which course is live in which week,
   and the join to the KC graph is the `unit` field matched by name. A typo binds
@@ -573,6 +592,17 @@ worked examples rather than the topic list.
   of values. Unknown symbols in the learner's input are bound to one fixed
   arbitrary value for the run, which is what makes "differs by a constant"
   testable.
+- **Whether an answer is submittable is defined once, or it drifts.** The
+  session player built the response in its handler and had a *second*,
+  parallel chain of emptiness checks on the Submit button's `disabled`. The
+  two drifted exactly the way two hand-maintained lists always do here: the
+  button's chain never grew cases for `ordering`, `proof-skeleton` or
+  `proof-rubric`, so it fell through to "is the text box empty", which for
+  those three is permanently true. Every one of those items rendered its
+  inputs, accepted them, and offered a Submit button that could not be
+  pressed. `pending` is now computed once and both the button and the handler
+  read it. Same bug class as the stale pack-cli fixture and the e2e
+  expectation regex, in a third place.
 - **Truth-table cells are tri-state, not boolean.** An all-false grid is a
   valid answer, so a `boolean[]` cannot distinguish "every row is 0" from "not
   started" — and submitting the second as the first records a wrong answer

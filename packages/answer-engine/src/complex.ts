@@ -38,6 +38,15 @@ export function angleDifference(a: number, b: number): number {
 const ANGLE_MARK = /∠|<|\/_|\bangle\b|\bcis\b|@/;
 
 /**
+ * A bare slash is an angle mark only when the text also says degrees.
+ *
+ * `5/53.1°` is how several textbooks set a phasor and `3/4` is three quarters,
+ * and nothing in the string distinguishes them. Requiring the degree marker
+ * keeps the notation available without turning a fraction into a phase.
+ */
+const SLASH_ANGLE = /\/(?=[^/]*(?:°|\bdeg))/;
+
+/**
  * Read a phasor from text.
  *
  * Degrees unless the input says otherwise: every circuits textbook writes
@@ -45,7 +54,11 @@ const ANGLE_MARK = /∠|<|\/_|\bangle\b|\bcis\b|@/;
  * mistake worth catching rather than a notation the grader should guess at.
  */
 export function parsePhasor(raw: string): { phasor: Phasor } | { error: string } {
-  const text = raw.trim();
+  // Typographic dashes reach the box by the ordinary route — copied out of a
+  // PDF, or typed on a phone — and `3 – j4` is the same answer as `3 - j4`.
+  // `normalizeInput` already knows that, but the term splitting below reads
+  // signs itself, so the substitution has to happen before it.
+  const text = raw.trim().replace(/[\u2212\u2013\u2014]/g, '-');
   if (text === '') return { error: 'No answer entered.' };
 
   // Strip a trailing unit word; the magnitude carries the dimension and mixing
@@ -55,7 +68,7 @@ export function parsePhasor(raw: string): { phasor: Phasor } | { error: string }
     .replace(/Ω\s*$/, '')
     .trim();
 
-  const polar = ANGLE_MARK.exec(cleaned);
+  const polar = ANGLE_MARK.exec(cleaned) ?? SLASH_ANGLE.exec(cleaned);
   if (polar) {
     const magnitudeText = cleaned.slice(0, polar.index);
     let angleText = cleaned.slice(polar.index + polar[0].length);
@@ -88,39 +101,71 @@ function readNumber(text: string): number | null {
 }
 
 /**
+ * Split `a ± b` into signed terms.
+ *
+ * The one subtlety is that not every `-` starts a term: in `5e-3` it belongs to
+ * the exponent, and splitting there turns one number into two.
+ */
+function splitTerms(text: string): string[] {
+  const terms: string[] = [];
+  let start = 0;
+  for (let i = 1; i < text.length; i++) {
+    const ch = text[i];
+    if (ch !== '+' && ch !== '-') continue;
+    const previous = text[i - 1];
+    if (previous === 'e' || previous === 'E') continue;
+    terms.push(text.slice(start, i));
+    start = i;
+  }
+  terms.push(text.slice(start));
+  return terms.filter((t) => t !== '' && t !== '+' && t !== '-');
+}
+
+/**
  * `a ± jb` in any of its spellings.
  *
- * Done in two steps because one regex covering every form was where the bugs
- * were: `-j4` has a sign that belongs to the imaginary term and no real part at
- * all, and a pattern that treats the leading `-` as the start of a real term
- * reads it as `+j4`. Canonicalising the imaginary unit to trail its magnitude
- * first turns every spelling into `a±bi`, which one anchored pattern reads.
+ * Each term goes through `readNumber`, which is the same reader the polar path
+ * uses and the only one that knows about SI prefixes, unit words and
+ * typographic characters. An earlier version did its own string surgery
+ * instead — canonicalising `j4` to `4i` and then matching one anchored
+ * pattern — and that is a second, partial number reader, which is this
+ * repository's most frequently relearned mistake.
+ *
+ * It failed exactly where the parser was needed most. `4.7k∠30` parsed,
+ * because polar hands the magnitude to `readNumber`; `4.7k - j2.2k` did not,
+ * because canonicalising `j2.2` to `2.2i` strands the `k` past the anchor. An
+ * impedance in kilohms is how Circuits II writes almost every answer it asks
+ * for, so the rejected form was the common one, and a rejected answer does not
+ * advance the session — the learner is simply stuck on the question.
+ * `1.2e3 + j4.5e2` failed the same way, with the exponent stranded instead.
  */
 function readRectangular(text: string): Phasor | null {
   const compact = text.replace(/\s+/g, '');
   if (!/[ij]/i.test(compact)) return null;
 
-  // `j4` -> `4i`, `4j` -> `4i`, a lone `j` -> `1i`, leaving signs where they
-  // are. Whether a bare unit is the trailing form or a magnitude of one is
-  // decided by what precedes it, which is why this cannot be a plain pattern.
-  const canonical = compact.replace(
-    /([ij])(\d+(?:\.\d+)?)?/gi,
-    (_match, _unit: string, digits: string | undefined, offset: number) => {
-      if (digits !== undefined) return `${digits}i`;
-      return /\d$/.test(compact.slice(0, offset)) ? 'i' : '1i';
-    },
-  );
+  let real = 0;
+  let imag = 0;
+  let sawImaginary = false;
 
-  // Lazy prefix, so the signed imaginary term binds last and a bare `-4i`
-  // leaves no real part rather than claiming the sign for one.
-  const match = /^(.*?)([+-]?\d+(?:\.\d+)?)i$/.exec(canonical);
-  if (!match) return null;
+  for (const term of splitTerms(compact)) {
+    if (!/[ij]/i.test(term)) {
+      const value = readNumber(term);
+      if (value === null) return null;
+      real += value;
+      continue;
+    }
 
-  const realText = match[1] ?? '';
-  const real = realText === '' ? 0 : Number(realText);
-  const imag = Number(match[2]);
-  if (!Number.isFinite(real) || !Number.isFinite(imag)) return null;
-  return { real, imag };
+    // The unit may lead or trail its magnitude — `j4.7k` and `4.7kj` are both
+    // written — so removing it wherever it sits leaves the number either way.
+    const magnitude = term.replace(/[ij]/i, '');
+    // `j`, `+j` and `-j` are a magnitude of one with the sign in front.
+    const value = /^[+-]?$/.test(magnitude) ? Number(`${magnitude}1`) : readNumber(magnitude);
+    if (value === null || !Number.isFinite(value)) return null;
+    imag += value;
+    sawImaginary = true;
+  }
+
+  return sawImaginary ? { real, imag } : null;
 }
 
 export interface PhasorComparison {

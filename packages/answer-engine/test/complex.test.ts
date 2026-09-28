@@ -124,4 +124,67 @@ describe('checkComplex', () => {
     expect(checkComplex('10∠-179.4°', nearPi).correct).toBe(true);
     expect(checkComplex('10∠179.6°', nearPi).correct).toBe(true);
   });
+
+  /*
+   * How an engineer actually writes an impedance.
+   *
+   * These are regressions, not hypotheticals: the rectangular path used to do
+   * its own string surgery rather than calling the shared number reader, so it
+   * parsed `3 - j4` and rejected `4.7k - j2.2k` — which is the form Circuits II
+   * asks for almost every time it asks for one. A rejected answer does not
+   * advance a practice session, so the learner is stuck on the question rather
+   * than marked wrong on it, and the failure looks like the app being broken.
+   */
+  describe('the spellings an answer actually arrives in', () => {
+    const z = (real: number, imag: number): ComplexAnswer => ({
+      kind: 'complex', real, imag, unit: 'ohm',
+      tolerance: { magRel: 0.01, angleDeg: 1 },
+    });
+
+    it('reads SI prefixes on both terms', () => {
+      expect(checkComplex('4.7k - j2.2k', z(4700, -2200)).correct).toBe(true);
+      expect(checkComplex('4.7k + j2.2k', z(4700, 2200)).correct).toBe(true);
+      expect(checkComplex('1.5m + j2.2m', z(0.0015, 0.0022)).correct).toBe(true);
+    });
+
+    it('reads a prefix with a unit still attached', () => {
+      expect(checkComplex('4.7k - j2.2k ohm', z(4700, -2200)).correct).toBe(true);
+      expect(checkComplex('4.7k - j2.2k Ω', z(4700, -2200)).correct).toBe(true);
+    });
+
+    it('reads scientific notation without splitting the exponent', () => {
+      expect(checkComplex('1.2e3 + j4.5e2', z(1200, 450)).correct).toBe(true);
+      expect(checkComplex('5e-3 - j2e-3', z(0.005, -0.002)).correct).toBe(true);
+    });
+
+    it('reads a typographic minus, which is what a PDF pastes', () => {
+      expect(checkComplex('3 \u2013 j4', z(3, -4)).correct).toBe(true);
+      expect(checkComplex('3 \u2212 j4', z(3, -4)).correct).toBe(true);
+    });
+
+    it('takes the imaginary unit on either side of its magnitude', () => {
+      expect(checkComplex('3 + 4j', z(3, 4)).correct).toBe(true);
+      expect(checkComplex('3 + j4', z(3, 4)).correct).toBe(true);
+      expect(checkComplex('4.7kj', z(0, 4700)).correct).toBe(true);
+    });
+
+    it('keeps a bare unit meaning one', () => {
+      expect(checkComplex('j', z(0, 1)).correct).toBe(true);
+      expect(checkComplex('-j', z(0, -1)).correct).toBe(true);
+      expect(checkComplex('3 - j', z(3, -1)).correct).toBe(true);
+    });
+
+    it('reads a slash angle only when the text says degrees', () => {
+      // `5/53.1°` is a phasor in several textbooks. `3/4` is three quarters,
+      // and nothing else in the string tells them apart, so the degree marker
+      // is what makes the slash an angle.
+      expect(checkComplex('5/53.1°', z(3.002, 3.998)).correct).toBe(true);
+      expect('error' in parsePhasor('3/4')).toBe(true);
+    });
+
+    it('still refuses something that is not a phasor at all', () => {
+      expect('error' in parsePhasor('about five')).toBe(true);
+      expect('error' in parsePhasor('')).toBe(true);
+    });
+  });
 });

@@ -189,6 +189,52 @@ export function Session(): React.ReactElement {
   const budget = DEFAULT_CAT_CONFIG.maxItems;
   const outstanding = shouldStop(cat, bank, DEFAULT_CAT_CONFIG).outstanding.length;
 
+  /**
+   * The response the inputs currently describe, or null when there is nothing
+   * to submit yet.
+   *
+   * Computed once and used by both the Submit button and the handler behind
+   * it. It used to be written twice — the handler built the response, and the
+   * button had its own parallel chain of emptiness checks — and the two
+   * drifted exactly the way two hand-maintained lists always do here: the
+   * button's chain never grew cases for `ordering`, `proof-skeleton` or
+   * `proof-rubric`, so it fell through to "is the text box empty", which for
+   * those three is permanently true. Every one of those items rendered its
+   * inputs, accepted them, and offered a Submit button that could never be
+   * pressed.
+   */
+  const pending: Response | null = isChoice
+    ? choice
+      ? { kind: 'choice', optionId: choice }
+      : null
+    : isOrdering
+      ? order.length > 0
+        ? { kind: 'ordering', order: [...order] }
+        : null
+    : isSkeleton
+      ? Object.keys(skeleton).length > 0
+        ? { kind: 'proof-skeleton', responses: { ...skeleton } }
+        : null
+    : isRubric
+      // An empty rubric is a real submission: it means the proof met none of
+      // the criteria, which is a score of zero rather than a missing answer.
+      ? { kind: 'proof-rubric', met: [...rubricMet] }
+    : isTable
+      ? tableComplete
+        ? { kind: 'truth-table', rows: tableRows.map((r) => r === true) }
+        : null
+      : text.trim()
+        ? { kind: 'text', value: text }
+        : null;
+
+  // A design task is graded by simulating what was built, so it goes to the
+  // store by a different route and has nothing to do with `pending`.
+  const canSubmit = isCircuit
+    ? circuitInput === 'netlist'
+      ? deck.trim().length > 0
+      : schematic.components.length > 0
+    : pending !== null;
+
   const send = (): void => {
     if (graded?.result.correct !== undefined && graded.result.outcome !== 'unparseable' && graded.result.outcome !== 'wrong-dimension') {
       return;
@@ -198,29 +244,7 @@ export function Session(): React.ReactElement {
       else void submitCircuit(schematic);
       return;
     }
-    const response: Response | null = isChoice
-      ? choice
-        ? { kind: 'choice', optionId: choice }
-        : null
-      : isOrdering
-        ? order.length > 0
-          ? { kind: 'ordering', order: [...order] }
-          : null
-      : isSkeleton
-        ? Object.keys(skeleton).length > 0
-          ? { kind: 'proof-skeleton', responses: { ...skeleton } }
-          : null
-      : isRubric
-        // An empty rubric is a real submission: it means the proof met none of
-        // the criteria, which is a score of zero rather than a missing answer.
-        ? { kind: 'proof-rubric', met: [...rubricMet] }
-      : isTable
-        ? tableComplete
-          ? { kind: 'truth-table', rows: tableRows.map((r) => r === true) }
-          : null
-        : text.trim()
-          ? { kind: 'text', value: text }
-          : null;
+    const response = pending;
     if (response) {
       const raw = isChoice
         ? (choice ?? '')
@@ -319,7 +343,16 @@ export function Session(): React.ReactElement {
                     key={choice}
                     disabled={settled}
                     onClick={() => setCircuitInput(choice)}
-                    className={`rounded px-2 py-1 text-xs ${circuitInput === choice ? 'bg-surface-2 text-white' : 'bg-surface-2 text-ink'}`}
+                    // `text-white` here was a literal colour left over from
+                    // before the palette became semantic tokens: on the light
+                    // theme it painted the *selected* tab white on a light
+                    // surface, so the active choice was the unreadable one and
+                    // the control looked disabled.
+                    className={`border px-2 py-1 font-mono text-2xs uppercase tracking-[0.08em] transition-colors ${
+                      circuitInput === choice
+                        ? 'border-accent bg-accent text-accent-fg'
+                        : 'border-line bg-transparent text-ink-dim hover:border-accent hover:text-accent'
+                    }`}
                     data-circuit-input={choice}
                   >
                     {choice === 'draw' ? 'Draw it' : 'Write a netlist'}
@@ -364,6 +397,7 @@ export function Session(): React.ReactElement {
                 return (
                   <button
                     key={option.id}
+                    data-option-id={option.id}
                     disabled={settled}
                     onClick={() => setChoice(option.id)}
                     className={[
@@ -464,17 +498,7 @@ export function Session(): React.ReactElement {
               <button
                 className="btn-primary"
                 onClick={send}
-                disabled={
-                  isCircuit
-                    ? circuitInput === 'netlist'
-                      ? deck.trim().length === 0
-                      : schematic.components.length === 0
-                    : isChoice
-                      ? !choice
-                      : isTable
-                        ? !tableComplete
-                        : !text.trim()
-                }
+                disabled={!canSubmit}
               >
                 Submit
               </button>
