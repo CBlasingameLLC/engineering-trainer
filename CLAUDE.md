@@ -36,6 +36,13 @@ Plain `pnpm install` silently repairs a stale lockfile and carries on; CI passes
 dependency passes locally and fails every CI job at the install step, before a
 single test runs.
 
+`apps/desktop` is in the vitest glob for one module only. It holds orchestration
+rather than mastery logic and mostly does not want unit tests, but
+`storage/transfer.ts` decides what happens to a learning history when two
+machines disagree, and a mistake there loses evidence silently rather than
+loudly. The `@` alias is declared in `vitest.config.ts` alongside the `@et/*`
+ones — a fifth place that has to stay in sync with the other four.
+
 **Typechecking is two projects, and `pnpm typecheck` only covers one.** The root
 `tsconfig.json` explicitly excludes `apps/desktop`. CI runs both; do the same
 before pushing:
@@ -149,6 +156,34 @@ implementation and a SQLite/`tauri-plugin-sql` one. The renderer never learns
 which it got. This is not gold-plating: it is the only reason the placement flow
 can be driven headlessly in CI on a machine that cannot build Tauri, and it
 keeps the desktop build packaging rather than a fork.
+
+Both adapters are also what makes a learning history portable. `storage/transfer.ts`
+writes the attempt log, the inferred priors, sessions, misconception events,
+saved circuits and the profile to one versioned JSON file, and merges one back.
+**Merging is well defined only because attempts are append-only**: the union of
+two append-only logs is an append-only log, the model is replayed over it, and
+the result does not depend on which machine the file travelled from. So an
+import is a union de-duplicated by id, never a replace — carrying one file back
+and forth between a laptop and a desktop converges instead of ping-ponging, and
+applying the same file twice is a no-op, which matters because the obvious habit
+is to export after every session and not track which exports have been applied.
+`appendAttempt` is `add` rather than `put` on purpose, so the de-duplication has
+to happen in the merge rather than being left to the store.
+
+The profile is the one thing that is not a log and so has to be decided field by
+field, on the rule "whichever choice is idempotent". XP takes the maximum rather
+than the sum: summing is the intuitive answer and is wrong twice, double-counting
+every session present in both files and growing on a repeated import of the same
+one. That under-counts work genuinely done on two machines in parallel, which is
+the smaller error — XP is motivational, while the measurement the app exists to
+make is replayed from the log and merged exactly.
+
+Export goes through a Rust command on the desktop (`write_progress_export`)
+rather than a blob download, because a download inside a WebView lands wherever
+the embedder decided and tells nobody — useless for a file whose only purpose is
+to be found and carried. Import is an `<input type="file">`, which is the one
+picker that behaves identically in a browser and in both WebViews.
+`docs/MACOS-INSTALL.md` has the user-facing version.
 
 ### Content pipeline: accepted, never trusted
 
@@ -364,6 +399,36 @@ worked examples rather than the topic list.
   panels hold dense readout rather than prose. Prose inside them keeps its own
   `max-w-[Nch]`, which is where a reading measure belongs: it is a property of
   a paragraph, not of a window.
+- **A tool that disarms itself after one use is a tool nobody can use.** The
+  schematic editor reverted to Select after placing one part and after
+  finishing one wire, so the second click of a two-resistor divider landed on
+  the marquee and did nothing. Combined with the invisible armed state above
+  there was no way to tell that had happened, and the two defects together are
+  the whole of "the circuit builder did not work": arm a tool, click, get
+  nothing, conclude the application is broken. Every capture tool keeps the
+  tool armed and uses Escape to put it down, because a circuit has more than
+  one resistor in it. Escape is two stages now — abandon the wire being drawn,
+  then disarm — since collapsing them makes a mis-clicked corner cost the tool
+  as well.
+- **A terminal is one grid cell wide, so aiming at one by eye is a coin flip.**
+  A ground dropped one cell below the pin it was meant for draws its stub
+  pointing straight at that pin and conducts nothing; the only evidence was a
+  solver error three panels away, and it named the *resistor* rather than the
+  ground that missed. Wire ends and grounds snap to the nearest connection
+  point within `SNAP` cells (`nearestConnection` in `@et/circuits`), the
+  rubber band previews the snapped position so the click is never a surprise,
+  and a ground that still reaches nothing is reported as such and drawn with
+  the same orange dot an unconnected pin gets. Parts deliberately do not snap:
+  a body centre is not a connection point, and welding one to a pin is worse
+  than missing.
+- **Auto-routing a wire can short a part it was never asked to touch.** A wire
+  laid over a pin connects to it — that is the T-junction rule working — so an
+  automatic elbow that happens to pass through, or land on, some third
+  terminal silently shorts it. Routing V+ to the top of R1 put the corner
+  exactly on R1's *bottom* pin. `elbow()` tries horizontal-first, falls back to
+  vertical-first, and rejects either if a leg crosses a pin or the corner lands
+  on one. The corner case is the likelier accident and the easier one to miss,
+  because an endpoint check excludes it by construction.
 - **A layered layout has no bound on how wide a layer gets.** Prerequisite
   depth decides the layering and nothing constrains how many components share a
   depth — across nine courses, thirty-three of them depend on nothing, so the
@@ -392,6 +457,16 @@ worked examples rather than the topic list.
   left by removed `dark:` classes will happily eat the indentation of a SQL
   template literal, so scope it to class strings or check the diff with
   `git diff -w` and revert anything that comes back empty.
+
+  The migration also left `text-white` behind in five places, and every one of
+  them was a *selected* state: white text on `bg-surface` or `bg-surface-2`,
+  which in the light theme is white on near-white. The chosen tab, the armed
+  tool, the Save button and an entered truth-table cell were each the one
+  element on screen rendered invisible, and each read as the control being
+  broken rather than as a colour being wrong — "I could not place wires" was
+  this, not the wire tool. `grep -rn 'text-white' apps/desktop/src` should
+  return nothing but comments. A selected control is `border-accent bg-accent
+  text-accent-fg`, or the `.btn-primary` that already composes it.
 - **A course that states quantities in a prefixed unit needs `unfoldedUnit`.**
   `engineering()` folds the prefix back into the value, which is right when the
   stored answer is in the base unit — 4700 ohms written as 4.7 k. It is wrong
@@ -603,6 +678,20 @@ worked examples rather than the topic list.
   pressed. `pending` is now computed once and both the button and the handler
   read it. Same bug class as the stale pack-cli fixture and the e2e
   expectation regex, in a third place.
+- **"I don't know" is not a wrong answer, and a skip is not either.** A session
+  with no way past an item ends at the first item the learner cannot do, which
+  on a placement run means no report at all — and a design task you cannot draw
+  is the common case, not the edge one. There are two ways out and they record
+  different things, because they are different facts. `declineItem` records a
+  real attempt with `outcome: 'declined'`: evidence of non-mastery, updating
+  Elo, BKT and the CAT exactly as a wrong answer does, but with no misconception
+  tag, because none was committed and there is nothing to drill. It also drops
+  `optionCount`, which exists only to feed BKT's guessing correction — carrying
+  it would discount a signal on the grounds of a guess the learner explicitly
+  declined to make. `passItem` records nothing at all and only marks the item
+  administered, which it must: without that the selector serves it straight
+  back and the button looks broken. A skip still spends item budget, so a
+  session of nothing but skips terminates.
 - **Truth-table cells are tri-state, not boolean.** An all-false grid is a
   valid answer, so a `boolean[]` cannot distinguish "every row is 0" from "not
   started" — and submitting the second as the first records a wrong answer
@@ -687,6 +776,14 @@ Things that will bite:
   a component, so a pasted fragment says so instead of silently losing a part.
 - **`M` is milli, `MEG` is mega**, case-insensitively. Getting it backwards
   scales a part by 10^9. Pinned by test.
+- **`byNet` accumulates, because every ground group is named `0`.** Nets are
+  grouped by union-find root and then named, and `set(name, members)` kept only
+  the last group's points for any name used twice — which is exactly what
+  happens with two grounds that are not joined by a wire. They *are* the same
+  electrical node, so `byPoint` was right; `byNet` silently lost half its
+  members, and the "pin sits on nothing" check reads `byNet`. A second ground
+  anywhere on the page therefore made a properly grounded pin report as
+  unconnected and blocked the simulation.
 - **Geometry is the only stored state.** Connectivity is re-derived by
   `extractNets` on every render, so a drawing and its circuit cannot disagree.
   Pin offsets live in `PIN_LAYOUT` in `schematic.ts` and the SVG symbols must
@@ -902,6 +999,21 @@ Not built:
 **The desktop build works and has been run.** `tauri build` produces `.deb`,
 `.rpm` and `.AppImage`; the app has been launched headless under Xvfb, driven
 through onboarding, and confirmed to apply both migrations and write to SQLite.
+
+**macOS is built in CI too, Apple Silicon only.** `.github/workflows/macos.yml`
+produces an `aarch64` `.dmg` plus a `ditto`-zipped `.app` on `macos-latest`,
+which is already an arm64 runner, so the host target is the one wanted and a
+universal build would double the compile time for an architecture nobody here
+has. It is unsigned, and the two things that follow from that are both
+counter-intuitive. Apple Silicon refuses to execute a binary with *no*
+signature, so the bundle is ad-hoc signed with `codesign --sign -` — that
+satisfies nothing about Gatekeeper, it only turns "is damaged and can't be
+opened" (which reads as a corrupt download) into "the developer cannot be
+verified" (which is the truth). And the `.app` travels as a `ditto -c -k`
+archive rather than a `zip -r`, because `zip` does not preserve the seal and an
+app whose signature is broken in transit will not launch. `docs/MACOS-INSTALL.md`
+carries the one `xattr` command a user needs and what signing properly would
+cost. Nobody has run these binaries either.
 
 **Windows is built in CI, not here.** `cargo-xwin` installs and the MSVC target
 adds cleanly, but `xwin` must fetch the MSVC CRT from Microsoft and the

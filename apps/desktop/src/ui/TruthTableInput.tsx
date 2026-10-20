@@ -99,7 +99,11 @@ export function TruthTableInput({
                           : 'border-accent/50 bg-accent/10 text-accent '
                         : value === null
                           ? 'border-dashed border-line-strong text-ink-faint hover:border-line-strong '
-                          : 'border-ink bg-surface text-white',
+                          // `text-white` over `bg-surface` is white on
+                          // near-white in the light theme: every digit you
+                          // entered vanished as you entered it. Inverting
+                          // against the ink role reads in both themes.
+                          : 'border-ink bg-ink text-surface',
                       disabled ? 'cursor-default opacity-90' : 'cursor-pointer',
                     ].join(' ')}
                   >

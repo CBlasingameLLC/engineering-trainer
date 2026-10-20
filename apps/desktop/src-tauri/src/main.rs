@@ -94,6 +94,40 @@ fn personal_packs(app: tauri::AppHandle) -> Result<Vec<(String, String)>, String
     Ok(found)
 }
 
+/// Write a progress export where the learner can find it.
+///
+/// The renderer could trigger a blob download instead, and does in the browser,
+/// but inside a WebView that lands wherever the embedder decides and tells
+/// nobody — which is useless for a file whose entire purpose is to be found and
+/// carried to another machine. Writing it here means the app can name the exact
+/// path it used.
+///
+/// Downloads first, because that is where a person looks for a file they are
+/// about to move; the app's own config directory is the fallback for a system
+/// that has no Downloads folder.
+#[tauri::command]
+fn write_progress_export(app: tauri::AppHandle, name: String, json: String) -> Result<String, String> {
+    // The name is built by the renderer from a timestamp, but it reaches here
+    // as a string and a string can contain a path separator. Keep only the file
+    // name component so an export can never be written outside the folder.
+    let safe = PathBuf::from(&name)
+        .file_name()
+        .map(|n| n.to_string_lossy().into_owned())
+        .filter(|n| !n.is_empty())
+        .unwrap_or_else(|| "engineering-trainer-progress.json".to_string());
+
+    let dir = app
+        .path()
+        .download_dir()
+        .or_else(|_| app.path().app_config_dir())
+        .map_err(|e| format!("nowhere to write the export: {e}"))?;
+    fs::create_dir_all(&dir).map_err(|e| format!("could not create {}: {e}", dir.display()))?;
+
+    let path = dir.join(safe);
+    fs::write(&path, json).map_err(|e| format!("could not write {}: {e}", path.display()))?;
+    Ok(path.to_string_lossy().into_owned())
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(
@@ -103,7 +137,11 @@ fn main() {
         )
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
-        .invoke_handler(tauri::generate_handler![personal_packs_dir, personal_packs])
+        .invoke_handler(tauri::generate_handler![
+            personal_packs_dir,
+            personal_packs,
+            write_progress_export
+        ])
         .run(tauri::generate_context!())
         .expect("error while running engineering trainer");
 }

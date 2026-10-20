@@ -30,7 +30,19 @@ const REPO = resolve(HERE, '../../..');
 const SHOT = process.env.E2E_SHOTS ?? resolve(HERE, 'screenshots');
 const BASE = process.env.E2E_BASE ?? 'http://127.0.0.1:4173';
 const CHROME = process.env.E2E_CHROME ?? undefined;
-const EXAM = process.env.E2E_EXAM ?? 'EE3300:exam-1';
+/**
+ * Which paper to sit, or null to take whichever one diagnostics offers first.
+ *
+ * It used to be hard-coded to `EE3300:exam-1`, which worked until that date
+ * passed and diagnostics — correctly — stopped offering a paper that had
+ * already been sat. The run then failed with "no diagnostics row for
+ * EE3300:exam-1", which reads as the exam list being broken rather than as the
+ * calendar having moved. Same bug class as the stale pack-cli fixture and the
+ * e2e expectation regex: a hand-written expectation beside the list that
+ * drives the run, which drifts the moment the data does. The driver reads the
+ * offer now and asserts the properties a paper must have, not its name.
+ */
+const EXAM = process.env.E2E_EXAM ?? null;
 
 mkdirSync(SHOT, { recursive: true });
 
@@ -105,16 +117,33 @@ console.log(`[2] briefing: ${headline}`);
 // --- Diagnostics -----------------------------------------------------------
 await page.locator('[data-testid="nav-diagnostics"]').click();
 await page.waitForSelector('[data-testid="triage"]', { timeout: 10000 });
-const examRow = page.locator(`[data-testid="exam-${EXAM}"]`);
-if ((await examRow.count()) === 0) fail(`no diagnostics row for ${EXAM}`);
 // Rows only. A prefix match also catches each row's own launch button and
 // would report twice the number of exams on offer.
-const examRows = await page.locator('[data-testid^="exam-"]:not([data-testid$="-launch"])').count();
-console.log(`[3] diagnostics offers ${examRows} exam(s) plus triage and placement`);
+const offered = await page
+  .locator('[data-testid^="exam-"]:not([data-testid$="-launch"])')
+  .evaluateAll((els) => els.map((e) => ({
+    id: e.getAttribute('data-testid').replace(/^exam-/, ''),
+    course: e.getAttribute('data-course'),
+    units: (e.getAttribute('data-units') ?? '').split('|').filter(Boolean)
+      .map((u) => { const [course, ...rest] = u.split(':'); return { course, unit: rest.join(':') }; }),
+  })));
+if (offered.length === 0) fail('diagnostics offers no exams at all');
+
+// Prefer a paper whose scope reaches into another course, because that is the
+// property worth testing here: `COURSE:Unit` entries are parsed in one place
+// and a silent failure to resolve one looks exactly like a smaller exam.
+const borrows = (e) => e.units.some((u) => u.course !== e.course);
+const chosen = EXAM
+  ? offered.find((e) => e.id === EXAM)
+  : (offered.find(borrows) ?? offered[0]);
+if (!chosen) fail(`no diagnostics row for ${EXAM}; offered ${offered.map((e) => e.id).join(', ')}`);
+const exam = chosen.id;
+console.log(`[3] diagnostics offers ${offered.length} exam(s) plus triage and placement`);
+console.log(`    sitting ${exam}, scope ${chosen.units.map((u) => `${u.course}:${u.unit}`).join(' · ')}`);
 await page.screenshot({ path: `${SHOT}/30-diagnostics.png`, fullPage: true });
 
 // --- Sit the paper ---------------------------------------------------------
-await page.locator(`[data-testid="exam-${EXAM}-launch"]`).click();
+await page.locator(`[data-testid="exam-${exam}-launch"]`).click();
 await page.waitForSelector('[data-testid="session"][data-mode="exam"]', { timeout: 10000 });
 
 const clock = page.locator('[data-testid="exam-clock"]');
@@ -182,16 +211,28 @@ console.log(`    scored at the bell ${percents[0]}, known overall ${percents[1]}
 const atBell = Number.parseInt(percents[0] ?? '0', 10);
 if (atBell >= 100) fail('handing in early scored 100% — unreached items were not counted');
 
+// Every unit the exam claims to cover has to appear in its report, measured
+// against what the app itself said the scope was rather than a list written
+// here. A copy of the data in the driver drifts the moment a syllabus does.
 const unitRows = await page.locator('[data-testid^="exam-result-"]').first().innerText();
-for (const unit of ['Second-Order Circuits', 'Sinusoidal Steady State', 'The s-Domain']) {
+for (const { unit } of chosen.units) {
   if (!unitRows.includes(unit)) fail(`the report never mentions "${unit}", which is in this exam's scope`);
 }
+
 // The scope entry that belongs to another course entirely. If the cross-course
-// reference silently resolved to nothing, everything above still passes.
-if (!unitRows.includes('Energy Storage and Transients')) {
-  fail('the borrowed EE2300 unit is absent from the report — a cross-course scope resolved to nothing');
+// reference silently resolved to nothing, everything above still passes — so
+// the absence of one is itself worth reporting rather than quietly skipping.
+const borrowed = chosen.units.filter((u) => u.course !== chosen.course);
+if (borrowed.length === 0) {
+  console.log(`    note: ${exam} borrows no unit from another course, so that path went untested`);
+} else {
+  for (const { unit } of borrowed) {
+    if (!unitRows.includes(unit)) {
+      fail(`the borrowed unit "${unit}" is absent from the report — a cross-course scope resolved to nothing`);
+    }
+  }
 }
-console.log('[7] per-unit breakdown names every unit in scope, the borrowed EE2300 one included');
+console.log(`[7] per-unit breakdown names all ${chosen.units.length} unit(s) in scope, ${borrowed.length} borrowed`);
 await page.screenshot({ path: `${SHOT}/32-exam-report.png`, fullPage: true });
 
 // --- Triage ----------------------------------------------------------------

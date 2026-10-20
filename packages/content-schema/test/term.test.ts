@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkTermUnits, parseTerm, type Term } from '../src/term.js';
+import { checkTermUnits, examUnits, parseTerm, type Term } from '../src/term.js';
 
 const base = {
   id: '2026-fall',
@@ -78,5 +78,49 @@ describe('unit names as the join', () => {
   it('is silent when everything resolves', () => {
     const clean = parseTerm(base).term as Term;
     expect(checkTermUnits(clean, known)).toEqual([]);
+  });
+});
+
+/**
+ * The `COURSE:Unit` prefix, which had no unit test at all.
+ *
+ * Its only coverage was one hard-coded assertion in the exam e2e driver, naming
+ * the one paper in the term whose scope borrows a unit from another course —
+ * and that paper's date passed, so diagnostics stopped offering it and the
+ * assertion stopped running. A feature guarded only by a dated fixture is a
+ * feature that quietly stops being guarded.
+ */
+describe('examUnits', () => {
+  const exam = (units: string[]) => ({ id: 'exam-1', title: 'Exam 1', on: '2026-09-28', cumulative: false, units });
+
+  it('attributes a bare unit name to the course that owns the exam', () => {
+    expect(examUnits('EE3300', exam(['Second-Order Circuits']))).toEqual([
+      { course: 'EE3300', unit: 'Second-Order Circuits' },
+    ]);
+  });
+
+  it('resolves a unit borrowed from another course', () => {
+    // EE3300's first exam tests chapter 7, which EE2300's curriculum owns.
+    // Confining the scope to its own course would mean either omitting that
+    // material or duplicating the component — and duplicating it splits the
+    // learner's evidence across two components that mean the same thing.
+    expect(examUnits('EE3300', exam(['EE2300:Energy Storage and Transients']))).toEqual([
+      { course: 'EE2300', unit: 'Energy Storage and Transients' },
+    ]);
+  });
+
+  it('mixes both in one scope, in order', () => {
+    const resolved = examUnits('EE3300', exam(['Sinusoidal Steady State', 'EE2300:Energy Storage and Transients']));
+    expect(resolved.map((r) => r.course)).toEqual(['EE3300', 'EE2300']);
+  });
+
+  it('splits on the first colon only, so a unit name may contain one', () => {
+    expect(examUnits('PHYS2335', exam(['EE2300:Thevenin: equivalents']))).toEqual([
+      { course: 'EE2300', unit: 'Thevenin: equivalents' },
+    ]);
+  });
+
+  it('is empty for an exam that states no units', () => {
+    expect(examUnits('EE3300', exam([]))).toEqual([]);
   });
 });

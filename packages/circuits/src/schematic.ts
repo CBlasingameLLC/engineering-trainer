@@ -230,7 +230,14 @@ export function extractNets(schematic: Schematic): NetMap {
       name = String(counter++);
     }
     const members = groups.get(root)!;
-    byNet.set(name, members);
+    // Accumulate rather than overwrite. Every ground group is named GROUND no
+    // matter how many of them there are, so `set` kept only the last one's
+    // points — and the "sits on nothing" check below reads this map, so a
+    // second ground elsewhere on the page made a properly grounded pin report
+    // as unconnected.
+    const existing = byNet.get(name);
+    if (existing) existing.push(...members);
+    else byNet.set(name, [...members]);
     for (const point of members) byPoint.set(key(point), name);
   }
 
@@ -249,6 +256,77 @@ export interface BuiltNetlist {
 }
 
 /**
+ * How many pins, wire points and other grounds a point touches, not counting
+ * itself.
+ *
+ * This is the question "is this thing attached to anything", which the editor
+ * asks to colour a terminal and the netlist writer asks to report a stranded
+ * ground. It lives here rather than in the editor because what counts as a
+ * connection is a property of the model, and a second opinion about it in the
+ * renderer is how a drawing and its circuit come to disagree.
+ */
+export function reaches(schematic: Schematic, point: Point): number {
+  let count = 0;
+  for (const component of schematic.components) {
+    for (const pin of pinPositions(component)) {
+      if (pin.x === point.x && pin.y === point.y) count++;
+    }
+  }
+  for (const wire of schematic.wires) {
+    for (let i = 1; i < wire.points.length; i++) {
+      if (onSegment(point, wire.points[i - 1]!, wire.points[i]!)) return count + 1;
+    }
+  }
+  for (const ground of schematic.grounds) {
+    if (ground !== point && ground.x === point.x && ground.y === point.y) count++;
+  }
+  return count;
+}
+
+/**
+ * Every point something can legally be attached to: component pins first, then
+ * wire vertices, then grounds.
+ *
+ * The editor snaps to these. Order is the priority order for a tie — a pin wins
+ * over a wire vertex at the same distance, because a pin is what the person was
+ * aiming at and a wire can be rerouted afterwards.
+ */
+export function connectionPoints(schematic: Schematic): Point[] {
+  const points: Point[] = [];
+  for (const component of schematic.components) points.push(...pinPositions(component));
+  for (const wire of schematic.wires) points.push(...wire.points);
+  points.push(...schematic.grounds);
+  return points;
+}
+
+/**
+ * The connection point nearest `to` within `radius` grid cells, or null.
+ *
+ * Grounds and wire ends have to land exactly on a terminal to connect, and a
+ * terminal is one grid cell wide: aiming at it by eye is a coin flip, and
+ * missing produces a drawing that looks finished and will not simulate. Snapping
+ * makes near-enough mean what the person meant, which is the whole difference
+ * between a drawing tool and a schematic capture tool.
+ */
+export function nearestConnection(
+  schematic: Schematic,
+  to: Point,
+  radius: number,
+  exclude?: (point: Point) => boolean,
+): Point | null {
+  let best: Point | null = null;
+  let bestDistance = Infinity;
+  for (const point of connectionPoints(schematic)) {
+    if (exclude?.(point)) continue;
+    const distance = Math.hypot(point.x - to.x, point.y - to.y);
+    if (distance > radius || distance >= bestDistance) continue;
+    bestDistance = distance;
+    best = point;
+  }
+  return best;
+}
+
+/**
  * Convert a drawing into a netlist.
  *
  * Issues are collected rather than thrown: a half-finished schematic is the
@@ -262,6 +340,18 @@ export function toNetlist(schematic: Schematic): BuiltNetlist {
 
   if (schematic.grounds.length === 0) {
     issues.push({ message: 'No ground symbol. Every circuit needs a reference node.' });
+  }
+
+  // A ground one cell off the pin it was meant for looks connected — its stub
+  // points straight at the terminal — and is electrically inert. Reporting it
+  // only as "R1 pin 2 sits on nothing" names the wrong end of the mistake: the
+  // pin is where the symptom shows, the ground is where the fix goes.
+  for (const ground of schematic.grounds) {
+    if (reaches(schematic, ground) === 0) {
+      issues.push({
+        message: `A ground symbol at (${ground.x}, ${ground.y}) touches nothing — move it onto a pin or a wire`,
+      });
+    }
   }
 
   for (const component of schematic.components) {

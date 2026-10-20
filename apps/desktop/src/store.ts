@@ -10,6 +10,7 @@ import {
   recordResponse,
   selectNextItem,
   shouldStop,
+  skipItem as skipCatItem,
   xpForAttempt,
   assembleExam,
   examShares,
@@ -38,6 +39,13 @@ import { examCandidates, examsForTerm, unitOfKcMap } from '@/content/exams';
 import { buildLearnerModel, type LearnerModel } from '@/features/learner-model';
 import { WebStorageAdapter } from '@/storage/web';
 import { TauriSqlAdapter, isTauri } from '@/storage/tauri';
+import {
+  encodeProgress,
+  exportProgress as buildProgressFile,
+  importProgress as mergeProgressFile,
+  parseProgress,
+  type ImportSummary,
+} from '@/storage/transfer';
 import {
   emptyProfile,
   type AttemptRecord,
@@ -202,6 +210,14 @@ interface AppState {
   submit(response: Response, raw: string): Promise<void>;
   submitCircuit(schematic: Schematic): Promise<void>;
   submitCircuitNetlist(deck: string): Promise<void>;
+  /** "I don't know": recorded as evidence of non-mastery, with nothing to drill. */
+  declineItem(): Promise<void>;
+  /** "Skip": no evidence at all, just move on. */
+  passItem(): Promise<void>;
+  /** Write the whole learning history to a file. Returns where it went. */
+  exportProgress(): Promise<{ path: string | null; filename: string }>;
+  /** Merge a file written by `exportProgress`, then replay the model over the union. */
+  importProgress(text: string): Promise<ImportSummary>;
   setWorkingSchematic(schematic: Schematic): void;
   advance(): Promise<void>;
   showHint(): void;
@@ -755,6 +771,118 @@ export const useApp = create<AppState>((set, get) => ({
     await gradeAndRecord(set, get, parsed.netlist, deck);
   },
 
+  /**
+   * "I don't know."
+   *
+   * Recorded as a real attempt, because it is a real measurement: the learner
+   * has told you directly that the component is not available to them, which is
+   * exactly what the mastery model is trying to establish. It updates Elo, BKT
+   * and the CAT the same way a wrong answer does, and tags no misconception,
+   * because none was committed — there is no error here to drill, only an
+   * absence to teach.
+   *
+   * Works for every answer kind including `circuit-build`, which is the point:
+   * the session used to be impossible to leave on an item you could not do, and
+   * on a design task "could not do" is the common case.
+   */
+  async declineItem() {
+    const { active } = get();
+    if (!active || get().graded) return;
+    await recordAttempt(set, get, false, {
+      result: {
+        correct: false,
+        outcome: 'declined',
+        feedback: 'Marked as not known. Read the worked solution — this one is now on your list.',
+      },
+      submitted: '',
+    });
+  },
+
+  /**
+   * "Skip" — no evidence either way.
+   *
+   * Distinct from declining, and the distinction is the reason both exist. A
+   * skip is for an item you cannot answer for a reason that is not about
+   * knowing the material: a figure that will not render, a question you have
+   * decided to come back to, a topic you have not been taught yet. Recording
+   * that as non-mastery would put a false gap in the report, and the report is
+   * the product.
+   *
+   * The item is still marked administered so it cannot be served again in this
+   * sitting. On a paper there is nothing to mark: the cursor moves and the
+   * answer stays blank, which is what leaving a question blank means and what
+   * `finishPaper` already scores.
+   */
+  async passItem() {
+    const { active, cat, paper } = get();
+    if (!active) return;
+    if (!paper && cat) set({ cat: skipCatItem(cat, active.catItem) });
+    set({ graded: null });
+    await get().advance();
+  },
+
+  /**
+   * Write the attempt log and everything derived alongside it to one file.
+   *
+   * On the desktop a Rust command puts it in Downloads and hands back the path,
+   * because a WebView download lands wherever the embedder decided and says
+   * nothing — useless for a file whose only purpose is to be found and carried.
+   * In a browser there is no such problem and an anchor does the job.
+   */
+  async exportProgress() {
+    const { storage, profile } = get();
+    if (!storage) throw new Error('storage is not ready');
+
+    const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
+    const filename = `engineering-trainer-progress-${stamp}.json`;
+    const file = await buildProgressFile(storage, `${storage.kind} · ${profile.targetTerm || 'no term set'}`);
+    const json = encodeProgress(file);
+
+    if (isTauri()) {
+      const { invoke } = await import('@tauri-apps/api/core');
+      const path = await invoke<string>('write_progress_export', { name: filename, json });
+      return { path, filename };
+    }
+
+    const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    return { path: null, filename };
+  },
+
+  /**
+   * Merge a progress file and rebuild the model over the union.
+   *
+   * The rebuild is the whole point and is not optional: the merge adds evidence
+   * to the log, and every number on every screen is a projection of that log.
+   * Skipping it would leave the new machine showing the mastery it had before
+   * the import, which is indistinguishable from the import having failed.
+   */
+  async importProgress(text) {
+    const { storage, content } = get();
+    if (!storage || !content) throw new Error('storage is not ready');
+
+    const summary = await mergeProgressFile(storage, parseProgress(text));
+
+    const profile = await storage.getProfile();
+    const [attempts, priors, circuits, misconceptionEvents] = await Promise.all([
+      storage.listAttempts(),
+      storage.listPriors(),
+      storage.listCircuits(),
+      storage.listMisconceptionEvents(),
+    ]);
+    set({
+      profile,
+      model: buildLearnerModel(content.graph, profile, attempts, priors),
+      circuits,
+      misconceptionEvents,
+    });
+    return summary;
+  },
+
   async submit(response, raw) {
     const { active } = get();
     if (!active || get().graded) return;
@@ -1065,6 +1193,12 @@ async function recordAttempt(
   correct: boolean,
   outcome: { result: CheckResult; submitted: string; circuit?: GradeResult },
 ): Promise<void> {
+  // A declined item had no guess in it. `optionCount` exists only to feed BKT's
+  // guessing correction, which discounts a four-option right answer because a
+  // low-ability learner lands one in four by chance — so carrying it onto an
+  // attempt where the learner explicitly did not pick would credit them with a
+  // guess they declined to make, and soften the very signal they volunteered.
+  const declined = outcome.result.outcome === 'declined';
   const { active, cat, storage, sessionId, hintsShown, mode, paper } = get();
   if (!active || !cat || !storage || !sessionId) return;
 
@@ -1078,7 +1212,9 @@ async function recordAttempt(
     hintsUsed: hintsShown,
     misconceptions: outcome.result.misconception ? [outcome.result.misconception] : [],
     at: new Date(),
-    ...(active.item.type === 'multiple-choice' ? { optionCount: active.item.options.length } : {}),
+    ...(active.item.type === 'multiple-choice' && !declined
+      ? { optionCount: active.item.options.length }
+      : {}),
     // Carried onto the attempt rather than looked up at replay time, because
     // the replay reads the attempt log and not the bank: an item whose weight
     // changes later must not silently rescore attempts already made under the

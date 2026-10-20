@@ -131,7 +131,13 @@ export function CircuitLab(): React.ReactElement {
         {(['op', 'ac', 'tran'] as const).map((m) => (
           <button
             key={m}
-            className={`rounded px-3 py-1 text-sm ${mode === m ? 'bg-surface-2 text-white' : 'bg-surface-2 text-ink'}`}
+            // Same raw-colour bug the session's circuit tabs had: the selected
+            // analysis was `text-white` over the same surface as the unselected
+            // ones, so on the light theme the chosen mode was the unreadable
+            // one and the row looked disabled.
+            className={mode === m ? 'btn-primary' : 'btn-secondary'}
+            data-mode={m}
+            data-active={mode === m ? 'true' : undefined}
             onClick={() => setMode(m)}
           >
             {m === 'op' ? 'Operating point' : m === 'ac' ? 'AC sweep' : 'Transient'}
@@ -164,13 +170,13 @@ export function CircuitLab(): React.ReactElement {
         )}
 
         <button
-          className="ml-auto rounded bg-surface-2 px-3 py-1 text-sm text-ink"
+          className="btn-secondary ml-auto"
           onClick={() => { setShowNetlist(!showNetlist); setNetlistDraft(formatNetlist(built.netlist, [`.${mode}`])); }}
         >
           {showNetlist ? 'Hide netlist' : 'Netlist'}
         </button>
         <button
-          className="rounded bg-surface-2 px-3 py-1 text-sm text-white"
+          className="btn-primary"
           onClick={() => void saveCircuit(schematic, formatNetlist(built.netlist))}
         >
           Save
@@ -186,7 +192,7 @@ export function CircuitLab(): React.ReactElement {
             spellCheck={false}
           />
           <div className="mt-2 flex items-center gap-3">
-            <button className="rounded bg-surface-2 px-2 py-1 text-xs" onClick={importNetlist}>
+            <button className="btn-secondary" onClick={importNetlist}>
               Check deck
             </button>
             {importError && <span className="text-xs text-ink-dim">{importError}</span>}
