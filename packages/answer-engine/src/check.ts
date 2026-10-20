@@ -25,7 +25,22 @@ import { checkOrdering, checkProofRubric, checkProofSkeleton } from './proof.js'
  * answer key cannot be independently reproduced never enters the bank.
  */
 
-export type CheckOutcome = 'correct' | 'incorrect' | 'unparseable' | 'wrong-dimension';
+/**
+ * `declined` is the learner saying they do not know, and it is deliberately not
+ * `incorrect`.
+ *
+ * The two produce the same update — both are evidence of non-mastery — but they
+ * are different facts, and the repository's whole argument is that collapsing
+ * different facts routes remediation wrongly. A wrong answer carries a
+ * misconception and a number the learner believed; a declined one carries
+ * neither, so there is nothing to drill and nothing to tag. It is also the
+ * cleaner measurement of the two on a multiple-choice item, where a wrong
+ * answer may be a slip and a decline cannot be.
+ *
+ * It is distinct from `unparseable`, which is not a grade at all: that one asks
+ * the learner to retype and does not advance the session.
+ */
+export type CheckOutcome = 'correct' | 'incorrect' | 'unparseable' | 'wrong-dimension' | 'declined';
 
 export interface CheckResult {
   correct: boolean;

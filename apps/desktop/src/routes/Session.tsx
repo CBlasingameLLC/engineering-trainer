@@ -139,6 +139,8 @@ export function Session(): React.ReactElement {
   const submitCircuit = useApp((s) => s.submitCircuit);
   const submitCircuitNetlist = useApp((s) => s.submitCircuitNetlist);
   const advance = useApp((s) => s.advance);
+  const declineItem = useApp((s) => s.declineItem);
+  const passItem = useApp((s) => s.passItem);
   const showHint = useApp((s) => s.showHint);
   const mode = useApp((s) => s.mode);
   const sessionXp = useApp((s) => s.sessionXp);
@@ -511,7 +513,30 @@ export function Session(): React.ReactElement {
                   Hint
                 </button>
               )}
-              <span className="ml-auto text-xs text-ink-faint">
+
+              {/* Two ways past an item, because they mean different things and
+                  the model records them differently. Without either, a question
+                  you cannot answer — and a design task you cannot draw is the
+                  usual one — ends the sitting, which is how a placement run
+                  becomes impossible to finish. */}
+              <button
+                className="btn-secondary"
+                onClick={() => void declineItem()}
+                data-testid="decline-item"
+                title="Counts as not known: no misconception recorded, and the worked solution is shown"
+              >
+                I don&rsquo;t know
+              </button>
+              <button
+                className="btn-ghost"
+                onClick={() => void passItem()}
+                data-testid="skip-item"
+                title="Records nothing either way and moves on"
+              >
+                Skip
+              </button>
+
+              <span className="ml-auto max-w-[34ch] text-right text-xs text-ink-faint">
                 {hintsShown > 0 ? 'Hints used — this counts as a weaker recall' : 'Press Enter to submit'}
               </span>
             </div>
@@ -538,16 +563,25 @@ function Feedback(): React.ReactElement | null {
   if (!graded) return null;
 
   const { result, item } = graded;
+  // Three states, not two. A declined item is not a wrong answer and saying
+  // "Not quite" in red to someone who told you they had not learned the
+  // material reads as a reprimand for being honest — and honesty is the
+  // behaviour the button exists to make cheap.
+  const declined = result.outcome === 'declined';
   return (
-    <section className="card mt-4 p-6">
+    <section className="card mt-4 p-6" data-outcome={result.outcome}>
       <div className="flex items-center gap-2">
         <span
           className={[
             'rounded px-2 py-0.5 text-xs font-semibold',
-            result.correct ? 'bg-accent/15 text-accent ' : 'bg-danger/15 text-danger',
+            result.correct
+              ? 'bg-accent/15 text-accent '
+              : declined
+                ? 'bg-warn/15 text-warn'
+                : 'bg-danger/15 text-danger',
           ].join(' ')}
         >
-          {result.correct ? 'Correct' : 'Not quite'}
+          {result.correct ? 'Correct' : declined ? 'Not known yet' : 'Not quite'}
         </span>
         {result.misconception && (
           <span className="font-mono text-xs text-ink-faint">{result.misconception}</span>
@@ -558,7 +592,11 @@ function Feedback(): React.ReactElement | null {
       </div>
 
       {result.feedback && !result.correct && (
-        <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-sm text-danger">
+        <p
+          className={`mt-3 rounded-md px-3 py-2 text-sm ${
+            declined ? 'bg-warn/10 text-ink-dim' : 'bg-danger/10 text-danger'
+          }`}
+        >
           <MathText>{result.feedback}</MathText>
         </p>
       )}

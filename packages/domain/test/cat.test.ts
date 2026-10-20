@@ -14,6 +14,7 @@ import {
   scoreItem,
   selectNextItem,
   shouldStop,
+  skipItem,
   type CatItem,
 } from '../src/cat/session.js';
 import { expectedScore } from '../src/mastery/elo.js';
@@ -242,6 +243,56 @@ describe('recordResponse', () => {
     recordResponse(state, { id: 'i', kcRefs: [{ kc: 'ohm', weight: 1 }], difficultyB: 0 }, true);
     expect(state.pMastery.get('ohm')).toBe(before);
     expect(state.itemCount).toBe(0);
+  });
+});
+
+describe('skipItem', () => {
+  const item: CatItem = { id: 'i', kcRefs: [{ kc: 'ohm', weight: 1 }], difficultyB: 0 };
+
+  it('leaves every belief exactly where it was', () => {
+    const state = createCatSession(['ohm']);
+    const next = skipItem(state, item);
+    expect(next.pMastery.get('ohm')).toBe(state.pMastery.get('ohm'));
+    expect(next.abilities.get('ohm')).toEqual(state.abilities.get('ohm'));
+    expect(next.exposure.get('ohm')).toBe(state.exposure.get('ohm'));
+    expect(next.difficulties.has(item.id)).toBe(false);
+  });
+
+  it('is not a wrong answer', () => {
+    const state = createCatSession(['ohm']);
+    const skipped = skipItem(state, item);
+    const answered = recordResponse(state, item, false);
+    expect(answered.pMastery.get('ohm')!).toBeLessThan(state.pMastery.get('ohm')!);
+    expect(skipped.pMastery.get('ohm')!).toBe(state.pMastery.get('ohm')!);
+  });
+
+  it('stops the same item coming straight back', () => {
+    const bank = bankFor(['ohm']);
+    let state = createCatSession(['ohm']);
+    const first = selectNextItem(state, bank, DEFAULT_CAT_CONFIG)!;
+    state = skipItem(state, first);
+    expect(selectNextItem(state, bank, DEFAULT_CAT_CONFIG)?.id).not.toBe(first.id);
+  });
+
+  // Skips have to count against the budget or a session of nothing but skips
+  // never reaches a stopping rule that looks at how long the sitting has been.
+  it('spends budget, so a session of skips still terminates', () => {
+    const config = { ...DEFAULT_CAT_CONFIG, maxItems: 4 };
+    const bank = bankFor(['ohm', 'kvl']);
+    let state = createCatSession(['ohm', 'kvl']);
+    for (let i = 0; i < config.maxItems; i++) {
+      const next = selectNextItem(state, bank, config);
+      if (!next) break;
+      state = skipItem(state, next);
+    }
+    expect(shouldStop(state, bank, config)).toMatchObject({ stop: true, reason: 'budget-exhausted' });
+  });
+
+  it('is immutable with respect to the previous state', () => {
+    const state = createCatSession(['ohm']);
+    skipItem(state, item);
+    expect(state.itemCount).toBe(0);
+    expect(state.administered.size).toBe(0);
   });
 });
 

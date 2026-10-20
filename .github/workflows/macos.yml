@@ -1,0 +1,136 @@
+name: macOS installer
+
+# Apple Silicon only, by request: `macos-latest` is already an arm64 runner, so
+# the host target is the one we want and a universal build would double both the
+# Rust compile time and the download for a second architecture nobody here has.
+#
+# The result is unsigned and un-notarized. There is no Apple Developer identity
+# in this repository, and inventing one is not a thing CI can do — so the .dmg
+# carries an ad-hoc signature (see below) and docs/MACOS-INSTALL.md explains the
+# one command Gatekeeper needs. Adding a real identity later is three secrets
+# and no change to this file's shape.
+#
+# Kept out of ci.yml for the same reason the Windows build is: a release Rust
+# build is minutes, and the fast checks should stay fast.
+
+on:
+  push:
+    branches: ['**']
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+  workflow_dispatch:
+
+jobs:
+  macos:
+    name: Build .dmg and .app
+    runs-on: macos-latest
+    timeout-minutes: 45
+    env:
+      PERSONAL_PACKS_B64: ${{ secrets.PERSONAL_PACKS_B64 }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with:
+          # Pinned independently of the action version: the committed lockfile
+          # was written by pnpm 10, and a newer major rewrites its format and
+          # then fails the frozen install.
+          version: 10
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install the Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+
+      - name: Cache the Rust build
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            apps/desktop/src-tauri/target
+          key: macos-cargo-${{ hashFiles('apps/desktop/src-tauri/Cargo.lock') }}
+          restore-keys: macos-cargo-
+
+      - run: pnpm install --frozen-lockfile
+
+      # The bundled item banks are generated, and a build that shipped a stale
+      # bank would be a different application from the one CI verified.
+      - name: Check the committed bank matches its generators
+        run: |
+          pnpm content build --variants=18
+          git diff --exit-code content/packs/shared
+
+      # Optional: the learner's own packs, restored from an encrypted secret.
+      # Same reasoning, and the same opt-in, as the Windows build — see
+      # docs/PERSONAL-CONTENT.md, whose route 1 (drop the files into the app's
+      # own packs folder at runtime) avoids the question entirely and is the one
+      # to prefer. `secrets` cannot be read in a step-level `if`, so it is
+      # lifted into the environment first and the condition tests that.
+      - name: Restore personal packs from the secret
+        id: personal
+        if: env.PERSONAL_PACKS_B64 != ''
+        run: |
+          set -euo pipefail
+          mkdir -p content/packs/personal
+          printf '%s' "$PERSONAL_PACKS_B64" | base64 -d | tar xzf - -C content/packs/personal
+          # Names are fine to log; contents are not, so only the names.
+          n=$(find content/packs/personal -maxdepth 1 -name '*.json' | tee /dev/stderr | wc -l | tr -d ' ')
+          # Left unset when the archive turned out to be empty, so a secret that
+          # decodes to nothing does not mislabel a perfectly ordinary artifact.
+          if [ "$n" -gt 0 ]; then echo "count=$n" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build the installer
+        run: pnpm tauri build --target aarch64-apple-darwin
+        env:
+          # Empty unless the step above ran, and an empty value is not "1", so
+          # the default build is redistributable without anyone deciding so.
+          VITE_ET_INCLUDE_PERSONAL: ${{ steps.personal.outputs.count && '1' || '' }}
+
+      # Apple Silicon refuses to execute a binary with no signature at all, so
+      # an unsigned build needs at least an ad-hoc one. The linker gives the
+      # main executable one for free; the bundle around it does not inherit it,
+      # and a .app whose seal is broken fails to launch with a message about
+      # being damaged — which reads as a corrupt download rather than as a
+      # missing Apple account. Signing the whole bundle with `-` costs nothing
+      # and makes the failure mode the honest one: an unidentified developer.
+      - name: Ad-hoc sign the bundle
+        run: |
+          set -euo pipefail
+          app=$(find apps/desktop/src-tauri/target -path '*bundle/macos*' -name '*.app' -maxdepth 6 | head -1)
+          echo "signing $app"
+          codesign --force --deep --sign - "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+
+      - name: Collect the artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p dist-macos
+          find apps/desktop/src-tauri/target -path '*bundle*' -name '*.dmg' -exec cp {} dist-macos/ \;
+          # The .app is a directory, so it travels as a zip. `ditto` is the one
+          # that preserves the resource forks and the signature; `zip -r` does
+          # not, and an app that arrives with a broken seal will not launch.
+          app=$(find apps/desktop/src-tauri/target -path '*bundle/macos*' -name '*.app' -maxdepth 6 | head -1)
+          ditto -c -k --keepParent "$app" "dist-macos/Engineering Trainer.app.zip"
+          ls -la dist-macos
+
+      # Two names, deliberately. An artifact carrying owned material must not be
+      # confused with one that can be handed to somebody else, and the file name
+      # is the only label that survives being downloaded.
+      - name: Upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: >-
+            ${{ steps.personal.outputs.count
+                && 'engineering-trainer-macos-personal'
+                || 'engineering-trainer-macos' }}
+          path: dist-macos/*
+          if-no-files-found: error
+          retention-days: 30

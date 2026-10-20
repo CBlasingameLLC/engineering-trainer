@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  GROUND, extractNets, formatValue, nextDesignator, pinPositions, toNetlist,
+  GROUND, extractNets, formatValue, nearestConnection, nextDesignator, pinPositions,
+  reaches, toNetlist,
   type ElementKind, type PlacedComponent, type Point, type Rotation, type Schematic,
 } from '@et/circuits';
 import { usePanZoom } from '@/ui/pan-zoom';
@@ -24,9 +25,37 @@ import { ComponentSymbol, GroundSymbol, PALETTE } from './symbols';
  * previous version could place a part and then never move it, and a wire once
  * drawn could not be selected at all — so the only way to fix a mistake was to
  * start over.
+ *
+ * Three things made it unusable after that, and they compounded:
+ *
+ *   - **The armed tool was invisible.** Active and inactive buttons shared a
+ *     background and the active one set `text-white`, which on the light theme
+ *     is white on a near-white surface. Arming the wire tool blanked its label
+ *     and changed nothing else.
+ *   - **Every tool disarmed itself after one use.** Placing a resistor silently
+ *     reverted to Select, so the second click of a two-resistor divider landed
+ *     on the marquee and did nothing visible. Combined with the first defect
+ *     there was no way to tell that had happened.
+ *   - **Terminating a wire needed a gesture nobody guesses** — clicking the
+ *     exact same grid cell twice — and the one hint saying so was rendered in
+ *     the invisible label.
+ *
+ * So: the armed tool is a filled accent chip, tools stay armed until changed
+ * (which is what every real capture tool does), and a wire ends on a
+ * double-click, a right-click, Enter, or a click on a pin.
  */
 
 const GRID = 18;
+
+/**
+ * How far from a pin or wire vertex a wire end or ground may be dropped and
+ * still attach, in grid cells.
+ *
+ * One and a half: far enough that aiming at the terminal under a part body
+ * works without zooming in, close enough that the next pin over — two cells
+ * away on every two-terminal part — can never win.
+ */
+const SNAP = 1.5;
 
 export type Tool = 'select' | 'wire' | 'ground' | ElementKind;
 
@@ -45,6 +74,12 @@ const HOTKEY_TOOL: Record<string, Tool> = {
   s: 'select', w: 'wire', g: 'ground',
   r: 'resistor', c: 'capacitor', l: 'inductor',
   v: 'vsource', i: 'isource', o: 'opamp',
+};
+
+const TOOL_LABEL: Partial<Record<Tool, string>> = {
+  resistor: 'RESISTOR', capacitor: 'CAPACITOR', inductor: 'INDUCTOR',
+  vsource: 'VOLTAGE SOURCE', isource: 'CURRENT SOURCE', opamp: 'OP-AMP',
+  vcvs: 'VCVS', vccs: 'VCCS', ccvs: 'CCVS', cccs: 'CCCS',
 };
 
 const HOTKEY_HINTS: [string, string][] = [
@@ -79,7 +114,28 @@ export function SchematicEditor({
   const [marquee, setMarquee] = useState<{ from: Point; to: Point } | null>(null);
   const [spaceHeld, setSpaceHeld] = useState(false);
 
-  const width = columns * GRID;
+  /**
+   * Grow the canvas to whatever width it has been given.
+   *
+   * The SVG used to be a fixed `columns * GRID` pixels inside a container that
+   * stretched, which left a wide strip of bordered background that looks
+   * exactly like canvas and swallows every click. `columns` is a minimum now,
+   * not a size. Height stays a prop: nothing above this component states how
+   * tall the editor should be, and guessing would fight the page's own layout.
+   */
+  const frame = useRef<HTMLDivElement | null>(null);
+  const [frameWidth, setFrameWidth] = useState(0);
+  useEffect(() => {
+    const element = frame.current;
+    if (!element) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setFrameWidth(entry?.contentRect.width ?? 0);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  const width = Math.max(columns, Math.floor(frameWidth / GRID)) * GRID;
   const height = rows * GRID;
 
   // Padding 0 and a viewBox equal to the element's intrinsic size, so the
@@ -146,6 +202,42 @@ export function SchematicEditor({
     [camera],
   );
 
+  /**
+   * Arm a tool.
+   *
+   * One definition, because there were four — the Select button, the Wire
+   * button, the Ground button and the part buttons each did their own subset of
+   * {set the tool, drop the draft, clear the selection}, and the two in the
+   * middle forgot the draft. With tools that disarm after one use that was
+   * nearly invisible; with tools that stay armed it means a half-drawn wire
+   * survives a trip to the palette and the *next* wire silently continues from
+   * it — which, if the abandoned point was on a terminal, welds two pins
+   * together and shorts a part nobody touched. The keyboard path always got
+   * this right, which is how two behaviours for one action stayed hidden.
+   */
+  const arm = useCallback((next: Tool): void => {
+    setTool(next);
+    setDraft([]);
+    if (next !== 'select') setSelection(new Set());
+  }, []);
+
+  /**
+   * Where a wire end or a ground actually lands.
+   *
+   * A terminal is one grid cell wide, so hitting it by eye is close to a coin
+   * flip — and missing produces a drawing that looks finished and refuses to
+   * simulate, which is the single most reported way this editor "did not work".
+   * Snapping inside `SNAP` cells makes near-enough mean what the person meant.
+   *
+   * Parts are deliberately not snapped: a body centre is not a connection
+   * point, and dragging one onto a pin would weld it there.
+   */
+  const snapped = useCallback(
+    (at: Point, exclude?: (point: Point) => boolean): Point =>
+      nearestConnection(valueRef.current, at, SNAP, exclude) ?? at,
+    [],
+  );
+
   // --- mutation ------------------------------------------------------------
   const place = (kind: ElementKind, at: Point): void => {
     const entry = PALETTE.find((p) => p.kind === kind);
@@ -158,7 +250,10 @@ export function SchematicEditor({
     };
     commit({ ...value, components: [...value.components, component] });
     setSelection(new Set([componentId(component.id)]));
-    setTool('select');
+    // The tool stays armed. Every capture tool works this way because a circuit
+    // has more than one resistor in it, and disarming after one placement meant
+    // the second click did nothing at all — silently, because the armed tool was
+    // not legible either. Esc or S goes back to Select.
   };
 
   const commitWire = useCallback(() => {
@@ -169,7 +264,9 @@ export function SchematicEditor({
       });
     }
     setDraft([]);
-    setTool('select');
+    // Still armed, so the next wire starts on the next click. A circuit needs
+    // four or five of these and re-arming between each one was most of why
+    // drawing one by hand was unbearable.
   }, [commit, draft, value]);
 
   const update = (id: string, patch: Partial<PlacedComponent>): void => {
@@ -227,7 +324,14 @@ export function SchematicEditor({
       if (event.ctrlKey || event.metaKey || event.altKey) return;
 
       if (event.key === 'Escape') {
-        setDraft([]);
+        // Two stages, because the tools stay armed now: the first Escape
+        // abandons the wire being drawn and leaves you still drawing wires,
+        // the second puts the pointer back to Select. Collapsing them would
+        // mean a mis-clicked corner costs you the tool as well.
+        if (draft.length > 0) {
+          setDraft([]);
+          return;
+        }
         setSelection(new Set());
         setTool('select');
         return;
@@ -252,9 +356,7 @@ export function SchematicEditor({
       const next = HOTKEY_TOOL[key];
       if (next) {
         event.preventDefault();
-        setTool(next);
-        setDraft([]);
-        if (next !== 'select') setSelection(new Set());
+        arm(next);
       }
     };
     const onKeyUp = (event: KeyboardEvent): void => {
@@ -266,7 +368,7 @@ export function SchematicEditor({
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);
     };
-  }, [commitWire, deleteSelection, draft.length, readOnly, redo, rotateSelection, undo]);
+  }, [arm, commitWire, deleteSelection, draft.length, readOnly, redo, rotateSelection, undo]);
 
   // --- dragging ------------------------------------------------------------
   /**
@@ -320,7 +422,11 @@ export function SchematicEditor({
     let moved = false;
 
     const move = (e: PointerEvent): void => {
-      const at = toGrid(e);
+      // Snap to anything but this wire's own points, or a vertex would stick to
+      // the neighbour it is being dragged away from.
+      const at = snapped(toGrid(e), (point) =>
+        before.wires.find((w) => w.id === wire)?.points.includes(point) ?? false,
+      );
       if (!moved) {
         moved = true;
         checkpoint();
@@ -401,25 +507,66 @@ export function SchematicEditor({
 
   const onCanvasClick = (event: React.MouseEvent): void => {
     if (readOnly || spaceHeld) return;
-    const at = toGrid(event);
+    const raw = toGrid(event);
 
     if (tool === 'select') return; // handled by pointerdown
     if (tool === 'ground') {
-      commit({ ...value, grounds: [...value.grounds, at] });
-      setTool('select');
+      commit({ ...value, grounds: [...value.grounds, snapped(raw)] });
       return;
     }
     if (tool === 'wire') {
+      const at = snapped(raw);
       const last = draft[draft.length - 1];
+      // Clicking the last point again still finishes, because that is what the
+      // first version taught anyone who found it.
       if (last && last.x === at.x && last.y === at.y) {
         commitWire();
         return;
       }
-      setDraft([...draft, at]);
+      const next = last ? [...draft, ...elbow(last, at, valueRef.current)] : [at];
+      // A click that lands on a component pin ends the wire there. Pin to pin
+      // is what nearly every wire in a teaching circuit is, and requiring a
+      // separate gesture afterwards is the step people got stuck on. Only once
+      // the wire has a start: the first click is allowed to be a pin.
+      if (draft.length > 0 && onAPin(valueRef.current, at)) {
+        setDraft([]);
+        commit({
+          ...value,
+          wires: [...value.wires, { id: `w${value.wires.length + 1}-${Date.now()}`, points: next }],
+        });
+        return;
+      }
+      setDraft(next);
       return;
     }
-    place(tool, at);
+    place(tool, raw);
   };
+
+  /** Double-click and right-click both finish a wire, as they do everywhere else. */
+  const onCanvasDoubleClick = (event: React.MouseEvent): void => {
+    if (readOnly || tool !== 'wire') return;
+    event.preventDefault();
+    commitWire();
+  };
+
+  const onCanvasContextMenu = (event: React.MouseEvent): void => {
+    if (readOnly) return;
+    if (tool === 'wire' && draft.length >= 2) {
+      event.preventDefault();
+      commitWire();
+      return;
+    }
+    if (tool !== 'select') {
+      event.preventDefault();
+      arm('select');
+    }
+  };
+
+  // The rubber band shows the elbow the next click will actually commit, so
+  // the route is never a surprise.
+  const draftLast = draft[draft.length - 1];
+  const draftPreview =
+    cursor && draftLast ? [...draft, ...elbow(draftLast, cursor, value)] : [...draft, ...(cursor ? [cursor] : [])];
 
   const selectedComponents = value.components.filter((c) => selection.has(componentId(c.id)));
   const only = selectedComponents.length === 1 ? selectedComponents[0]! : null;
@@ -432,13 +579,13 @@ export function SchematicEditor({
     <div className="flex gap-4">
       {!readOnly && (
         <div className="w-44 shrink-0 space-y-1">
-          <ToolButton tool="select" active={tool === 'select'} hint="S" onClick={() => { setTool('select'); setDraft([]); }}>
+          <ToolButton tool="select" active={tool === 'select'} hint="S" onClick={() => arm('select')}>
             Select
           </ToolButton>
-          <ToolButton tool="wire" active={tool === 'wire'} hint="W" onClick={() => { setTool('wire'); setSelection(new Set()); }}>
-            Wire{tool === 'wire' && <span className="ml-1 text-ink-faint">· Enter to finish</span>}
+          <ToolButton tool="wire" active={tool === 'wire'} hint="W" onClick={() => arm('wire')}>
+            Wire
           </ToolButton>
-          <ToolButton tool="ground" active={tool === 'ground'} hint="G" onClick={() => { setTool('ground'); setSelection(new Set()); }}>
+          <ToolButton tool="ground" active={tool === 'ground'} hint="G" onClick={() => arm('ground')}>
             Ground
           </ToolButton>
 
@@ -449,7 +596,7 @@ export function SchematicEditor({
               tool={entry.kind}
               active={tool === entry.kind}
               hint={Object.entries(HOTKEY_TOOL).find(([, t]) => t === entry.kind)?.[0]?.toUpperCase()}
-              onClick={() => { setTool(entry.kind); setSelection(new Set()); setDraft([]); }}
+              onClick={() => arm(entry.kind)}
             >
               {entry.label}
             </ToolButton>
@@ -502,7 +649,26 @@ export function SchematicEditor({
       )}
 
       <div className="min-w-0 flex-1">
-        <div className="relative overflow-hidden rounded border border-line bg-surface">
+        <div ref={frame} className="relative overflow-hidden rounded border border-line bg-surface">
+          {!readOnly && tool !== 'select' && (
+            // The instructions belong on the canvas, where the work is. They
+            // used to be a suffix on the tool button's label — which was the
+            // one element rendered invisible by the colour bug, so the guidance
+            // disappeared at exactly the moment it was needed.
+            <div
+              className="pointer-events-none absolute left-2 top-2 z-10 max-w-[44ch] border border-accent-dim
+                         bg-surface/90 px-2 py-1 font-mono text-3xs leading-relaxed text-ink-dim backdrop-blur"
+              data-testid="tool-hint"
+            >
+              {tool === 'wire'
+                ? draft.length === 0
+                  ? 'WIRE · click a pin or a point to start'
+                  : 'WIRE · click to add a corner · double-click, right-click, Enter or a pin to finish · Esc to cancel'
+                : tool === 'ground'
+                  ? 'GROUND · click a pin or a wire — it snaps to the nearest one'
+                  : `${TOOL_LABEL[tool] ?? tool} · click to place · stays armed · Esc for Select`}
+            </div>
+          )}
           {!readOnly && (
             <div className="pointer-events-none absolute right-2 top-2 z-10 flex flex-col gap-1">
               <SmallSquare title="Zoom in" onClick={() => camera.zoomBy(1.3)}>+</SmallSquare>
@@ -520,7 +686,11 @@ export function SchematicEditor({
             }`}
             onPointerDown={onCanvasPointerDown}
             onClick={onCanvasClick}
-            onMouseMove={(e) => tool === 'wire' && setCursor(toGrid(e))}
+            onDoubleClick={onCanvasDoubleClick}
+            onContextMenu={onCanvasContextMenu}
+            // Preview the snapped position, not the raw one — otherwise the
+            // rubber band points one cell away from where the click will land.
+            onMouseMove={(e) => tool === 'wire' && setCursor(snapped(toGrid(e)))}
             data-testid="schematic-canvas"
           >
             <defs>
@@ -575,7 +745,7 @@ export function SchematicEditor({
 
             {draft.length > 0 && (
               <polyline
-                points={[...draft, ...(cursor ? [cursor] : [])].map((p) => `${p.x * GRID},${p.y * GRID}`).join(' ')}
+                points={draftPreview.map((p) => `${p.x * GRID},${p.y * GRID}`).join(' ')}
                 fill="none"
                 stroke="#0ea5e9"
                 strokeWidth={2}
@@ -595,6 +765,16 @@ export function SchematicEditor({
               >
                 <circle cx={0} cy={GRID * 0.5} r={GRID * 0.7} fill="transparent" stroke="none" />
                 <GroundSymbol grid={GRID} />
+                {/* Same green/orange as the pin dots, for the same reason: a
+                    ground one cell off the terminal it was aimed at points
+                    straight at it and conducts nothing, and until this dot
+                    existed the only sign was a solver error three panels
+                    away. */}
+                <circle
+                  cx={0} cy={0} r={3}
+                  fill={reaches(value, g) > 0 ? '#22c55e' : '#f97316'}
+                  stroke="none" pointerEvents="none"
+                />
               </g>
             ))}
 
@@ -646,7 +826,7 @@ export function SchematicEditor({
             {value.components.flatMap((component) =>
               pinPositions(component).map((pin, i) => {
                 const net = nets.byPoint.get(`${pin.x},${pin.y}`);
-                const connected = net !== undefined && countAt(value, pin) > 1;
+                const connected = net !== undefined && reaches(value, pin) > 1;
                 return (
                   <circle
                     key={`${component.id}-${i}`}
@@ -716,14 +896,23 @@ function ToolButton({
       // matching on rendered text breaks the moment the label gains a badge.
       data-tool={tool}
       data-active={active ? 'true' : undefined}
-      className={`flex w-full items-center rounded px-2 py-1 text-left text-xs ${
-        active ? 'bg-surface-2 text-white' : 'bg-surface-2 text-ink'
+      // The armed tool is a filled accent chip. It used to be `text-white` over
+      // the same `bg-surface-2` as every other button, which on the light theme
+      // painted the one label you needed to read white on near-white and left
+      // the background unchanged — so arming a tool looked like nothing
+      // happening, and the editor looked broken because you could not tell what
+      // the next click would do. Third appearance of a raw colour where a role
+      // belongs; see CLAUDE.md.
+      className={`flex w-full items-center border px-2 py-1 text-left text-xs transition-colors ${
+        active
+          ? 'border-accent bg-accent font-medium text-accent-fg'
+          : 'border-line bg-surface-2 text-ink hover:border-accent hover:text-accent'
       }`}
       onClick={onClick}
     >
       <span className="min-w-0 flex-1 truncate">{children}</span>
       {hint && (
-        <kbd className={`ml-1 shrink-0 font-mono text-3xs ${active ? 'text-ink-faint' : 'text-ink-faint'}`}>
+        <kbd className={`ml-1 shrink-0 font-mono text-3xs ${active ? 'text-accent-fg/70' : 'text-ink-faint'}`}>
           {hint}
         </kbd>
       )}
@@ -764,29 +953,59 @@ function SmallSquare({
   );
 }
 
-/** How many pins, wire vertices and grounds sit exactly on a point. */
-function countAt(schematic: Schematic, point: Point): number {
-  let count = 0;
-  for (const component of schematic.components) {
-    for (const pin of pinPositions(component)) {
-      if (pin.x === point.x && pin.y === point.y) count++;
-    }
-  }
-  for (const wire of schematic.wires) {
-    for (let i = 1; i < wire.points.length; i++) {
-      const a = wire.points[i - 1]!;
-      const b = wire.points[i]!;
-      const onSegment =
-        (b.x - a.x) * (point.y - a.y) - (b.y - a.y) * (point.x - a.x) === 0 &&
-        point.x >= Math.min(a.x, b.x) && point.x <= Math.max(a.x, b.x) &&
-        point.y >= Math.min(a.y, b.y) && point.y <= Math.max(a.y, b.y);
-      if (onSegment) return count + 1;
-    }
-  }
-  for (const ground of schematic.grounds) {
-    if (ground.x === point.x && ground.y === point.y) count++;
-  }
-  return count;
+/** Does the orthogonal segment a–b pass over `p`, other than at its own ends? */
+function passesOver(a: Point, b: Point, p: Point): boolean {
+  if ((p.x === a.x && p.y === a.y) || (p.x === b.x && p.y === b.y)) return false;
+  if (a.x === b.x) return p.x === a.x && p.y > Math.min(a.y, b.y) && p.y < Math.max(a.y, b.y);
+  if (a.y === b.y) return p.y === a.y && p.x > Math.min(a.x, b.x) && p.x < Math.max(a.x, b.x);
+  return false;
+}
+
+/**
+ * The corner between two points, if the leg needs one.
+ *
+ * Schematic wires run horizontally and vertically; a diagonal is how a drawing
+ * tool behaves, not how a capture tool does. Beyond looking wrong it costs
+ * connectivity: the T-junction rule attaches a pin that lands *on* a segment,
+ * and a diagonal passes between grid points instead of through them, so
+ * nothing can tap it.
+ *
+ * Which way the elbow turns is chosen to miss other parts' terminals. A wire
+ * laid over a pin connects to it — that is the T-junction rule doing its job —
+ * so an auto-routed corner that happens to cross one shorts out a component the
+ * person never touched. Routing V+ to the top of R1 did exactly that: the
+ * horizontal-first leg ran through R1's *bottom* pin and shorted it, and the
+ * only evidence was a sentence in the status line. Horizontal first otherwise,
+ * because the preview has to be able to promise what the click will commit.
+ */
+function elbow(from: Point, to: Point, schematic: Schematic): Point[] {
+  if (from.x === to.x || from.y === to.y) return [to];
+
+  const pins = schematic.components.flatMap(pinPositions);
+  // A corner that lands *on* a pin shorts it just as surely as a leg that runs
+  // over one, and it is the likelier accident: the horizontal-first corner of a
+  // pin-to-pin leg is the other terminal of the destination part about as often
+  // as not. The destination itself is exempt, since landing there is the point.
+  const clean = (corner: Point): boolean =>
+    !pins.some(
+      (pin) =>
+        passesOver(from, corner, pin) ||
+        passesOver(corner, to, pin) ||
+        (pin.x === corner.x && pin.y === corner.y && !(corner.x === to.x && corner.y === to.y)),
+    );
+
+  const horizontalFirst = { x: to.x, y: from.y };
+  const verticalFirst = { x: from.x, y: to.y };
+  if (clean(horizontalFirst)) return [horizontalFirst, to];
+  if (clean(verticalFirst)) return [verticalFirst, to];
+  return [horizontalFirst, to];
+}
+
+/** Is this point one of some component's terminals? */
+function onAPin(schematic: Schematic, point: Point): boolean {
+  return schematic.components.some((component) =>
+    pinPositions(component).some((pin) => pin.x === point.x && pin.y === point.y),
+  );
 }
 
 /** Accept "4.7k" as well as "4700" in the value box. */

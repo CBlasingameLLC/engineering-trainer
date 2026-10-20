@@ -13,6 +13,7 @@ import {
   type ExamPriority,
   type KcMastery,
 } from '@et/domain';
+import { ProgressTransfer } from '@/ui/ProgressTransfer';
 import { useApp } from '@/store';
 import { currentTerm, drillCandidates } from '@/content';
 import { Countdown, DataRow, Empty, Meter, Panel } from '@/ui/shell';
@@ -552,6 +553,8 @@ export function Dashboard(): React.ReactElement {
               )}
             </div>
           </Panel>
+
+          <ProgressTransfer />
 
           <Panel title="Elsewhere">
             <div className="flex flex-col items-start gap-px p-2">

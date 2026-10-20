@@ -221,6 +221,28 @@ export function recordResponse(
   };
 }
 
+/**
+ * Pass over an item without learning anything from it.
+ *
+ * The only thing that changes is `administered`, so the selector cannot serve
+ * it again — without that the same question comes straight back and the skip
+ * button does nothing visible, which is worse than not having one.
+ *
+ * Abilities, beliefs, exposure and the item's own difficulty are all left
+ * exactly as they were: a skip is an absence of evidence, and the alternative
+ * — treating it as a wrong answer — is the thing the learner was promised it
+ * would not do. `itemCount` does rise, because the budget bounds how long the
+ * sitting is and the learner spent that item's worth of attention deciding to
+ * skip it. It is also what guarantees the session still terminates.
+ */
+export function skipItem(state: CatSessionState, item: CatItem): CatSessionState {
+  return {
+    ...state,
+    administered: new Set(state.administered).add(item.id),
+    itemCount: state.itemCount + 1,
+  };
+}
+
 export interface StopDecision {
   stop: boolean;
   reason: 'budget-exhausted' | 'targets-met' | 'bank-exhausted' | 'continue';

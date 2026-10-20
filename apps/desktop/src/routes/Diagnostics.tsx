@@ -28,6 +28,7 @@ function ScopeRow({
   disabled,
   warning,
   testId,
+  data,
 }: {
   title: React.ReactNode;
   detail: React.ReactNode;
@@ -38,9 +39,11 @@ function ScopeRow({
   disabled?: boolean;
   warning?: React.ReactNode;
   testId?: string;
+  /** Extra `data-*` attributes, so a driver can read what this row is about. */
+  data?: Record<string, string>;
 }): React.ReactElement {
   return (
-    <div className="border-b border-line px-3 py-2.5 last:border-b-0" data-testid={testId}>
+    <div className="border-b border-line px-3 py-2.5 last:border-b-0" data-testid={testId} {...data}>
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -115,6 +118,15 @@ export function Diagnostics(): React.ReactElement {
       <ScopeRow
         key={exam.id}
         testId={`exam-${exam.id}`}
+        // The scope as the app itself resolved it, including any unit borrowed
+        // from another course. A driver that hand-writes the unit names instead
+        // is asserting against a copy of the data that drifts the moment a
+        // syllabus does — which is how the exam driver came to name a paper
+        // three weeks after it had been sat.
+        data={{
+          'data-course': exam.course,
+          'data-units': exam.units.map((u) => `${u.course}:${u.unit}`).join('|'),
+        }}
         title={`${exam.course} ${exam.title}`}
         meta={
           <>
